@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrSolutionMapper">
+	 
+	 <update id="updateSolution" parameterType="com.emotte.order.order.model.Solution" >
+		update t_solution_agreement t 
+		<set>
+			<if test="agreementId != null and agreementId != ''">
+				t.id = #{agreementId},
+			</if>
+			<if test="id != null and id != ''">
+				t.solution_id = #{id},
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				t.update_by = #{updateBy},
+			</if>
+			<if test="agreementStatus != null and agreementStatus != ''">
+				t.agreement_status = #{agreementStatus},
+			</if>
+			t.update_time = sysdate,
+			t.version = t.version + 1
+		</set>
+		where t.id = #{agreementId}  
+	</update>
+</mapper>

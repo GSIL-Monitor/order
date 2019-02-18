@@ -1,0 +1,1553 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReOrderAfterSalesMapper">
+	 <select id="queryOrderAfterSaleslistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.after_sales_imgs as afterSalesImgs,
+			oas.approve_by as approveBy,
+			oas.approve_dept as approveDept,
+			oas.refund_total as refundTotal,
+			oas.refund_membership_fee as refundMembershipFee,
+			oas.refund_salary_fee as refundSalaryFee,
+			oas.account_pay_id as accountPayId,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.create_time as createTime,
+			oas.remark as remark,
+			oas.server_time as serverTime,
+			oas.vph_account_id as vphAccountId,
+			oas.is_stop as isStop,
+			oas.reason_flag as reasonFlag,
+			oas.refund_object	as refundObject,
+			oas.vph_fee as vphFee,
+			nvl(oas.vph_cancle_status,'-') as vphCancleStatus,
+			nvl(oas.vph_back_status,'-') as vphBackStatus,
+			oas.is_at as isAT,
+			od.cate_type as "order.cateType",
+			od.order_code as "orderCode",
+			oas.bathno as bathno,
+			(select ap.remark from t_account_pay ap  where ap.id = oas.account_pay_id and ap.is_back_type = 1 and ap.valid = 1) as "accountRemark",
+			(select rech.real_name from t_auth_manager rech where oas.approve_by = rech.id) as approveByText,
+			nvl(od.log,'-') as "order.log",
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,oas.approve_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where oas.approve_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where oas.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,oas.approve_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) +
+               nvl((select 1
+                   from t_auth_org orgaa
+                  where oas.create_dept = orgaa.id
+                    and orgaa.valid = 1
+                    and orgaa.code like '1001%'),0)      
+	             as loginRechargeOrNot,
+			</if>
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy,
+			od.id as "order.id",
+			od.order_type as "order.orderType",
+			oas.payfee_id as payFeeId
+	 		from t_order_after_sales oas
+	 		left join t_order od on oas.order_id = od.id
+		<where>
+			1 = 1 and od.cate_type is not null   and oas.order_type is not null and oas.is_old_data is null
+			and (oas.valid = 1 or oas.valid is null) and od.valid = 1
+ 			/*and oas.after_sales_kind != '11'*/
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="creStart!=null and creStart !=''">
+			and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart} 	</if>
+		   <if test="creEnd!=null and creEnd !=''">
+		   and	to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	</if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} ) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} 
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or oas.approve_dept =#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or oas.approve_by = #{loginBy}  or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where oas.create_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where oas.approve_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+		<select id="loadAfterSales" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.after_sales_imgs as afterSalesImgs,
+			oas.refund_total as refundTotal,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.remark as remark,
+			oas.create_time as createTime,
+			oas.server_time as serverTime,
+			oas.refund_membership_fee as refundMembershipFee,
+			oas.refund_salary_fee as refundSalaryFee,
+			oas.is_at as isAT,
+			oas.approve_by as approveBy,
+			oas.approve_dept as approveDept,
+			oas.create_dept as createDept,
+			oas.account_pay_id as accountPayId,
+			oas.vph_account_id as vphAccountId,
+			oas.vph_fee as vphFee,
+			nvl(oas.vph_cancle_status,'-') as vphCancleStatus,
+			nvl(oas.vph_back_status,'-') as vphBackStatus,
+			oas.is_stop as isStop,
+			oas.refund_object	as refundObject,
+			oas.move_to_order_id as moveToOrderId,
+			(select rech.real_name from t_auth_manager rech where oas.approve_by = rech.id) as approveByText,
+            (select orgr.name from t_auth_org orgr where oas.approve_dept = orgr.id ) as approveDeptText,
+            (select orgr.name from t_auth_org orgr where oas.create_dept = orgr.id ) as createDeptText,
+            (select od.order_code from t_order od where od.id = oas.order_id and od.valid = 1) as orderCode,
+            (select cod.order_code from t_order cod where cod.id = oas.move_to_order_id and cod.valid = 1) as changeCode,
+            FEE_ACCOUNT_ID as feeAcountId,
+            oas.IS_APP as isApp,
+            oas.PERSONNEL_STATUS as personnelStatus
+	 		from t_order_after_sales oas
+		where
+			oas.ID=#{id} and oas.valid = 1 	</select>
+			
+	<select id="queryAfterSalesApprovelistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.after_sales_imgs as afterSalesImgs,
+			oas.refund_total as refundTotal,
+			oas.account_pay_id as accountPayId,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.create_time as createTime,
+			oas.remark as remark,
+			oas.approve_by as approveBy,
+			oas.approve_dept as approveDept,
+			oas.server_time as serverTime,
+			oas.refund_membership_fee as refundMembershipFee,
+			oas.refund_salary_fee as refundSalaryFee,
+			oas.create_dept as createDept,
+			oas.is_at as isAT,
+			oas.is_stop as isStop,
+			oas.refund_object	as refundObject,
+			oas.reason_flag as reasonFlag,
+			oas.vph_account_id as vphAccountId,
+			oas.vph_fee as vphFee,
+			nvl(oas.vph_cancle_status,'-') as vphCancleStatus,
+			nvl(oas.vph_back_status,'-') as vphBackStatus,
+			od.cate_type as "order.cateType",
+			od.order_code as "orderCode",
+			(select rech.real_name from t_auth_manager rech where oas.create_by = rech.id) as createByText,
+            (select orgr.name from t_auth_org orgr where oas.create_dept = orgr.id ) as createDeptText,
+			(select rech.real_name from t_auth_manager rech where oas.approve_by = rech.id) as approveByText,
+            (select orgr.name from t_auth_org orgr where oas.approve_dept = orgr.id ) as approveDeptText,
+			(select ap.remark from t_account_pay ap  where ap.id = oas.account_pay_id and ap.is_back_type = 1 and ap.valid = 1) as "accountRemark",
+			nvl(od.log,'-') as "order.log",
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.recharge_by,1,oas.create_by,1,oas.approve_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,oas.create_by,1,oas.approve_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,oas.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,oas.create_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,oas.create_dept,1,oas.approve_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,oas.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where oas.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where oas.approve_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,oas.create_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,oas.create_dept,1,oas.approve_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			#{loginBy} as loginBy,
+			od.id as "order.id"
+	 		from t_order_after_sales oas
+	 		left join t_order od on oas.order_id = od.id
+		<where>
+			1 = 1 and od.cate_type is not null   and oas.order_type is not null and oas.is_old_data is null
+			and (oas.valid = 1 or oas.valid is null) and od.valid = 1
+			 <!-- and oas.after_sales_kind != '11' -->
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and oas.create_by = #{createBy} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="creStart!=null and creStart !=''">
+			and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart} 	</if>
+		   <if test="creEnd!=null and creEnd !=''">
+		   and	to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	</if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or oas.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} ) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.create_by = #{loginBy} or oas.approve_by = #{loginBy} 
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or oas.approve_dept =#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or oas.create_by = #{loginBy} or od.recharge_by = #{loginBy} or oas.approve_by = #{loginBy}  or
+       		exists(select 1 from t_auth_org orgaa
+                            where oas.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where oas.approve_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+	
+	<select id="queryVPHSaleslistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.refund_total as refundTotal,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.create_time as createTime,
+			oas.remark as remark,
+			oas.server_time as serverTime,
+			oas.is_at as isAT,
+			oas.is_stop as isStop,
+			oas.refund_object	as refundObject,
+			oas.reason_flag as reasonFlag,
+			od.cate_type as "order.cateType",
+			od.order_code as "orderCode",
+			(select op.bank_flow_num as bankFlowNum 			
+					    from t_account_pay ap 
+						left join t_order_payfee op
+						  on ap.id = op.order_id
+						  and op.valid=1
+                          and op.account_status=1
+					   where 1=1 and ap.id=oas.vph_account_id and ap.valid = 1)	as vphId,
+		 	oas.vph_fee as  vphFee,
+			(select ap.remark from t_account_pay ap  where ap.id = oas.vph_account_id and ap.is_back_type = 3 and ap.valid = 1) as "accountRemark",
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,oas.approve_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where oas.approve_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where oas.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,oas.approve_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) +
+               nvl((select 1
+                   from t_auth_org orgaa
+                  where oas.create_dept = orgaa.id
+                    and orgaa.valid = 1
+                    and orgaa.code like '1001%'),0)      
+	             as loginRechargeOrNot,
+			</if>
+			#{loginBy} as loginBy,
+			od.id as "order.id"
+	 		from t_order_after_sales oas
+	 		left join t_order od on oas.order_id = od.id
+		<where>
+			1 = 1 and od.cate_type is not null   and oas.order_type is not null and oas.is_old_data is null
+			and (oas.valid = 1 or oas.valid is null) and od.valid = 1 
+			and oas.vph_account_id is not null and oas.vph_fee != 0  <!-- oas.after_sales_kind = '11' or -->
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="refundObject != null and refundObject != '' and refundObject == 1">
+				and (oas.refund_object = 1 or oas.refund_object is null)
+			</if>
+			<if test="refundObject != null and refundObject != '' and refundObject == 2">
+				and oas.refund_object = 2
+			</if>
+			<if test="vphId != null and vphId != ''">
+			  and oas.order_id in (select ap.order_id			
+						    from t_account_pay ap 
+							left join t_order_payfee op
+							  on ap.id = op.order_id
+						   where 1=1 and ap.valid = 1 and op.valid = 1 and ap.is_back_type = 3
+						   	 and op.bank_flow_num LIKE '%'||#{vphId}||'%' )	
+			</if>
+			<if test="creStart!=null and creStart !=''">
+			and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart} 	</if>
+		   <if test="creEnd!=null and creEnd !=''">
+		   and	to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	</if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} ) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} 
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or oas.approve_dept =#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or oas.approve_by = #{loginBy}  or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where oas.create_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where oas.approve_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+	
+	<!-- 查询使用唯品会分期付款的用户  -->
+	<select id="queryVPHOrderlistPage"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select 
+       od.id  as "id" ,      
+       od.order_code  as "orderCode" ,      
+       od.user_name  as "userName" ,      
+       od.user_mobile  as "userMobile" ,          
+       od.create_by  as "createBy" ,       
+       to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as "createTime", 
+       to_char(server.start_time,'yyyy-MM-dd hh24:mi:ss') as "startTime",
+       to_char(server.end_time,'yyyy-MM-dd hh24:mi:ss') as endTime,    
+       decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as "payText",            
+       decode(od.cate_type,3,'商品',
+         1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+         4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+         2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+         5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS "typeText",
+       decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+         '9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+      od.cate_type as "cateType",
+      op.bank_flow_num as "vphOrderId",
+      op.order_id as "accountId",
+      (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+             <if test="id != null and id != ''">
+      (select * from(select op.fee_to_date as feeToDate       
+              from t_account_pay ap 
+            left join t_order_payfee op
+              on ap.id = op.order_id
+             where 1=1 and ap.valid = 1 
+                      and op.valid = 1 
+                      and ap.is_back_type = 2
+                      and op.is_back_type = 1
+                      and op.fee_post = 20250027
+                   and ap.order_id=#{id} 
+            order by op.create_time desc )  
+       where rownum = 1) as "payTime",
+      </if>
+      <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+         decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) as "loginByOrNot",
+         decode(#{loginBy},od.recharge_by,1,0) as "loginRechargeOrNot",    
+      </if>
+      <if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+        decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) +
+        decode(#{loginDept},od.create_dept,1,od.recharge_dept,1,0) as "loginByOrNot",  
+        decode(#{loginBy},od.recharge_by,1,0) +
+        decode(#{loginDept},od.recharge_dept,1,0) as "loginRechargeOrNot",            
+      </if>
+      <if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+        decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) +
+        decode(#{loginDept},od.create_dept,1,od.recharge_dept,1,0) +
+              decode(1,(select 1
+                   from t_auth_org orgaa
+                  where od.create_dept = orgaa.id
+                    and orgaa.code like '${loginOrgCode}%'),1,
+              (select 1
+                   from t_auth_org orgaa
+                  where od.recharge_dept = orgaa.id
+                    and orgaa.code like '${loginOrgCode}%'),1,0) as "loginByOrNot", 
+              decode(#{loginBy},od.recharge_by,1,0) +
+        decode(#{loginDept}, od.recharge_dept,1,0) +
+              nvl((select 1
+                   from t_auth_org orgaa
+                  where od.recharge_dept = orgaa.id
+                    and orgaa.valid = 1
+                    and orgaa.code like '${loginOrgCode}%'),0) as "loginRechargeOrNot",
+      </if>
+      #{loginBy} as "loginBy"
+	from  (select * from t_order order by create_time desc ) od
+	left join t_account_pay ap on od.id = ap.order_id
+    left join t_order_payfee op on op.order_id = ap.id
+    left join t_order_item_detail_server server on server.order_id = od.id
+	<where> 
+	 1 = 1 and od.create_time &lt;=sysdate and od.valid = 1  and ap.is_back_type = 2 and op.is_back_type = 1
+	       and ap.valid = 1 and op.valid = 1 and (op.fee_post = 20250027 or op.source_fee_post = 20250027)and ap.pay_status in ('20110002','20110003')
+	        and od.cate_type != 8              <!--  and od.order_status not in ('9','10','12') -->
+	     <if test="id !=null and id !='' ">           
+				and	od.id =  #{id}	</if>
+		<if test="userName!=null and userName!='' ">           
+				and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+		<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode}       </if>
+		<if test="userMobile!=null and userMobile!='' ">           
+				and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+		<if test="vphOrderId !=null and vphOrderId !='' ">           
+				and	op.bank_flow_num LIKE '%'||#{vphOrderId}||'%' 		</if>
+		<!-- <if test="userLevel!=null and userLevel!='' ">           
+				and	od.user_level =  #{userLevel} 		</if> -->
+		<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+				and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} ) 		</if>
+		<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+				and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} 
+				or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} )	</if>
+		<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy}  or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.code like '${loginOrgCode}%'
+                     )	)
+		</if>
+	</where>
+	order by od.create_time desc nulls last
+	</select>
+	<!-- 查询白条最大退款金额 -->
+	<select id="queryVPHMaxMoney"  parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="java.lang.String">
+	 select (nvl(op.fee_sum, 0) 
+	        - (select nvl(sum(pd.money),0) from t_payfee_detail pd 
+	            where pd.payfee_id = op.id  and pd.btype in(102,107) and pd.valid = 1)
+	        ) as maxMoney
+	   from t_order_payfee op
+	  where op.valid = 1
+	    and op.is_back_type = 1   
+	    and op.bank_flow_num = #{vphId}
+	    and op.order_id = #{accountPayId}
+	</select>
+	
+	<select id="queryOrderMemberAccount"  parameterType="java.lang.Long" resultType="java.lang.String">
+	 select sum(ap.account_amount) accountAmount
+	  from t_order od
+	  left join t_account_pay ap
+	    on ap.order_id = od.id
+	 where od.valid = 1
+	   and ap.valid = 1
+	   and ap.is_back_type = 2
+	   and ap.pay_status = 20110003
+	   and ap.pay_type = 6
+	   and ap.order_id = #{orderId}
+	</select>
+	
+	<select id="queryMemberDetailFee"  parameterType="java.lang.Long" resultType="java.lang.String">
+	    select bbb.money b1
+		  from t_order od
+		  left join t_account_pay ap
+		    on ap.order_id = od.id
+		 inner join (select sum(pd.money) money, op.order_id accountId
+		               from t_payfee_detail pd, t_order_payfee op
+		              where pd.payfee_id = op.id
+		                and pd.btype = 105
+		                and pd.valid = 1
+		                and op.valid = 1
+		                and op.is_back_type = 1
+		                and op.fee_post != '20250027'
+		                and op.pay_status = 20110002
+		              group by op.order_id) bbb
+		    on bbb.accountId = ap.id
+		 <where> od.valid = 1
+		   and ap.valid = 1
+		   and ap.is_back_type = 2
+		   and ap.pay_status = 20110003     
+		   and ap.order_id = #{orderId}
+		 </where>
+		 group by bbb.money 
+	</select>
+	
+	<select id="querySalaryDetail"  parameterType="java.lang.Long" resultType="java.lang.String">
+	        select sum(aaa.b1) as a1 from 
+	        (select bbb.maxMoney b1
+		      from t_order od
+		      left join t_account_pay ap
+		        on ap.order_id = od.id
+		     inner join (select (nvl(op.fee_sum, 0) 
+		                        - (select nvl(sum(pd.money), 0)
+		                            from t_payfee_detail pd
+		                           where pd.payfee_id = op.id
+		                             and pd.btype in (102,104)
+		                             and pd.valid = 1)) as maxMoney,
+		                        op.order_id as accountId
+		                   from t_order_payfee op
+		                  where op.valid = 1
+		                    and op.is_back_type = 1
+		                    and op.fee_post != '20250027'
+		                    and op.pay_status in (20110002, 20110003)) bbb
+		        on bbb.accountId = ap.id
+		  <where> od.valid = 1
+		       and ap.valid = 1
+		       and ap.is_back_type = 2
+		       and ap.pay_status in (20110002, 20110003)
+		       and ap.order_id = #{orderId}
+		 </where>
+     		group by bbb.maxMoney
+     		) aaa
+	</select>
+	
+	<select id="querySalaryDetailFee"  parameterType="java.lang.Long" resultType="java.lang.String">
+	    select bbb.money b1
+		  from t_order od
+		  left join t_account_pay ap
+		    on ap.order_id = od.id
+		 inner join (select sum(pd.money) money, op.order_id accountId
+		               from t_payfee_detail pd, t_order_payfee op
+		              where pd.payfee_id = op.id
+		                and pd.btype = 106
+		                and pd.valid = 1
+		                and op.valid = 1
+		                and op.is_back_type = 1
+		                and op.fee_post != '20250027'
+		                and op.pay_status = 20110002
+		              group by op.order_id) bbb
+		    on bbb.accountId = ap.id
+		 <where> od.valid = 1
+		   and ap.valid = 1
+		   and ap.is_back_type = 2
+		   and ap.pay_status in ( 20110002,20110003)  
+		   and ap.order_id = #{orderId}
+		 </where>
+		 group by bbb.money 
+	</select>
+	
+	<select id="queryVphSum"  parameterType="java.lang.Long" resultType="java.lang.String">
+	   select nvl(sum(money.maxMoney),0)as money
+         from (select (nvl(op.fee_sum, 0) -
+                  (select nvl(sum(pd.money), 0)
+                      from t_payfee_detail pd
+                     where pd.payfee_id = op.id
+                       and pd.btype in (102, 107)
+                       and pd.valid = 1)) as maxMoney
+             from t_order_payfee op
+             left join t_account_pay ap
+               on ap.id = op.order_id
+            <where> op.valid = 1
+              and ap.valid = 1
+              and op.is_back_type = 1
+              and ap.is_back_type = 2
+              and ap.order_id = #{orderId}
+              and ap.pay_status = 20110003
+              and (op.fee_post = 20250027 or op.source_fee_post = 20250027)
+            </where>
+            ) money
+	</select>
+	
+	<select id="queryVPHAccount"  parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Payfee">
+	   select ap.id
+             from t_order_payfee op
+             left join t_account_pay ap
+               on ap.id = op.order_id
+            <where> op.valid = 1
+              and ap.valid = 1
+              and op.is_back_type = 1
+              and ap.is_back_type = 2
+              and ap.order_id = #{orderId}
+              and ap.pay_status = 20110003
+              and op.fee_post = 20250027
+            </where>
+	</select>
+	
+	<select id="queryVPHFee"  parameterType="java.lang.Long" resultType="java.lang.String">
+	   select nvl(sum(money.maxMoney),0)as money
+         from (select (nvl(op.fee_sum, 0) -
+                  (select nvl(sum(pd.money), 0)
+                      from t_payfee_detail pd
+                     where pd.payfee_id = op.id
+                       and pd.btype in (102, 107)
+                       and pd.valid = 1)) as maxMoney
+             from t_order_payfee op
+             left join t_account_pay ap
+               on ap.id = op.order_id
+            <where> op.valid = 1
+              and ap.valid = 1
+              and op.is_back_type = 1
+              and ap.is_back_type = 2
+              and ap.id = #{accountId}
+              and ap.pay_status = 20110003
+              and op.fee_post = 20250027
+            </where>
+            ) money
+	</select>
+	
+	<select id="queryOrderA" parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select tmp_tb.*, ROWNUM row_id
+          from (select
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 (select ch.name from t_custom_channel ch where od.order_channel = to_char(ch.id)) as channelText,			
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.total_pay  as "totalPay" ,			
+			 od.deliver_pay  as "deliverPay" ,			
+			 od.ip  as "ip" ,			
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.user_sex  as "userSex" ,
+			 od.three_order_code as threeOrderCode,
+			 od.user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			od.cate_type as cateType,
+			od.city as city ,
+			(select creat.real_name from t_auth_manager creat where od.create_by = creat.id) as createByText,
+            (select orgc.name from t_auth_org orgc where od.create_dept = orgc.id ) as createDeptText,
+            od.recharge_by as "rechargeBy",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.follow_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			#{loginBy} as loginBy,
+			oas.move_to_order_id as  vphOrderId,
+			oas.audit_flag as orderStatusOther
+	 		from t_order od
+            left join  t_order_after_sales oas
+                    on  oas.order_id = od.id and oas.after_sales_kind = '12' and oas.valid = 1
+		<where>
+			1 = 1 and od.cate_type = 2
+			      and od.order_status not in (9,10,12)
+   				  and od.valid = 1
+			<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode} 
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} ) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy}  
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} )		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy}  or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'
+                    ) )	
+				</if>
+		</where>
+				order by oas.create_time desc
+				) tmp_tb
+         where ROWNUM = 1
+	</select>
+	
+	<select id="isOrderSale" parameterType="Long" resultType="Map">
+					SELECT op.id
+				  FROM t_account_pay ap
+				  JOIN t_order_payfee op
+				    ON ap.id = op.order_id
+				 WHERE ap.valid = 1
+				   AND op.valid = 1
+				   AND op.fee_post = 20250029
+				   AND ap.order_id = #{orderId}
+	</select>
+	
+	<select id="queryOrder" parameterType="Long" resultType="com.emotte.order.order.model.Order">
+					select t.*, t.rowid
+						  from t_order t
+						 where t.cate_type = 2
+						   and t.order_type not in (100200120003, 100200010001)
+						   and t.id = #{orderId}
+	</select>
+	
+	<select id="queryDepartment" parameterType="Long" resultType="Long">
+					SELECT t.id
+						  FROM t_auth_org t
+						 WHERE t.valid = 1
+						   AND t.status = 1
+						   AND t.code LIKE
+						       (SELECT tt.code FROM t_auth_org tt WHERE  tt.id = 990022905588415) || '%'
+						   and t.id=#{deptId}
+	</select>
+	
+	<select id="queryAfterSalesByDepartmentlistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select oas.id as id,
+                       oas.order_id as orderId,
+                       oas.order_type as orderType,
+                       oas.create_by as createBy,
+                       oas.update_by as updateBy,
+                       oas.update_time as updateTime,
+                       oas.version as version,
+                       oas.after_sales_kind as afterSalesKind,
+                       oas.cust_mobile as custMobile,
+                       oas.cust_name as custName,
+                       oas.audit_flag as auditFlag,
+                       oas.reason as reason,
+                       oas.after_sales_imgs as afterSalesImgs,
+                       oas.refund_total as refundTotal,
+                       oas.account_pay_id as accountPayId,
+                       oas.bank_card as bankCard,
+                       oas.bank_name as bankName,
+                       oas.bank_user_name as bankUserName,
+                       oas.bank_support_id as bankSupportId,
+                       oas.bank_city_code as bankCityCode,
+                       oas.create_time as createTime,
+                       oas.remark as remark,
+                       oas.approve_by as approveBy,
+                       oas.approve_dept as approveDept,
+                       oas.server_time as serverTime,
+                       oas.refund_membership_fee as refundMembershipFee,
+                       oas.refund_salary_fee as refundSalaryFee,
+                       oas.create_dept as createDept,
+                       oas.is_at as isAT,
+                       oas.is_stop as isStop,
+                       oas.refund_object as refundObject,
+                       oas.reason_flag as reasonFlag,
+                       oas.vph_account_id as vphAccountId,
+                       oas.vph_fee as vphFee,
+                       nvl(oas.vph_cancle_status, '-') as vphCancleStatus,
+                       nvl(oas.vph_back_status, '-') as vphBackStatus,
+                       od.cate_type as "order.cateType",
+                       od.order_code as "orderCode",
+					  	oas.BATHNO as bathno,
+                       (select rech.real_name
+                          from t_auth_manager rech
+                         where oas.create_by = rech.id) as createByText,
+                       (select orgr.name
+                          from t_auth_org orgr
+                         where oas.create_dept = orgr.id) as createDeptText,
+                       (select rech.real_name
+                          from t_auth_manager rech
+                         where oas.approve_by = rech.id) as approveByText,
+                       (select orgr.name
+                          from t_auth_org orgr
+                         where oas.approve_dept = orgr.id) as approveDeptText,
+                       (select ap.remark
+                          from t_account_pay ap
+                         where ap.id = oas.account_pay_id
+                           and ap.is_back_type = 1
+                           and ap.valid = 1) as "accountRemark",
+                       nvl(od.log, '-') as "order.log",
+                      
+                       1 as loginBy,
+                       od.id as "order.id"
+                  from t_order_after_sales oas
+                  left join t_order od
+                    on oas.order_id = od.id
+		<where>
+		1 = 1
+                   and od.cate_type is not null
+                   and oas.order_type is not null
+                   and oas.is_old_data is null
+                   and (oas.valid = 1 or oas.valid is null)
+                   and od.valid = 1
+                   and oas.audit_flag in(20130011,20130012,20130004,20130005,20130006,20130007,20130008)
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				and od.order_code = #{orderCode} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="refundObject != null and refundObject != '' and refundObject == 1">
+				and (oas.refund_object = 1 or oas.refund_object is null)
+			</if>
+			<if test="refundObject != null and refundObject != '' and refundObject == 2">
+				and oas.refund_object = 2
+			</if>
+			<if test="vphId != null and vphId != ''">
+			  and oas.order_id in (select ap.order_id			
+						    from t_account_pay ap 
+							left join t_order_payfee op
+							  on ap.id = op.order_id
+						   where 1=1 and ap.valid = 1 and op.valid = 1 and ap.is_back_type = 3
+						   	 and op.bank_flow_num LIKE '%'||#{vphId}||'%' )	
+			</if>
+			<if test="creStart!=null and creStart !=''">
+			and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart} 	</if>
+		   <if test="creEnd!=null and creEnd !=''">
+		   and	to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	</if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+	
+	<sql id="afterSalesOrderList">
+	SELECT oas.id AS id,
+		       oas.order_id AS orderId,
+		       oas.order_type AS orderType,
+		       oas.create_by AS createBy,
+		       oas.update_by AS updateBy,
+		       oas.update_time AS updateTime,
+		       oas.version AS version,
+		       oas.after_sales_kind AS afterSalesKind,
+		       oas.cust_mobile AS custMobile,
+		       oas.cust_name AS custName,
+		       oas.audit_flag AS auditFlag,
+		       oas.reason AS reason,
+		       oas.after_sales_imgs AS afterSalesImgs,
+		       oas.approve_by AS approveBy,
+		       oas.approve_dept AS approveDept,
+		       oas.refund_total AS refundTotal,
+		       oas.refund_membership_fee AS refundMembershipFee,
+		       oas.refund_salary_fee AS refundSalaryFee,
+		       oas.account_pay_id AS accountPayId,
+		       oas.bank_card AS bankCard,
+		       oas.bank_name AS bankName,
+		       oas.bank_user_name AS bankUserName,
+		       oas.bank_support_id AS bankSupportId,
+		       oas.bank_city_code AS bankCityCode,
+		       oas.create_time AS createTime,
+		       oas.remark AS remark,
+		       oas.server_time AS serverTime,
+		       oas.vph_account_id AS vphAccountId,
+		       oas.is_stop AS isStop,
+		       oas.reason_flag AS reasonFlag,
+		       oas.refund_object AS refundObject,
+		       oas.vph_fee AS vphFee,
+		       nvl(oas.vph_cancle_status, '-') AS vphCancleStatus,
+		       nvl(oas.vph_back_status, '-') AS vphBackStatus,
+		       (SELECT ap.remark FROM t_account_pay ap WHERE ap.id = oas.account_pay_id AND ap.is_back_type = 1 AND ap.valid = 1) AS "accountRemark",
+		       (SELECT rech.real_name FROM t_auth_manager rech WHERE oas.approve_by = rech.id) AS approveByText,
+		       oas.is_at AS isAT,
+		       oas.payfee_id AS payFeeId,
+		       oas.bathno AS bathno,
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,oas.approve_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,oas.approve_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,oas.approve_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1 from t_auth_org orgaa where od.create_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1 from t_auth_org orgaa where oas.approve_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1 from t_auth_org orgaa where oas.create_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1 from t_auth_org orgaa where od.recharge_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,oas.approve_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,oas.approve_dept,1,0) +
+	            nvl((select 1 from t_auth_org orgaa where od.recharge_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'),0) +
+                nvl((select 1 from t_auth_org orgaa where oas.create_dept = orgaa.id and orgaa.valid = 1 and orgaa.code like '1001%'),0) as loginRechargeOrNot,
+			</if>
+			   to_char(od.follow_time, 'yyyy-MM-dd hh24:mi:ss') AS followTime,
+		       od.id AS "order.id",
+			   od.order_code AS "orderCode",
+		       od.cate_type AS "order.cateType",
+		       od.order_type AS "order.orderType",
+			   nvl(od.log, '-') AS "order.log",
+		       #{loginBy} AS loginBy
+		  FROM t_order_after_sales oas
+		  	LEFT JOIN t_order od ON oas.order_id = od.id
+		 WHERE od.cate_type IS NOT NULL AND od.valid = 1
+		 	   AND oas.order_type IS NOT NULL
+			   AND oas.is_old_data IS NULL
+			   AND (oas.valid = 1 OR oas.valid IS NULL)
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">
+				AND (od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or oas.approve_by = #{loginBy} )
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">
+				AND (od.create_by = #{loginBy} OR od.recharge_by = #{loginBy} OR oas.approve_by = #{loginBy} 
+					OR od.create_dept = #{loginDept} OR od.recharge_dept = #{loginDept} OR oas.approve_dept = #{loginDept})
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">
+				AND (od.create_by = #{loginBy} OR od.recharge_by = #{loginBy} OR oas.approve_by = #{loginBy} 
+				OR EXISTS 
+				 (SELECT 1 FROM t_auth_org orgaa WHERE od.create_dept = orgaa.id AND orgaa.valid = 1 AND orgaa.code LIKE '${loginOrgCode}%'
+				UNION ALL
+				  SELECT 1 FROM t_auth_org orgbb WHERE od.recharge_dept = orgbb.id AND orgbb.valid = 1 AND orgbb.code LIKE '${loginOrgCode}%'
+				UNION ALL 
+				  SELECT 1 FROM t_auth_org orgdd WHERE oas.create_dept = orgdd.id AND orgdd.valid = 1 AND orgdd.code LIKE '${loginOrgCode}%'
+			    UNION ALL
+				  SELECT 1 FROM t_auth_org orgcc WHERE oas.approve_dept = orgcc.id  AND orgcc.valid = 1 AND orgcc.code LIKE '${loginOrgCode}%'))
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+					AND od.order_code = #{orderCode} 
+				</if>
+				<if test="id != null and id != ''">
+				    AND oas.id = #{id}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND oas.order_id = #{orderId}
+				</if>
+				<if test="orderType != null and orderType != ''">
+					AND oas.order_type = #{orderType}
+				</if>
+				<if test="afterSalesKind != null and afterSalesKind != ''">
+					AND oas.after_sales_kind = #{afterSalesKind}
+				</if>
+				<if test="custMobile != null and custMobile != ''">
+					AND oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+				</if>
+				<if test="custName != null and custName != ''">
+					AND oas.cust_name LIKE '%'||#{custName}||'%'
+				</if>
+				<if test="auditFlag != null and auditFlag != ''">
+					AND oas.audit_flag = #{auditFlag}
+				</if>
+				<if test="creStart!=null and creStart !=''">
+					AND to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart}
+				</if>
+				<if test="creEnd!=null and creEnd !=''">
+					AND to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	
+				</if>
+				<if test="serverTime != null and serverTime != ''">
+					AND to_char(oas.server_time,'yyyy-MM-dd') = #{serverTime}
+				</if>
+	</sql>
+	
+	<sql id="afterSalesCardList">
+	SELECT oas.id AS id,
+		       oas.order_id AS orderId,
+		       oas.order_type AS orderType,
+		       oas.create_by AS createBy,
+		       oas.update_by AS updateBy,
+		       oas.update_time AS updateTime,
+		       oas.version AS version,
+		       oas.after_sales_kind AS afterSalesKind,
+		       oas.cust_mobile AS custMobile,
+		       oas.cust_name AS custName,
+		       oas.audit_flag AS auditFlag,
+		       oas.reason AS reason,
+		       oas.after_sales_imgs AS afterSalesImgs,
+		       oas.approve_by AS approveBy,
+		       oas.approve_dept AS approveDept,
+		       oas.refund_total AS refundTotal,
+		       oas.refund_membership_fee AS refundMembershipFee,
+		       oas.refund_salary_fee AS refundSalaryFee,
+		       oas.account_pay_id AS accountPayId,
+		       oas.bank_card AS bankCard,
+		       oas.bank_name AS bankName,
+		       oas.bank_user_name AS bankUserName,
+		       oas.bank_support_id AS bankSupportId,
+		       oas.bank_city_code AS bankCityCode,
+		       oas.create_time AS createTime,
+		       oas.remark AS remark,
+		       oas.server_time AS serverTime,
+		       oas.vph_account_id AS vphAccountId,
+		       oas.is_stop AS isStop,
+		       oas.reason_flag AS reasonFlag,
+		       oas.refund_object AS refundObject,
+		       oas.vph_fee AS vphFee,
+		       nvl(oas.vph_cancle_status, '-') AS vphCancleStatus,
+		       nvl(oas.vph_back_status, '-') AS vphBackStatus,
+		       (SELECT ap.remark FROM t_account_pay ap WHERE ap.id = oas.account_pay_id AND ap.is_back_type = 1 AND ap.valid = 1) AS "accountRemark",
+		       (SELECT rech.real_name FROM t_auth_manager rech WHERE oas.approve_by = rech.id) AS approveByText,
+		       oas.is_at AS isAT,
+		       oas.payfee_id AS payFeeId,
+		       oas.bathno AS bathno,
+               1 AS loginByOrNot,
+               1 AS loginRechargeOrNot,		
+			   NULL AS followTime,
+		       NULL AS "order.id",
+			   NULL AS "orderCode",
+		       NULL AS "order.cateType",
+		       NULL AS "order.orderType",
+			   NULL AS "order.log",
+		       #{loginBy} AS loginBy
+		  FROM t_order_after_sales oas
+			 INNER JOIN t_card tc ON tc.id = oas.order_id
+			 LEFT JOIN t_card_distribution_salesman ON ds.card_id=oas.order_id
+		  WHERE oas.valid = 1
+			   AND tc.valid = 1
+		 	   AND oas.order_type IS NOT NULL
+			   AND oas.is_old_data IS NULL
+			   AND (oas.valid = 1 OR oas.valid IS NULL)
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">
+				AND (ds.salesman_id=#{loginBy} OR oas.approve_by = #{loginBy} )
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">
+				AND (ds.salesman_id=#{loginBy} OR oas.approve_by=#{loginBy} OR ds.salesman_dept_id=#{loginDept} OR oas.approve_dept=#{loginDept})
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">
+				AND (od.recharge_by = #{loginBy} OR oas.approve_by = #{loginBy} 
+				OR EXISTS 
+				 (SELECT 1 FROM t_auth_org orgbb WHERE ds.salesman_dept_id = orgbb.id AND orgbb.valid = 1 AND orgbb.code LIKE '${loginOrgCode}%'
+			    UNION ALL
+				  SELECT 1 FROM t_auth_org orgcc WHERE oas.approve_dept = orgcc.id  AND orgcc.valid = 1 AND orgcc.code LIKE '${loginOrgCode}%'))
+			</if>
+				<if test="id != null and id != ''">
+				    AND oas.id = #{id}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND oas.order_id = #{orderId}
+				</if>
+				<if test="orderType != null and orderType != ''">
+					AND oas.order_type = #{orderType}
+				</if>
+				<if test="afterSalesKind != null and afterSalesKind != ''">
+					AND oas.after_sales_kind = #{afterSalesKind}
+				</if>
+				<if test="custMobile != null and custMobile != ''">
+					AND oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+				</if>
+				<if test="custName != null and custName != ''">
+					AND oas.cust_name LIKE '%'||#{custName}||'%'
+				</if>
+				<if test="auditFlag != null and auditFlag != ''">
+					AND oas.audit_flag = #{auditFlag}
+				</if>
+				<if test="creStart!=null and creStart !=''">
+					AND to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart}
+				</if>
+				<if test="creEnd!=null and creEnd !=''">
+					AND to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 	
+				</if>
+				<if test="serverTime != null and serverTime != ''">
+					AND to_char(oas.server_time,'yyyy-MM-dd') = #{serverTime}
+				</if>
+	</sql>
+	
+	<select id="queryAfterSalesNewlistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+			select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.after_sales_imgs as afterSalesImgs,
+			oas.approve_by as approveBy,
+			oas.approve_dept as approveDept,
+			oas.refund_total as refundTotal,
+			oas.refund_membership_fee as refundMembershipFee,
+			oas.refund_salary_fee as refundSalaryFee,
+			oas.account_pay_id as accountPayId,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.create_time as createTime,
+			oas.remark as remark,
+			oas.server_time as serverTime,
+			oas.vph_account_id as vphAccountId,
+			oas.is_stop as isStop,
+			oas.reason_flag as reasonFlag,
+			oas.refund_object	as refundObject,
+			oas.vph_fee as vphFee,
+			nvl(oas.vph_cancle_status,'-') as vphCancleStatus,
+			nvl(oas.vph_back_status,'-') as vphBackStatus,
+			oas.is_at as isAT,
+			od.cate_type as "order.cateType",
+			od.order_code as "orderCode",
+			oas.bathno as bathno,
+			(select ap.remark from t_account_pay ap  where ap.id = oas.account_pay_id and ap.is_back_type = 1 and ap.valid = 1) as "accountRemark",
+			(select rech.real_name from t_auth_manager rech where oas.approve_by = rech.id) as approveByText,
+			nvl(od.log,'-') as "order.log",
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy,
+			od.id as "order.id",
+			od.order_type as "order.orderType",
+			oas.payfee_id as payFeeId,
+			DECODE(oas.after_sales_kind,'16',tc.card_numb,od.order_code) AS fkCode, 
+			oas.order_id AS fkId
+			from t_order_after_sales oas
+	 		left join t_order od on od.id=oas.order_id and od.cate_type is not null and od.valid = 1
+	 		left join t_card tc on tc.id=oas.order_id
+		<where>
+				oas.order_type is not null and oas.is_old_data is null and (oas.valid = 1 or oas.valid is null) 
+			<if test="fkCode != null and fkCode != ''">
+				and (od.order_code = #{fkCode} or tc.card_numb = #{fkCode}) 
+			</if>
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="creStart!=null and creStart !=''">
+				and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart}
+			</if>
+		    <if test="creEnd!=null and creEnd !=''">
+		  		 and to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 
+		    </if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+				and	(oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}) 		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+				and	(oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}
+				or oas.create_dept = #{loginDept} or oas.approve_dept =#{loginDept})		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+				and (oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}
+				or exists (select 1 from t_auth_org orgaa where oas.create_dept=orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+				union all  select 1 from t_auth_org orgbb where oas.approve_dept=orgbb.id and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'))	
+			</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+	
+	<select id="queryAfterSalesApproveNewlistPage" parameterType="com.emotte.order.order.model.OrderAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		select 
+			oas.id as id,
+			oas.order_id as orderId,
+			oas.order_type as orderType,
+			oas.create_by as createBy,
+			oas.update_by as updateBy,
+			oas.update_time as updateTime,
+			oas.version as version,
+			oas.after_sales_kind as afterSalesKind,
+			oas.cust_mobile as custMobile,
+			oas.cust_name as custName,
+			oas.audit_flag as auditFlag,
+			oas.reason as reason,
+			oas.after_sales_imgs as afterSalesImgs,
+			oas.refund_total as refundTotal,
+			oas.account_pay_id as accountPayId,
+			oas.bank_card as bankCard,
+			oas.bank_name as bankName,
+			oas.bank_user_name as bankUserName,
+			oas.bank_support_id as bankSupportId,
+			oas.bank_city_code as bankCityCode,
+			oas.create_time as createTime,
+			oas.remark as remark,
+			oas.approve_by as approveBy,
+			oas.approve_dept as approveDept,
+			oas.server_time as serverTime,
+			oas.refund_membership_fee as refundMembershipFee,
+			oas.refund_salary_fee as refundSalaryFee,
+			oas.create_dept as createDept,
+			oas.is_at as isAT,
+			oas.is_stop as isStop,
+			oas.refund_object	as refundObject,
+			oas.reason_flag as reasonFlag,
+			oas.vph_account_id as vphAccountId,
+			oas.vph_fee as vphFee,
+			nvl(oas.vph_cancle_status,'-') as vphCancleStatus,
+			nvl(oas.vph_back_status,'-') as vphBackStatus,
+			od.cate_type as "order.cateType",
+			od.order_code as "orderCode",
+			(select rech.real_name from t_auth_manager rech where oas.create_by = rech.id) as createByText,
+            (select orgr.name from t_auth_org orgr where oas.create_dept = orgr.id ) as createDeptText,
+			(select rech.real_name from t_auth_manager rech where oas.approve_by = rech.id) as approveByText,
+            (select orgr.name from t_auth_org orgr where oas.approve_dept = orgr.id ) as approveDeptText,
+			(select ap.remark from t_account_pay ap  where ap.id = oas.account_pay_id and ap.is_back_type = 1 and ap.valid = 1) as "accountRemark",
+			nvl(od.log,'-') as "order.log",
+			1 as loginByOrNot,
+			1 as loginRechargeOrNot,
+			#{loginBy} as loginBy,
+			od.id as "order.id",
+			DECODE(oas.after_sales_kind,'16',tc.card_numb,od.order_code) AS fkCode, 
+			oas.order_id AS fkId
+	 		from t_order_after_sales oas
+	 		left join t_order od on oas.order_id = od.id and od.cate_type is not null and od.valid = 1
+	 		left join t_card tc on tc.id=oas.order_id
+		<where>
+			   oas.order_type is not null and oas.is_old_data is null and (oas.valid = 1 or oas.valid is null) 
+			<if test="fkCode != null and fkCode != ''">
+				and (od.order_code = #{fkCode} or tc.card_numb = #{fkCode}) 
+			</if>
+			<if test="id != null and id != ''">
+				and oas.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and oas.order_id = #{orderId} 
+			</if>
+			<if test="orderType != null and orderType != ''">
+				and oas.order_type = #{orderType} 
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and oas.create_by = #{createBy} 
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				and oas.after_sales_kind = #{afterSalesKind} 
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				and oas.cust_mobile LIKE '%'||#{custMobile}||'%'
+			</if>
+			<if test="custName != null and custName != ''">
+				and oas.cust_name LIKE '%'||#{custName}||'%'
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				and oas.audit_flag = #{auditFlag} 
+			</if>
+			<if test="creStart!=null and creStart !=''">
+				and	to_char(oas.create_time,'yyyy-mm-dd') &gt;= #{creStart} 
+			</if>
+		    <if test="creEnd!=null and creEnd !=''">
+		  	    and to_char(oas.create_time,'yyyy-mm-dd') &lt;= #{creEnd} 
+		    </if>
+			<if test="serverTime != null and serverTime != ''">
+				and to_char(oas.server_time,'yyyy-MM-dd')  = #{serverTime}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+				and	(oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}) 		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+				and	(oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}
+				or oas.create_dept = #{loginDept} or oas.approve_dept =#{loginDept})		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+				and (oas.create_by = #{loginBy} or oas.approve_by = #{loginBy}
+				or exists (select 1 from t_auth_org orgaa where oas.create_dept=orgaa.id and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%'
+				union all  select 1 from t_auth_org orgbb where oas.approve_dept=orgbb.id and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%'))	
+			</if>
+		</where>
+		order by oas.create_time desc nulls last
+	</select>
+
+	<!--根据订单ID查询有效售后记录-->
+	<select id="checkOnlyAfterSales" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM T_ORDER_AFTER_SALES WHERE ORDER_ID = #{id} AND VALID = 1
+	</select>
+</mapper>

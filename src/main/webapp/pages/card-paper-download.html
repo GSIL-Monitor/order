@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">编辑满减券</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline">
+                    <div class="row">
+                    <div class="form-group col-xs-12">
+                        <label><p>使用场景:</p></label>
+                        <label class="radio-inline">
+                            <input type="radio" checked="checked" name="scene" value="1用户注册"> 1用户注册
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="scene" value="2首页领取"> 2首页领取
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="scene" value="3发红包"> 3发红包
+                        </label>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label><p>分享标题:</p></label>
+                            <label>
+                                <textarea class="form-control" style="width:300px;height:50px;"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label><p>副标题:</p></label>
+                            <label>
+                                <textarea class="form-control" style="width:300px;height:50px;"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb10">
+                        <div class="form-group checkbox col-xs-12">
+                            <label for="exampleInputFile">
+                                <p>分享小图：</p>
+                                <input type="file" id="exampleInputFile" class="pl40">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb10">
+                        <div class="form-group checkbox col-xs-12">
+                            <label for="exampleInputFile">
+                                <p>背景大图：</p>
+                                <input type="file" id="exampleInputFile" class="pl40">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label><p>使用规则:</p></label>
+                            <label>
+                                <textarea class="form-control" style="width:300px;height:50px;"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label><p>是否上线:</p></label>
+                            <label>
+                                <select class="form-control" style="width:100px;">
+                                    <option>是</option>
+                                    <option>否</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

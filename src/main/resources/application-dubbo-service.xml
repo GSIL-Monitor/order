@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd          
+    http://code.alibabatech.com/schema/dubbo          
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="dubbo-order-client" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址测试 -->
+ 	<dubbo:registry id="testRegistry" protocol="zookeeper" address="${zk.url}"/>
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="20886" />
+
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:service interface="com.emotte.dubbo.order.OrderInterfaceService" ref="orderInterfaceService"  registry="testRegistry" protocol="dubbo" retries="0" timeout="60000"/>
+
+	<!-- 和本地bean一样实现服务 -->
+	<bean id="orderInterfaceService" class="com.emotte.dubbo.order.impl.OrderInterfaceServiceImpl" />
+
+	<dubbo:consumer check="false" />
+
+	<!-- 扣除对应卡/券/账户 -->
+	<dubbo:reference id="solutionOrderInterfaceService" interface="com.emotte.dubbo.activities.solution.SolutionOrderInterfaceService" />
+
+	<!-- FA订单分包 -->
+	<dubbo:reference id="subPackageService" interface="com.emotte.dubbo.wms.SubPackageService" />
+
+	<!-- 账户充值业务处理 -->
+	<dubbo:reference id="accountService" interface="com.emotte.dubbo.account.AccountService" />
+
+	<!-- 扣除对应卡/券/账户 -->
+	<dubbo:reference id="payFeeDBService" interface="com.emotte.dubbo.emPay.PayFeeDBService" />
+
+	<!-- 礼品卡支付接口 -->
+	<dubbo:reference id="gJBAPPCardInterfaceService" interface="com.emotte.dubbo.activities.service.GJBAPPCardInterfaceService" />
+
+	<!-- 服务人员排期 -->
+	<dubbo:reference id="personnelInterfaceService" interface="com.emotte.dubbo.service.PersonnelInterfaceService" />
+
+	<!-- 服务人员APP消息推送-->
+	<dubbo:reference id="pushInterfaceService" interface="com.emotte.dubbo.service.PushInterfaceService" />
+
+	<!-- 解决方案卡生成接口 -->
+	<dubbo:reference id="solutionDubboCardService" interface="com.emotte.dubbo.activities.service.SolutionDubboCardService" />
+
+	<!-- 隔汇天下pos机较验接口 -->
+	<dubbo:reference id="isPosSuccessService" interface="com.emotte.dubbo.finance.IsPosSuccessService" />
+
+	<!-- 会员身份身份 -->
+	<dubbo:reference id="vipRecordService" interface="com.emotte.dubbo.custom.VipRecordService" />
+
+	<!-- 门店分包调用保存分包日志接口 -->
+	<dubbo:reference id="addSubcontractLogService" interface="com.emotte.dubbo.custom.addSubcontractLogService" />
+
+	<!-- 单次服务分账接口 -->
+	<dubbo:reference id="splitDubbo" interface="com.emotte.dubbo.finance.SplitService" />
+
+	<!-- 单次服务分账接口 -->
+	<dubbo:reference id="SMSServiceDubbo" interface="com.emotte.dubbo.sms.SMSServiceDubbo" />
+
+	<!-- 白条退费接口 -->
+	<dubbo:reference id="iouDBServiceImpl" interface="com.emotte.dubbo.iou.IouDBService" />
+
+	<!-- 消息弹出 -->
+	<dubbo:reference id="newsService" interface="com.emotte.dubbo.manager.NewsService" />
+
+	<dubbo:reference id="OrderNewsService" interface="com.emotte.dubbo.manager.OrderNewsService" />
+
+	<!-- 查询库存 -->
+	<dubbo:reference id="personOrderService" interface="com.emotte.dubbo.order.PersonOrderService" />
+
+	<!-- 验证身份证 -->
+	<dubbo:reference id="creditService" interface="com.emotte.dubbo.credit.CreditService" />
+
+	<!-- 查询服务人员排期冲突 -->
+	<dubbo:service interface="com.emotte.dubbo.order.PersonnelScheduleService" ref="personnelScheduleService" registry="testRegistry" protocol="dubbo" retries="0" timeout="10000"/>
+	<bean class="com.emotte.dubbo.order.impl.PersonnelScheduleServiceImpl" id="personnelScheduleService"  />
+
+	<!-- 约Ta面试接口 -->
+	<dubbo:service interface="com.emotte.dubbo.order.PersonInterviewService" ref="personInterviewService" registry="testRegistry" protocol="dubbo" retries="0" timeout="10000"/>
+	<bean id="personInterviewService" class="com.emotte.dubbo.order.impl.PersonInterviewServiceImpl" />
+
+	<!--完善客户账户信息-->
+	<dubbo:reference id="bankcardServiceImpl" interface="com.emotte.dubbo.bankcard.BankcardService" />
+
+	<!-- 客户回访 -->
+	<dubbo:reference id="revisitRecordService" interface="com.emotte.dubbo.custom.RevisitRecordService"/>
+
+	<!-- 联动主扫生成支付二维码 -->
+	<dubbo:reference id="emottePayService" interface="com.emotte.dubbo.emottepay.EmottePayService"/>
+
+	<!-- 联动四要素 -->
+	<dubbo:reference id="installmentService" interface="com.emotte.dubbo.installment.InstallmentService" />
+
+	<!-- 保存新建合同,验证是否有历史未完成合同, 发送短信确认 -->
+	<dubbo:reference id="customerInfoService" interface="com.emotte.dubbo.installment.CustomerInfoService" />
+
+	<!-- 修改合同状态接口 -->
+	<dubbo:service interface="com.emotte.dubbo.agreement.AgreementUpdateStateService" ref="agreementUpdateStateService" registry="testRegistry" protocol="dubbo" retries="0" timeout="10000"/>
+	<bean id="agreementUpdateStateService" class="com.emotte.dubbo.agreement.impl.AgreementUpdateStateServiceImpl" />
+
+	<!-- 自动校验生成卡券 -->
+	<dubbo:reference id="autoGenDubboCardService" interface="com.emotte.dubbo.activities.service.AutoGenDubboCardService"/>
+
+	<!-- 海金合同给客户发送代扣协议 -->
+	<dubbo:reference id="reissueAgreementService" interface="com.emotte.dubbo.installment.ReissueAgreementService"/>
+
+	<!-- 一对一对账接口 -->
+	<dubbo:reference id="BalanceAccountDubbo" interface="com.emotte.dubbo.finance.BalanceAccountDubbo" />
+	
+	<!-- 2019-01-18  查询卡 用户用的管家卡  支付组 提供 -->
+	<dubbo:reference id="CardDubboService"  interface="com.emotte.dubbo.activities.service.CardDubboService" />
+	
+	<!-- 2019-01-18  卡扣费  支付组 提供  -->
+	<dubbo:reference id="CardPayDubboService" interface="com.emotte.dubbo.activities.service.CardPayDubboService" />
+	
+
+</beans>

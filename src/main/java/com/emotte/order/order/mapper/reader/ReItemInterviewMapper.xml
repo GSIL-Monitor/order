@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReItemInterviewMapper">
+	<select id="loadItemInterview" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.ItemInterview">
+		select 
+			id as id ,			
+			order_id  as "orderId" ,
+			order_item_id as orderItemId ,			
+			server_type as serverType ,			
+			person_id as personId ,			
+			star_time as starTime ,			
+			end_time as endTime ,			
+			create_by as createBy ,			
+			create_time as createTime ,			
+			update_by as updateBy ,			
+			update_time as updateTime ,			
+			version as version ,			
+			interview_type as interviewType ,			
+			remarks as remarks ,			
+			interview_time as interviewTime ,
+			valid as valid 			
+		from t_order_item_interview
+		where
+			id=#{id} 	</select>
+	
+	<select id="queryShortRecode" parameterType="java.util.Map" resultType="java.util.Map">
+		select t.*
+		from t_sms_record t
+		where
+			t.receiver_phone = #{receivePhone}
+	</select>
+	
+	<select id="queryItemInterview"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+	select
+			 id  as "id" ,		
+			 order_id  as "orderId" ,	
+			 order_item_id  as "orderItemId" ,			
+			 server_type  as "serverType" ,			
+			 person_id  as "personId" ,			
+			to_char(star_time,'yyyy-mm-dd hh24:mi:ss')  as "starTime" ,			
+			to_char(end_time,'yyyy-mm-dd hh24:mi:ss')  as "endTime" ,			
+			 create_by  as "createBy" ,			
+			 create_time  as "createTime" ,			
+			 update_by  as "updateBy" ,			
+			to_char(update_time,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,			
+			 version  as "version" ,			
+			 interview_type  as "interviewType" ,			
+			 remarks  as "remarks" ,			
+			to_char(interview_time,'yyyy-mm-dd hh24:mi:ss')  as "interviewTime" ,
+			valid as "valid"			
+	from  t_order_item_interview 
+	<where> 
+	 1 = 1
+				<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="orderItemId!=null and orderItemId!='' ">           
+		and	order_item_id =  #{orderItemId} 		</if>
+				<if test="orderId!=null and orderId!='' ">           
+		and	order_id =  #{orderId} 		</if>
+				  <if test="serverType!=null and serverType!='' ">           
+		and	server_type =  #{serverType} 		</if>
+				  <if test="personId!=null and personId!='' ">           
+		and	person_id =  #{personId} 		</if>
+				  <if test="starTime!=null and starTime!='' ">           
+		and	to_char(star_time,'yyyy-mm-dd') = substr(#{starTime},0,10) 		</if>
+				  <if test="endTime!=null and endTime!='' ">           
+		and	to_char(end_time,'yyyy-mm-dd') = substr(#{endTime},0,10) 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	create_by =  #{createBy} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	create_time =  #{createTime} 		</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(update_time,'yyyy-mm-dd') = substr(#{updateTime},0,10) 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	version =  #{version} 		</if>
+				  <if test="interviewType!=null and interviewType!='' ">           
+		and	interview_type =  #{interviewType} 		</if>
+				  <if test="remarks!=null and remarks!='' ">           
+		and	remarks =  #{remarks} 		</if>
+				  <if test="interviewTime!=null and interviewTime!='' ">           
+		and	to_char(interview_time,'yyyy-mm-dd') = substr(#{interviewTime},0,10) 		</if>
+				  <if test="valid !=null and valid !='' ">           
+		and	valid = #{valid}		</if>
+			</where>
+	order by id desc  
+<!-- 		<if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	<select id="countItemInterview"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_order_item_interview 
+		<where> 
+	         1 = 1
+			<if test="id!=null and id!='' ">           
+			    and	 id = #{id} 		
+			</if>
+		    <if test="orderItemId!=null and orderItemId!='' ">           
+			    and	order_item_id = #{orderItemId} 		
+			</if>
+		    <if test="serverType!=null and serverType!='' ">           
+			    and	server_type =  #{serverType} 		
+			</if>
+		    <if test="personId!=null and personId!='' ">           
+			    and	person_id =  #{personId} 		
+		    </if>
+		    <if test="starTime!=null and starTime!='' ">           
+			    and	to_char(star_time,'yyyy-mm-dd') = substr(#{starTime},0,10) 		
+		    </if>
+		    <if test="endTime!=null and endTime!='' ">           
+			    and	to_char(end_time,'yyyy-mm-dd') = substr(#{endTime},0,10) 		
+		    </if>
+		    <if test="createBy!=null and createBy!='' ">           
+			    and	create_by =  #{createBy} 		
+		    </if>
+			<if test="createTime!=null and createTime!='' ">           
+			    and	create_time =  #{createTime} 		
+		    </if>
+			<if test="updateBy!=null and updateBy!='' ">           
+			    and	update_by =  #{updateBy} 		
+		    </if>
+			<if test="updateTime!=null and updateTime!='' ">           
+			    and	to_char(update_time,'yyyy-mm-dd') = substr(#{updateTime},0,10) 		
+		    </if>
+		    <if test="version!=null and version!='' ">           
+			    and	version =  #{version} 		
+		    </if>
+		    <if test="interviewType!=null and interviewType!='' ">           
+			    and	interview_type =  #{interviewType} 		
+		    </if>
+		    <if test="remarks!=null and remarks!='' ">           
+			    and	remarks =  #{remarks} 		
+		    </if>
+		    <if test="interviewTime!=null and interviewTime!='' ">           
+			    and	to_char(interview_time,'yyyy-mm-dd') = substr(#{interviewTime},0,10) 		
+		    </if>
+			<if test="valid !=null and valid !='' ">           
+			    and	valid = #{valid}		
+		    </if>
+			</where>
+	</select>		
+	<select id="queryNeedPersons"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+		select
+			 id  as "id" ,			
+			 order_item_id  as "orderItemId" ,			
+			 server_type  as "serverType" ,			
+			 person_id  as "personId" ,			
+			to_char(star_time,'yyyy-mm-dd hh24:mi:ss')  as "starTime" ,			
+			to_char(end_time,'yyyy-mm-dd hh24:mi:ss')  as "endTime" ,			
+			 create_by  as "createBy" ,			
+			 create_time  as "createTime" ,		
+			to_char(interview_time,'yyyy-mm-dd hh24:mi:ss')  as "interviewTime" ,
+			interview_type as "interviewType",
+			valid as "valid"			
+		from  t_order_item_interview 
+	<where> 
+	 1 = 1 
+				 <if test="orderId !=null and orderId !='' ">           
+		 and	order_id =  #{orderId} 		</if>
+		 		<if test="type !=null and type==1 ">           
+		 and interview_type in (1,2,4,6,8)		
+		 		</if> 
+		 		<if test="type !=null and type==2 ">           
+		 and interview_type in (2,4,6,8) 		
+		 		</if> 
+		 		<if test="type !=null and type==6 ">           
+		 and (interview_type=6 or interview_type=8) 		
+		 		</if>
+		 		<if test="type !=null and type==7 ">           
+		 and  interview_type=8		
+		 		</if>
+		 		<if test="type == 11 ">
+		 			<!-- 验证是否己顶岗推送使用 -->
+		 			AND INTERVIEW_TYPE IN (1,2,4,6,11)	
+		 		</if>
+		 and valid=1
+			</where>
+	order by id desc
+	</select>
+	
+	<select id="querySalaryCondition"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	
+	 select w.order_id as "ORDERID",
+        case
+          when to_char(w.star_time, 'yyyy-MM-dd') &gt;= '${start_time}' then
+           to_char(w.star_time, 'yyyy-MM-dd')
+          else
+           '${start_time}'
+        end as "STARTTIME",
+        decode(to_char(w.end_time, 'yyyy-MM-dd'),
+               null,
+               '${end_time}',
+               to_char(w.end_time, 'yyyy-MM-dd')) as "ENDTIME",
+        w.person_id as "PERSONID",
+        7 as "STATE",
+        1 as "ORDERMONTH" 
+   from t_order_item_interview w
+  where 1=1 
+    and w.order_id = #{order_id}
+    and to_char(w.star_time, 'yyyy-MM-dd') &gt;=
+        decode(w.end_time,
+               null,
+               to_char(w.star_time, 'yyyy-MM-dd'),
+               '${start_time}')   
+    and decode(to_char(w.end_time, 'yyyy-MM-dd'),
+               null,
+               '${end_time}',
+               to_char(w.end_time, 'yyyy-MM-dd')) &lt;= '${end_time}' 
+    and to_char(w.star_time, 'yyyy-MM-dd') &lt;= '${end_time}'
+    and w.interview_type in (8, 9)
+    </select>
+    <select id="queryItemInterviewByOrderId"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+	select
+			 id  as "id" ,			
+			 order_id  as "orderId" ,			
+			 server_type  as "serverType" ,			
+			 person_id  as "personId" ,			
+			to_char(star_time,'yyyy-mm-dd hh24:mi:ss')  as "starTime" ,			
+			to_char(end_time,'yyyy-mm-dd hh24:mi:ss')  as "endTime" ,		
+			 interview_type  as "interviewType" ,	
+			to_char(interview_time,'yyyy-mm-dd hh24:mi:ss')  as "interviewTime"			
+	from  t_order_item_interview 
+	<where> 
+	 1 = 1
+				<if test="orderId!=null and orderId!='' ">           
+		and	order_id =  #{orderId} 		</if>
+				  <if test="interviewType!=null and interviewType!='' ">           
+		and	interview_type =  #{interviewType} 		</if>
+			</where>
+	</select>
+	<select id="queryInterviewsByOrderId"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+	select
+			 id  as "id" ,			
+			 order_id  as "orderId" ,			
+			 server_type  as "serverType" ,			
+			 person_id  as "personId" ,			
+			to_char(star_time,'yyyy-mm-dd hh24:mi:ss')  as "starTime" ,			
+			to_char(end_time,'yyyy-mm-dd hh24:mi:ss')  as "endTime" ,		
+			 interview_type  as "interviewType" ,	
+			to_char(interview_time,'yyyy-mm-dd hh24:mi:ss')  as "interviewTime"			
+	from  t_order_item_interview 
+		<where> 
+	  	order_id = #{orderId} 
+	  	<if test="type !=null and type==13">           
+			and interview_type = 4 		</if>
+		<if test="type !=null and type==14">           
+			and interview_type in (4,8,9) 		</if>
+	  	and valid=1
+		</where>
+	</select>
+	<select id="queryNotHousehold"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="java.lang.Long">
+		select person_id from   t_order_item_interview 
+			<where> 
+			  	order_id = #{orderId}
+			  	<if test="type !=null and type==20">           
+					and to_char(interview_type) in ('1','4') 
+					and person_id != #{personId}
+				</if>
+				<if test="type !=null and type==21">   
+					and to_char(interview_type) in ('4')         
+				 	and  person_id not in 
+				  	<foreach collection="emp_id" index="index" item="item" open="(" separator="," close=")">                          
+				  	     #{item}
+			         </foreach> 
+				</if>	 
+			</where>
+	</select>
+	<select id="queryInterview"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+		select star_time as "starTime" from   t_order_item_interview   where id=#{id}
+	</select>
+	<select id="queryOrderNeedsHu"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="java.lang.Long">
+		select count(1) as person_id from   t_order_item_interview 
+			<where> 
+			  	order_id = #{orderId}
+			  	 and interview_type =8
+			</where>
+	</select>
+	<!-- 查询已匹配的服务人员 -->
+	<select id="queryMatchingPersonId"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="java.lang.Integer">
+		select count(1) as person_id from   t_order_item_interview 
+			<where> 
+			  	order_id = #{orderId}
+			  	 and interview_type =4
+			</where>
+	</select>	
+	
+	<select id="queryInterviews" parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+				SELECT id,
+			       order_item_id AS orderItemId,
+			       server_type AS serverType,
+			       person_id AS personId,
+			       to_char(star_time, 'yyyy-mm-dd') AS starTime,
+			       to_char(end_time, 'yyyy-mm-dd') AS endTime,
+			       create_by AS createBy,
+			       to_char(create_time, 'yyyy-mm-dd hh24:mi:ss') AS createTime,
+			       update_by AS updateBy,
+			       to_char(update_time, 'yyyy-mm-dd hh24:mi:ss') AS updateTime,
+			       version AS VERSION,
+			       interview_type AS interviewType,
+			       remarks AS remarks,
+			       to_char(interview_time, 'yyyy-mm-dd hh24:mi:ss') AS interviewTime,
+			       order_id AS orderId,
+			       DECODE(interview_type,1,'未处理',2,'已推送',3,'已拒绝',4,'已匹配',5,'已调换',6,'面试成功',7,'面试失败',8,'上户',9,'下户',10,'已取消',11,'顶岗预备',12,'顶岗上户',13,'调岗下户' ) AS interviewTypeText
+			  FROM t_order_item_interview
+			  <where>
+			  			valid = 1
+			  		<if test="id != null and id != '' ">
+			  		    AND id = #{id}
+			  		</if>
+			  		<if test="orderId != null and orderId != '' ">
+			  		    AND order_id = #{orderId}
+			  		</if>
+			  		<if test="personId != null and personId != '' ">
+			  			AND person_id = #{personId}
+			  		</if>
+			  		<if test="interviewType != null and interviewType != '' ">
+			  			AND interview_type = #{interviewType}
+			  		</if>
+			  		<if test="inInterviewType != null and inInterviewType != '' ">
+			  			AND interview_type in (${inInterviewType})
+			  		</if>
+			  </where>
+	</select>
+	<select id="checkRetuningJobsUp" parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+					SELECT i.id,
+				       to_char(i.star_time, 'yyyy-mm-dd') AS starTime,
+				       to_char(i.end_time, 'yyyy-mm-dd') AS endTime,
+				       i.interview_type
+				  FROM t_order_item_interview i
+				 WHERE i.valid = 1
+				   AND i.interview_type = 9
+				   AND i.order_id = #{orderId}
+				   AND i.end_time &gt; (SELECT iii.end_time
+				                       FROM t_order_item_interview iii
+				                      WHERE iii.valid = 1
+				                        AND iii.id = #{id})
+				   AND i.end_time = (SELECT MAX(ii.end_time)
+				                       FROM t_order_item_interview ii
+				                      WHERE ii.valid = 1
+				                        AND ii.interview_type = 9
+				                        AND ii.order_id = #{orderId})
+	</select>
+	<select id="selectSchedule" parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+			SELECT t.id,
+			       t.start_time as starTime,
+			       t.end_time   as endTime,
+			       t.start_date as startDate,
+			       t.end_date   as endDate,
+			       t.weekday    as week,
+			       t.order_id   as orderId,
+			       t.emp_id     as personids
+			  FROM t_emp_personnel_schedule t
+			 WHERE t.emp_id = #{personId}
+			   and t.order_id = #{orderId}
+			   and t.is_enable = 1
+	</select>
+	
+	<select id="selectConflictSchedule" parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+		SELECT tt.* FROM (
+							SELECT (SELECT '管家姓名【' || m.real_name || '】,订单编号【 ' || o.order_code || '】,占用服务人员排期为'||t.start_date||'--'||t.end_date
+						          FROM t_order o
+						          LEFT JOIN t_auth_manager m
+						            ON m.id = o.recharge_by
+						            AND m.valid = 1
+						         WHERE o.valid = 1
+						           AND o.id = t.order_id) as msg,
+						       t.order_id as ordr,
+						       t.start_date,
+						       t.end_date,
+						       t.start_time,
+						       t.end_time,
+						       t.weekday,
+						       tl.name as name,
+						       ROWNUM AS rn
+						  FROM t_emp_personnel_schedule t
+						  left join t_emp_personnel tl
+						    on t.emp_id = tl.id
+						    and tl.valid=1
+						 WHERE t.is_enable = 2
+						   AND t.status != 1
+						      AND t.order_id != #{orderId}
+						   AND t.emp_id = #{personids}
+						   <if test="startDate != null and startDate !='' and endDate != null and endDate !='' ">
+						   AND (#{startDate} &lt;= t.end_date AND t.start_date &lt;= #{endDate})
+						   </if>
+						     <if test="starTime != null or starTime !='' or endTime !=null or endTime !='' ">
+						   AND (#{starTime} &lt;= t.end_time AND t.start_time &lt;= #{endTime})
+						   </if>
+						   <if test="week !=null">
+						   AND t.weekday IN (${week})
+						   </if>
+   					) tt WHERE tt.rn=1
+	</select>
+	
+	
+	
+	<select id="validateSendpies"  parameterType="com.emotte.order.order.model.ItemInterview" resultType="java.lang.Integer">
+	select   count(0) 		
+	from  T_ORDER_PUSH_LOG 
+		<where> 
+		and valid=1
+		<if test="orderId != null and orderId != '' ">
+			 AND order_id=#{orderId}
+	    </if>
+	    <if test="customID != null and customID != '' ">
+	         and manager_id=#{customID} 
+	     </if>
+	  	     and DISTINGUISH=3
+		</where>
+	</select>
+	
+	<select id="queryOrderStatus" parameterType="Long" resultType="com.emotte.order.order.model.ItemInterview">
+	SELECT t.id FROM t_order_item_interview t WHERE t.valid=1 AND t.interview_type IN (1,2,4,6,8) AND t.order_id=#{orderId}
+	</select>
+	
+	<select id="loadItemInterviewInfo" parameterType="Long" resultType="com.emotte.order.order.model.ItemInterview">
+					SELECT nvl(o.user_name, '客户') AS name,
+					       o.user_mobile AS mobilePhone,
+					       o.id AS orderId,
+					       o.order_code AS orderCode,
+					       o.order_status AS orderStatus,
+					       pc.cname AS orderType,
+					       p.id AS personId,
+					       to_char(i.star_time, 'yyyymmdd') AS starTime
+					  FROM t_order_item_interview i
+					  JOIN t_order o
+					    ON i.order_id = o.id
+					  JOIN t_emp_personnel p
+					    ON p.id = i.person_id
+					  JOIN t_customer c
+					    ON c.id = o.user_id
+					  LEFT JOIN t_product_category pc
+					    ON pc.code = o.order_type
+					 WHERE o.valid = 1
+					   AND o.cate_type = 2
+					   AND p.valid = 1
+					   AND pc.valid = 1
+					   AND i.valid = 1
+					   AND c.valid = 1
+					   AND i.id = #{id}
+	</select>
+</mapper>

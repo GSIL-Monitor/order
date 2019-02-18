@@ -1,0 +1,1329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.RePayfeeMapper">
+    <select id="loadPayfee" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Payfee">
+		select 
+			id as id ,			
+			order_id as orderId ,			
+			fee_post as feePost ,			
+			fee_type as feeType ,			
+			post_num as postNum ,			
+			cards_num as cardsNum ,			
+			is_back_type as isBackType ,			
+			fee_statrt_period as feeStatrtPeriod ,			
+			fee_end_period as feeEndPeriod ,			
+			fee_to_date as feeToDate ,			
+			fee_sum as feeSum ,			
+			account_status as accountStatus ,			
+			create_time as createTime ,			
+			create_by as createBy ,			
+			update_time as updateTime ,			
+			update_by as updateBy ,			
+			version as version ,			
+			agent_user as agentUser ,
+			post_terminal_no as postTerminalNo			
+		from t_order_payfee
+		where
+			id=#{id} 	</select>
+
+    <select id="queryPayfee" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+        pf.id as "id" ,
+        pf.order_id as "orderId" ,
+        nvl(pf.source_fee_post,pf.fee_post) as "feePost" ,
+        (select t.dict_name from t_base_dictionary t
+        where t.dict_code=pf.fee_post and t.dict_code like '2025%') as postText,
+        (SELECT tb.ticket_name
+        FROM t_card_ticket t
+        inner join t_card_ticket_batch tb
+        on t.ticket_batch_id = tb.id
+        where t.ticket_numb = pf.cards_num
+        and t.valid = 1) as ticketName,
+        pf.fee_type as "feeType" ,
+        pf.post_num as "postNum" ,
+        pf.post_bank as "postBank",
+        pf.post_user as "postUser",
+        pf.cards_num as "cardsNum" ,
+        pf.is_back_type as "isBackType" ,
+        to_char(pf.fee_statrt_period,'yyyy-mm-dd hh24:mi:ss') as "feeStatrtPeriod" ,
+        to_char(pf.fee_end_period,'yyyy-mm-dd hh24:mi:ss') as "feeEndPeriod" ,
+        to_char(pf.fee_to_date,'yyyy-mm-dd hh24:mi:ss') as "feeToDate" ,
+        pf.fee_sum as "feeSum" ,
+        pf.pay_status as "payStatus" ,
+        pf.account_status as "accountStatus" ,
+        to_char(pf.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        pf.create_by as "createBy" ,
+        decode(pf.create_by,null,'自助缴费',0,'自助缴费',tama.real_name) as "createByName",
+        to_char(pf.update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+        pf.update_by as "updateBy" ,
+        decode(pf.update_by,null,'自助缴费',0,'自助缴费',tamb.real_name) as "updateByName",
+        pf.version as "version" ,
+        pf.agent_user as "agentUser" ,
+        pf.bank_flow_num as "bankFlowNum" ,
+        pf.post_terminal_no as "postTerminalNo",
+        (select ch.name from t_custom_channel ch where pf.collection_channel = to_char(ch.id)) as collectionChannelText,
+        pf.platform_fee as "platformFee",
+        pf.collection_channel as "collectionChannel",
+        pf.platform_order_id as "platformOrderId",
+        pf.collection_entity as "collectionEntity" ,
+        pf.source_payfee_id as "sourcePayfeeId",
+        pf.source_fee_post as "sourceFeePost",
+        pf.vipshop_name as "vipShopName",
+        pf.pos_img_url as "posImgUrl" ,
+        pf.is_manual as isManualFee,
+        pf.hjbl_name AS hjblName,
+        pf.hjbl_bank AS hjblBank,
+        pf.hjbl_card AS hjblCard,
+        pf.hjbl_card_bank AS hjblCardBank
+        from t_order_payfee pf
+        left join emerp.t_auth_manager tama on (pf.create_by = tama.id and tama.valid = 1)
+        left join emerp.t_auth_manager tamb on (pf.create_by = tamb.id and tamb.valid = 1)
+        <where>
+            1 = 1 and pf.valid = 1
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and pf.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and pf.id = #{id}
+                    </if>
+                    <if test="orderId!=null and orderId!='' ">
+                        and pf.order_id = #{orderId}
+                    </if>
+                    <if test="feePost!=null and feePost!='' ">
+                        and pf.fee_post = #{feePost}
+                    </if>
+                    <if test="feeType!=null and feeType!='' ">
+                        and pf.fee_type = #{feeType}
+                    </if>
+                    <if test="postNum!=null and postNum!='' ">
+                        and pf.post_num = #{postNum}
+                    </if>
+                    <if test="cardsNum!=null and cardsNum!='' ">
+                        and pf.cards_num = #{cardsNum}
+                    </if>
+                    <if test="isBackType!=null and isBackType!='' ">
+                        and pf.is_back_type = #{isBackType}
+                    </if>
+                    <if test="feeStatrtPeriod!=null and feeStatrtPeriod!='' ">
+                        and pf.fee_statrt_period = to_date(#{feeStatrtPeriod},'yyyy-mm-dd')
+                    </if>
+                    <if test="feeEndPeriod!=null and feeEndPeriod!='' ">
+                        and pf.fee_end_period = to_date(#{feeEndPeriod},'yyyy-mm-dd')
+                    </if>
+                    <if test="feeToDate!=null and feeToDate!='' ">
+                        and pf.fee_to_date = to_date(#{feeToDate},'yyyy-mm-dd')
+                    </if>
+                    <if test="feeSum!=null and feeSum!='' ">
+                        and pf.fee_sum = #{feeSum}
+                    </if>
+                    <if test="accountStatus!=null and accountStatus!='' ">
+                        and pf.account_status = #{accountStatus}
+                    </if>
+                    <if test="payStatus!=null and payStatus!='' ">
+                        and pf.pay_status = #{payStatus}
+                    </if>
+                    <if test="createTime!=null and createTime!='' ">
+                        and pf.create_time = to_date(#{createTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="createBy!=null and createBy!='' ">
+                        and pf.create_by = #{createBy}
+                    </if>
+                    <if test="updateTime!=null and updateTime!='' ">
+                        and pf.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="updateBy!=null and updateBy!='' ">
+                        and pf.update_by = #{updateBy}
+                    </if>
+                    <if test="version!=null and version!='' ">
+                        and pf.version = #{version}
+                    </if>
+                    <if test="agentUser!=null and agentUser!='' ">
+                        and pf.agent_user = #{agentUser}
+                    </if>
+                    <if test="valid!=null and valid!='' ">
+                        and pf.valid = #{valid}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        order by pf.create_time
+    </select>
+    <select id="countPayfee" parameterType="com.emotte.order.order.model.Payfee" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM t_order_payfee
+        <where>
+            1 = 1
+            <if test="id!=null and id!='' ">
+                and id = #{id}
+            </if>
+            <if test="orderId!=null and orderId!='' ">
+                and order_id = #{orderId}
+            </if>
+            <if test="feePost!=null and feePost!='' ">
+                and fee_post = #{feePost}
+            </if>
+            <if test="feeType!=null and feeType!='' ">
+                and fee_type = #{feeType}
+            </if>
+            <if test="postNum!=null and postNum!='' ">
+                and post_num = #{postNum}
+            </if>
+            <if test="cardsNum!=null and cardsNum!='' ">
+                and cards_num = #{cardsNum}
+            </if>
+            <if test="isBackType!=null and isBackType!='' ">
+                and is_back_type = #{isBackType}
+            </if>
+            <if test="feeStatrtPeriod!=null and feeStatrtPeriod!='' ">
+                and fee_statrt_period = to_date(#{feeStatrtPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="feeEndPeriod!=null and feeEndPeriod!='' ">
+                and fee_end_period = to_date(#{feeEndPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="feeToDate!=null and feeToDate!='' ">
+                and fee_to_date = to_date(#{feeToDate},'yyyy-mm-dd')
+            </if>
+            <if test="feeSum!=null and feeSum!='' ">
+                and fee_sum = #{feeSum}
+            </if>
+            <if test="accountStatus!=null and accountStatus!='' ">
+                and account_status = #{accountStatus}
+            </if>
+            <if test="createTime!=null and createTime!='' ">
+                and create_time = to_date(#{createTime},'yyyy-mm-dd')
+            </if>
+            <if test="createBy!=null and createBy!='' ">
+                and create_by = #{createBy}
+            </if>
+            <if test="updateTime!=null and updateTime!='' ">
+                and update_time = to_date(#{updateTime},'yyyy-mm-dd')
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                and update_by = #{updateBy}
+            </if>
+            <if test="version!=null and version!='' ">
+                and version = #{version}
+            </if>
+            <if test="agentUser!=null and agentUser!='' ">
+                and agent_user = #{agentUser}
+            </if>
+        </where>
+    </select>
+
+    <select id="loadAccount" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Payfee">
+		select 
+			id as id ,			
+			order_id as orderId ,			
+			account_amount as accountAmount ,			
+			pay_type as payType ,			
+			pay_status as payStatus ,	
+			is_back_type as isBackType ,
+			to_char(start_time,'yyyy-mm-dd hh24:mi:ss') as startTime ,
+			to_char(end_time,'yyyy-mm-dd hh24:mi:ss') as endTime ,			
+			create_time as createTime ,			
+			create_by as createBy ,			
+			update_time as updateTime ,			
+			update_by as updateBy ,			
+			version as version ,
+			valid as valid ,
+			customer_fee as customerFee,
+			personal_fee as personalFee		
+		from t_account_pay
+		where
+			id=#{id} 	
+	</select>
+
+    <select id="queryAccount" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+        act.id as id ,
+        act.order_id as orderId ,
+        act.account_amount as feeSum ,
+        act.pay_type as feeType ,
+        act.pay_status as payStatus ,
+        decode(act.pay_status,20110001,'未结算',20110002,'部分结算',20110003,'结算完成',20130001,'待审核',20130002,'确认无效',
+        20130003,'确认有效',20130004,'审核中',20130005,'审核失败',20130006,'审核成功',20130007,'退款中',20130008,'退款成功',20130009,'退款失败',20130010,'已删除',20130014,'回访中',20130015,'回访失败')
+        as payText ,
+        act.is_back_type as isBackType ,
+        to_char(act.start_time,'yyyy-mm-dd hh24:mi:ss') as feeStatrtPeriod ,
+        to_char(act.end_time,'yyyy-mm-dd hh24:mi:ss') as feeEndPeriod ,
+        to_char(act.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+        act.create_by as createBy ,
+        decode(act.create_by,null,'自助缴费',0,'自助缴费',tama.real_name) as "createByName",
+        to_char(act.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+        act.update_by as updateBy ,
+        act.version as version ,
+        act.pay_kind as payKind,
+        act.pay_type as payType,
+        act.buss_status as bussStatus,
+        act.remark as remark,
+        act.valid as valid ,
+        act.customer_fee as customerFee,
+        act.personal_fee as personalFee,
+        act.platform_all_fee as platformAllFee,
+        act.vph_status as vphStatus,
+        act.vph_back_status as vphBackStatus,
+        act.refund_object as refundObject,
+        od.cate_type as cateType,
+        top.fee_post as feePost
+        from t_account_pay act
+        left join t_order od on act.order_id = od.id
+        left join t_auth_manager tama on (act.create_by=tama.id and tama.valid=1)
+        left join t_order_payfee top on (top.order_id = act.id and top.valid = 1)
+        <where>
+            1 = 1 and ( (act.is_manual=2 and act.pay_status='20110003') or act.is_manual=1 or act.is_manual is null)
+            <if test="id!=null and id!='' ">
+                and act.id = #{id}
+            </if>
+            <if test="orderId!=null and orderId!='' ">
+                and act.order_id = #{orderId}
+            </if>
+            <if test="feeSum!=null and feeSum!='' ">
+                and act.account_amount = #{feeSum}
+            </if>
+            <if test="feeType!=null and feeType!='' ">
+                and act.pay_type = #{feeType}
+            </if>
+            <if test="payStatus!=null and payStatus!='' ">
+                and act.pay_status = #{payStatus}
+            </if>
+            <if test="isBackType!=null and isBackType!='' ">
+                and act.is_back_type = #{isBackType}
+            </if>
+            <if test="feeStatrtPeriod!=null and feeStatrtPeriod!='' ">
+                and act.fee_statrt_period &gt;= to_date(#{feeStatrtPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="feeEndPeriod!=null and feeEndPeriod!='' ">
+                and act.fee_end_period &lt;= to_date(#{feeEndPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="valid!=null and valid!='' ">
+                and act.valid = #{valid}
+            </if>
+            <if test="isType !=null and isType !='' and isType == 1">
+                and act.is_back_type in (1,3)
+            </if>
+            <if test="version!=null and version!='' ">
+                and act.version = #{version}
+            </if>
+            <if test="feePost != null and feePost != '' ">
+                and top.fee_post != #{feePost}
+            </if>
+        </where>
+        order by act.create_time desc
+    </select>
+
+    <select id="queryPayfeeLpk" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+        cd.id as id ,
+        cd.card_balance as cardBalance ,
+        cd.card_numb as cardNumb ,
+        to_char(cd.valid_time,'yyyy-mm-dd') as validTime
+        from t_card cd, t_order od
+        <where>
+            1 = 1 and cd.bind_user_id=od.user_id(+)
+            <if test="id!=null and id!='' ">
+                and id = #{id}
+            </if>
+            <if test="orderId!=null and orderId!='' ">
+                and od.id = #{orderId}
+            </if>
+        </where>
+        and cd.valid=1 and rownum&lt;=5
+    </select>
+
+    <select id="queryAccountByOrderId" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+
+        act.order_id as orderId ,
+        sum(act.account_amount) as feeSum
+        from t_account_pay act
+        <where>
+            1 = 1
+            <if test="orderId!=null and orderId!='' ">
+                and act.order_id = #{orderId}
+            </if>
+            <if test="feeType!=null and feeType!='' ">
+                and act.pay_type = #{feeType}
+            </if>
+            <if test="payStatus!=null and payStatus!='' ">
+                and act.pay_status = #{payStatus}
+            </if>
+            <if test="isBackType!=null and isBackType!='' ">
+                and act.is_back_type = #{isBackType}
+            </if>
+            <if test="valid!=null and valid!='' ">
+                and act.valid = #{valid}
+            </if>
+        </where>
+        group by act.order_id
+    </select>
+
+    <select id="loadPayfeeMinCreTime" parameterType="java.lang.Long" resultType="string">
+		 select min(op.create_time) as createTime
+		  from t_account_pay ap
+		  left join t_order_payfee op
+		    on ap.id = op.order_id
+		 where ap.id=#{accountId} 	and op.valid = 1
+	</select>
+    <select id="loadIOUsByUserId" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Payfee">
+		select 
+			ia.id as "iouId" ,
+			ia.available as "iouAvailable" ,
+			ia.state as "iouState"
+		from t_iou_account ia 
+    	left join t_customer c on c.id=ia.cust_id
+		where 
+			1 = 1 and ia.valid = 1 
+			and ia.cust_id = #{userId}
+	</select>
+    <!-- 此查询已作废 -->
+    <select id="queryPayfeeByType" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        select
+        nvl(sum(op.fee_sum),0)
+        from t_order od
+        left join t_account_pay ap on od.id = ap.order_id
+        left join t_order_payfee op on ap.id = op.order_id
+        <where>1=1
+            and ap.pay_status in (20110002,20110003)
+            and ap.pay_kind not in (4,5)
+            and op.pay_status = 20110002
+            and op.fee_post not in (20250010,20250011)
+            <if test="flag !=null and flag !='' and flag == 91 ">and ap.pay_type in (1,2,3,5)</if>
+            <if test="flag !=null and flag !='' and flag == 92 ">and ap.pay_type = 4</if>
+            <if test="startTime !=null and startTime !='' and vipFlag == 1 ">and to_char(op.create_time,'yyyy-MM-dd
+                hh24:mi:ss') &gt;= #{startTime}
+            </if>
+            and ap.is_back_type = 2
+            and op.is_back_type = 1
+            and od.valid = 1
+            and ap.valid = 1
+            and op.valid = 1
+            and od.id = #{orderId}
+        </where>
+    </select>
+    <select id="queryVphPay" parameterType="java.lang.Long" resultType="java.lang.Long">
+		select pay.id
+		  from t_account_pay pay
+		 inner join T_ORDER_PAYFEE FEE
+		    on fee.ORDER_ID = PAY.ID
+		   and fee.fee_post = 20250027
+		 where pay.id =#{0}
+		   and pay.valid = 1
+		   and fee.valid=1
+		   and pay.is_back_type = 1
+	</select>
+    <select id="queryVphBankFlowNum" parameterType="java.lang.Long" resultType="java.lang.String">
+		select * from(select op.bank_flow_num as bankFlowNum 			
+					    from t_account_pay ap 
+						left join t_order_payfee op
+						  on ap.id = op.order_id
+					   where 1=1 and ap.valid = 1 
+						          and op.valid = 1 
+						          and ap.is_back_type = 2
+						          and op.is_back_type = 1
+						          and op.fee_post = 20250027
+							 	  and ap.order_id=#{orderId} 
+						order by op.create_time desc )	
+		 where rownum = 1
+    </select>
+    <!-- 查询POS凭条 带分页 -->
+    <select id="queryPosChecklistPage" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        with orderInfo as ( select ap.id as apId,ap.create_by as accountBy,
+        od.create_by as createBy,od.recharge_dept as rechargeDept,
+        od.create_dept as createDept, od.cate_type as cateType,
+        od.order_type as orderType,od.order_code as orderCode,
+        od.city as cityCode
+        from t_order od left join t_account_pay ap on od.id = ap.order_id
+        where ap.is_back_type = 2 and od.valid = 1 and ap.valid = 1)
+        select a.* from ( (select
+        pf.id as "id" ,
+        nvl(pf.order_id,pf.id) as "orderId" ,
+        pf.fee_post as "feePost" ,
+        (select t.dict_name from t_base_dictionary t
+        where t.dict_code=pf.fee_post and t.dict_code like '2025%') as postText,
+        pf.post_num as "postNum" ,
+        pf.fee_sum as "feeSum" ,
+        pf.pay_status as "payStatus" ,
+        pf.account_status as "accountStatus" ,
+        to_char(pf.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        pf.create_by as "createBy" ,
+        to_char(pf.update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+        pf.update_by as "updateBy" ,
+        pf.bank_flow_num as "bankFlowNum" ,
+        pf.pos_img_url as "posImgUrl" ,
+        pf.pos_check_status as "posCheckStatus",
+        pf.pos_fail_reason as "posFailReason",
+        to_char(pf.pos_check_date,'yyyy-mm-dd hh24:mi:ss') as "posCheckDate",
+        (select creat.real_name from t_auth_manager creat where pf.create_by = creat.id) as createByString,
+        (select orgc.name from t_auth_org orgc where orgc.id = (select c.dept_id from t_auth_manager c where
+        pf.create_by = c.id) ) as createDeptString,
+        (select rech.real_name from t_auth_manager rech where pf.pos_check_by = rech.id) as checkByString,
+        (select orgr.name from t_auth_org orgr where pf.pos_check_dept = orgr.id ) as checkDeptString,
+        decode(orderInfo.cateType,3,'商品',
+        1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = orderInfo.orderType AND pc.valid = 1),
+        4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = orderInfo.orderType AND pc.valid = 1),
+        2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = orderInfo.orderType AND pc.valid = 1),
+        5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+        orderInfo.orderCode as "orderCode",
+        to_char(bc.create_time,'yyyy-mm-dd hh24:mi:ss') as "payDate",
+        ic.pay_user as "payUser" ,
+        orderInfo.cityCode as "cityCode",
+        (select base.name from t_base_city base where base.code = orderInfo.cityCode) as "orderCity",
+        decode(pf.account_status,1,'是',2,'否','无') as "accountStatusText",
+        decode(pf.fee_type,1,'订单',2,'续费',3,'服务人员',4,'卡售卖','无') as "feeTypeText",
+        to_char(ic.create_time,'yyyy-mm-dd hh24:mi:ss') as "confirmTime"
+        from t_order_payfee pf
+        left join orderInfo on orderInfo.apId = pf.order_id
+        left join finance.t_fin_bank_confirm bc on bc.order_payfee_id = pf.id
+        left join finance.t_fin_income_comfirm ic on bc.income_comfirm_id = ic.id
+        <where>
+            1 = 1 and pf.valid = 1 and pf.is_back_type = 1
+            and pf.fee_post in ('20250005','20250008','20250019') and pf.pos_check_status is not null
+            <if test="id!=null and id!='' ">
+                and pf.id = #{id}
+            </if>
+            <if test="payStatus!=null and payStatus!='' ">
+                and pf.pay_status = #{payStatus}
+            </if>
+            <if test="feeType !=null and feeType !='' ">
+                and pf.fee_type = #{feeType}
+            </if>
+            <if test="accountStatus !=null and accountStatus !='' ">
+                and pf.account_status = #{accountStatus}
+            </if>
+            <if test="feePost !=null and feePost !='' ">
+                and pf.fee_post = #{feePost}
+            </if>
+            <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                and pf.bank_flow_num like '${bankFlowNum}%'
+            </if>
+            <if test="payUser !=null and payUser !='' ">
+                and ic.pay_user like '${payUser}%'
+            </if>
+            <if test="createBy!=null and createBy!='' ">
+                and pf.create_by = #{createBy}
+            </if>
+            <if test="createDeptString !=null and createDeptString !='' ">
+                and orderInfo.rechargeDept=#{createDeptString}
+            </if>
+            <if test="updateTime!=null and updateTime!='' ">
+                and pf.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                and pf.update_by = #{updateBy}
+            </if>
+            <if test="checkDeptString !=null and checkDeptString !='' ">
+                and pf.pos_check_dept =#{checkDeptString}
+            </if>
+            <if test="checkByString !=null and checkByString !='' ">
+                and pf.pos_check_by = #{checkByString}
+            </if>
+            <if test="createTime!=null and createTime!='' ">
+                and to_char(pf.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+            </if>
+            <if test="createEndTime !=null and createEndTime !='' ">
+                and to_char(pf.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+            </if>
+            <if test="confirmTime !=null and confirmTime !='' ">
+                and to_char(ic.create_time,'yyyy-mm-dd') &gt;= #{confirmTime}
+            </if>
+            <if test="confirmEndTime !=null and confirmEndTime !='' ">
+                and to_char(ic.create_time,'yyyy-mm-dd') &lt;= #{confirmEndTime}
+            </if>
+            <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                and pf.pos_check_status=#{posCheckStatus}
+            </if>
+            <if test="categoryCode !=null and categoryCode !='' ">
+                and orderInfo.orderType like '${categoryCode}%'
+            </if>
+            <if test="checkProvince !=null and checkProvince !='' ">
+                and orderInfo.cityCode like '${checkProvince}%'
+            </if>
+            <if test="checkCity !=null and checkCity !='' ">
+                and orderInfo.cityCode like '${checkCity}%'
+            </if>
+            <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+                and ( orderInfo.createBy=#{loginBy} or pf.create_by = #{loginBy} or orderInfo.createDept = #{loginDept}
+                )
+            </if>
+        </where>
+        )
+        union
+
+        (select
+        odd.id as "id" ,
+        null as "orderId" ,
+        odd.fee_post as "feePost" ,
+        (select t.dict_name from t_base_dictionary t
+        where t.dict_code=odd.fee_post and t.dict_code like '2025%') as postText,
+        odd.post_num as "postNum" ,
+        odd.pay_money as "feeSum" ,
+        '' as "payStatus" ,
+        rev.is_check as "accountStatus" ,
+        to_char(rev.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        rev.create_by as "createBy" ,
+        to_char(rev.update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+        rev.update_by as "updateBy" ,
+        odd.bank_confirm as "bankFlowNum" ,
+        odd.pos_img_url as "posImgUrl" ,
+        odd.pos_check_status as "posCheckStatus",
+        odd.pos_fail_reason as "posFailReason",
+        to_char(odd.pos_check_date,'yyyy-mm-dd hh24:mi:ss') as "posCheckDate",
+        (select creat.real_name from t_auth_manager creat where rev.create_by = creat.id) as createByString,
+        (select orgc.name from t_auth_org orgc where orgc.id = (select c.dept_id from t_auth_manager c where
+        rev.create_by = c.id) ) as createDeptString,
+        (select rech.real_name from t_auth_manager rech where odd.pos_check_by = rech.id) as checkByString,
+        (select orgr.name from t_auth_org orgr where odd.pos_check_dept = orgr.id ) as checkDeptString,
+        '其他' AS typeText,
+        '' as "orderCode",
+        to_char(bc.create_time,'yyyy-mm-dd hh24:mi:ss') as "payDate",
+        ic.pay_user as "payUser" ,
+        '' as "cityCode",
+        '' as "orderCity",
+        decode(rev.is_check,1,'否',2,'是','无') as "accountStatusText",
+        '其他' as "feeTypeText",
+        to_char(ic.create_time,'yyyy-mm-dd hh24:mi:ss') as "confirmTime"
+        from finance.t_fin_other_deal_detail odd
+        left join finance.t_fin_other_revenue rev on rev.id = odd.other_revenue_id
+        left join finance.t_fin_bank_confirm bc on bc.order_payfee_id = odd.other_revenue_id
+        left join finance.t_fin_income_comfirm ic on bc.income_comfirm_id = ic.id
+        <where>
+            1 = 1 and odd.vaild = 1
+            and odd.fee_post in ('20250005','20250008','20250019') and odd.pos_check_status is not null
+            <if test="id!=null and id!='' ">
+                and odd.id = #{id}
+            </if>
+            <if test="payStatus!=null and payStatus!='' ">
+                and odd.bank_confirm != null
+            </if>
+            <if test="feeType !=null and feeType !='' and feeType != 5">
+                and odd.bank_confirm != null
+            </if>
+            <if test="accountStatus !=null and accountStatus !='' and accountStatus == 1 ">
+                and rev.is_check = 2
+            </if>
+            <if test="accountStatus !=null and accountStatus !='' and accountStatus == 2">
+                and rev.is_check = 1
+            </if>
+            <if test="feePost !=null and feePost !='' ">
+                and odd.fee_post = #{feePost}
+            </if>
+            <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                and odd.bank_confirm like '${bankFlowNum}%'
+            </if>
+            <if test="payUser !=null and payUser !='' ">
+                and ic.pay_user like '${payUser}%'
+            </if>
+            <if test="createBy!=null and createBy!='' ">
+                and rev.create_by = #{createBy}
+            </if>
+            <if test="updateTime!=null and updateTime!='' ">
+                and odd.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                and odd.update_by = #{updateBy}
+            </if>
+            <if test="checkDeptString !=null and checkDeptString !='' ">
+                and odd.pos_check_dept =#{checkDeptString}
+            </if>
+            <if test="checkByString !=null and checkByString !='' ">
+                and odd.pos_check_by = #{checkByString}
+            </if>
+            <if test="createTime!=null and createTime!='' ">
+                and to_char(rev.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+            </if>
+            <if test="createEndTime !=null and createEndTime !='' ">
+                and to_char(rev.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+            </if>
+            <if test="confirmTime !=null and confirmTime !='' ">
+                and to_char(ic.create_time,'yyyy-mm-dd') &gt;= #{confirmTime}
+            </if>
+            <if test="confirmEndTime !=null and confirmEndTime !='' ">
+                and to_char(ic.create_time,'yyyy-mm-dd') &lt;= #{confirmEndTime}
+            </if>
+            <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                and odd.pos_check_status=#{posCheckStatus}
+            </if>
+            <if test="categoryCode !=null and categoryCode !='' ">
+                and odd.bank_confirm != null
+            </if>
+            <if test="checkProvince !=null and checkProvince !='' ">
+                and odd.bank_confirm != null
+            </if>
+            <if test="checkCity !=null and checkCity !='' ">
+                and odd.bank_confirm != null
+            </if>
+            <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+                and rev.create_by = #{loginBy}
+            </if>
+        </where>
+        )
+        order by "posCheckStatus","createTime" desc
+        ) a
+    </select>
+    <!-- 查询POS凭条 未分页 -->
+    <select id="queryPosCheck" parameterType="com.emotte.order.order.model.Payfee" resultType="java.util.Map">
+        with orderInfo as ( select ap.id as apId,ap.create_by as accountBy,
+        od.create_by as createBy,od.recharge_dept as rechargeDept,
+        od.create_dept as createDept, od.cate_type as cateType,
+        od.order_type as orderType,od.order_code as orderCode,
+        od.city as cityCode
+        from t_order od left join t_account_pay ap on od.id = ap.order_id
+        where ap.is_back_type = 2 and od.valid = 1 and ap.valid = 1)
+        select b.* from ((select
+        pf.bank_flow_num as "fileName" ,
+        to_char(pf.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        substr(pf.pos_img_url,21) as "url"
+        from t_order_payfee pf
+        left join orderInfo on orderInfo.apId = pf.order_id
+        <where>
+            1 = 1 and pf.valid = 1 and pf.is_back_type = 1
+            and pf.fee_post in ('20250005','20250008','20250017','20250018','20250019') and pf.pos_check_status is not
+            null
+            and pf.pos_img_url is not null
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and pf.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and pf.id = #{id}
+                    </if>
+                    <if test="orderId!=null and orderId!='' ">
+                        and pf.order_id = #{orderId}
+                    </if>
+                    <if test="payStatus!=null and payStatus!='' ">
+                        and pf.pay_status = #{payStatus}
+                    </if>
+                    <if test="feeType !=null and feeType !='' ">
+                        and pf.fee_type = #{feeType}
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' ">
+                        and pf.account_status = #{accountStatus}
+                    </if>
+                    <if test="feePost !=null and feePost !='' ">
+                        and pf.fee_post = #{feePost}
+                    </if>
+                    <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                        and pf.bank_flow_num like '${bankFlowNum}%'
+                    </if>
+                    <if test="payUser !=null and payUser !='' ">
+                        and ic.pay_user like '${payUser}%'
+                    </if>
+                    <if test="createBy!=null and createBy!='' ">
+                        and pf.create_by = #{createBy}
+                    </if>
+                    <if test="createDeptString !=null and createDeptString !='' ">
+                        and orderInfo.rechargeDept=#{createDeptString}
+                    </if>
+                    <if test="updateTime!=null and updateTime!='' ">
+                        and pf.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="updateBy!=null and updateBy!='' ">
+                        and pf.update_by = #{updateBy}
+                    </if>
+                    <if test="checkDeptString !=null and checkDeptString !='' ">
+                        and pf.pos_check_dept =#{checkDeptString}
+                    </if>
+                    <if test="checkByString !=null and checkByString !='' ">
+                        and pf.pos_check_by = #{checkByString}
+                    </if>
+                    <if test="createTime!=null and createTime!='' ">
+                        and to_char(pf.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+                    </if>
+                    <if test="createEndTime !=null and createEndTime !='' ">
+                        and to_char(pf.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+                    </if>
+                    <if test="confirmTime !=null and confirmTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &gt;= #{confirmTime}
+                    </if>
+                    <if test="confirmEndTime !=null and confirmEndTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &lt;= #{confirmEndTime}
+                    </if>
+                    <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                        and pf.pos_check_status=#{posCheckStatus}
+                    </if>
+                    <if test="categoryCode !=null and categoryCode !='' ">
+                        and orderInfo.orderType like '${categoryCode}%'
+                    </if>
+                    <if test="checkProvince !=null and checkProvince !='' ">
+                        and orderInfo.cityCode like '${checkProvince}%'
+                    </if>
+                    <if test="checkCity !=null and checkCity !='' ">
+                        and orderInfo.cityCode like '${checkCity}%'
+                    </if>
+                    <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+                        and (orderInfo.createBy = #{loginBy} or orderInfo.accountBy=#{loginBy} or pf.create_by =
+                        #{loginBy} or orderInfo.createDept = #{loginDept} )
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        )
+
+        union
+
+        (select
+        odd.bank_confirm as "fileName" ,
+        to_char(rev.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        substr(odd.pos_img_url,21) as "url"
+        from finance.t_fin_other_deal_detail odd
+        left join finance.t_fin_other_revenue rev on rev.id = odd.other_revenue_id
+        <where>
+            1 = 1 and odd.vaild = 1
+            and odd.fee_post in ('20250005','20250008','20250017','20250018','20250019') and odd.pos_check_status is not
+            null
+            and odd.pos_img_url is not null
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and odd.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and odd.id = #{id}
+                    </if>
+                    <if test="payStatus!=null and payStatus!='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="feeType !=null and feeType !='' and feeType != 5">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' and accountStatus == 1 ">
+                        and rev.is_check = 2
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' and accountStatus == 2">
+                        and rev.is_check = 1
+                    </if>
+                    <if test="feePost !=null and feePost !='' ">
+                        and odd.fee_post = #{feePost}
+                    </if>
+                    <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                        and odd.bank_confirm like '${bankFlowNum}%'
+                    </if>
+                    <if test="createBy!=null and createBy!='' ">
+                        and rev.create_by = #{createBy}
+                    </if>
+                    <if test="updateTime!=null and updateTime!='' ">
+                        and odd.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="updateBy!=null and updateBy!='' ">
+                        and odd.update_by = #{updateBy}
+                    </if>
+                    <if test="checkDeptString !=null and checkDeptString !='' ">
+                        and odd.pos_check_dept =#{checkDeptString}
+                    </if>
+                    <if test="checkByString !=null and checkByString !='' ">
+                        and odd.pos_check_by = #{checkByString}
+                    </if>
+                    <if test="createTime!=null and createTime!='' ">
+                        and to_char(rev.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+                    </if>
+                    <if test="createEndTime !=null and createEndTime !='' ">
+                        and to_char(rev.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+                    </if>
+                    <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                        and odd.pos_check_status=#{posCheckStatus}
+                    </if>
+                    <if test="categoryCode !=null and categoryCode !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="checkProvince !=null and checkProvince !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="checkCity !=null and checkCity !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+                        and rev.create_by = #{loginBy}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        )
+        order by "createTime" desc
+        ) b
+    </select>
+
+    <select id="queryPayfeeSplit" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+		select pf.id as "id"
+		  from t_order_payfee pf
+		  left join t_account_pay ap
+		    on ap.id = pf.order_id
+		 where 1 = 1
+		   and pf.valid = 1
+		   and ap.valid = 1
+		   and pf.SPLIT_STATUS != 1
+		   and ap.is_back_type = 2
+		   and ap.PAY_TYPE in (1, 2, 3, 5)
+		   and ap.order_id = #{orderId}
+	</select>
+    <!-- 查询满足导出条件的POS凭条 -->
+    <select id="queryPosCheckExcel" parameterType="com.emotte.order.order.model.Payfee" resultType="java.util.Map">
+        with orderInfo as ( select ap.id as apId,od.create_by as createBy,ap.create_by as accountBy,od.recharge_dept as
+        rechargeDept,oi.category_code as categoryCode,
+        od.create_dept as createDept, od.cate_type as cateType,od.order_type as orderType,od.order_code as
+        orderCode,od.city as cityCode
+        from t_order od left join t_account_pay ap on od.id = ap.order_id left join t_order_item oi on oi.order_id =
+        od.id
+        where ap.is_back_type = 2 and od.valid = 1 and ap.valid = 1 and oi.valid = 1)
+        select c.* from ( (select
+        decode(pf.fee_type,1,'订单',2,'续费',3,'服务人员',4,'卡售卖','无') as "凭条来源",
+        (select orgr.name from t_auth_org orgr where pf.pos_check_dept = orgr.id ) as 审核部门,
+        (select rech.real_name from t_auth_manager rech where pf.pos_check_by = rech.id) as 审核人,
+        to_char(pf.pos_check_date,'yyyy-mm-dd') as 审核日期 ,
+        (select t.dict_name from t_base_dictionary t
+        where t.dict_code=pf.fee_post and t.dict_code like '2025%') as 支付类型,
+        pf.bank_flow_num as 交易参考号 ,
+        to_char(ic.create_time,'yyyy-mm-dd') as 交易日期,
+        to_char(bc.create_time,'yyyy-mm-dd') as 对账日期,
+        to_char(pf.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        <!-- 		       ic.deal_money as 流水金额, -->
+        pf.fee_sum as 交易金额,
+        ic.pay_user as 户名 ,
+        orderInfo.orderCode as 订单编号,
+        nvl(pf.order_id,pf.id ) as 结算单号 ,
+        (select base.name from t_base_city base where base.code = orderInfo.cityCode) as 城市,
+        (select orgc.name from t_auth_org orgc where orgc.id = (select c.dept_id from t_auth_manager c where
+        pf.create_by = c.id)) as 负责部门,
+        (select creat.real_name from t_auth_manager creat where pf.create_by = creat.id) as 负责人,
+        (select pc.cname from t_product_category pc where pc.code = substr(orderInfo.categoryCode,0,4)) as 订单一级分类,
+        (select pc.cname from t_product_category pc where pc.code = substr(orderInfo.categoryCode,0,8)) as 订单二级分类,
+        (select pc.cname from t_product_category pc where pc.code = substr(orderInfo.categoryCode,0,12)) as 订单三级分类,
+        decode(pf.account_status,1,'是',2,'否','无') as 是否对账,
+        decode(pf.pos_check_status,1,'待审核',2,'通过',3,'驳回','无') as 审核状态
+
+        from t_order_payfee pf
+        left join orderInfo on orderInfo.apId = pf.order_id
+        left join finance.t_fin_bank_confirm bc on bc.order_payfee_id = pf.id
+        left join finance.t_fin_income_comfirm ic on bc.income_comfirm_id = ic.id
+        <where>
+            1 = 1 and pf.valid = 1 and pf.is_back_type = 1
+            and pf.fee_post in ('20250005','20250008','20250017','20250018','20250019') and pf.pos_check_status is not
+            null
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and pf.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and pf.id = #{id}
+                    </if>
+                    <if test="orderId!=null and orderId!='' ">
+                        and pf.order_id = #{orderId}
+                    </if>
+                    <if test="payStatus!=null and payStatus!='' ">
+                        and pf.pay_status = #{payStatus}
+                    </if>
+                    <if test="feeType !=null and feeType !='' ">
+                        and pf.fee_type = #{feeType}
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' ">
+                        and pf.account_status = #{accountStatus}
+                    </if>
+                    <if test="feePost !=null and feePost !='' ">
+                        and pf.fee_post = #{feePost}
+                    </if>
+                    <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                        and pf.bank_flow_num like '${bankFlowNum}%'
+                    </if>
+                    <if test="payUser !=null and payUser !='' ">
+                        and ic.pay_user like '${payUser}%'
+                    </if>
+                    <if test="createBy!=null and createBy!='' ">
+                        and pf.create_by = #{createBy}
+                    </if>
+                    <if test="createDeptString !=null and createDeptString !='' ">
+                        and od.recharge_dept=#{createDeptString}
+                    </if>
+                    <if test="updateTime!=null and updateTime!='' ">
+                        and pf.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="updateBy!=null and updateBy!='' ">
+                        and pf.update_by = #{updateBy}
+                    </if>
+                    <if test="checkDeptString !=null and checkDeptString !='' ">
+                        and pf.pos_check_dept =#{checkDeptString}
+                    </if>
+                    <if test="checkByString !=null and checkByString !='' ">
+                        and pf.pos_check_by = #{checkByString}
+                    </if>
+                    <if test="createTime!=null and createTime!='' ">
+                        and to_char(pf.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+                    </if>
+                    <if test="createEndTime !=null and createEndTime !='' ">
+                        and to_char(pf.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+                    </if>
+                    <if test="confirmTime !=null and confirmTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &gt;= #{confirmTime}
+                    </if>
+                    <if test="confirmEndTime !=null and confirmEndTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &lt;= #{confirmEndTime}
+                    </if>
+                    <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                        and pf.pos_check_status=#{posCheckStatus}
+                    </if>
+                    <if test="categoryCode !=null and categoryCode !='' ">
+                        and orderInfo.orderType like '${categoryCode}%'
+                    </if>
+                    <if test="checkProvince !=null and checkProvince !='' ">
+                        and orderInfo.cityCode like '${checkProvince}%'
+                    </if>
+                    <if test="checkCity !=null and checkCity !='' ">
+                        and orderInfo.cityCode like '${checkCity}%'
+                    </if>
+                    <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+                        and (orderInfo.createBy = #{loginBy} or orderInfo.accountBy=#{loginBy} or pf.create_by =
+                        #{loginBy} or orderInfo.createDept = #{loginDept} )
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        )
+
+        union
+
+        (select
+        '其他' as "凭条来源",
+        (select orgr.name from t_auth_org orgr where odd.pos_check_dept = orgr.id ) as 审核部门,
+        (select rech.real_name from t_auth_manager rech where odd.pos_check_by = rech.id) as 审核人,
+        to_char(odd.pos_check_date,'yyyy-mm-dd') as 审核日期 ,
+        (select t.dict_name from t_base_dictionary t
+        where t.dict_code=odd.fee_post and t.dict_code like '2025%') as 支付类型,
+        odd.bank_confirm as 交易参考号 ,
+        to_char(ic.create_time,'yyyy-mm-dd') as 交易日期,
+        to_char(bc.create_time,'yyyy-mm-dd') as 对账日期,
+        to_char(rev.create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+        odd.pay_money as 交易金额,
+        ic.pay_user as 户名 ,
+        null as 订单编号,
+        null as 结算单号 ,
+        null as 城市,
+        (select orgc.name from t_auth_org orgc where orgc.id = (select c.dept_id from t_auth_manager c where
+        rev.create_by = c.id)) as 负责部门,
+        (select creat.real_name from t_auth_manager creat where rev.create_by = creat.id) as 负责人,
+        null as 订单一级分类,
+        null as 订单二级分类,
+        null as 订单三级分类,
+        decode(rev.is_check,1,'否',2,'是','无') as 是否对账,
+        decode(odd.pos_check_status,1,'待审核',2,'通过',3,'驳回','无') as 审核状态
+        from finance.t_fin_other_deal_detail odd
+        left join finance.t_fin_other_revenue rev on rev.id = odd.other_revenue_id
+        left join finance.t_fin_bank_confirm bc on bc.order_payfee_id = odd.other_revenue_id
+        left join finance.t_fin_income_comfirm ic on bc.income_comfirm_id = ic.id
+        <where>
+            1 = 1 and odd.vaild = 1
+            and odd.fee_post in ('20250005','20250008','20250017','20250018','20250019') and odd.pos_check_status is not
+            null
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and odd.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and odd.id = #{id}
+                    </if>
+                    <if test="payStatus!=null and payStatus!='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="feeType !=null and feeType !='' and feeType != 5">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' and accountStatus == 1 ">
+                        and rev.is_check = 2
+                    </if>
+                    <if test="accountStatus !=null and accountStatus !='' and accountStatus == 2">
+                        and rev.is_check = 1
+                    </if>
+                    <if test="feePost !=null and feePost !='' ">
+                        and odd.fee_post = #{feePost}
+                    </if>
+                    <if test="bankFlowNum !=null and bankFlowNum !='' ">
+                        and odd.bank_confirm like '${bankFlowNum}%'
+                    </if>
+                    <if test="payUser !=null and payUser !='' ">
+                        and ic.pay_user like '${payUser}%'
+                    </if>
+                    <if test="createBy!=null and createBy!='' ">
+                        and rev.create_by = #{createBy}
+                    </if>
+                    <if test="updateTime!=null and updateTime!='' ">
+                        and odd.update_time = to_date(#{updateTime},'yyyy-mm-dd')
+                    </if>
+                    <if test="updateBy!=null and updateBy!='' ">
+                        and odd.update_by = #{updateBy}
+                    </if>
+                    <if test="checkDeptString !=null and checkDeptString !='' ">
+                        and odd.pos_check_dept =#{checkDeptString}
+                    </if>
+                    <if test="checkByString !=null and checkByString !='' ">
+                        and odd.pos_check_by = #{checkByString}
+                    </if>
+                    <if test="createTime!=null and createTime!='' ">
+                        and to_char(rev.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+                    </if>
+                    <if test="createEndTime !=null and createEndTime !='' ">
+                        and to_char(rev.create_time,'yyyy-mm-dd') &lt;= #{createEndTime}
+                    </if>
+                    <if test="confirmTime !=null and confirmTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &gt;= #{confirmTime}
+                    </if>
+                    <if test="confirmEndTime !=null and confirmEndTime !='' ">
+                        and to_char(ic.create_time,'yyyy-mm-dd') &lt;= #{confirmEndTime}
+                    </if>
+                    <if test="posCheckStatus !=null and posCheckStatus !='' ">
+                        and odd.pos_check_status=#{posCheckStatus}
+                    </if>
+                    <if test="categoryCode !=null and categoryCode !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="checkProvince !=null and checkProvince !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+                    <if test="checkCity !=null and checkCity !='' ">
+                        and odd.bank_confirm != null
+                    </if>
+
+                </otherwise>
+            </choose>
+        </where>
+        )
+        order by "createTime" desc
+
+        ) c
+    </select>
+    <!-- 查询待审核的POS凭条数 -->
+    <select id="queryUncheck" parameterType="com.emotte.order.order.model.Payfee" resultType="java.lang.Integer">
+        select t1.bb+t2.aa "count" from
+        (
+        with orderInfo as ( select od.id as id,od.create_by as createBy,ap.create_by as accountBy, od.create_dept as
+        createDept
+        from t_order od left join t_account_pay ap on od.id = ap.order_id
+        where ap.is_back_type = 2 and od.valid = 1 and ap.valid = 1)
+        ( select
+        nvl(count(*),0) as bb
+        from t_order_payfee pf
+        left join orderInfo on orderInfo.id = pf.order_id
+        where
+        1 = 1 and pf.valid = 1 and pf.is_back_type = 1
+        and pf.fee_post in ('20250005','20250008','20250019')
+        and pf.pos_check_status = 1
+        <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+            and (orderInfo.createBy = #{loginBy} or orderInfo.accountBy=#{loginBy} or pf.create_by = #{loginBy} or
+            orderInfo.createDept = #{loginDept} )
+        </if>
+        ))t1,
+        (select
+        nvl(count(*),0) as aa
+        from finance.t_fin_other_deal_detail odd
+        left join finance.t_fin_other_revenue rev on rev.id = odd.other_revenue_id
+        where 1=1 and odd.vaild = 1 and odd.pos_check_status = 1
+        and odd.fee_post in ('20250005','20250008','20250019')
+        <if test="loginLevel!=null and loginLevel !='' and loginLevel==1 ">
+            and rev.create_by = #{loginBy}
+        </if>
+        )t2
+
+    </select>
+    <!-- 查询其他缴费 -->
+    <select id="queryOtherDeal" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+        pf.id as "id"
+        from finance.t_fin_other_deal_detail pf
+        left join finance.t_fin_other_revenue rev on rev.id = pf.other_revenue_id
+        <where>
+            1 = 1 and pf.vaild = 1
+            <choose>
+                <when test="ids_!=null and ids_!=''">
+                    and pf.ID in
+                    <foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">
+                        #{id_, jdbcType=NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id!=null and id!='' ">
+                        and pf.id = #{id}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        order by rev.create_time desc
+    </select>
+
+    <select id="queryPayCreateTime" parameterType="Long" resultType="com.emotte.order.order.model.Payfee">
+				SELECT MIN(to_char(t.create_time, 'yyyy-mm-dd hh24:mi:ss')) AS createTime
+			  FROM t_order_payfee t
+			 WHERE t.valid = 1
+			   AND t.order_id = #{accountId}
+	</select>
+
+
+    <select id="queryChannel" parameterType="Long" resultType="Long">
+			SELECT t.id as channelId FROM t_custom_channel t left join t_order o on t.id=o.order_channel where o.id=#{orderId} and t.valid=1
+	</select>
+
+    <select id="queryInstalmentsPay" resultType="java.lang.Long">
+			select pay.id
+			  from t_account_pay pay
+			 inner join T_ORDER_PAYFEE FEE
+			    on fee.ORDER_ID = PAY.ID
+			   and fee.fee_post = #{1}
+			 where pay.id =#{0}
+			   and pay.valid = 1
+			   and fee.valid=1
+			   and pay.is_back_type = #{2}
+		</select>
+
+    <select id="queryAccountList" parameterType="com.emotte.order.order.model.Payfee"
+            resultType="com.emotte.order.order.model.Payfee">
+        select
+        act.id as id ,
+        act.order_id as orderId ,
+        act.account_amount as feeSum ,
+        act.pay_type as feeType ,
+        act.pay_status as payStatus ,
+        decode(act.pay_status,20110001,'未结算',20110002,'部分结算',20110003,'结算完成',20130001,'待审核',20130002,'确认无效',
+        20130003,'确认有效',20130004,'审核中',20130005,'审核失败',20130006,'审核成功',20130007,'退款中',20130008,'退款成功',20130009,'退款失败',20130010,'已删除',20130014,'回访中',20130015,'回访失败')
+        as payText ,
+        act.is_back_type as isBackType ,
+        to_char(act.start_time,'yyyy-mm-dd hh24:mi:ss') as feeStatrtPeriod ,
+        to_char(act.end_time,'yyyy-mm-dd hh24:mi:ss') as feeEndPeriod ,
+        to_char(act.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+        act.create_by as createBy ,
+        decode(act.create_by,null,'自助缴费',0,'自助缴费',tama.real_name) as "createByName",
+        to_char(act.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+        act.update_by as updateBy ,
+        act.version as version ,
+        act.pay_kind as payKind,
+        act.pay_type as payType,
+        act.buss_status as bussStatus,
+        act.remark as remark,
+        act.valid as valid ,
+        act.customer_fee as customerFee,
+        act.personal_fee as personalFee,
+        act.platform_all_fee as platformAllFee,
+        act.vph_status as vphStatus,
+        act.vph_back_status as vphBackStatus,
+        act.refund_object as refundObject,
+        od.cate_type as cateType
+        <!-- top.fee_post as feePost -->
+        from t_account_pay act
+        left join t_order od on act.order_id = od.id
+        left join t_auth_manager tama on (act.create_by=tama.id and tama.valid=1)
+        <!-- left join t_order_payfee top on (top.order_id = act.id and top.valid = 1) -->
+        <where>
+            1 = 1 and ( (act.is_manual=2 and act.pay_status='20110003') or act.is_manual=1 or act.is_manual is null)
+            <if test="id!=null and id!='' ">
+                and act.id = #{id}
+            </if>
+            <if test="orderId!=null and orderId!='' ">
+                and act.order_id = #{orderId}
+            </if>
+            <if test="feeSum!=null and feeSum!='' ">
+                and act.account_amount = #{feeSum}
+            </if>
+            <if test="feeType!=null and feeType!='' ">
+                and act.pay_type = #{feeType}
+            </if>
+            <if test="payStatus!=null and payStatus!='' ">
+                and act.pay_status = #{payStatus}
+            </if>
+            <if test="isBackType!=null and isBackType!='' ">
+                and act.is_back_type = #{isBackType}
+            </if>
+            <if test="feeStatrtPeriod!=null and feeStatrtPeriod!='' ">
+                and act.fee_statrt_period &gt;= to_date(#{feeStatrtPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="feeEndPeriod!=null and feeEndPeriod!='' ">
+                and act.fee_end_period &lt;= to_date(#{feeEndPeriod},'yyyy-mm-dd')
+            </if>
+            <if test="valid!=null and valid!='' ">
+                and act.valid = #{valid}
+            </if>
+            <if test="isType !=null and isType !='' and isType == 1">
+                and act.is_back_type in (1,3)
+            </if>
+            <if test="version!=null and version!='' ">
+                and act.version = #{version}
+            </if>
+        </where>
+        order by act.create_time desc
+    </select>
+
+    <select id="queryPayfeeDetail" parameterType="com.emotte.order.order.model.Payfee" resultType="Double">
+					SELECT nvl(SUM(pd.money), 0) AS salaryFee
+				  FROM t_order_payfee op
+				  JOIN t_payfee_detail pd
+				    ON pd.payfee_id = op.id
+				 WHERE pd.valid = 1
+				   AND pd.btype=102
+				   AND op.id=#{id}
+	</select>
+
+    <select id="queryTypeByParentId" parameterType="Long" resultType="Long">
+				SELECT t.type FROM t_solution_cust_solution t WHERE  t.id=#{parentId}
+	</select>
+
+    <!--根据结算单ID校验财务系统汇总表信息-->
+    <select id="checkFinSummaryForAccount" parameterType="java.lang.Long" resultType="int">
+		SELECT
+			COUNT(a.ID)
+		FROM FINANCE.T_FIN_SUMMARY_SHEET a
+		LEFT JOIN FINANCE.T_FIN_SUMMARY_SHEET_PAYFEE b ON a.ID = b.SUMMARY_SHEET_ID AND b.VALID = 1
+		LEFT JOIN T_ORDER_PAYFEE c ON b.SYS_MAIN_ID = c.ID AND c.VALID = 1 AND c.IS_BACK_TYPE = 1
+		LEFT JOIN T_ACCOUNT_PAY d ON c.ORDER_ID = d.ID
+		WHERE d.ID = #{accountId} AND a.VALID = 1
+	</select>
+
+
+    <select id="checkAccountReviewState" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(1) FROM T_ORDER_PAYFEE T WHERE T.REVIEW_STATE=5  AND T.ORDER_ID=#{accountId} AND T.VALID=1
+	</select>
+
+    <select id="getHistoryAfterCharge" parameterType="java.lang.Long" resultType="Double">
+		SELECT nvl(SUM(NVL(p.money, 0)), 0)
+           FROM t_order_after_sales t
+           JOIN t_payfee_detail p
+             ON p.relation_id = t.id
+          WHERE t.audit_flag = 20130008
+            AND p.valid = 1
+            AND t.after_sales_kind IN (4, 5, 8, 10, 12)
+            AND p.btype IN (105,106)
+            AND t.order_id= #{orderId}
+	</select>
+
+    <!--根据结算单ID查询支付方式为【第三方支付（区别于：卡、券、余额支付）】的缴费单信息-->
+    <select id="findCountByAccountIdForDelete" parameterType="java.lang.Long" resultType="int">
+        SELECT COUNT(ID) FROM T_ORDER_PAYFEE WHERE VALID = 1 AND FEE_POST NOT IN (20250010,20250011,20250013) AND ORDER_ID = #{id}
+    </select>
+
+    <!--根据订单ID查询是否存在第三方支付缴费-->
+    <select id="findPayFeeByOrderIdAndFeePost" parameterType="java.lang.Long" resultType="int">
+        SELECT COUNT(ID) FROM T_ORDER_PAYFEE a LEFT JOIN T_ACCOUNT_PAY b ON a.ORDER_ID = b.ID AND b.VALID = 1 WHERE a.FEE_POST NOT IN (20250010,20250011,20250013) AND b.ORDER_ID = #{orderId}
+    </select>
+</mapper>

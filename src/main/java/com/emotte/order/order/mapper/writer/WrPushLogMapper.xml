@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrPushLogMapper">
+
+	<insert id="insertPushLog" parameterType="com.emotte.order.order.model.PushLog">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq()	FROM dual
+		</selectKey>
+		insert into t_order_push_log ( 
+			ID ,		
+			ORDER_ID ,		
+			MANAGER_ID ,		
+			MSG ,		
+			TYPE ,		
+			CREATE_TIME ,		
+			UPDATE_TIME ,		
+			CREATE_BY ,		
+			UPDATE_BY ,		
+			VALID ,		
+			VERSION ,		
+			LOG ,		
+			DISTINGUISH 		
+		) values (
+			#{id} ,		
+			#{orderId} ,		
+			#{managerId} ,		
+			#{msg} ,		
+			#{type} ,		
+			sysdate ,		
+			to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') ,		
+			#{createBy} ,		
+			#{updateBy} ,		
+			1 ,		
+			1,		
+			#{log} ,		
+			#{distinguish} 		
+		)
+	</insert>
+
+	<update id="updatePushLog" parameterType="com.emotte.order.order.model.PushLog">
+		update t_order_push_log	
+		 <set>  
+			<if test="id!=null and id!='' "> 
+				ID =  #{id} 
+			</if>		
+			<if test="orderId!=null and orderId!='' "> 
+				,ORDER_ID =  #{orderId} 
+			</if>		
+			<if test="managerId!=null and managerId!='' "> 
+				,MANAGER_ID =  #{managerId} 
+			</if>		
+			<if test="msg!=null and msg!='' "> 
+				,MSG =  #{msg} 
+			</if>		
+			<if test="type!=null and type!='' "> 
+				,TYPE =  #{type} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  #{createTime} 
+			</if>		
+			<if test="updateTime!=null and updateTime!='' "> 
+				,UPDATE_TIME =  #{updateTime} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="updateBy!=null and updateBy!='' "> 
+				,UPDATE_BY =  #{updateBy} 
+			</if>		
+			<if test="valid!=null and valid!='' "> 
+				,VALID =  #{valid} 
+			</if>		
+			<if test="version!=null and version!='' "> 
+				,VERSION =  #{version} 
+			</if>		
+			<if test="log!=null and log!='' "> 
+				,LOG =  #{log} 
+			</if>		
+			<if test="distinguish!=null and distinguish!='' "> 
+				,DISTINGUISH =  #{distinguish} 
+			</if>		
+       </set>
+		where
+			 ID =  #{id}
+				
+	</update>
+	
+</mapper>

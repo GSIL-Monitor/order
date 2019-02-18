@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrThreeOrderCustomerMapper">
+	<insert id="insertThreeOrderCustomer" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	       SELECT getseq() as ID from DUAL  
+		</selectKey> 
+		insert into emerp.t_customer (
+			id,
+			login_name,
+			real_name,
+			mobile,
+			card_num,
+			card_type,
+			sex,
+			province,
+			city,
+			district,
+			addr,
+			LATITUDE,
+			LONGITUDE,
+			create_by,
+			create_time,
+			update_time,
+			version,
+			valid,
+			citycode
+			 ) values (
+				#{id},
+				#{userMobile},
+				#{realName},
+				#{userMobile},
+				#{cardNum},
+				#{cardType},
+				#{userSex},
+				#{userProvince},
+				#{userCity},
+				#{userDistrict},
+				#{userAddress},
+				#{latitude},
+				#{longitude},
+				#{createBy},
+				sysdate,
+				sysdate,
+				#{version},
+				#{valid},
+				#{userCityCode}
+			)
+	</insert>
+		<insert id="insertThreeOrderFaAddr" parameterType="com.emotte.order.order.model.ThreeOrderCustomerAddrModel">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	       SELECT getseq() as ID from DUAL  
+		</selectKey> 
+		insert into
+		emotte.t_user_address (
+			id ,
+			cust_id,
+			create_by ,
+			create_time ,
+			update_by ,
+			update_time ,
+			version ,
+			valid ,
+			province,
+			city ,
+			country ,
+			address_detail ,
+			longitude ,
+			latitude ,
+			is_default ,
+			contact_phone,
+			contact_name,
+			CITYCODE,
+			is_front,
+			choose_address 
+		) values (
+			getseq() ,
+			#{userId} ,
+			#{createBy} ,
+			sysdate ,
+			#{updateBy} ,
+			sysdate ,
+			#{version} ,
+			#{valid} ,
+			#{province},
+			#{city} ,
+			#{country} ,
+			#{addressDetail} ,
+			#{longitude} ,
+			#{latitude} ,
+			#{isDefault} , 
+			#{contactPhone} ,
+			#{contactName},
+			#{cityCode},
+			#{isFront},
+			#{addressChooseAddress}
+		)
+	</insert>
+	
+	<update id="updateThreeOrderFaAddr" parameterType="com.emotte.order.order.model.ThreeOrderCustomerAddrModel">
+		update emotte.t_user_address
+		<set>
+			version = version+1
+			<if test="updateBy != null and updateBy != ''">
+				,update_by = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				,update_time = sysdate
+			</if>
+			<if test="valid != null and valid != ''">
+				,valid = #{valid}
+			</if>
+			<if test="province != null and province != ''">
+				,province = #{province}
+			</if>
+			<if test="city != null and city != ''">
+				,city = #{city}
+			</if>
+			<if test="country != null and country != ''">
+				,country = #{country}
+			</if>
+			<if test="addressDetail != null and addressDetail != ''">
+				,address_detail = #{addressDetail}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,longitude = #{longitude}
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,latitude = #{latitude}
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				,is_default = #{isDefault}
+			</if>
+			<if test="contactPhone != null and contactPhone != ''">
+				,contact_phone = #{contactPhone}
+			</if> 
+			<if test="contactName != null and contactName != ''">
+				,contact_name = #{contactName}
+			</if>
+			<if test="cityCode !=null and cityCode != '' ">
+				,CITYCODE = #{cityCode}
+			</if>
+			<if test="addressChooseAddress !=null and addressChooseAddress != '' ">
+				,choose_address = #{addressChooseAddress}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="updateTODeliveryIsDefault" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel">
+		update emotte.t_user_address
+		<set>
+			<if test="isDefault != null and isDefault != ''">
+				is_default = #{isDefault}
+			</if>
+		</set>
+		where
+		cust_id=#{userId}
+	</update>
+</mapper>

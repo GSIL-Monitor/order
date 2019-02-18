@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreeOrderCustomerMapper">
+	<select id="getOrderThreeCustomer" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel"
+		resultType="com.emotte.order.order.model.ThreeOrderCustomerModel">
+		select * from (select rownum rn,t.* from (
+			select
+			id as "id" ,
+			real_name as "realName" ,
+			sex as "userSex" ,
+			mobile as "userMobile" ,
+			create_by as "createBy" ,
+			to_char(create_time,'yyyy-mm-dd HH:mi:ss') as createTime,
+			card_type as "cardType" ,
+			card_num as "cardNum" ,
+			birthday as "userBirth" ,
+			province as "userProvince" ,
+			city as "userCity" ,
+			district as userDistrict,
+			addr as userAddress,
+			valid as "valid" ,
+			version as "version",
+			citycode as "userCityCode",
+			is_vip as "is_vip",
+			is_big_cust as "is_big_cust"
+			from emerp.t_customer
+			<where>
+				1 = 1
+				<if test="id!=null and id!='' ">
+					and id = #{id}
+				</if>
+				<if test="realName!=null and realName!='' ">
+					and real_name like  '%'||#{realName}||'%'
+				</if>
+				<if test="userMobile !=null and userMobile !='' ">
+					and mobile like '%'||#{userMobile}||'%'
+				</if>
+				<if test="valid!=null and valid!='' ">
+					and valid = #{valid}
+				</if>
+				<if test="version!=null and version!='' ">
+					and version = #{version}
+				</if>
+			</where>
+			order by update_time desc nulls last ) t)
+		<if test="flagPage!=1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if>
+	</select>
+	<select id="countOrderThreeCustomer" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel"
+		resultType="java.lang.Integer">
+		select count(0)
+		from emerp.t_customer
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+	</select>
+	<select id="isExsitCustomerByMoblie" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel"
+		resultType="java.lang.Integer">
+		select count(id) from emerp.t_customer  where valid = 1 and mobile = #{userMobile}
+	</select>
+	
+	<select id="getCustomer" parameterType="com.emotte.order.order.model.ThreeOrderCustomerModel"
+		resultType="com.emotte.order.order.model.ThreeOrderCustomerModel">
+		select
+		tus.id as userId ,
+		tus.real_name as realName ,
+		tus.province as userProvince ,
+		tus.city as userCity ,
+		tus.district as userDistrict,
+		tus.addr as userAddress ,
+		tus.mobile as userMobile ,
+		tus.email as userEmail ,
+		tus.sex as userSex ,
+		to_char(tus.birthday,'yyyy-MM-dd') as userBirth,
+		tus.citycode as userCityCode,
+	    tus.longitude as longitude,
+	    tus.latitude as latitude
+	    from emerp.t_customer tus 
+		<where>
+			1 = 1
+			<if test="id != null and id !='' ">
+				and tus.id = #{id}
+			</if>
+			<if test="valid != null and valid != '' ">
+				and tus.valid = #{valid}
+			</if>
+		</where>
+		and rownum=1
+	</select> 
+	
+	<select id="gerCustomerIs_Vip_BigCustById" parameterType="com.emotte.order.order.model.ThreeOrderInProductModel"
+		resultType="com.emotte.order.order.model.ThreeOrderInProductModel">
+		select
+		id as user_id ,
+		is_vip as is_vip,
+		is_big_cust as is_big_cust 
+		from emerp.t_customer 
+		<where>
+			valid = 1 
+			<if test=" user_id != null and user_id != '' ">
+				and id = #{user_id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryOrderThreeAddrByUser" parameterType="com.emotte.order.order.model.ThreeOrderCustomerAddrModel"
+		resultType="com.emotte.order.order.model.ThreeOrderCustomerAddrModel">
+		select
+		id as "id" ,
+		contact_phone as "contactPhone" ,
+		contact_name as "contactName" ,
+		address_detail as "addressDetail" ,
+		province as "province" ,
+		city as "city" ,
+		country as "country" ,
+		valid as "valid" ,
+		version as "version",
+		LONGITUDE as longitude,
+		LATITUDE as latitude,
+		IS_DEFAULT as isDefault,
+		is_front as isFront,
+		citycode as cityCode,
+		CASE WHEN CITYCODE like #{cityCode}||'%' then 1 else 0 end  as isDisabled,
+		choose_address  as "addressChooseAddress" 
+		from emotte.t_user_address 
+		<where>
+			valid = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and cust_id = #{userId}
+			</if>
+		</where>
+		order by isDefault nulls last , isDisabled desc
+	</select>
+	<select id="isExistCustomerAddrById" parameterType="com.emotte.order.order.model.ThreeOrderCustomerAddrModel"
+		resultType="java.lang.Integer">
+		select count(0)
+		from emotte.t_user_address
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and cust_id = #{userId}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+	</select>
+</mapper>

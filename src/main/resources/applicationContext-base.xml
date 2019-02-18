@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <!-- 加载数据库配置、url配置、zookeeper配置 -->
+    <!-- 测试 -->
+    <context:property-placeholder location="classpath:db-debug.properties,classpath:url-debug.properties"/>
+    <!-- 正式 -->
+    <!-- <context:property-placeholder location="classpath:db.properties,classpath:url.properties" /> -->
+    <!-- 本地连正式 -->
+    <!-- <context:property-placeholder location="classpath:db-remote.properties,classpath:url.properties" /> -->
+
+    <!-- 使Spring关注Annotation -->
+    <context:annotation-config/>
+
+    <!-- 核心类扫描 -->
+    <context:component-scan base-package="com.emotte">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 慢SQL记录配置 -->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="10000"/>
+        <property name="logSlowSql" value="true"/>
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <!-- 数据源配置1 -->
+    <bean id="dataSource_write" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+          destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.pwd}"/>
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="60"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'  from dual"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="connectionProperties" value="config.decrypt=true"/>
+    </bean>
+
+    <!--数据源配置2-->
+    <bean id="dataSource_excep" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="${jdbc.ii.url}"/>
+        <property name="username" value="${jdbc.ii.username}"/>
+        <property name="password" value="${jdbc.ii.pwd}"/>
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="20"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'  from dual"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="connectionProperties" value="config.decrypt=true"/>
+    </bean>
+
+    <bean id="default_dataSource" class="com.emotte.server.sql.DynamicDataSource">
+        <property name="excep" value="excep"></property>
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="excep" value-ref="dataSource_excep"></entry>
+            </map>
+        </property>
+        <!-- 默认目标数据源为你的生产库数据源 -->
+        <property name="defaultTargetDataSource" ref="dataSource_write"/>
+    </bean>
+
+    <!-- 数据源切换配置结束 -->
+    <bean id="sqlSessionFactory_read" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="default_dataSource"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="typeAliasesPackage" value="com.emotte.order.*.model"/>
+    </bean>
+    <bean id="sqlSessionFactory_write" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="default_dataSource"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="typeAliasesPackage" value="com.emotte.order.*.model"/>
+    </bean>
+
+    <!-- 事务管理器 boss -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="default_dataSource"/>
+    </bean>
+
+    <!--使用基于注解方式配置事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+    <!-- redis配置1-->
+    <bean id="jedisPoolConfig" class="org.wildhorse.server.core.dao.redis.core.JedisPoolConfig">
+        <property name="maxActive" value="1024"/>
+        <property name="maxIdle" value="200"/>
+        <property name="maxWait" value="10000"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+    </bean>
+    <bean id="redisClientConfig" class="org.wildhorse.server.core.dao.redis.client.RedisClientConfig">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <property name="timeout" value="2000"/>
+        <property name="masterConfString" value="${redis.url}"/>
+        <property name="slaveConfString" value=""/>
+    </bean>
+    <bean id="redisClient" class="org.wildhorse.server.core.dao.redis.client.RedisClient">
+        <constructor-arg ref="redisClientConfig"/>
+    </bean>
+    <bean id="redisTask" class="com.emotte.kernel.task.RedisTask" init-method="doThreadTask">
+        <property name="rc" ref="redisClient"/>
+        <property name="key" value="order"/>
+    </bean>
+
+
+    <!-- redis配置2 -->
+    <bean id="jedisPoolConfig1" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="1"/>
+        <property name="maxTotal" value="50"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxWaitMillis" value="5000"/>
+    </bean>
+    <bean id="jedisPool" class="com.emotte.kernel.redis.EJedisPool" init-method="initMethod">
+        <property name="config" ref="jedisPoolConfig1"/>
+        <property name="host" value="${redis.ip}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="pass" value="${redis.pass}"/>
+    </bean>
+    <!-- <bean id="jedisPool" class="com.emotte.kernel.redis.EJedisPool" init-method="initMethod">
+        <property name="config" ref="jedisPoolConfig1" />
+        <property name="hostAndport" value="${redis.hostAndport}" />
+        <property name="masterName" value="${redis.masterName}" />
+        <property name="pass" value="${redis.pass}" />
+    </bean> -->
+    <!-- CONTRACT_SMS -->
+    <bean id="smrb" class="com.emotte.order.gentlemanSignature.SendMessageByRedis" init-method="sms_process">
+        <property name="jedispool" ref="jedisPool"/>
+        <property name="key" value="CONTRACT_SMS"/>
+        <property name="serviceUrl" value="${sms.send}"/>
+    </bean>
+</beans>

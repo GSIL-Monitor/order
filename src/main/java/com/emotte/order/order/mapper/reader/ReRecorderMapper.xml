@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReRecorderMapper">
+	<select id="loadRecorder" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Recorder">
+		select 
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			RECORDER as recorder ,		
+			CREATE_TIME as createTime ,		
+			SATISFY as satisfy ,		
+			MEANING as meaning ,		
+			NEXT_TIME as nextTime ,		
+			REMARK as remark ,		
+			CLASSFY_CODE as classfyCode ,		
+			ISREAD as isread 		
+		from T_order_recorder
+		where
+	</select>
+	
+	<select id="queryRecorder"  parameterType="com.emotte.order.order.model.Recorder" resultType="com.emotte.order.order.model.Recorder">
+	select
+			t.ID as id ,		
+			t.ORDER_ID as orderId ,	
+			t.recorder as recorder,	
+			(select m.real_name from t_auth_manager m where m.id=t.recorder)   as realname,	
+			 to_char(t.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') as createTime, 	
+			decode(t.SATISFY,'1','很满意','2','一般满意','3','不满意')      as satis,
+			t.SATISFY    as satisfy,
+       		decode(t.MEANING,'1','强烈意向','2','一般意向','3','远期意向','4','无意向')    as mean,
+       		t.MEANING   as meaning,		
+			  to_char(t.NEXT_TIME,'yyyy-mm-dd hh24:mi:ss') as nextTime,
+			t.REMARK as remark ,		
+			t.CLASSFY_CODE as classfyCode ,		
+			t.ISREAD as isread 	,
+			substr(t.CLASSFY_CODE,0,4)	as oneclass,
+     		substr(t.CLASSFY_CODE,0,8)	as twoclass	,
+     		(select b.cname from t_product_category b where b.code=t.classfy_code ) threeclass,
+     		decode(t.order_progress,1,'正准备签合同',2,'已面试考虑中',3,'已面试需重新匹配',4,'已约好面试',5,'正匹配人员',6,'已联系有意向',7,'已联系意向不强',8,'最近没时间考虑',9,'只是咨询',10,'不需要服务',11,'一直联系不上',12,'已经找到服务',13,'距离远服务不到',14,'提供不了合适人员',15,'觉得信息费太贵',16,'觉得人员服务费太高',17,'对管家不认同',18,'对管家帮不认同',19,'其他情况',20,'不想预存',21,'不接受预存及白条') orderProgressStr,
+     		t.order_progress orderProgress,
+     		t.order_progress_info orderProgressInfo,
+     		sources AS sources,
+			custom_id AS customId,
+			unintentional_reason AS unintentionalReason,
+			DECODE(unintentional_reason,
+                1,
+                '服务人员服务费高',
+                2,
+                '不想预存',
+                3,
+                '只是咨询',
+                4,
+                '中介费高',
+                5,
+                '距离远',
+                6,
+                '联系不上',
+                7,
+                '无合适人员',
+                8,
+                '其他') AS unintentionalReasonStr
+	FROM  T_ORDER_RECORDER t
+	<where> 
+	 		t.valid=1 AND t.sources IN (20500001,20500004)
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="recorder!=null and recorder!='' ">           
+			and	RECORDER =  #{recorder} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="satisfy!=null and satisfy!='' ">           
+			and	SATISFY =  #{satisfy} 		
+		</if>	
+		<if test="meaning!=null and meaning!='' ">           
+			and	MEANING =  #{meaning} 		
+		</if>	
+		<if test="nextTime!=null and nextTime!='' ">           
+			and	NEXT_TIME =  #{nextTime} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="classfyCode!=null and classfyCode!='' ">           
+			and	CLASSFY_CODE =  #{classfyCode} 		
+		</if>	
+		<if test="isread!=null and isread!='' ">           
+			and	ISREAD =  #{isread} 		
+		</if>	
+	</where>
+	order by CREATE_TIME  desc
+	</select>
+	
+	
+	<select id="countRecorder"  parameterType="com.emotte.order.order.model.Recorder" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM T_order_recorder
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="recorder!=null and recorder!='' ">           
+			and	RECORDER =  #{recorder} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="satisfy!=null and satisfy!='' ">           
+			and	SATISFY =  #{satisfy} 		
+		</if>	
+		<if test="meaning!=null and meaning!='' ">           
+			and	MEANING =  #{meaning} 		
+		</if>	
+		<if test="nextTime!=null and nextTime!='' ">           
+			and	NEXT_TIME =  #{nextTime} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="classfyCode!=null and classfyCode!='' ">           
+			and	CLASSFY_CODE =  #{classfyCode} 		
+		</if>	
+		<if test="isread!=null and isread!='' ">           
+			and	ISREAD =  #{isread} 		
+		</if>	
+			</where>
+	</select>
+	
+	<select id="queryRecorderInfo"   resultType="com.emotte.order.order.model.Recorder">
+	 select
+       o.order_code  as orderCode ,  
+      t.recorder as recorder,  
+      o.recharge_by  as  isread,
+      (select m.real_name from t_auth_manager m where m.id=t.recorder)   as realname,  
+   <!--  to_char(t.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') as createTime,   --> 
+        to_char(t.NEXT_TIME,'yyyy-mm-dd hh24:mi:ss') as nextTime,
+      t.REMARK as remark ,
+      (select c.cname from t_product_category c where c.code=o.order_type)   as satis,
+      t.CLASSFY_CODE as classfyCode ,    
+      substr(t.CLASSFY_CODE,0,4)  as oneclass,
+         substr(t.CLASSFY_CODE,0,8)  as twoclass  
+  from  T_order_recorder t  join t_order o  on o.id=t.order_id
+	<where> 
+	      t.valid=1 
+	  AND t.sources IN (20500001,20500004)
+	  AND to_char(t.NEXT_TIME,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') 
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="recorder!=null and recorder!='' ">           
+			and	RECORDER =  #{recorder} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="satisfy!=null and satisfy!='' ">           
+			and	SATISFY =  #{satisfy} 		
+		</if>	
+		<if test="meaning!=null and meaning!='' ">           
+			and	MEANING =  #{meaning} 		
+		</if>	
+		<if test="nextTime!=null and nextTime!='' ">           
+			and	NEXT_TIME =  #{nextTime} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="classfyCode!=null and classfyCode!='' ">           
+			and	CLASSFY_CODE =  #{classfyCode} 		
+		</if>	
+		<if test="isread!=null and isread!='' ">           
+			and	ISREAD =  #{isread} 		
+		</if>	
+	</where>
+	</select>
+	
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReDictionaryMapper">
+	<select id="loadDictionary" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Dictionary">
+		select 
+			id as id ,			
+			pid as pid ,			
+			types as types ,			
+			dkey as dkey ,			
+			dvalue as dvalue ,			
+			valid as valid ,			
+			to_char(create_name,'yyyy-mm-dd hh24:mi:ss') as createName ,
+			remarks as remarks 			
+		from t_order_dictionary
+		where
+			id=#{id} 	</select>
+	
+	<select id="queryDictionary"  parameterType="com.emotte.order.order.model.Dictionary" resultType="com.emotte.order.order.model.Dictionary">
+	select
+			 id  as "id" ,			
+			 pid  as "pid" ,			
+			 types  as "types" ,			
+			 dkey  as "dkey" ,			
+			 dvalue  as "dvalue" ,			
+			 valid  as "valid" ,			
+			 create_name  as "createName" ,			
+			to_char(create_name,'yyyy-mm-dd hh24:mi:ss')  as "createDate" ,			
+			 remarks  as "remarks" 			
+	from  t_order_dictionary 
+	<where> 
+	 1 = 1
+				<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="pid!=null and pid!='' ">           
+		and	pid =  #{pid} 		</if>
+				  <if test="types!=null and types!='' ">           
+		and	types =  #{types} 		</if>
+				  <if test="dkey!=null and dkey!='' ">           
+		and	dkey =  #{dkey} 		</if>
+				  <if test="dvalue!=null and dvalue!='' ">           
+		and	dvalue =  #{dvalue} 		</if>
+				  <if test="valid!=null and valid!='' ">           
+		and	valid =  #{valid} 		</if>
+				  <if test="createName!=null and createName!='' ">           
+		and	create_name =  #{createName} 		</if>
+				  <if test="createDate!=null and createDate!='' ">           
+		and	create_date = date_format(#{createDate},'%Y-%m-%d %H:%i:%s') 		</if>
+				  <if test="remarks!=null and remarks!='' ">           
+		and	remarks =  #{remarks} 		</if>
+			</where>
+	order by id desc  <if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if>
+	</select>
+	<select id="countDictionary"  parameterType="com.emotte.order.order.model.Dictionary" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_order_dictionary 
+		<where> 
+	         1 = 1
+					<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="pid!=null and pid!='' ">           
+		and	pid =  #{pid} 		</if>
+				  <if test="types!=null and types!='' ">           
+		and	types =  #{types} 		</if>
+				  <if test="dkey!=null and dkey!='' ">           
+		and	dkey =  #{dkey} 		</if>
+				  <if test="dvalue!=null and dvalue!='' ">           
+		and	dvalue =  #{dvalue} 		</if>
+				  <if test="valid!=null and valid!='' ">           
+		and	valid =  #{valid} 		</if>
+				  <if test="createName!=null and createName!='' ">           
+		and	create_name =  #{createName} 		</if>
+				  <if test="createDate!=null and createDate!='' ">           
+		and	create_date = date_format(#{createDate},'%Y-%m-%d %H:%i:%s') 		</if>
+				  <if test="remarks!=null and remarks!='' ">           
+		and	remarks =  #{remarks} 		</if>
+			</where>
+	</select>		
+	
+</mapper>

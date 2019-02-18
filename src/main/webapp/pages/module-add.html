@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">标题</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-basic">
+                    <header><h4>人员基本信息</h4></header>
+                    <div class="info clearfix">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>姓名：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label class="col-sm-2 control-label"><p>性别：</p></label>
+                                    <div class="col-sm-10">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sex" value="男"> 男
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sex" value="女"> 女
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>紧急联系：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>学历：</p>
+                                        <select class="form-control">
+                                            <option>小学</option>
+                                            <option>初中</option>
+                                            <option>高中</option>
+                                            <option>大专</option>
+                                            <option>本科</option>
+                                            <option>硕士</option>
+                                            <option>博士</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>现住地址：</p>
+                                        <textarea class="form-control"></textarea>                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>原籍地址：</p>
+                                        <textarea class="form-control"></textarea>                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-content-basic">
+                    <header><h4>表单验证</h4></header>
+                    <div class="info clearfix">
+                        <!--表单验证模板-->
+                        <form id="my-form">
+
+                            <section>
+                                <div><label>姓名:</label><input id="username" name="username" type="text"/></div>
+                                <div><label>密码:</label><input id="pass" name="password" type="password"/></div>
+                                <div><label>邮箱:</label><input id="email" name="email" data-ideal="required email" type="email"/></div>
+                                <div><label>照片:</label><input id="file" name="file" multiple type="file"/></div>
+                                <div><label>网站:</label><input name="website" data-ideal="url" type="text"/></div>
+                                <div>
+                                </div>
+                                <div id="languages">
+                                    <label>语言:</label>
+                                    <label><input type="checkbox" name="langs[]" value="English"/>English</label>
+                                    <label><input type="checkbox" name="langs[]" value="Chinese"/>Chinese</label>
+                                    <label><input type="checkbox" name="langs[]" value="Spanish"/>Spanish</label>
+                                    <label><input type="checkbox" name="langs[]" value="French"/>French</label>
+                                </div>
+                                <div><label>性别:</label>
+                                    <label><input type="radio" name="radio" checked/>男</label>
+                                    <label><input type="radio" name="radio"/>女</label>
+                                    <label><input type="radio" name="radio"/>未知</label>
+                                </div>
+                                <div><label>电话:</label><input type="tel" name="phone" data-ideal="phone"/></div>
+                                <div><label>国籍:</label>
+                                    <select id="states" name="states">
+                                        <option value="default">&ndash; 选择国籍 &ndash;</option>
+                                        <option value="ZG">中国</option>
+                                        <option value="MG">美国</option>
+                                        <option value="YG">英国</option>
+                                        <option value="RB">日本</option>
+                                        <option value="ELS">俄罗斯</option>
+                                        <option value="HG">韩国</option>
+                                        <option value="YD">印度</option>
+                                        <option value="CX">朝鲜</option>
+                                        <option value="JND">加拿大</option>
+                                    </select>
+                                </div>
+                                <div><label>文本:</label><textarea id="comments" name="comments"></textarea></div>
+                            </section>
+                            <div>
+                                <button type="submit">Submit</button>
+                                <button id="reset" type="button">Reset</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    var options = {
+
+                        onFail: function() {
+                            alert( $myform.getInvalid().length +' invalid fields.' )
+                        },
+
+                        inputs: {
+                            'password': {
+                                filters: 'required pass',
+                            },
+                            'username': {
+                                filters: 'required username',
+                                data: {
+                                    //ajax: { url:'validate.php' }
+                                }
+                            },
+                            'file': {
+                                filters: 'extension',
+                                data: { extension: ['jpg'] }
+                            },
+
+                            'comments': {
+                                filters: 'min max',
+                                data: { min: 50, max: 200 }
+                            },
+                            'states': {
+                                filters: 'exclude',
+                                data: { exclude: ['default'] },
+                                errors : {
+                                    exclude: '选择一个国家.'
+                                }
+                            },
+                            'langs[]': {
+                                filters: 'min max',
+                                data: { min: 2, max: 3 },
+                                errors: {
+                                    min: '至少选择 <strong>2</strong> 个.',
+                                    max: '最多不超过 <strong>3</strong> 个.'
+                                }
+                            }
+                        }
+                    };
+
+                    var $myform = $('#my-form').idealforms(options).data('idealforms');
+
+                    $('#reset').click(function(){ $myform.reset().fresh().focusFirst() });
+                    $myform.focusFirst();
+
+                </script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-sm btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

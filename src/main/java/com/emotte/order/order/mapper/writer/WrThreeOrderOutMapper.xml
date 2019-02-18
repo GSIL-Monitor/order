@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrThreeOrderOutMapper">
+
+	<insert id="saveOrderAccounts" parameterType="com.emotte.order.order.model.ThreeOrderAccounts">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="accountsId">
+			SELECT getseq() as accountsId from DUAL  
+		</selectKey>
+		insert into t_account_pay (id, order_id, account_amount, create_time, create_by, update_time,
+			update_by, version, pay_status, pay_type, is_back_type, start_time, end_time, valid,
+			pay_kind, buss_status, remark)
+		values (#{accountsId}, #{orderId}, #{accountAmount}, sysdate, #{createBy}, sysdate,
+			#{updateBy}, #{version}, #{payStatus}, #{payType}, #{isBackType}, 
+			to_date(#{startTime},'yyyy-mm-dd'), to_date(#{endTime},'yyyy-mm-dd'),
+			#{valid}, #{payKind}, #{bussStatus}, #{remark})
+	</insert>
+	
+	<insert id="saveAddress" parameterType="com.emotte.order.order.model.ThreeOrderAddress">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into emotte.t_user_address (id, contact_phone, contact_name, address_detail, province, city, country, 
+			longitude, latitude, is_default, create_by, create_time, update_by, update_time, version,
+			valid, cust_id, choose_address, citycode, is_front)
+		values (#{id}, #{contactPhone}, #{contactName}, #{addressDetail}, #{province}, #{city}, #{country},
+			#{longitude}, #{latitude}, #{isDefault}, #{createBy}, sysdate, #{updateBy}, sysdate, #{version},
+			#{valid}, #{custId}, #{chooseAddress}, #{cityCode}, #{isFront})
+	</insert>
+	
+	<update id="updateAddress" parameterType="com.emotte.order.order.model.ThreeOrderAddress">
+		update emotte.t_user_address
+		<set>
+			<if test="contactName != null">
+				contact_name = #{contactName},
+			</if>
+			<if test="contactPhone != null">
+				contact_phone = #{contactPhone},
+			</if>
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="country != null">
+				country = #{country},
+			</if>
+			<if test="cityCode != null">
+				citycode = #{cityCode},
+			</if>
+			<if test="longitude != null">
+				longitude = #{longitude},
+			</if>
+			<if test="latitude != null">
+				latitude = #{latitude},
+			</if>
+			<if test="addressDetail != null">
+				address_detail = #{addressDetail},
+			</if>
+			<if test="chooseAddress != null">  
+				choose_address = #{chooseAddress},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy},
+			</if>
+			update_time = sysdate
+		</set>
+		where id = #{id}
+	</update>
+
+	<insert id="saveOrderUser" parameterType="com.emotte.order.order.model.ThreeOrderUser">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into t_customer ( id , login_name, login_pwd , real_name , mobile , card_num , card_type ,
+			sex , province, city , district , addr , longitude , latitude , citycode,
+			create_by , create_time, update_by, update_time, version, valid) 
+		values ( #{id} , #{loginName} , #{loginPwd} , #{realName} , #{userMobile} , #{cardNum} , #{cardType} ,
+			#{userSex} , #{userProvince} , #{userCity} , #{userDistrict}, #{userAddress}, #{longitude}, #{latitude},
+			#{cityCode}, #{createBy} , SYSDATE, #{updateBy}, SYSDATE, #{version}, #{valid})
+	</insert>
+	
+	<insert id="insertThreeOrder" parameterType="com.emotte.order.order.model.ThreeOrder">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into t_order 
+			(id,
+			order_code,
+			user_id,
+			user_name,
+			user_province,
+			user_city,
+			user_area,
+			user_address,
+			user_mobile,
+			user_email,
+			cate_type,
+			receiver_name,
+			receiver_province,
+			receiver_city,
+			receiver_area,
+			receiver_address,
+			receiver_mobile,
+			receiver_email,
+			order_type,
+			order_channel,
+			order_source_id,
+			order_status,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			version,
+			critical,
+			remark,
+			is_invoice,
+			pay_status,
+			total_pay,
+			deliver_pay,
+			ip,
+			user_sex,
+			city,
+			receiver_city_code,
+			user_city_code,
+			longitude,
+			latitude,
+			auth_manager_id,
+			valid,
+			CREATE_DEPT,
+			RECHARGE_BY,
+			RECHARGE_DEPT,
+			<!-- FOLLOW_BY,
+			FOLLOW_DEPT, -->
+			price_type,
+			<!-- follow_time, -->
+			three_match_time  ,
+			three_match_lock)
+		values (#{id},getseq(),#{userId},#{userName},#{userProvince},#{userCity},#{userArea},#{userAddress},
+			#{userMobile},#{userEmail},#{cateType},#{receiverName},#{receiverProvince},#{receiverCity},#{receiverArea},
+			#{receiverAddress},#{receiverMobile},#{receiverEmail},#{orderType},#{orderChannel},#{orderSourceId},
+			#{orderStatus},#{createBy},SYSDATE,#{updateBy},SYSDATE,#{version},#{critical},#{remark},#{isInvoice},
+			#{payStatus},#{totalPay},#{deliverPay},#{ip},#{userSex},#{cityCode},#{receiverCityCode},#{userCityCode},#{longitude},#{latitude},
+			#{authManagerId},#{valid},#{createDept},#{rechargeBy},#{rechargeDept},<!-- #{followBy},#{followDept}, -->#{productUnit},SYSDATE,
+			#{Threematchlock})
+	</insert>
+	
+	<insert id="insertThreeOrderItem" parameterType="com.emotte.order.order.model.ThreeOrder">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into t_order_item 
+			(id, order_id, product_code, product_name, valid, create_by, create_time, update_by, update_time, 
+			now_price, quantity, sale_type, category_code, version, product_price_type, product_unit, product_spec)
+		values 
+			(#{id},#{orderId},#{productCode},#{productName},#{valid},#{createBy},sysdate,#{updateBy},sysdate, 
+			#{price},#{quantity}, #{saleType}, #{orderType}, #{version}, #{priceType}, #{productUnit}, #{productSpec})
+	</insert>
+	
+	<insert id="insertThreeOrderItemDetailServer" parameterType="com.emotte.order.order.model.ThreeOrder">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into t_order_item_detail_server (id, item_id, start_time, end_time, address, order_id, valid, create_by, create_time, 
+			update_by, update_time)
+		values (#{id},#{orderItemId},to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss'),to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss'),#{address},#{orderId},#{valid},
+			#{createBy},sysdate,#{updateBy},sysdate)
+	</insert>
+	
+	<update id="doMatch" parameterType="list">
+		update t_order set order_status = 3, update_time = sysdate where id in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</update>
+	
+	<update id="doBilling" parameterType="list">
+		update t_order set order_status = 9, update_time = sysdate where id in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</update>
+	
+	<update id="saveMatch" parameterType="com.emotte.order.order.model.ThreeOrder">
+		update t_order set order_status = #{orderStatus}, update_by = #{updateBy}, update_time = sysdate where id = #{orderId}
+	</update>
+	
+	<update id="matchFail" parameterType="com.emotte.order.order.model.ThreeOrder">
+		update t_order set update_by = #{updateBy}, update_time = sysdate, remark = remark||#{remark}
+		where id = #{orderId}
+	</update>
+	
+	<update id="updateOrderPayfee" parameterType="com.emotte.order.order.model.ThreeOrder">
+		update t_order set order_status = 2, update_by = #{updateBy}, update_time = sysdate
+		where id = #{orderId} and order_status = 1
+	</update>
+	
+	<insert id="savePayfee" parameterType="com.emotte.order.order.model.ThreeOrderPayfee">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+			SELECT getseq() as id from DUAL  
+		</selectKey>
+		insert into T_ORDER_PAYFEE (id, order_id, fee_post, fee_type, post_num, cards_num, is_back_type, fee_statrt_period, fee_end_period,
+			fee_to_date, fee_sum, account_status, create_time, create_by, update_time, update_by, version, agent_user, bank_flow_num,
+			split_status, valid, pay_status, post_bank, post_user, collection_entity, post_terminal_no)
+		values (#{id},#{accountsId},#{feePost},#{feeType},#{postNum},#{cardsNum},#{isBackType},#{feeStatrtPeriod},#{feeEndPeriod},
+			to_date(#{feeToDate},'yyyy-mm-dd hh24:mi:ss'),#{feeSum},#{accountStatus},sysdate,#{createBy},sysdate,#{updateBy},#{version},#{agentUser},#{bankFlowNum},
+			#{splitStatus},#{valid},#{payStatus},#{postBank},#{postUser},#{collectionEntity},#{postTerminalNo})
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.emotte.order.order.model.ThreeOrder">
+		UPDATE T_ORDER SET REMARK=#{remark},TOTAL_PAY=#{totalPay},ORDER_STATUS =#{orderStatus}
+		WHERE ORDER_CODE = #{orderCode}
+	</update>
+  
+  	<insert id="savaExcelRecord" >
+		 insert into t_order_imporexp_record(
+		 		id,
+		 		file_Name,
+		 		path,
+		 		is_export,
+		 		create_by,
+		 		create_time,
+		 		three_give_type
+		 	) values (
+		 		getseq(),
+		 		#{fileName},
+		 		#{url},
+		 		2,
+		 		#{createBy},
+		 		sysdate,
+		 		2
+		 )
+	</insert>
+	
+  	<insert id="savaOrderImportRecord" >
+		 insert into t_order_imporexp_record(
+		 		id,
+		 		file_Name,
+		 		path,
+		 		is_export,
+		 		create_by,
+		 		create_time,
+		 		three_give_type
+		 	) values (
+		 		getseq(),
+		 		#{fileName},
+		 		#{url},
+		 		2,
+		 		#{createBy},
+		 		sysdate,
+		 		3
+		 )
+	</insert>
+	
+	<update id="updateItemServiceByOrderCode" parameterType="com.emotte.order.order.model.ThreeOrder" >
+ 		UPDATE T_ORDER_ITEM_DETAIL_SERVER SET PERSON_NAME= #{personName},POST_ID = #{postId}
+    	WHERE ID = #{orderItemServiceId}
+ 	</update>
+</mapper>

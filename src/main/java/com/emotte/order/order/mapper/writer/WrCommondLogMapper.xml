@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrCommondLogMapper">
+	 <insert id="insertCommondLog" parameterType="com.emotte.order.order.model.CommondLog" >
+	 	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		insert into t_emp_command_log(
+			id,
+			key_constent,
+			type_constent,
+			type_value,
+			create_time,
+			update_time,
+			flag
+		)values(
+			#{id},
+			#{keyConstent},
+			#{typeConstent},
+			#{typeValue},
+			sysdate,
+			to_date(#{updateTime},'YYYY-MM-DD HH24:MI:SS'),
+			2
+		)
+	</insert>
+	 
+</mapper>

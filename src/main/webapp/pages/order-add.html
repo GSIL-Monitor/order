@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增订单</h4>
+            </div>
+            <div class="modal-body modal-order">
+                <h3>客户信息</h3>
+                <ul>
+                    <li>
+                        <label for="">联系方式：
+                            <input type="text"/>
+                        </label>
+                        <label for="">客户姓名：
+                            <input type="text"/>
+                        </label>
+                    </li>
+                </ul>
+                <h4>地址：</h4>
+                <div class="panel-content table-reponsive">
+                    <table class="table order-table">
+                        <tbody>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="2" class="bor-r">
+                                <input type='checkbox'></td>
+                            <td>姓名</td>
+                            <td>18876742984</td>
+                            <td rowspan="2" class="bor-l">
+                                <div>
+                                    <a href='#'>修改
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">订单管理系统订单管理系统订单管理系统订单管理系统</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="2" class="bor-r">
+                                <input type='checkbox'>
+                            </td>
+                            <td>姓名</td>
+                            <td>18876742984</td>
+                            <td rowspan="2" class="bor-l">
+                                <div>
+                                    <a href='#'>修改
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">订单管理系统订单管理系统订单管理系统订单管理系统</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="2" class="bor-r">
+                                <input type='checkbox'>
+                            </td>
+                            <td>姓名</td>
+                            <td>18876742984</td>
+                            <td rowspan="2" class="bor-l">
+                                <div>
+                                    <a href='#'>修改
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">订单管理系统订单管理系统订单管理系统订单管理系统</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="order-btn">
+                    <button type="button" class="btn btn-order">新建地址</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule('order-add',function(){openModule('order-add-2.html',{},{},{},'order-add-2')});">下一步</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

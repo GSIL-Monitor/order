@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreeOrderOutMapper">
+
+	<select id="queryOrderThirdType" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderCategory">
+	select
+		DISTINCT
+		pc.id,
+			pc.code code,
+		pc.	cname cname,
+		pc.	ename ename,
+		pc.	display display,
+		pc.	valid valid,
+			pc.cate_type cateType
+	from t_order od
+ 		left join t_product_category pc on pc.code=od.order_type
+		where
+	    length(code)= 12 and pc.valid = '1' and pc.display = '1' and pc.cate_type=4
+ 
+	</select>
+	
+	<select id="queryBaseDictionary" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderDictionary">
+		select
+			id id,
+			dict_code code,
+			dict_name name
+		from
+			t_base_dictionary
+		where
+			dict_code like '%'||#{code}||'%' and length(dict_code) = 8 and valid = '1'
+		order by
+			dict_code asc
+	</select>
+	
+	<select id="queryBaseCity" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderDictionary">
+		select
+			id id,
+			code code,
+			name name
+		from 
+			t_base_city
+		where
+			code like #{code}||'%' and length(code)=#{length} and valid=1
+		order by code
+	</select>
+
+	<select id="countOrder" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="java.lang.Integer">
+		SELECT count(0) FROM t_order   od
+		<where>
+			 od.cate_type = '4' and (od.order_status='4' or od.order_status='9')  
+			<if test="id!=null and id!='' ">
+				and od.id = #{id}
+			</if>
+			<if test="orderCode!=null and orderCode!='' ">
+					and od.order_code = #{orderCode} 
+			</if>
+			<if test="userName!=null and userName!='' ">
+				and  od.user_name like '%'||#{userName}||'%'
+			</if>
+			<if test="createTimeStart!=null and createTimeStart!='' ">
+				and  to_char(create_time,'yyyy-mm-dd') &gt;= #{createTimeStart}
+			</if>
+			<if test="createTimeEnd!=null and createTimeEnd!='' ">
+				and  to_char(create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+			</if>
+			<if test="userMobile!=null and userMobile!='' ">
+				and od.user_mobile like '%'||#{userMobile}||'%'
+			</if>
+			<if test="orderType!=null and orderType!='' ">
+				and od.order_type = #{orderType}
+			</if>
+			<if test="orderStatus!=null and orderStatus!='' ">
+				and od.order_status = #{orderStatus}
+			</if>
+			<if test="orderSourceId!=null and orderSourceId!='' ">
+				and od.order_source_id = #{orderSourceId}
+			</if>
+			<if test="orderChannel!=null and orderChannel!='' ">
+				and od.order_channel = #{orderChannel}
+			</if>
+			<if test="provinceCode!=null and provinceCode!='' ">
+				and od.user_city_code in (
+					SELECT code
+					FROM t_base_city
+					WHERE code LIKE #{provinceCode}||'%'
+					AND LENGTH (code) = 9
+				)
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and od.user_city_code = #{cityCode}
+			</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		</where>
+	</select>
+	
+	<select id="queryOrder" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		select * from (select rownum rn,t.* from (
+			SELECT 
+        o.ID,
+        o.order_code orderCode,
+        o.cate_type cateType,
+        i.product_name productName,
+         (select br.name from T_PRODUCT_CITY v,T_PRODUCT p,T_PRODUCT_BASE b,T_PRODUCT_BRAND br
+         where v.product_code = i.product_code and v.product_id=p.id and p.base_id=b.id and b.brand_id=br.id and rownum=1) as brandName,
+        o.user_id userId,
+        o.user_name userName,
+        o.user_mobile userMobile,
+       (select ca.cname from T_PRODUCT_CATEGORY ca where  ca.code = o.order_type) as  typeText,
+        o.order_status orderStatus,
+        o.city city,
+        o.receiver_province receiverProvince,
+        o.receiver_city receiverCity,
+        o.total_pay totalPay,
+        o.pay_status payStatus,
+        
+        (select creat.real_name from t_auth_manager creat where o.create_by = creat.id and creat.valid=1 and creat.state=1) as realName,
+         (select orgc.name from t_auth_org orgc where o.create_dept = orgc.id and orgc.valid=1 and orgc.status=1 ) as realNameDept,
+         (select rech.real_name from t_auth_manager rech where o.recharge_by = rech.id and rech.valid=1 and rech.state=1) as rechargeByName,
+          (select orgr.name from t_auth_org orgr where o.recharge_dept = orgr.id  and orgr.valid=1 and orgr.status=1) as rechargeDeptName,
+          <!-- (select foll.real_name from t_auth_manager foll where o.follow_by = foll.id and foll.valid=1 and foll.state=1) as followByName,
+          (select orgf.name from t_auth_org orgf where o.follow_dept = orgf.id and orgf.valid=1 and orgf.status=1 ) as followDeptName, -->
+             TO_CHAR(o.follow_time, 'yyyy-MM-dd HH:mi:ss') followTime, 
+        (
+          SELECT T.dict_name FROM t_base_dictionary T 
+          WHERE T.dict_code = o.order_source_id AND T.valid = 1
+        ) AS sourceText,
+        (
+          select   ch.name  from      t_custom_channel ch    where   o.order_channel=ch.id
+          AND ch.valid=1
+        ) AS channelText,
+        TO_CHAR(o.create_time, 'yyyy-MM-dd HH:mi:ss') createTime,
+        
+        <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},o.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) +
+				decode(#{loginDept},o.create_dept,1,o.follow_dept,1,o.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},o.recharge_by,1,0) +
+				decode(#{loginDept},o.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) +
+				decode(#{loginDept},o.create_dept,1,o.follow_dept,1,o.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where o.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where o.follow_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where o.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},o.recharge_by,1,0) +
+				decode(#{loginDept}, o.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where o.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			#{loginBy} as loginBy
+      FROM 
+        (SELECT  *    FROM  T_ORDER   order by create_time desc ,  update_time desc ) o
+        LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = o.ID
+      <where>  
+      			o.cate_type = '4' and (o.order_status='4' or o.order_status='9')
+      			and o.create_time &lt;=sysdate
+				<if test="id!=null and id!='' ">
+					and o.id = #{id}
+				</if>
+					<if test="orderCode!=null and orderCode!='' ">
+					and o.order_code = #{orderCode} 
+				</if>
+				<if test="userName!=null and userName!='' ">
+					and o.user_name like '%'||#{userName}||'%'
+				</if>
+				<if test="createTimeStart!=null and createTimeStart!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeStart}
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+				</if>
+				<if test="userMobile!=null and userMobile!='' ">
+					and o.user_mobile like '%'||#{userMobile}||'%'
+				</if>
+				<if test="orderType!=null and orderType!='' ">
+					and o.order_type = #{orderType}
+				</if>
+				<if test="orderStatus!=null and orderStatus!='' ">
+					and o.order_status = #{orderStatus}
+				</if>
+				<if test="orderSourceId!=null and orderSourceId!='' ">
+					and o.order_source_id = #{orderSourceId}
+				</if>
+				<if test="orderChannel!=null and orderChannel!='' ">
+					and o.order_channel = #{orderChannel}
+				</if>
+				<if test="provinceCode!=null and provinceCode!='' ">
+					and o.user_city_code in (
+						SELECT tbc.code
+						FROM t_base_city tbc
+						WHERE tbc.code LIKE #{provinceCode}||'%'
+						AND LENGTH (tbc.code) = 9
+					)
+				</if>
+				<if test="cityCode!=null and cityCode!='' ">
+					and o.user_city_code = #{cityCode}
+				</if>
+				<if test="rechargeDeptName!=null and rechargeDeptName!='' ">
+					and ao.name = #{rechargeDeptName}
+				</if>
+					<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or o.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or o.follow_by=#{loginBy}
+			or o.create_dept = #{loginDept} or o.recharge_dept=#{loginDept} or o.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (o.create_by = #{loginBy} or o.recharge_by = #{loginBy} or o.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where o.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgbb
+                            where o.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgcc
+                            where o.follow_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+			</where>
+			) t
+		)
+		<if test="flagPage!=1"> 
+			where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  
+		</if>
+	</select>
+	
+	<select id="queryOrderOneDetail" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		SELECT DISTINCT
+			od. ID AS id,
+			od.order_code AS orderCode,
+			i.product_name productName,
+			it. ID AS code,
+			it. VERSION AS version,
+			ca.cname typeText,
+			TO_CHAR (it.start_time, 'yyyy-mm-dd HH:mi:ss') AS startTime,
+			TO_CHAR (it.end_time, 'yyyy-mm-dd HH:mi:ss') AS endTime,
+			TO_CHAR (it.interview_time,'yyyy-mm-dd HH:mi:ss') AS interviewTime,
+			od.critical AS critical,
+			od.order_source_id AS orderSourceId,
+			(
+				SELECT T.dict_name FROM t_base_dictionary T 
+				WHERE T.dict_code = od.order_source_id AND T.valid = 1
+			) AS sourceText,
+			od.order_status AS orderStatus,
+			od.remark AS remark,
+			it.address AS address,
+			it.interview_address AS interviewAddress,
+			it.min_age AS minAge,
+			it.max_age AS maxAge,
+			it.origin AS origin,
+			it.home_forests AS homeForests,
+			it.familys AS familys,
+			it.person_level AS personLevel,
+			it.education AS education,
+			od.user_id AS userId,
+			od.user_name AS userName,
+			od.user_mobile AS userMobile,
+			od.user_birth AS birth,
+			od.user_sex AS sex,
+			od.user_address AS userAddress,
+			od.receiver_province receiverProvince,
+			od.receiver_city receiverCity,
+			od.receiver_area receiverArea,
+			od.receiver_address receiverAddress,
+			am.real_name authManagerRealName,
+			am.phone authManagerPhone
+		FROM T_ORDER od
+		LEFT JOIN T_AUTH_MANAGER am ON AM.ID = OD.AUTH_MANAGER_ID
+		LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER it ON od. ID = it.order_id
+		LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = od.ID
+		LEFT JOIN T_PRODUCT_CITY c ON c.product_code = i.product_code
+		LEFT JOIN T_PRODUCT p ON p.id = c.product_id
+		LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+		LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = b.category_code
+		where
+			od.ID = #{id} 
+		ORDER BY
+			it.ID DESC
+	</select>
+	
+	<select id="queryOrderOneAccounts" parameterType="com.emotte.order.order.model.ThreeOrderAccounts"
+		resultType="com.emotte.order.order.model.ThreeOrderAccounts">
+		 select
+			ap.id accountsId, 
+			to_char(ap.create_time, 'yyyy-mm-dd HH:mi:ss') createTime, 
+			ap.account_amount accountAmount
+		from 
+			t_account_pay ap
+		where
+			ap.order_id = #{orderId}  order by ap.create_time desc
+			
+		
+	</select>
+	
+	<select id="queryOrderOnePayfee" parameterType="com.emotte.order.order.model.ThreeOrderAccounts"
+		resultType="com.emotte.order.order.model.ThreeOrderAccounts">
+			 select 
+		       op.id payfeeId,
+		       op.post_user postUser, 
+		       op.fee_post feePost, 
+		       op.fee_sum feeSum,
+		       pf.post_bank as "postBank" ,
+		       pf.BANK_FLOW_NUM as "bankflowNum",
+		       op.account_status as "accountStatus"
+		       from t_order_payfee op left join  t_order_payfee pf on op.id=pf.id
+            where
+			op.order_id = #{accountsId} 	
+	</select>
+	
+	<select id="countOrderUser" parameterType="com.emotte.order.order.model.ThreeOrderUser"
+		resultType="java.lang.Integer">
+		<!-- select count(0) from t_customer
+		<where>
+			valid = '1'
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name like '%'||#{realName}||'%'
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile like '%'||#{userMobile}||'%'
+			</if>
+		</where> -->
+		select count(0)
+		from emerp.t_customer
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+			<if test="adValid !=null and adValid ==2">
+				and (market_by = #{loginBy} or (create_by=#{loginBy} and (is_commit=1 or is_commit is null)))
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryOrderUser" parameterType="com.emotte.order.order.model.ThreeOrderUser"
+		resultType="com.emotte.order.order.model.ThreeOrderUser">
+		<!-- select * from (select rownum rn,t.* from (
+			select
+				id id,
+				real_name realName,
+				sex userSex,
+				mobile userMobile,
+				to_char(create_time,'yyyy-mm-dd HH:mi:ss') createTime,
+				card_type cardType,
+				card_num cardNum,
+				province userProvince,
+				city userCity,
+				citycode cityCode,
+				is_vip isVip,
+				is_big_cust isBigCust
+			from t_customer
+			<where>
+				valid = '1'
+				<if test="id!=null and id!='' ">
+					and id = #{id}
+				</if>
+				<if test="realName!=null and realName!='' ">
+					and real_name like '%'||#{realName}||'%'
+				</if>
+				<if test="userMobile !=null and userMobile !='' ">
+					and mobile like '%'||#{userMobile}||'%'
+				</if>
+			</where>
+			order by update_time desc nulls last) t)
+		<if test="flagPage!=1">
+			where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})
+		</if>
+	</select> -->
+		select * from (select rownum rn,t.* from (
+		select
+		id id,
+				real_name realName,
+				sex userSex,
+				mobile userMobile,
+				to_char(create_time,'yyyy-mm-dd HH:mi:ss') createTime,
+				card_type cardType,
+				card_num cardNum,
+				province userProvince,
+				city userCity,
+				citycode cityCode,
+				is_vip isVip,
+				is_big_cust isBigCust
+		from emerp.t_customer tc
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<!-- 判断已经提交的不能查询 -->
+			<if test="adValid !=null and adValid ==2">
+				and (tc.market_by = #{loginBy} or (tc.create_by=#{loginBy} and (tc.is_commit=1 or tc.is_commit is null)))
+			</if>
+		</where>
+		order by create_time desc ) t)
+		<if test="flagPage!=1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if>
+<!-- 		<if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	
+	<select id="queryOrderUserByMobile" parameterType="com.emotte.order.order.model.ThreeOrderUser"
+		resultType="java.lang.Integer">
+		select count(id) from t_customer where mobile = #{userMobile} and valid = '1'
+	</select>
+	
+	<select id="queryCategory" parameterType="com.emotte.order.order.model.ThreeOrderCategory"
+		resultType="com.emotte.order.order.model.ThreeOrderCategory">
+		select
+			tpc.id id,
+			tpc.code code,
+			tpc.cname cname,
+			tpc.ename ename,
+			tpc.display display,
+			tpc.valid valid,
+			tpc.cate_type cateType,
+			tpcc.city_code cityCode
+		from 
+			t_product_category tpc 
+			join T_PRODUCT_CATEGORY_CITY tpcc on tpc.code = tpcc.CATEGORY_CODE
+		where
+			(length(tpc.org_code) - length(replace(tpc.org_code,'-','')) =#{level}) 
+			and tpc.valid = '1' and tpcc.valid = '1' and tpc.display = '1'
+			<if test="code!=null and code!=''">
+				and tpc.code like '${code}%'
+			</if>
+			<if test="cateType != null and cateType != '' ">
+				and tpc.cate_type = #{cateType}
+			</if>
+			<if test=" cityCode !=null and cityCode !='' ">
+				and tpcc.city_code = substr(#{cityCode},0,9)
+			</if>
+		order by tpc.priority desc
+	</select>
+	
+	<select id="queryProduct" parameterType="com.emotte.order.order.model.ThreeOrderProduct"
+		resultType="com.emotte.order.order.model.ThreeOrderProduct">
+		<!-- select 
+			pc.product_code code, pb.name
+		from 
+			t_product_city pc
+		left join 
+			t_product pp on pc.product_id = pp.id
+		left join 
+			t_product_base pb on pp.base_id = pb.id
+		where 
+			pb.category_code = #{categoryCode} and pp.valid = '1' and pb.valid = '1' and pc.valid = '1' and pc.status = '1'
+			<if test="cityCode!=null and cityCode!=''">
+				and pc.city_code = #{cityCode}
+			</if>
+		group by
+			pc.product_code, pb.name -->
+	select   c.product_code as code,
+            b.name 
+	from 
+	t_product_base b, t_product t, t_product_city c,t_auth_org_product o 
+	where
+		b.category_code = #{categoryCode} and
+ 	 	b.id = t.base_id and 
+ 	 	t.id = c.product_id and 
+ 		b.valid = 1 and
+ 		c.valid = 1 and 
+ 		o.valid= 1  and
+ 		c.status = '1'and 
+ 		b.is_prod_serve='4' and
+ 		o.product_code=c.product_code 
+ 	    <if test="cityCode!=null and cityCode!=''">
+				and c.city_code = #{cityCode}
+			</if>
+		  <if test="orgId!=null and orgId!=''">
+				and o.org_id = #{orgId}
+			</if>
+		<!-- group by
+			c.product_code, b.name -->
+	</select>
+	
+	<select id="queryAddress" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderAddress">
+		select
+			id id,
+			contact_name contactName,
+			contact_phone contactPhone,
+			address_detail addressDetail,
+			province province,
+			city city,
+			country country,
+			longitude longitude,
+			latitude latitude,
+			is_default isDefault,
+			citycode cityCode,
+			is_front isFront,
+			choose_address  chooseAddress,
+			case when substr(citycode,0,9) = #{cityCode} then 1 else 0 end isDisabled 
+		from
+			emotte.t_user_address
+		where
+			<if test="userId !=null and userId !='' ">
+			cust_id = #{userId} and valid = '1'
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and citycode like '${cityCode}%'
+			</if>
+		order by
+			isDisabled desc, is_default desc nulls last, is_front desc
+	</select>
+	
+	<select id="queryUserDetail" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderUser">
+		SELECT 
+			ID ID,  REAL_NAME realName, PROVINCE userProvince, CITY userCity, DISTRICT userDistrict, 
+			ADDR userAddress, MOBILE userMobile, EMAIL userEmail, SEX userSex, CITYCODE cityCode,
+			IS_VIP isVip, IS_BIG_CUST isBigCust
+		FROM 
+			T_CUSTOMER
+		WHERE 
+			ID = #{userId}
+	</select>
+	
+	<select id="queryProductPrice" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderPrice">
+		select
+			price
+		from
+			t_city_product_dict_price
+		where
+			product_code = #{productCode} and dict_code = #{dictCode}
+	</select>
+	
+	<select id="queryUserAddressDetail" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderAddress">
+		select
+			id id,
+			contact_name contactName,
+			contact_phone contactPhone,
+			address_detail addressDetail,
+			province province,
+			city city,
+			country country,
+			longitude longitude,
+			latitude latitude,
+			is_default isDefault,
+			citycode cityCode,
+			is_front isFront,
+			choose_address  chooseAddress
+			
+		from
+			emotte.t_user_address
+		where
+			id = #{userAddressId} and valid = '1'
+	</select>
+	
+	<select id="checkOrderStatus" parameterType="HashMap" resultType="java.lang.Integer">
+		select count(0) from t_order where order_status = #{orderStatus} and id in 
+		<foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="queryProductDetail" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderProduct">
+		select 
+			pc.product_code code, pb.name
+		from 
+			t_product_city pc
+		left join 
+			t_product pp on pc.product_id = pp.id
+		left join 
+			t_product_base pb on pp.base_id = pb.id
+		where 
+			pc.product_code = #{productCode}
+		group by
+			pc.product_code, pb.name
+	</select>
+	
+	<select id="queryCards" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrderCard">
+		select c.id cardId, c.card_balance cardBalance, c.card_numb cardNumb, 
+		to_char(c.valid_time, 'yyyy-mm-dd') validTime
+		from t_card c
+		where c.bind_user_id = #{userId} and c.valid = '1' and c.valid_time >= sysdate
+	</select>
+
+	<select id="queryOrderList" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		SELECT
+		o.ID "ID",
+		o.city,
+		o.ORDER_CODE "orderCode",
+		i.product_name productName,
+		user_name userName,
+		user_mobile userMobile,
+		o.RECEIVER_NAME "receiverName",
+		o.RECEIVER_MOBILE "receiverMobile",
+		ca.cname typeText,
+		o.CATE_TYPE cateType,
+		o.ORDER_TYPE "orderType",
+		o.RECEIVER_PROVINCE "receiverProvince",
+		o.RECEIVER_CITY "receiverCity",
+		o.RECEIVER_AREA "receiverArea",
+		o.RECEIVER_ADDRESS "receiverAddress",
+		ODD.START_TIME "startTime",
+		ODD.END_TIME "endTime",
+		to_char(o.CREATE_TIME,'yyyy-MM-dd hh24:mi:ss') as "createTime",
+		ODD.PERSON_NAME "personName",
+		ODD.POST_ID "postId",
+		o.TOTAL_PAY "totalPay",
+		(
+			case ORDER_STATUS
+			when '1' then '新单'
+			when '2' then '已受理'
+			WHEN '3' THEN '匹配中'
+			when '4' then '已匹配'
+			when '5' then '待面试'
+			when '6' then '面试成功'
+			when '7' then '已签约'
+			when '8' then '已上户'
+			when '9' then '已完成'
+			when '10' then '已取消'
+			when '11' then '已下户'
+			when '12' then '已终止'
+			when '13' then '捡货中'
+			when '14' then '配送中'
+			end
+		)AS "orderStatus",
+		o.REMARK "remark",
+		 <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},o.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) +
+				decode(#{loginDept},o.create_dept,1,o.follow_dept,1,o.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},o.recharge_by,1,0) +
+				decode(#{loginDept},o.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},o.create_by,1,o.follow_by,1,o.recharge_by,1,0) +
+				decode(#{loginDept},o.create_dept,1,o.follow_dept,1,o.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where o.create_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where o.follow_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where o.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},o.recharge_by,1,0) +
+				decode(#{loginDept}, o.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where o.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			#{loginBy} as loginBy
+		FROM T_ORDER o
+		LEFT JOIN T_ORDER_ITEM odi ON ODI.ORDER_ID = o.ID
+		LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER odd ON odd.item_id = odi.id
+		LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = o.ID
+		LEFT JOIN (
+			SELECT tpc.product_code, tpc.product_id 
+			FROM T_PRODUCT_CITY tpc 
+			WHERE tpc.valid = 1
+			GROUP BY tpc.product_code, tpc.product_id
+		) v ON v.product_code = i.product_code
+		LEFT JOIN T_PRODUCT p ON p.id = v.product_id
+		LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+		LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = b.category_code
+		<where>
+			o.CATE_TYPE = '4'
+			<if test="id!=null and id!='' ">
+				and o.id = #{id}
+			</if>
+			<if test="orderCode!=null and orderCode!='' ">
+				and o.order_code like '%'||#{orderCode}||'%'
+			</if>
+			<if test="userName!=null and userName!='' ">
+				and o.user_name like '%'||#{userName}||'%'
+			</if>
+			<if test="startTime!=null and startTime!='' ">
+				and to_char(o.create_time,'yyyy-mm-dd') &gt;=
+				#{startTime}
+			</if>
+			<if test="endTime!=null and endTime!='' ">
+				and to_char(o.create_time,'yyyy-mm-dd') &lt;=
+				#{endTime}
+			</if>
+			<if test="userMobile!=null and userMobile!='' ">
+				and o.user_mobile like '%'||#{userMobile}||'%'
+			</if>
+			<if test="orderType!=null and orderType!='' ">
+				and o.order_type = #{orderType}
+			</if>
+			<if test="orderStatus!=null and orderStatus!='' ">
+				and o.order_status = #{orderStatus}
+			</if>
+			<if test="orderSourceId!=null and orderSourceId!='' ">
+				and o.order_source_id = #{orderSourceId}
+			</if>
+			<if test="orderChannel!=null and orderChannel!='' ">
+				and o.order_channel = #{orderChannel}
+			</if>
+			<if test="provinceCode!=null and provinceCode!='' ">
+					and o.user_city_code in (
+						SELECT tbc.code
+						FROM t_base_city tbc
+						WHERE tbc.code LIKE #{provinceCode}||'%'
+						AND LENGTH (tbc.code) = 9
+					)
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and o.user_city_code = #{cityCode}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or o.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or o.follow_by=#{loginBy}
+			or o.create_dept = #{loginDept} or o.recharge_dept=#{loginDept} or o.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (o.create_by = #{loginBy} or o.recharge_by = #{loginBy} or o.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where o.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgbb
+                            where o.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgcc
+                            where o.follow_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		</where>
+		order by o.create_time desc
+	</select>
+	
+	<select id="queryDictionary" resultType="java.util.HashMap">
+		select
+			dkey,
+			dvalue
+		from t_order_dictionary
+	</select>
+
+	<select id="queryOrderType" resultType="java.util.HashMap">
+	select 
+			DISTINCT
+		code,cname 
+	from t_order od
+ 		left join t_product_category pc on pc.code=od.order_type
+  where 
+    od.cate_type='4' and pc.valid = 1
+	</select>
+	
+	<select id="queryOrderCodeList" resultType="java.util.HashMap">
+		SELECT 
+			ID,ORDER_CODE as "orderCode",ORDER_STATUS as "orderStatus"
+		FROM 
+			T_ORDER WHERE CATE_TYPE ='4'
+	</select>
+	
+	<select id="queryDeptName" resultType="java.util.Map" parameterType="java.util.Map">
+		select o.name as deptName from t_auth_manager t join t_auth_org o on t.dept_id=o.id 
+		where t.id = #{userId}   
+	</select>
+	
+	<select id = "countThreeOrderOutRecord" resultType="java.lang.Integer" 
+	parameterType="com.emotte.order.order.model.ThreeOrder">
+		SELECT COUNT(0)
+		FROM T_ORDER_IMPOREXP_RECORD
+		<where>
+			THREE_GIVE_TYPE = '2'
+		<if test="recordStartTime!=null and recordStartTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &gt;= #{recordStartTime} 		
+		</if>
+		<if test="recordEndTime!=null and recordEndTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &lt;= #{recordEndTime} 		
+		</if>
+		</where> 
+		ORDER BY T_ORDER_IMPOREXP_RECORD.CREATE_TIME DESC
+	</select>
+	
+	<select id = "queryThreeOrderOutRecord" resultType ="com.emotte.order.order.model.ThreeOrder">
+		select * from (select rownum rn,t.* from (select 
+		file_name as "fileName",
+		path as "path",
+		create_time as "createTime"
+		from t_order_imporexp_record
+		<where>
+		  THREE_GIVE_TYPE = '2'
+		<if test="recordStartTime!=null and recordStartTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &gt;= #{recordStartTime} 		
+		</if>
+		<if test="recordEndTime!=null and recordEndTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &lt;= #{recordEndTime} 		
+		</if>
+		</where>
+		   order by t_order_imporexp_record.create_time desc ) t)
+		<if test="flagPage!=1"> 
+			where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  
+		</if>
+	</select>
+	
+	<select id="queryIdByOrderCode" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT 
+			ODD.id "orderItemServiceId"
+		FROM T_ORDER o
+		LEFT JOIN T_ORDER_ITEM oid ON OID.ORDER_ID = o.ID
+		LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER odd ON odd.item_id = oid.id
+		WHERE o.ORDER_CODE = #{orderCode}
+	</select>
+	
+	<!-- 根据用户ID查询用户信息 -->
+	<select id="queryUserDetailByUserId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ThreeOrderUser">
+		SELECT 
+			ID ID, LOGIN_NAME loginName, PROVINCE userProvince, CITY userCity, DISTRICT userDistrict, 
+			ADDR userAddress, MOBILE userMobile, EMAIL userEmail, SEX userSex, CITYCODE cityCode,
+			IS_VIP isVip, IS_BIG_CUST isBigCust, MARKET_BY as marketBy
+		FROM 
+			T_CUSTOMER
+		WHERE 
+			ID = #{userId}
+	</select>
+	
+	<!-- 查询管理员部门ID -->
+	<select id="queryManagerDeptId" parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		SELECT 
+			DEPT_ID as deptId 
+		FROM 
+			T_AUTH_MANAGER
+		WHERE 
+			ID = #{id}
+	</select>
+	
+	<select id="queryThreeOrderCodeList" resultType="java.lang.String">
+		SELECT 
+			THREE_ORDER_CODE as "orderCode"
+		FROM 
+			T_ORDER WHERE THREE_ORDER_CODE is not null
+	</select>
+	
+	<select id="loadBaseCity" resultType="java.util.HashMap">
+		select t.code as code,t.name as name from t_base_city t where t.valid='1' 
+	</select>
+	
+	<select id = "countOrderImportRecord" resultType="java.lang.Integer" 
+	parameterType="com.emotte.order.order.model.ThreeOrder">
+		SELECT COUNT(0)
+		FROM T_ORDER_IMPOREXP_RECORD
+		<where>
+			THREE_GIVE_TYPE = '3'
+		<if test="recordStartTime!=null and recordStartTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &gt;= #{recordStartTime} 		
+		</if>
+		<if test="recordEndTime!=null and recordEndTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &lt;= #{recordEndTime} 		
+		</if>
+		</where> 
+		ORDER BY T_ORDER_IMPOREXP_RECORD.CREATE_TIME DESC
+	</select>
+	
+	<select id = "queryOrderImportRecord" resultType ="com.emotte.order.order.model.ThreeOrder">
+		select * from (select rownum rn,t.* from (select 
+		file_name as "fileName",
+		path as "path",
+		create_time as "createTime"
+		from t_order_imporexp_record
+		<where>
+		  THREE_GIVE_TYPE = '3'
+		<if test="recordStartTime!=null and recordStartTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &gt;= #{recordStartTime} 		
+		</if>
+		<if test="recordEndTime!=null and recordEndTime!='' ">           
+		   and	to_char(create_time,'yyyy-mm-dd') &lt;= #{recordEndTime} 		
+		</if>
+		</where>
+		   order by t_order_imporexp_record.create_time desc ) t)
+		<if test="flagPage!=1"> 
+			where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  
+		</if>
+	</select>
+	
+</mapper>

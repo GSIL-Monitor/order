@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增服务人员</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-basic">
+                    <header><h4>人员基本信息</h4></header>
+                    <div class="info clearfix">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>姓名：</p>
+                                        <input type="text" class="form-control" placeholder="Jane">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6 pl100">
+                                    <label class="radio-inline">
+                                        <input type="radio" checked="checked" name="sex" value="男"> 男
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="sex" value="女"> 女
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>年龄：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>籍贯：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>身份证号：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>联系方式：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>紧急联系：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>学历：</p>
+                                        <select class="form-control">
+                                            <option>小学</option>
+                                            <option>初中</option>
+                                            <option>高中</option>
+                                            <option>大专</option>
+                                            <option>本科</option>
+                                            <option>硕士</option>
+                                            <option>博士</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>民族：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>婚姻状况：</p>
+                                        <select class="form-control">
+                                            <option>未婚</option>
+                                            <option>已婚</option>
+                                            <option>离异</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>普通话：</p>
+                                        <select class="form-control">
+                                            <option></option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>属相：</p>
+                                        <select class="form-control">
+                                            <option>鼠</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>现住地址：</p>
+                                        <textarea class="form-control"></textarea>                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>原籍地址：</p>
+                                        <textarea class="form-control"></textarea>                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-content-basic">
+                    <header><h4>人员工作信息</h4></header>
+                    <div class="info clearfix">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>期望工种：</p>
+                                        <select class="form-control">
+                                            <option>一般家务</option>
+                                            <option>小时工</option>
+                                            <option>钟点工</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>家政工作年限：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>健康证状况：</p>
+                                        <select class="form-control">
+                                            <option>健康证</option>
+                                            <option>检验证明</option>
+                                            <option>已过期</option>
+                                        </select>                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>是否怕宠物：</p>
+                                        <select class="form-control">
+                                            <option>是</option>
+                                            <option>否</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>是否住家：</p>
+                                        <select class="form-control">
+                                            <option>是</option>
+                                            <option>否</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>工作期望内容：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>期望薪资：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>特长：</p>
+                                        <textarea class="form-control"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>初试评价：</p>
+                                        <textarea class="form-control"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-content-basic">
+                    <header><h4>其他信息</h4></header>
+                    <div class="info clearfix">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>渠道一级：</p>
+                                        <select class="form-control">
+                                            <option>学校录入</option>
+                                            <option>合伙人</option>
+                                            <option>呼叫中心</option>
+                                            <option>基地录入</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>二级：</p>
+                                        <select class="form-control">
+                                            <option>58同城</option>
+                                            <option>百姓网</option>
+                                            <option>赶集网</option>
+                                        </select>
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>三级：</p>
+                                        <select class="form-control">
+                                            <option>王鑫</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label class="mr20">
+                                        <p>是否已到校：</p>
+                                        <select class="form-control">
+                                            <option>已到校</option>
+                                            <option>未到校</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

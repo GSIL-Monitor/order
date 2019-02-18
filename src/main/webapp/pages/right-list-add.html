@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" style="width:38%;">
+        <div class="modal-content info clearfix">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">管理</h4>
+            </div>
+            <form class="modal-body form-inline">
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>选择板块：</p>
+                                    <select class="form-control">
+                                        <option value="解决方案">解决方案</option>
+                                        <option>家政服务</option>
+                                        <option>便民服务</option>
+                                        <option>有机农产品</option>
+                                        <option>美容美体</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>页面排序：</p>
+                                    <input type="text" class="form-control">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>标题：</p>
+                                    <input type="text" class="form-control">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group checkbox col-xs-12">
+                                <label class="radio-inline">
+                                    <p>是否显示：</p>
+                                    <input type="checkbox" name="way" value="显示"> 显示
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>
+                                    <p>跳转到商品：</p>
+                                    <select class="form-control">
+                                        <option>全部</option>
+                                        <option>解决方案</option>
+                                        <option>家政服务</option>
+                                        <option>营养</option>
+                                        <option>健康</option>
+                                        <option>教育</option>
+                                        <option value="便民服务">便民服务</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>
+                                    <select class="form-control">
+                                        <option>全部</option>
+                                        <option>月嫂</option>
+                                        <option>育儿嫂</option>
+                                        <option>保姆</option>
+                                        <option>陪护</option>
+                                        <option value="家电维修">家电维修</option>
+                                        <option>钟点工</option>
+                                        <option>小时工</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <select class="form-control">
+                                    <option value="全部">全部</option>
+                                    <option>抽油烟机</option>
+                                    <option>空调清洗</option>
+                                    <option>冰箱除菌</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="checkbox col-xs-12 pl100">
+                                <label>
+                                    <input type="checkbox"/>
+                                    <p class="jmp-url">跳转到URL</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12 pl100">
+                                <input type="text" class="form-control form-textarea"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group checkbox col-xs-12">
+                                <label for="exampleInputFile">
+                                    <p>图片(网站)：</p>
+                                    <input type="file" id="exampleInputFile" class="pl40">
+                                    <input type="checkbox"> 网站                                </label>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group checkbox col-xs-12">
+                                <label for="exampleInputFile">
+                                    <p style="width:110px;">图片（移动端）：</p>
+                                    <input type="file" id="exampleInputFile" class="pl40">
+                                    <input type="checkbox"> 微信                                      <input type="checkbox"/>微信
+                                    <input type="checkbox"/>IOS
+                                </label>
+                            </div>
+                        </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreeOrderBaseCityMapper">
+	<select id="getBaseCityCodeByName" parameterType="com.emotte.order.order.model.ThreeOrderBaseCity"
+		resultType="com.emotte.order.order.model.ThreeOrderBaseCity">
+		select
+			id,
+			pid,
+			code,
+			org_code,
+			name,
+			short_name,
+			levels,
+			tel,
+			spelling,
+			valid
+			from EMERP.T_BASE_CITY
+			<where>
+				valid = 1 
+				<if test=" id != null and id != '' ">
+					and id = #{id} 
+				</if>
+				<if test=" pid != null and pid !='' ">
+					and pid = #{pid} 
+				</if>
+				<if test=" code !=null and code !='' ">
+					and code = #{code} 
+				</if>
+				<if test=" org_code !=null and org_code !='' ">
+					and org_code = #{org_code} 
+				</if>
+				<if test=" name !=null and name !='' ">
+					and name = #{name} 
+				</if>
+				<if test=" short_name !=null and short_name !='' ">
+					and short_name = #{short_name} 
+				</if>
+				<if test=" levels !=null and levels !='' ">
+					and levels = #{levels} 
+				</if>
+				<if test=" tel !=null and tel !='' ">
+					and tel = #{tel} 
+				</if>
+				<if test=" spelling !=null and spelling !='' ">
+					and spelling = #{spelling} 
+				</if>
+				
+			</where>
+	</select>
+</mapper>

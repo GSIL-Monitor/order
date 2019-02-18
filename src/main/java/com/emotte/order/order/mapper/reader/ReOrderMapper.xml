@@ -1,0 +1,2866 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReOrderMapper">
+	<select id="loadOrder" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Order">
+		select 
+			od.id as id ,			
+			od.order_code as orderCode ,			
+			od.parent_id as parentId ,			
+			od.user_id as userId ,			
+			od.user_name as userName ,			
+			od.user_province as userProvince ,			
+			od.user_city as userCity ,			
+			od.user_area as userArea ,			
+			od.user_address as userAddress ,			
+			od.user_mobile as userMobile ,			
+			od.user_email as userEmail ,		
+			od.receiver_name as receiverName ,			
+			od.receiver_province as receiverProvince ,			
+			od.receiver_city as receiverCity ,			
+			od.receiver_area as receiverArea ,			
+			od.receiver_zipcode as receiverZipcode ,			
+			od.receiver_address as receiverAddress ,
+			od.longitude as longitude ,			
+			od.latitude as latitude ,	
+			od.receiver_mobile as receiverMobile ,			
+			od.receiver_email as receiverEmail ,			
+			od.order_type as orderType ,			
+			od.order_channel as orderChannel ,			
+			od.order_source_id as orderSourceId ,			
+			od.order_status as orderStatus ,			
+			od.auth_manager_id as authManagerId ,			
+			od.create_by as createBy ,			
+			to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime ,			
+			od.update_by as updateBy ,			
+			to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime ,			
+			od.version as version ,			
+			od.critical as critical ,				
+			od.remark as remark ,			
+			od.sendtime_type as sendtimeType ,			
+			od.is_invoice as isInvoice ,			
+			od.vendor_id as vendorId ,			
+			od.invoice_type as invoiceType ,			
+			od.invoice_memo as invoiceMemo ,			
+			od.pay_status as payStatus ,
+			decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,			
+			od.deliver_pay as deliverPay ,			
+			od.ip as ip ,		
+			od.price_type  as "priceType" ,			
+			od.invite_code as inviteCode ,			
+			od.user_level as userLevel ,			
+			od.order_groupid as orderGroupid ,
+			od.three_order_code as threeOrderCode,
+			od.user_sex as userSex,
+			od.user_birth as userBirth,
+			od.cate_type as cateType,
+			od.total_pay as totalPay,
+			odp.cate_type as cateTypeParent,
+			od.recharge_by as rechargeBy,
+			od.recharge_dept as rechargeDept,
+			od.city
+		from t_order od left join t_order odp on od.parent_id=odp.id
+		where 1=1 
+			and od.id=#{id} and od.valid = 1 
+	</select>
+	<select id="loadOrderByOrder"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.deliver_pay  as "deliverPay" ,	
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			od.cate_type as cateType,
+			od.total_pay as totalPay,
+			od.city as city ,
+            od.recharge_by as "rechargeBy",
+			od.SERVICE_OBJECT as serviceObject,
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.follow_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			tchannel.is_collection as iscollection,
+			#{loginBy} as loginBy
+	from  t_order od  left join  t_custom_channel tchannel  on  od.ORDER_CHANNEL=tchannel.id
+	<where> 
+		od.id = #{id}  and od.valid = 1
+	</where>
+	</select>
+	<select id="queryOrder"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select * from (select rownum rn,t.* from (
+		select
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,
+			 decode(od.SERVICE_OBJECT,'1','企业','2','个人')  as "serviceObject" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 (select ch.name from t_custom_channel ch where od.order_channel = to_char(ch.id)) as channelText,			
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.total_pay  as "totalPay" ,			
+			 od.deliver_pay  as "deliverPay" ,			
+			 od.ip  as "ip" ,			
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.user_sex  as "userSex" ,
+			 od.three_order_code as threeOrderCode,
+			 od.user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			od.cate_type as cateType,
+			od.city as city ,
+			(select creat.real_name from t_auth_manager creat where od.create_by = creat.id) as createByText,
+            (select orgc.name from t_auth_org orgc where od.create_dept = orgc.id ) as createDeptText,
+            od.recharge_by as "rechargeBy",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            od.recharge_dept as rechargeDept,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+            <!-- (select foll.real_name from t_auth_manager foll where od.follow_by = foll.id) as followByText,
+            (select orgf.name from t_auth_org orgf where od.follow_dept = orgf.id ) as followDeptText, -->
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.follow_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>	
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy
+	from t_order  od
+	LEFT JOIN (SELECT ORDER_ID,MIN(START_TIME) startTime,NVL(MAX(END_TIME),MIN(START_TIME)) endTime FROM T_ORDER_SERVER_LINED GROUP BY ORDER_ID) osl ON od.ID = osl.ORDER_ID
+	<where> 
+	 od.create_time &lt;=sysdate and od.valid = 1 and od.order_channel !=233790976800856
+				<if test="serviceObject!=null and serviceObject!='' ">           
+		 and	od.SERVICE_OBJECT =  #{serviceObject} 		</if>
+		 		<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="threeOrderCode!=null and threeOrderCode!='' ">           
+		and	od.three_order_code = #{threeOrderCode}		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				  <if test="threeOrderItemId!=null and threeOrderItemId!='' ">           
+		and	od.recharge_by =  #{threeOrderItemId} 		</if>
+						  <if test="rechargeDept !=null and rechargeDept !='' ">           
+		and	od.recharge_dept =  #{rechargeDept} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="payText!=null and payText!='' ">           
+		and	od.pay_status = #{payText} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="orderStatusOther !=null and orderStatusOther !='' ">           
+		and	od.order_status not in(${orderStatusOther}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+<!--                             and orgaa.valid = 1  -->
+                            and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+<!--                             and orgbb.valid = 1  -->
+                            and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+<!--                             and orgcc.valid = 1  -->
+                            and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+		<if test="startLinedTime!=null and startLinedTime!='' ">
+			AND TO_CHAR(osl.STARTTIME,'YYYYMMDD') &gt;= #{startLinedTime}
+		</if>
+		<if test="endLinedTime!=null and endLinedTime!='' ">
+			AND TO_CHAR(osl.ENDTIME,'YYYYMMDD') &lt;= #{endLinedTime}
+		</if>
+		<if test="checkStatus!=null and checkStatus!='' ">
+			AND EXISTS (SELECT oa.id FROM T_ORDER_AGREEMENT oa WHERE oa.VALID = 1 AND oa.ORDER_ID = od.ID AND oa.CHECK_STATUS = #{checkStatus})
+		</if>
+			ORDER BY od.create_time DESC	
+			</where>
+		) t
+	<if test="flagPage!=1">
+		where rownum&lt;=(${pageSize}+${beginRow})) where rn&gt;=${beginRow}+1
+	</if>
+	<if test="flagPage==1">
+		)
+	</if>
+<!-- 	<if test="flagPage==1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if> -->
+<!-- 	<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	
+	<select id="queryOrderBirthDate"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select * from (select rownum rn,t.* from (
+		select
+			 od.id  as "id" ,
+			 decode(od.SERVICE_OBJECT,'1','企业','2','个人')  as "serviceObject" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 (select ch.name from t_custom_channel ch where od.order_channel = to_char(ch.id)) as channelText,			
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 od.three_order_code as threeOrderCode,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.total_pay  as "totalPay" ,			
+			 od.deliver_pay  as "deliverPay" ,			
+			 od.ip  as "ip" ,			
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.user_sex  as "userSex" ,
+			 od.user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			od.cate_type as cateType,
+			od.city as city ,
+			(select creat.real_name from t_auth_manager creat where od.create_by = creat.id) as createByText,
+            (select orgc.name from t_auth_org orgc where od.create_dept = orgc.id ) as createDeptText,
+            od.recharge_by as "rechargeBy",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+            (select foll.real_name from t_auth_manager foll where od.follow_by = foll.id) as followByText,
+            (select orgf.name from t_auth_org orgf where od.follow_dept = orgf.id ) as followDeptText,
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.follow_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy
+	from   t_order od 
+		left join t_order_item_detail_server its on  od.id=its.order_id
+	<where> 
+	 	od.create_time &lt;=sysdate and od.valid = 1 and od.order_channel !=233790976800856
+	 			<if test="serviceObject!=null and serviceObject!='' ">           
+		 and	od.SERVICE_OBJECT =  #{serviceObject} 		</if>
+				<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="birthTimeOrder!=null and birthTimeOrder!='' ">           
+		and	to_char(its.birth_time,'yyyy-mm-dd') &gt;= #{birthTimeOrder} 		
+				</if>
+				<if test="birthTimeOrderEnd!=null and birthTimeOrderEnd!='' ">           
+		and	to_char(its.birth_time,'yyyy-mm-dd') &lt;= #{birthTimeOrderEnd} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				  <if test="threeOrderItemId!=null and threeOrderItemId!='' ">           
+		and	od.recharge_by =  #{threeOrderItemId} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="payText!=null and payText!='' ">           
+		and	od.pay_status = #{payText} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="orderStatusOther !=null and orderStatusOther !='' ">           
+		and	od.order_status not in(${orderStatusOther}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+<!--                             and orgaa.valid = 1  -->
+                            and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+<!--                             and orgbb.valid = 1  -->
+                            and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+<!--                             and orgcc.valid = 1  -->
+                            and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+				ORDER BY od.create_time DESC 
+			</where>
+		) t
+	<if test="flagPage!=1">
+		where rownum&lt;=(${pageSize}+${beginRow})) where rn&gt;=${beginRow}+1
+	</if>
+	<if test="flagPage==1">
+		)
+	</if>
+<!-- 	<if test="flagPage==1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if> -->
+<!-- 	<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	
+	<select id="exoutOrder"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 (select ch.name from t_custom_channel ch where od.order_channel = to_char(ch.id)) as channelText,			
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.total_pay  as "totalPay" ,			
+			 od.deliver_pay  as "deliverPay" ,			
+			 od.ip  as "ip" ,			
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.user_sex  as "userSex" ,
+			 od.user_birth  as "userBirth" ,
+			 to_char(its.birth_time,'yyyy-MM-dd hh24:mi:ss') as  "birthTimeOrder",
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			od.cate_type as cateType,
+			od.city as city ,
+			(select creat.real_name from t_auth_manager creat where od.create_by = creat.id) as createByText,
+            (select orgc.name from t_auth_org orgc where od.create_dept = orgc.id ) as createDeptText,
+            od.recharge_by as "rechargeBy",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+            (select foll.real_name from t_auth_manager foll where od.follow_by = foll.id) as followByText,
+            (select orgf.name from t_auth_org orgf where od.follow_dept = orgf.id ) as followDeptText,
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+<!-- 	                  and orgaa.valid = 1 -->
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy
+	from  (select * from t_order order by create_time desc ) od 
+		left join t_order_item_detail_server its on  od.id=its.order_id
+	<where> 
+	 	od.create_time &lt;= sysdate and od.valid = 1
+				<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="birthTimeOrder!=null and birthTimeOrder!='' ">           
+		and	to_char(its.birth_time,'yyyy-mm-dd') &gt;= #{birthTimeOrder} 		
+				</if>
+				<if test="birthTimeOrderEnd!=null and birthTimeOrderEnd!='' ">           
+		and	to_char(its.birth_time,'yyyy-mm-dd') &lt;= #{birthTimeOrderEnd} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				  <if test="threeOrderItemId!=null and threeOrderItemId!='' ">           
+		and	od.recharge_by =  #{threeOrderItemId} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="payText!=null and payText!='' ">           
+		and	od.pay_status = #{payText} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="orderStatusOther !=null and orderStatusOther !='' ">           
+		and	od.order_status not in(${orderStatusOther}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} ) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} 
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+<!--                             and orgaa.valid = 1  -->
+                            and orgaa.code like '${loginOrgCode}%'
+					union all 
+					select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+<!--                             and orgbb.valid = 1  -->
+                            and orgbb.code like '${loginOrgCode}%'
+                   ) )	
+				</if>
+				
+			</where>
+<!-- 	<if test="flagPage==1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if> -->
+<!-- 	<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	
+	
+	<select id="queryOrderNoPage"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select
+			 id  as "id" ,			
+			 order_code  as "orderCode" ,			
+			 parent_id  as "parentId" ,			
+			 user_id  as "userId" ,			
+			 user_name  as "userName" ,			
+			 user_province  as "userProvince" ,			
+			 user_city  as "userCity" ,			
+			 user_area  as "userArea" ,			
+			 user_address  as "userAddress" ,			
+			 user_mobile  as "userMobile" ,			
+			 user_email  as "userEmail" ,		
+			 receiver_name  as "receiverName" ,			
+			 receiver_province  as "receiverProvince" ,			
+			 receiver_city  as "receiverCity" ,			
+			 receiver_area  as "receiverArea" ,			
+			 receiver_zipcode  as "receiverZipcode" ,			
+			 receiver_address  as "receiverAddress" ,
+			 longitude  as  "longitude" ,			
+			 latitude  as "latitude" ,			
+			 receiver_mobile  as "receiverMobile" ,			
+			 receiver_email  as "receiverEmail" ,			
+			 order_type  as "orderType" ,			
+			 order_channel  as "orderChannel" ,			
+			 order_source_id  as "orderSourceId" ,			
+			 order_status  as "orderStatus" ,			
+			 auth_manager_id  as "authManagerId" ,			
+			 create_by  as "createBy" ,	
+			 update_by  as "updateBy" ,			
+			 to_char(create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 version  as "version" ,			
+			 critical  as "critical" ,					
+			 remark  as "remark" ,			
+			 sendtime_type  as "sendtimeType" ,			
+			 is_invoice  as "isInvoice" ,			
+			 vendor_id  as "vendorId" ,			
+			 invoice_type  as "invoiceType" ,			
+			 invoice_memo  as "invoiceMemo" ,			
+			 pay_status  as "payStatus" ,
+			 decode(pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130002','退款中','20130003','退款成功','20130008','退款成功','未知') as payText,			
+			 total_pay  as "totalPay" ,			
+			 deliver_pay  as "deliverPay" ,			
+			 ip  as "ip" ,			
+			 invite_code  as "inviteCode" ,			
+			 user_level  as "userLevel" ,			
+			 order_groupid  as "orderGroupid" ,
+			 user_sex  as "userSex" ,
+			 user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			cate_type as cateType
+	from  t_order od 
+	<where> 
+	 1 = 1 and od.create_time &lt;=sysdate and od.valid = 1
+				<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+                            and orgaa.valid = 1 and orgaa.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+                            and orgbb.valid = 1 and orgbb.code like '${loginOrgCode}%') or
+       		exists(select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+                            and orgcc.valid = 1 and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+			</where>
+	order by od.create_time desc 
+	</select>
+	<select id="countOrderBirthDate"  parameterType="com.emotte.order.order.model.Order" resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM t_order od left join t_order_item_detail_server its on  od.id=its.order_id
+		<where> 
+	         1 = 1 and od.create_time &lt;=sysdate and od.valid = 1
+					<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				<if test="threeOrderItemId!=null and threeOrderItemId!='' ">           
+		and	od.recharge_by =  #{threeOrderItemId} 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="birthTimeOrder!=null and birthTimeOrder!='' ">           
+		and	to_char(its.birth_time,'yyyy-mm-dd') &gt;= #{birthTimeOrder} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="payText!=null and payText!='' ">           
+		and	od.pay_status = #{payText} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="orderStatusOther !=null and orderStatusOther !='' ">           
+		and	od.order_status not in(${orderStatusOther}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+<!--                             and orgaa.valid = 1  -->
+                            and orgaa.code like '${loginOrgCode}%'
+					union all
+       				select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+<!--                             and orgbb.valid = 1  -->
+                            and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+<!--                             and orgcc.valid = 1  -->
+                            and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+				
+			</where>
+	</select>
+	
+	<select id="countOrder"  parameterType="com.emotte.order.order.model.Order" resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM t_order od
+		<where> 
+	         1 = 1 and od.create_time &lt;=sysdate and od.valid = 1
+					<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+				  <if test="parentId!=null and parentId!='' ">           
+		and	od.parent_id =  #{parentId} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	od.user_id =  #{userId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	od.user_name LIKE '%'||#{userName}||'%'		</if>
+				  <if test="userProvince!=null and userProvince!='' ">           
+		and	od.user_province =  #{userProvince} 		</if>
+				  <if test="userCity!=null and userCity!='' ">           
+		and	od.user_city =  #{userCity} 		</if>
+				  <if test="userArea!=null and userArea!='' ">           
+		and	od.user_area =  #{userArea} 		</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	od.user_address =  #{userAddress} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile LIKE '%'||#{userMobile}||'%' 		</if>
+				<if test="threeOrderItemId!=null and threeOrderItemId!='' ">           
+		and	od.recharge_by =  #{threeOrderItemId} 		</if>
+				  <if test="userEmail!=null and userEmail!='' ">           
+		and	od.user_email =  #{userEmail} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	od.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverProvince!=null and receiverProvince!='' ">           
+		and	od.receiver_province =  #{receiverProvince} 		</if>
+				  <if test="receiverCity!=null and receiverCity!='' ">           
+		and	od.receiver_city =  #{receiverCity} 		</if>
+				  <if test="receiverArea!=null and receiverArea!='' ">           
+		and	od.receiver_area =  #{receiverArea} 		</if>
+				  <if test="receiverZipcode!=null and receiverZipcode!='' ">           
+		and	od.receiver_zipcode =  #{receiverZipcode} 		</if>
+				  <if test="receiverAddress!=null and receiverAddress!='' ">           
+		and	od.receiver_address =  #{receiverAddress} 		</if>
+				  <if test="longitude!=null and longitude!='' ">           
+		and	od.longitude =  #{longitude} 		</if>
+				  <if test="latitude!=null and latitude!='' ">           
+		and	od.latitude =  #{latitude} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	od.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="receiverEmail!=null and receiverEmail!='' ">           
+		and	od.receiver_email =  #{receiverEmail} 		</if>
+				  <if test="orderType!=null and orderType!='' ">           
+		and	od.order_type =  #{orderType} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and	od.order_channel =  #{orderChannel} 		</if>
+				  <if test="orderSourceId!=null and orderSourceId!='' ">           
+		and	od.order_source_id =  #{orderSourceId} 		</if>
+				  <if test="orderStatus!=null and orderStatus!='' ">           
+		and	od.order_status =  ''||#{orderStatus} 		</if>
+				  <if test="authManagerId!=null and authManagerId!='' ">           
+		and	od.auth_manager_id =  #{authManagerId} 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	od.create_by =  #{createBy} 		</if>
+				<if test="createTime!=null and createTime!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime} 		
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">           
+		and	to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd} 		
+				</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	od.update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	to_char(od.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	od.version =  #{version} 		</if>
+				  <if test="critical!=null and critical!='' ">           
+		and	od.critical =  #{critical} 		</if>
+				  <if test="remark!=null and remark!='' ">           
+		and	od.remark =  #{remark} 		</if>
+				  <if test="sendtimeType!=null and sendtimeType!='' ">           
+		and	od.sendtime_type =  #{sendtimeType} 		</if>
+				  <if test="isInvoice!=null and isInvoice!='' ">           
+		and	od.is_invoice =  #{isInvoice} 		</if>
+				  <if test="vendorId!=null and vendorId!='' ">           
+		and	od.vendor_id =  #{vendorId} 		</if>
+				  <if test="invoiceType!=null and invoiceType!='' ">           
+		and	od.invoice_type =  #{invoiceType} 		</if>
+				  <if test="invoiceMemo!=null and invoiceMemo!='' ">           
+		and	od.invoice_memo =  #{invoiceMemo} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	od.pay_status =  #{payStatus} 		</if>
+				  <if test="totalPay!=null and totalPay!='' ">           
+		and	od.total_pay =  #{totalPay} 		</if>
+				  <if test="deliverPay!=null and deliverPay!='' ">           
+		and	od.deliver_pay =  #{deliverPay} 		</if>
+				  <if test="ip!=null and ip!='' ">           
+		and	od.ip =  #{ip} 		</if>
+				  <if test="inviteCode!=null and inviteCode!='' ">           
+		and	od.invite_code =  #{inviteCode} 		</if>
+				  <if test="userLevel!=null and userLevel!='' ">           
+		and	od.user_level =  #{userLevel} 		</if>
+				  <if test="orderGroupid!=null and orderGroupid!='' ">           
+		and	od.order_groupid =  #{orderGroupid} 		</if>
+				<if test="city!=null and city!='' ">           
+		and	od.city like '${city}%' 		</if>
+				<if test="cateType!=null and cateType!='' ">           
+		and	od.cate_type = #{cateType} 		</if>
+				<if test="payText!=null and payText!='' ">           
+		and	od.pay_status = #{payText} 		</if>
+				<if test="isSolution !=null and isSolution !='' ">           
+		and	od.cate_type not in(#{isSolution}) 		</if>
+				<if test="cateTypeNot !=null and cateTypeNot !='' ">           
+		and	od.cate_type not in(${cateTypeNot}) 		</if>
+				<if test="orderStatusOther !=null and orderStatusOther !='' ">           
+		and	od.order_status not in(${orderStatusOther}) 		</if>
+				<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}) 		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">           
+		and	(od.create_by = #{loginBy} or od.recharge_by=#{loginBy} or od.follow_by=#{loginBy}
+			or od.create_dept = #{loginDept} or od.recharge_dept=#{loginDept} or od.follow_dept=#{loginDept})		
+				</if>
+				<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">           
+		and (od.create_by = #{loginBy} or od.recharge_by = #{loginBy} or od.follow_by = #{loginBy} or
+       		exists(select 1 from t_auth_org orgaa
+                            where od.create_dept=orgaa.id
+<!--                             and orgaa.valid = 1  -->
+                            and orgaa.code like '${loginOrgCode}%'
+					union all
+       				select 1 from t_auth_org orgbb
+                            where od.recharge_dept=orgbb.id
+<!--                             and orgbb.valid = 1  -->
+                            and orgbb.code like '${loginOrgCode}%'
+                    union all
+       				select 1 from t_auth_org orgcc
+                            where od.follow_dept=orgcc.id
+<!--                             and orgcc.valid = 1  -->
+                            and orgcc.code like '${loginOrgCode}%') )	
+				</if>
+				
+			</where>
+	</select>
+	
+	<select id="BasicServer" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+	SELECT DISTINCT
+		od.id as "id",
+		od.order_code as "orderCode",
+		it.id as code,
+		it.version as version,
+	   decode(od.cate_type,3,'商品',
+	 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+		to_char(it.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+		to_char(it.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+		to_char(it.interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime,
+		to_char(od.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		od.critical as critical,
+		decode(od.critical,1,'紧急','不紧急') AS "criticalText",
+		od.order_status as orderStatus ,
+		decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户','9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','') AS "statusText",
+		od.order_source_id as orderSourceId,
+		(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = od.order_source_id
+			AND t.dict_code like '2018%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+		) AS "sourceText",
+		it.address as "address",
+		it.interview_address as "interviewAddress",
+		it.remark as "remark",
+		it.min_age as "minAge",
+		it.max_age as "maxAge",
+		it.origin as "origin",
+		og.dvalue as originText,
+		it.home_forests as homeForests,
+		it.familys as familys,
+		it.person_level as personLevel,
+		bw.pelev AS "personLevelText",
+		it.education as education,
+		decode(it.education,1,'无学历',2,'小学',3,'初中',4,'高中/中专',5,'本科/大专',6,'研究生','') AS "educationText",
+		(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = od.order_channel
+			AND t.dict_code like '2019%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+		) AS "channelText",
+		nvl(it.person_number,1) as "personNumber",
+		od.user_name  as "order.userName" ,			
+		od.user_mobile  as "order.userMobile" ,	
+		od.user_city_code as "order.userCityCode",
+		od.user_birth as "birth",
+		od.user_sex as "sex" ,
+		od.user_address as "userAddress" ,
+		od.receiver_city_code as "order.receiverCityCode" ,
+		od.receiver_name as "order.receiverName",
+		od.receiver_address as "order.receiverAddress",
+		od.receiver_mobile as "order.receiverMobile",
+		od.order_type  as "order.orderType" ,			
+		od.order_channel  as "order.orderChannel" ,			
+		od.order_source_id  as "order.orderSourceId" ,	
+		od.pay_status  as "payStatus" ,
+		decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,					
+		od.order_status  as "order.orderStatus" ,	
+		od.remark  as "order.remark" ,	
+		od.total_pay as "order.totalPay"  ,
+		od.deliver_pay as "order.deliverPay"  ,
+		item.product_name as "productName",
+		item.now_price as "nowPrice",
+		item.quantity as "quantity",
+		item.product_code as "productCode",
+		item.product_price_type as "productPriceType",
+		tbda.dict_name as "productPriceTypeText",
+		item.product_unit as "productUnit",
+		tbdb.dict_name as "productUnitText",
+		item.product_spec as "productSpec"
+		
+	FROM t_order od
+    left join t_order_item item on (od.id = item.order_id and item.valid=1)
+    left join t_base_dictionary tbda on (item.product_price_type=tbda.dict_code and tbda.valid=1)
+	left join t_base_dictionary tbdb on (item.product_unit=tbdb.dict_code and tbdb.valid=1)
+    left join t_order_item_detail_server it on (od.id = it.order_id and it.valid=1)
+    left join (select id,"level" as pelev from t_base_work_type_level) bw on it.person_level = bw.id
+    left join (select replace(replace(sys_connect_by_path(t.name, ','), ',', ''), '中国','') dvalue,t.code
+			  from t_base_city t
+			 where length(t.code) = 9
+			connect by prior t.code = substr(t.code, 0, length(t.code) - 3)
+			 start with t.code = '101') og on it.origin = og.code
+		<where>
+			1 = 1 
+			and od.id = #{id} and od.create_time &lt;=sysdate and od.valid = 1
+		</where>
+		order by it.id desc
+	</select>
+			
+	<select id="queryOrderBasicItem" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Order">
+		SELECT 
+		od.id as "id",
+		od.parent_id as parentId ,
+		od.order_code as "orderCode",
+		od.user_id as "userId",
+		od.user_name  as "userName" ,			
+		od.user_mobile  as "userMobile" ,
+		od.user_birth as "birth",
+		od.user_sex as "sex" ,	
+		od.user_address as "userAddress" ,
+		od.receiver_name as "receiverName",
+		od.receiver_address as "receiverAddress",
+		od.receiver_mobile as "receiverMobile",
+		od.receiver_zipcode as "receiverZipcode",
+		od.order_type as "orderType",
+		od.pay_status  as "payStatus" ,
+		decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,		
+		od.order_status as "orderStatus",
+		decode(od.critical,1,'紧急',2,'不紧急','') AS "criticalText",
+		od.receiver_province as "receiverProvince",
+		od.receiver_city as "receiverCity",
+		od.receiver_area as "receiverArea",
+		decode(od.order_status,'1','新建','2','已受理','13','捡货中','14','配送中 ','9','已完成','10','已取消','18','待受理','') AS "statusText",
+		(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = od.order_source_id
+			AND t.dict_code like '2018%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+		) AS "sourceText",
+		(
+			SELECT
+			ch.name
+			FROM
+			t_custom_channel ch
+			WHERE  od.order_channel=to_char(ch.id)
+			AND ch.valid = 1
+		) AS "channelText",
+		od.is_invoice as "isInvoice",
+		od.total_pay as "totalPay",
+		od.deliver_pay as "deliverPay",
+		od.critical as "criticalText",
+		NVL(od.remark,it.remark) as remark,
+		od.remark as "item.remark",
+		od.cate_type as cateType,
+		to_char(od.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		p.name as person,
+		p.mobile as personmobile,
+		(SELECT t.solution_code FROM t_solution_cust_solution t WHERE t.id=od.parent_id) solutionCode,
+		it.product_name as "item.productName",
+		it.now_price as "item.nowPrice",
+		it.quantity as "item.quantity",
+		it.product_code as "item.productCode",
+		it.product_price_type as "item.productPriceType",
+		tbda.dict_name as "item.productPriceTypeText",
+		it.product_unit as "item.productUnit",
+		tbdb.dict_name as "item.productUnitText",
+		it.product_spec as "item.productSpec",
+		decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText
+		FROM t_order od
+		left join t_emp_personnel p on p.id=od.emp_id
+		left join t_order_item it on (od.id = it.order_id and it.valid=1)
+		left join t_base_dictionary tbda on (it.product_price_type=tbda.dict_code and tbda.valid=1)
+		left join t_base_dictionary tbdb on (it.product_unit=tbdb.dict_code and tbdb.valid=1)
+		<where>
+			1 = 1 
+			and od.id = #{id} and od.create_time &lt;=sysdate and od.valid = 1
+		</where>
+		order by it.id desc
+	</select>
+	
+	<select id="queryAttendanceOrderlistPage"  parameterType="com.emotte.order.order.model.Order" 
+					resultType="com.emotte.order.order.model.Order">
+										SELECT 
+										o.total_pay AS "totalPay",
+									    c.real_name   AS "custom.realName",
+   									    c.mobile      AS "custom.mobile",
+   									    to_char(oids.start_time,'yyyy-mm-dd') AS "startTime",
+										o.id AS "id",
+										o.order_code AS "orderCode",
+										o.user_id AS "userId",
+										o.order_type AS "orderType",
+										o.user_name AS "userName",
+										o.user_mobile AS "userMobile",
+										pc.cname AS "category.cname",
+										ao.name AS "orgName",
+										m.real_name AS "managerName",
+										m.id AS "managerId"
+										FROM t_order o
+										JOIN t_order_item i
+										ON i.order_id = o.id
+										JOIN t_order_item_detail_server oids
+                    					ON oids.item_id=i.id
+										LEFT JOIN t_product_category pc
+										ON pc.code = i.category_code
+										AND pc.valid = 1
+										LEFT JOIN t_auth_org ao
+										ON ao.id =  o.recharge_dept
+										AND ao.valid = 1
+										LEFT JOIN t_auth_manager m
+										ON m.id =  o.follow_by
+										AND m.valid = 1
+										LEFT JOIN t_customer c
+    									ON c.id = o.user_id
+										<where>
+											o.valid = 1
+											AND i.valid = 1
+											AND o.cate_type = '2'
+											AND o.order_status NOT IN (1, 2, 3, 4, 5, 6, 7) and o.create_time &lt;=sysdate
+											<if  test="isQueryByPersonnelNameOrMobile!=null and isQueryByPersonnelNameOrMobile!='' and isQueryByPersonnelNameOrMobile=='yes'">
+												AND EXISTS
+												( SELECT oii.order_id
+												FROM t_order_item_interview oii
+												WHERE
+												oii.person_id IN (SELECT ep.id
+												FROM t_emp_personnel ep
+												WHERE
+												1=1
+												<if test="personnelName!=null and personnelName!=''">
+													AND ep.name LIKE '%'||#{personnelName}||'%'
+												</if>
+												<if test="personnelMobile!=null and personnelMobile!=''">
+													AND ep.mobile LIKE '%'||#{personnelMobile}||'%'
+												</if>
+												)
+												AND oii.interview_type IN (8,9)
+												AND oii.order_id =o.id
+												)
+										</if>
+									<if test="userMobile!=null and userMobile!='' ">
+										AND c.mobile LIKE ('%'||#{userMobile}||'%')
+									</if>
+									<if test="userName!=null and userName!='' ">
+										AND c.real_name LIKE ('%'||#{userName}||'%')
+									</if>
+									<if test="orderCode!=null and orderCode!='' ">
+										AND o.order_code LIKE ('%'||#{orderCode}||'%')
+									</if>
+									<if test="managerName!=null and managerName!='' ">
+										AND m.real_name LIKE ('%'||#{managerName}||'%')
+									</if>
+									<if test="isReport!=null and isReport!='' ">
+										AND DECODE(sign(o.total_pay-i.now_price),-1,'2',0,'1',1,'1') = #{isReport}
+									</if>
+									<if test="authManagerId!=null and authManagerId!='' ">
+										AND (EXISTS
+										(SELECT tao.id
+										FROM t_auth_org tao
+										WHERE tao.valid = 1
+										AND tao.code LIKE (SELECT tao1.code
+										FROM t_auth_manager tam1
+										JOIN t_auth_org tao1
+										ON tam1.dept_id = tao1.id
+										WHERE tam1.id = #{authManagerId}) || '%'
+										AND tao.id = o.follow_dept)
+										or EXISTS (
+										SELECT tam.id
+										FROM t_auth_manager tam
+										JOIN t_auth_org tao
+										ON tao.id = tam.dept_id
+										WHERE tam.valid = 1
+										AND tao.valid = 1
+										AND tao.code LIKE (SELECT tao1.code
+										FROM t_auth_manager tam1
+										JOIN t_auth_org tao1
+										ON tam1.dept_id = tao1.id
+										WHERE tam1.id = #{authManagerId})||'%'
+                   						AND tam.id= o.follow_by))
+									</if>
+								</where>
+								 ORDER BY "startTime" DESC,o.id
+		</select>
+		<select id="queryOrderId" resultType="java.lang.Long">
+			select getseq() from dual 
+		</select>
+		<select id="queryFollowDept" parameterType="com.emotte.order.order.model.Dictionary"
+			resultType="com.emotte.order.order.model.Dictionary">
+			select t.id as dkey, 
+				t.name as dvalue, 
+				t.type as pid
+			  from t_auth_org t
+			<where>
+				t.type in (5,7,11) and t.valid=1
+				<if test="pid !=null and pid !='' ">
+					t.type=#{pid}
+				</if>
+			</where>
+				order by t.name
+		</select>
+		<select id="queryFollowBy" parameterType="com.emotte.order.order.model.Dictionary"
+			resultType="com.emotte.order.order.model.Dictionary">
+			select t.id as dkey, 
+				t.real_name as dvalue, 
+				t.dept_id as pid
+			  from t_auth_manager t
+			<where>
+				1=1
+				and t.dept_id = #{pid}
+				and t.valid = 1
+				and t.state = 1
+			</where>
+			order by real_name
+		</select>
+		
+		<select id="queryOrderNotInItem"  resultType="com.emotte.order.order.model.Order">
+		 select t.id as "id",
+		 		t.create_by as "createBy",
+		 		t.cate_type as "cateType"
+         from t_order t,t_order_item m 
+         <where>
+         	   1=1 
+         	   and not exists (select ois.order_id 
+		                   from t_order_item_salary ois
+		                    where t.id = ois.order_id and ois.valid = 2) 
+		       and t.valid = 1  and t.order_status = '9' and t.id = m.order_id
+			   and t.PRICE_TYPE is not null and t.cate_type in (1,4)
+		       and t.create_time &lt;=sysdate
+         </where>
+         order by t.create_time desc 
+	</select>
+	
+	<select id="existsSalary" parameterType="com.emotte.order.order.model.Order" resultType="Boolean">
+		SELECT <![CDATA[CASE WHEN COUNT(s.id)>0 THEN 1 ELSE 0 END AS "existsSalary"]]>
+		FROM t_emp_salary s
+		WHERE s.valid = 1
+		AND s.order_month = #{salaryOrderMonth}
+		AND s.order_id = #{salaryOrderId}
+	</select>
+	
+	<select id="existsInterview" parameterType="com.emotte.order.order.model.Order" resultType="Boolean">
+		SELECT <![CDATA[CASE WHEN COUNT(i.id)>0 THEN 1 ELSE 0 END AS "existsInterview"]]>
+		FROM t_order_item_interview i
+		WHERE i.valid = 1
+		AND i.interview_type IN (8,9)
+		AND i.order_id=#{salaryOrderId}
+	</select>
+	
+	
+	<select id="queryOrderReMatch"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select
+			 id  as "id" ,			
+			 order_code  as "orderCode" ,			
+			 parent_id  as "parentId" ,			
+			 user_id  as "userId" ,			
+			 user_name  as "userName" ,			
+			 user_province  as "userProvince" ,			
+			 user_city  as "userCity" ,			
+			 user_area  as "userArea" ,			
+			 user_address  as "userAddress" ,			
+			 user_mobile  as "userMobile" ,			
+			 user_email  as "userEmail" ,		
+			 receiver_name  as "receiverName" ,			
+			 receiver_province  as "receiverProvince" ,			
+			 receiver_city  as "receiverCity" ,			
+			 receiver_area  as "receiverArea" ,			
+			 receiver_zipcode  as "receiverZipcode" ,			
+			 receiver_address  as "receiverAddress" ,
+			 longitude  as  "longitude" ,			
+			 latitude  as "latitude" ,			
+			 receiver_mobile  as "receiverMobile" ,			
+			 receiver_email  as "receiverEmail" ,			
+			 order_type  as "orderType" ,			
+			 order_channel  as "orderChannel" ,			
+			 order_source_id  as "orderSourceId" ,			
+			 order_status  as "orderStatus" ,			
+			 auth_manager_id  as "authManagerId" ,			
+			 create_by  as "createBy" ,	
+			 update_by  as "updateBy" ,			
+			 to_char(create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 version  as "version" ,			
+			 critical  as "critical" ,					
+			 remark  as "remark" ,			
+			 sendtime_type  as "sendtimeType" ,			
+			 is_invoice  as "isInvoice" ,			
+			 vendor_id  as "vendorId" ,			
+			 invoice_type  as "invoiceType" ,			
+			 invoice_memo  as "invoiceMemo" ,			
+			 pay_status  as "payStatus" ,
+			 decode(pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130002','退款中','20130003','退款成功','20130008','退款成功','未知') as payText,			
+			 total_pay  as "totalPay" ,			
+			 deliver_pay  as "deliverPay" ,			
+			 ip  as "ip" ,			
+			 invite_code  as "inviteCode" ,			
+			 user_level  as "userLevel" ,			
+			 order_groupid  as "orderGroupid" ,
+			 user_sex  as "userSex" ,
+			 user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			cate_type as cateType
+	from  t_order od
+	<where> 
+	 1 = 1 
+	 and exists(select 1 from t_order_temp p where p.id=od.id) and od.create_time &lt;=sysdate and od.valid = 1
+	 </where>
+	</select>
+	
+	<select id="querySysdate"  resultType="string">
+		select sysdate from dual
+	</select>
+	<select id="queryServiceStartTime" parameterType="java.lang.Long"  resultType="string">
+		select oids.start_time from t_order_item_detail_server oids where oids.order_id = #{orderId} and oids.valid = 1
+	</select>
+	<select id="queryOrderRechargeBy" parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+			select
+				o.id as id ,
+				o.version as version ,
+				o.order_code as orderCode ,
+				o.recharge_by as rechargeBy,
+				o.recharge_dept as rechargeDept
+			from t_order o
+			where o.recharge_by=#{followBy} and o.valid=1
+			and o.cate_type!=8
+	</select>
+	
+	<select id="queryPersonlistPage"  parameterType="com.emotte.order.order.model.Order" resultType="java.util.HashMap">
+		SELECT p.id as id , p.name as name  ,p.mobile as mobile ,b.name as  origin ,  p.id_card_num   as  id_card_num
+		FROM t_emp_personnel p  left join t_base_city b on p.origin=b.code
+		<where>
+			1 = 1 and p.valid=1 
+			<if test="userName !=null and userName !='' ">
+				and 	p.name=#{userName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and 	p.mobile=#{userMobile}
+			</if>
+		 </where>
+		
+	</select>
+	<select id="countPerson"  parameterType="com.emotte.order.order.model.Order" resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM t_emp_personnel p 
+		<where>
+			1 = 1 and p.valid=1 and p.CONRATOR_STATUS = 1 and
+			exists (select 1
+			from t_emp_work_type w
+			where valid = 1
+			and  p.id= w.emp_id)
+			<if test="userName !=null and userName !='' ">
+				and 	p.name=#{userName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and 	p.mobile=#{userMobile}
+			</if>
+		 </where>
+		
+	</select>
+		<select id="loadParcelByOrderId" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Order">
+		select 
+			wp.logistics_number as logisticsNumber,
+			(select bd.dict_name from t_base_dictionary bd where wp.dictary_code = bd.dict_code) as logisticsName		
+		from t_warehouse_parcel wp
+		where 1=1 
+			and wp.order_id=#{id} and wp.valid = 1  and wp.state in (3,4)
+	</select>
+	
+		
+	<select id="queryOrderByUserId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Order">
+	SELECT 
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.price_type  as "priceType" ,					
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.deliver_pay  as "deliverPay" ,	
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.cate_type as cateType,
+			 od.total_pay as totalPay,
+			 od.city as city 
+	FROM t_order od  
+		<where>
+			1 = 1  and od.user_id = #{userId}  and od.valid = 1
+		</where>
+		order by od.create_time desc
+	</select>
+	<!-- 1、购买礼品卡金额不计入累计消费金额中 -->
+	<!-- 2、赠送的礼品卡、优惠券、退费不计入在累计消费金额中 -->
+	<!-- 3、客户支付服务员的服务人员服务费不计入累计消费金额中 -->
+	<!-- 4、 购买会员身份的金额不计入累计消费 -->
+	<select id="queryOrderUserAllFee" resultType="java.util.HashMap">
+	select cu.id as userid,nvl(sum(op.fee_sum), 0) as fee
+      from t_order od
+      left join t_account_pay ap
+        on od.id = ap.order_id
+      left join t_order_payfee op
+        on ap.id = op.order_id
+      left join t_customer cu
+        on cu.id = od.user_id
+     <where> 1 = 1
+       and ap.pay_status in ('20110002', '20110003')
+       and ap.pay_kind not in (4, 5)
+       and op.pay_status = 20110002
+       and op.fee_post not in (20250010, 20250011)
+       and ap.pay_type in (1, 2, 3, 5)
+       and od.cate_type in (2,8)
+       and to_char(op.create_time, 'yyyy-MM-dd hh24:mi:ss') >= NVL(to_char(cu.vip_startime, 'yyyy-MM-dd hh24:mi:ss'),'2000-01-01')
+       and ap.is_back_type = 2
+       and op.is_back_type = 1
+       and od.valid = 1
+       and ap.valid = 1
+       and op.valid = 1
+     </where>
+     group by cu.id
+     
+     union all 
+     
+     select cu.id as userid,nvl(sum(op.fee_sum), 0)as fee
+      from t_order od
+      left join t_account_pay ap
+        on od.id = ap.order_id
+      left join t_order_payfee op
+        on ap.id = op.order_id
+      left join t_customer cu
+        on cu.id = od.user_id
+     <where> 1 = 1
+       and ap.pay_status in (20110002, 20110003)
+       and ap.pay_kind not in (4, 5)
+       and op.pay_status = 20110002
+       and op.fee_post not in (20250010, 20250011)
+       and ap.pay_type =4
+       and od.cate_type != 2 and od.cate_type != 8
+      and to_char(op.create_time, 'yyyy-MM-dd hh24:mi:ss') >= NVL(to_char(cu.vip_startime, 'yyyy-MM-dd hh24:mi:ss'),'2000-01-01')
+       and ap.is_back_type = 2
+       and op.is_back_type = 1
+       and od.valid = 1
+       and ap.valid = 1
+       and op.valid = 1
+     </where>
+     group by cu.id
+	</select>
+	
+	<!-- 1、管家帮分期,延续订单,预收结算单类型,分期缴费方式,已对账,已支付 -->
+	<select id="queryUserGJBInstallmentFee" resultType="java.util.HashMap">
+	 select t.id as userid,nvl(sum(op.fee_sum),0) as fee
+	  from t_order t
+	  left join t_account_pay ap
+	    on ap.order_id = t.id
+	  left join t_order_payfee op
+	    on op.order_id = ap.id
+     <where> 1 = 1
+	   and t.valid = 1
+	   and t.cate_type = 2
+	   and ((ap.pay_type = 3 and ap.pay_status = 20110003) or
+	       (op.fee_post = 20250027 and op.pay_status = 20110002 and
+	       op.account_status = 1))
+	   and ap.valid = 1
+	   and op.valid = 1
+	   group by t.id
+     </where>
+     </select>
+	
+	<select id="queryChannelOrder"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select * from (select rownum rn,t.* from (
+		select
+			 od.id  as "id" ,			
+			 od.order_code  as "orderCode" ,			
+			 od.parent_id  as "parentId" ,			
+			 od.user_id  as "userId" ,			
+			 od.user_name  as "userName" ,			
+			 od.user_province  as "userProvince" ,			
+			 od.user_city  as "userCity" ,			
+			 od.user_area  as "userArea" ,			
+			 od.user_address  as "userAddress" ,			
+			 od.user_mobile  as "userMobile" ,			
+			 od.user_email  as "userEmail" ,		
+			 od.receiver_name  as "receiverName" ,			
+			 od.receiver_province  as "receiverProvince" ,			
+			 od.receiver_city  as "receiverCity" ,			
+			 od.receiver_area  as "receiverArea" ,			
+			 od.receiver_zipcode  as "receiverZipcode" ,			
+			 od.receiver_address  as "receiverAddress" ,
+			 od.longitude  as  "longitude" ,			
+			 od.latitude  as "latitude" ,			
+			 od.receiver_mobile  as "receiverMobile" ,			
+			 od.receiver_email  as "receiverEmail" ,			
+			 od.order_type  as "orderType" ,			
+			 od.order_channel  as "orderChannel" ,	
+			 (select ch.name from t_custom_channel ch where od.order_channel = to_char(ch.id)) as channelText,			
+			 od.order_source_id  as "orderSourceId" ,
+			 od.order_status  as "orderStatus" ,			
+			 od.auth_manager_id  as "authManagerId" ,			
+			 od.create_by  as "createBy" ,	
+			 od.update_by  as "updateBy" ,			
+			 to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime,
+       		 to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime,			
+			 od.version  as "version" ,			
+			 od.critical  as "critical" ,					
+			 od.price_type  as "priceType" ,					
+			 od.remark  as "remark" ,			
+			 od.sendtime_type  as "sendtimeType" ,			
+			 od.is_invoice  as "isInvoice" ,			
+			 od.vendor_id  as "vendorId" ,			
+			 od.invoice_type  as "invoiceType" ,			
+			 od.invoice_memo  as "invoiceMemo" ,			
+			 od.pay_status  as "payStatus" ,
+			 decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,				
+			 od.total_pay  as "totalPay" ,			
+			 od.deliver_pay  as "deliverPay" ,			
+			 od.ip  as "ip" ,			
+			 od.invite_code  as "inviteCode" ,			
+			 od.user_level  as "userLevel" ,			
+			 od.order_groupid  as "orderGroupid" ,
+			 od.user_sex  as "userSex" ,
+			 od.user_birth  as "userBirth" ,
+			 decode(od.cate_type,3,'商品',
+			 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+			 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+			 decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+			 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS "statusText",
+			 (
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 ) AS "sourceText" ,
+			od.cate_type as cateType,
+			od.city as city ,
+			(select creat.real_name from t_auth_manager creat where od.create_by = creat.id) as createByText,
+            (select orgc.name from t_auth_org orgc where od.create_dept = orgc.id ) as createDeptText,
+            od.recharge_by as "rechargeBy",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+           <!--  (select foll.real_name from t_auth_manager foll where od.follow_by = foll.id) as followByText,
+            (select orgf.name from t_auth_org orgf where od.follow_dept = orgf.id ) as followDeptText, -->
+            <if test="loginLevel==null or loginLevel =='' or loginLevel==1 or loginLevel==3">   
+            	decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) as loginByOrNot,
+            	decode(#{loginBy},od.recharge_by,1,0) as loginRechargeOrNot,		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 "> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) as loginByOrNot,  
+				decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept},od.recharge_dept,1,0) as loginRechargeOrNot,        		
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==4"> 
+				decode(#{loginBy},od.create_by,1,od.follow_by,1,od.recharge_by,1,0) +
+				decode(#{loginDept},od.create_dept,1,od.follow_dept,1,od.recharge_dept,1,0) +
+	            decode(1,(select 1
+	                 from t_auth_org orgaa
+	                where od.create_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.follow_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,
+	            (select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.code like '${loginOrgCode}%'),1,0) as loginByOrNot, 
+	            decode(#{loginBy},od.recharge_by,1,0) +
+				decode(#{loginDept}, od.recharge_dept,1,0) +
+	            nvl((select 1
+	                 from t_auth_org orgaa
+	                where od.recharge_dept = orgaa.id
+	                  and orgaa.valid = 1
+	                  and orgaa.code like '${loginOrgCode}%'),0) as loginRechargeOrNot,
+			</if>
+			to_char(od.follow_time,'yyyy-MM-dd hh24:mi:ss') as followTime,
+			#{loginBy} as loginBy
+			FROM  t_order od
+			LEFT JOIN t_order_item_detail_server its ON  od.id=its.order_id AND its.valid = 1
+			INNER JOIN t_custom_channel tcc ON tcc.id = od.order_channel AND tcc.valid = 1
+		<where> 
+	 			od.valid=1 AND od.create_time &lt;= sysdate
+	 		<if test="birthTimeOrder!=null and birthTimeOrder!='' ">           
+				AND	to_char(its.birth_time,'yyyy-mm-dd') &gt;= #{birthTimeOrder} 		
+			</if>
+			<if test="birthTimeOrderEnd!=null and birthTimeOrderEnd!='' ">           
+				AND	to_char(its.birth_time,'yyyy-mm-dd') &lt;= #{birthTimeOrderEnd} 		
+			</if>
+			<if test="rechargeDept !=null and rechargeDept !='' ">           
+				AND	 od.recharge_dept = #{rechargeDept}		
+			</if>	
+			<if test="id!=null and id!='' ">
+				AND od.id = #{id}
+			</if>
+			<if test="orderCode!=null and orderCode!='' ">
+				AND od.order_code = #{orderCode}
+			</if>
+			<if test="parentId!=null and parentId!='' ">
+				AND od.parent_id = #{parentId}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				AND od.user_id = #{userId}
+			</if>
+			<if test="userName!=null and userName!='' ">
+				AND od.user_name LIKE '%'||#{userName}||'%'	
+			</if>
+			<if test="userProvince!=null and userProvince!='' ">
+				AND od.user_province = #{userProvince}
+			</if>
+			<if test="userCity!=null and userCity!='' ">
+				AND od.user_city = #{userCity}
+			</if>
+			<if test="userArea!=null and userArea!='' ">
+				AND od.user_area = #{userArea}
+			</if>
+			<if test="userAddress!=null and userAddress!='' ">
+				AND od.user_address = #{userAddress}
+			</if>
+			<if test="userMobile!=null and userMobile!='' ">
+				AND od.user_mobile LIKE '%'||#{userMobile}||'%' 
+			</if>
+			<if test="userEmail!=null and userEmail!='' ">
+				AND od.user_email = #{userEmail}
+			</if>
+			<if test="receiverName!=null and receiverName!='' ">
+				AND od.receiver_name = #{receiverName}
+			</if>
+			<if test="receiverProvince!=null and receiverProvince!='' ">
+				AND od.receiver_province = #{receiverProvince}
+			</if>
+			<if test="receiverCity!=null and receiverCity!='' ">
+				AND od.receiver_city = #{receiverCity}
+			</if>
+			<if test="receiverArea!=null and receiverArea!='' ">
+				AND od.receiver_area = #{receiverArea}
+			</if>
+			<if test="receiverZipcode!=null and receiverZipcode!='' ">
+				AND od.receiver_zipcode = #{receiverZipcode}
+			</if>
+			<if test="receiverAddress!=null and receiverAddress!='' ">
+				AND od.receiver_address = #{receiverAddress}
+			</if>
+			<if test="longitude!=null and longitude!='' ">
+				AND od.longitude = #{longitude}
+			</if>
+			<if test="latitude!=null and latitude!='' ">
+				AND od.latitude = #{latitude}
+			</if>
+			<if test="receiverMobile!=null and receiverMobile!='' ">
+				AND od.receiver_mobile = #{receiverMobile}
+			</if>
+			<if test="receiverEmail!=null and receiverEmail!='' ">
+				AND od.receiver_email = #{receiverEmail}
+			</if>
+			<if test="orderType!=null and orderType!='' ">
+				AND od.order_type = #{orderType}
+			</if>
+			<if test="orderChannel!=null and orderChannel!='' ">
+				AND od.order_channel = #{orderChannel}
+			</if>
+			<if test="orderSourceId!=null and orderSourceId!='' ">
+				AND od.order_source_id = #{orderSourceId}
+			</if>
+			<if test="orderStatus!=null and orderStatus!='' ">
+				AND od.order_status = ''||#{orderStatus}
+			</if>
+			<if test="authManagerId!=null and authManagerId!='' ">
+				AND od.auth_manager_id = #{authManagerId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				AND od.create_by = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				AND to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+			</if>
+			<if test="createTimeEnd!=null and createTimeEnd!='' ">
+				AND to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				AND od.update_by = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				AND to_char(od.update_time,'yyyy-MM-dd') = #{updateTime}
+			</if>
+			<if test="version!=null and version!='' ">
+				AND od.version = #{version}
+			</if>
+			<if test="critical!=null and critical!='' ">
+				AND od.critical = #{critical}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				AND od.remark = #{remark}
+			</if>
+			<if test="sendtimeType!=null and sendtimeType!='' ">
+				AND od.sendtime_type = #{sendtimeType}
+			</if>
+			<if test="isInvoice!=null and isInvoice!='' ">
+				AND od.is_invoice = #{isInvoice}
+			</if>
+			<if test="vendorId!=null and vendorId!='' ">
+				AND od.vendor_id = #{vendorId}
+			</if>
+			<if test="invoiceType!=null and invoiceType!='' ">
+				AND od.invoice_type = #{invoiceType}
+			</if>
+			<if test="invoiceMemo!=null and invoiceMemo!='' ">
+				AND od.invoice_memo = #{invoiceMemo}
+			</if>
+			<if test="payStatus!=null and payStatus!='' ">
+				AND od.pay_status = #{payStatus}
+			</if>
+			<if test="totalPay!=null and totalPay!='' ">
+				AND od.total_pay = #{totalPay}
+			</if>
+			<if test="deliverPay!=null and deliverPay!='' ">
+				AND od.deliver_pay = #{deliverPay}
+			</if>
+			<if test="ip!=null and ip!='' ">
+				AND od.ip = #{ip}
+			</if>
+			<if test="inviteCode!=null and inviteCode!='' ">
+				AND od.invite_code = #{inviteCode}
+			</if>
+			<if test="userLevel!=null and userLevel!='' ">
+				AND od.user_level = #{userLevel}
+			</if>
+			<if test="orderGroupid!=null and orderGroupid!='' ">
+				AND od.order_groupid = #{orderGroupid}
+			</if>
+			<if test="threeOrderItemId!=null and threeOrderItemId!='' ">
+				AND od.recharge_by = #{threeOrderItemId}
+			</if>
+			<if test="city!=null and city!='' ">
+				AND od.city like '${city}%' 		</if>
+			<if test="cateType!=null and cateType!='' ">
+				AND od.cate_type = #{cateType}
+			</if>
+			<if test="payText!=null and payText!='' ">
+				AND od.pay_status = #{payText}
+			</if>
+			<if test="isSolution !=null and isSolution !='' ">
+				AND od.cate_type not in(#{isSolution})
+			</if>
+			<if test="cateTypeNot !=null and cateTypeNot !='' ">
+				AND od.cate_type not in(${cateTypeNot})
+			</if>
+			<if test="orderStatusOther !=null and orderStatusOther !='' ">
+				AND od.order_status not in(${orderStatusOther})
+			</if>
+			<if test="managerId !=null and managerId !=''">
+	 			AND tcc.manager_id = #{managerId}
+	 		</if>
+	 		<if test="partnerManagerId !=null and partnerManagerId !=''">
+	 			AND tcc.partner_manager_id = #{partnerManagerId}
+	 		</if>
+	 		order by od.create_time desc
+			</where>
+				) t
+			<if test="flagPage!=1">
+				WHERE rownum &lt;= (#{pageSize}+#{beginRow})) WHERE rn &gt;= #{beginRow}+1
+			</if>
+			<if test="flagPage==1">
+				)
+			</if>
+	</select>
+	
+	<select id="countChannelOrder"  parameterType="com.emotte.order.order.model.Order" resultType="java.lang.Integer">
+			SELECT count(1) 
+			FROM  t_order od
+			LEFT JOIN t_order_item_detail_server its ON  od.id=its.order_id AND its.valid = 1
+			INNER JOIN t_custom_channel tcc ON tcc.id = od.order_channel AND tcc.valid = 1
+		<where> 
+	 				od.valid=1 AND od.create_time &lt;= sysdate
+	 		<if test="birthTimeOrder!=null and birthTimeOrder!='' ">           
+				AND	to_char(its.birth_time,'yyyy-mm-dd') &gt;= #{birthTimeOrder} 		
+			</if>
+			<if test="birthTimeOrderEnd!=null and birthTimeOrderEnd!='' ">           
+				AND	to_char(its.birth_time,'yyyy-mm-dd') &lt;= #{birthTimeOrderEnd} 		
+			</if>
+			<if test="rechargeDept !=null and rechargeDept !='' ">           
+				AND	 od.recharge_dept = #{rechargeDept}		
+			</if>		
+			<if test="id!=null and id!='' ">
+				AND od.id = #{id}
+			</if>
+			<if test="orderCode!=null and orderCode!='' ">
+				AND od.order_code = #{orderCode}
+			</if>
+			<if test="parentId!=null and parentId!='' ">
+				AND od.parent_id = #{parentId}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				AND od.user_id = #{userId}
+			</if>
+			<if test="userName!=null and userName!='' ">
+				AND od.user_name LIKE '%'||#{userName}||'%'	
+			</if>
+			<if test="userProvince!=null and userProvince!='' ">
+				AND od.user_province = #{userProvince}
+			</if>
+			<if test="userCity!=null and userCity!='' ">
+				AND od.user_city = #{userCity}
+			</if>
+			<if test="userArea!=null and userArea!='' ">
+				AND od.user_area = #{userArea}
+			</if>
+			<if test="userAddress!=null and userAddress!='' ">
+				AND od.user_address = #{userAddress}
+			</if>
+			<if test="userMobile!=null and userMobile!='' ">
+				AND od.user_mobile LIKE '%'||#{userMobile}||'%' 
+			</if>
+			<if test="userEmail!=null and userEmail!='' ">
+				AND od.user_email = #{userEmail}
+			</if>
+			<if test="receiverName!=null and receiverName!='' ">
+				AND od.receiver_name = #{receiverName}
+			</if>
+			<if test="receiverProvince!=null and receiverProvince!='' ">
+				AND od.receiver_province = #{receiverProvince}
+			</if>
+			<if test="receiverCity!=null and receiverCity!='' ">
+				AND od.receiver_city = #{receiverCity}
+			</if>
+			<if test="receiverArea!=null and receiverArea!='' ">
+				AND od.receiver_area = #{receiverArea}
+			</if>
+			<if test="receiverZipcode!=null and receiverZipcode!='' ">
+				AND od.receiver_zipcode = #{receiverZipcode}
+			</if>
+			<if test="receiverAddress!=null and receiverAddress!='' ">
+				AND od.receiver_address = #{receiverAddress}
+			</if>
+			<if test="longitude!=null and longitude!='' ">
+				AND od.longitude = #{longitude}
+			</if>
+			<if test="latitude!=null and latitude!='' ">
+				AND od.latitude = #{latitude}
+			</if>
+			<if test="receiverMobile!=null and receiverMobile!='' ">
+				AND od.receiver_mobile = #{receiverMobile}
+			</if>
+			<if test="receiverEmail!=null and receiverEmail!='' ">
+				AND od.receiver_email = #{receiverEmail}
+			</if>
+			<if test="orderType!=null and orderType!='' ">
+				AND od.order_type = #{orderType}
+			</if>
+			<if test="orderChannel!=null and orderChannel!='' ">
+				AND od.order_channel = #{orderChannel}
+			</if>
+			<if test="orderSourceId!=null and orderSourceId!='' ">
+				AND od.order_source_id = #{orderSourceId}
+			</if>
+			<if test="orderStatus!=null and orderStatus!='' ">
+				AND od.order_status = ''||#{orderStatus}
+			</if>
+			<if test="authManagerId!=null and authManagerId!='' ">
+				AND od.auth_manager_id = #{authManagerId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				AND od.create_by = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				AND to_char(od.create_time,'yyyy-mm-dd') &gt;= #{createTime}
+			</if>
+			<if test="createTimeEnd!=null and createTimeEnd!='' ">
+				AND to_char(od.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				AND od.update_by = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				AND to_char(od.update_time,'yyyy-MM-dd') = #{updateTime}
+			</if>
+			<if test="version!=null and version!='' ">
+				AND od.version = #{version}
+			</if>
+			<if test="critical!=null and critical!='' ">
+				AND od.critical = #{critical}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				AND od.remark = #{remark}
+			</if>
+			<if test="sendtimeType!=null and sendtimeType!='' ">
+				AND od.sendtime_type = #{sendtimeType}
+			</if>
+			<if test="isInvoice!=null and isInvoice!='' ">
+				AND od.is_invoice = #{isInvoice}
+			</if>
+			<if test="vendorId!=null and vendorId!='' ">
+				AND od.vendor_id = #{vendorId}
+			</if>
+			<if test="invoiceType!=null and invoiceType!='' ">
+				AND od.invoice_type = #{invoiceType}
+			</if>
+			<if test="invoiceMemo!=null and invoiceMemo!='' ">
+				AND od.invoice_memo = #{invoiceMemo}
+			</if>
+			<if test="payStatus!=null and payStatus!='' ">
+				AND od.pay_status = #{payStatus}
+			</if>
+			<if test="totalPay!=null and totalPay!='' ">
+				AND od.total_pay = #{totalPay}
+			</if>
+			<if test="deliverPay!=null and deliverPay!='' ">
+				AND od.deliver_pay = #{deliverPay}
+			</if>
+			<if test="ip!=null and ip!='' ">
+				AND od.ip = #{ip}
+			</if>
+			<if test="inviteCode!=null and inviteCode!='' ">
+				AND od.invite_code = #{inviteCode}
+			</if>
+			<if test="userLevel!=null and userLevel!='' ">
+				AND od.user_level = #{userLevel}
+			</if>
+			<if test="orderGroupid!=null and orderGroupid!='' ">
+				AND od.order_groupid = #{orderGroupid}
+			</if>
+			<if test="threeOrderItemId!=null and threeOrderItemId!='' ">
+				AND od.recharge_by = #{threeOrderItemId}
+			</if>
+			<if test="city!=null and city!='' ">
+				AND od.city like '${city}%' 		
+			</if>
+			<if test="cateType!=null and cateType!='' ">
+				AND od.cate_type = #{cateType}
+			</if>
+			<if test="payText!=null and payText!='' ">
+				AND od.pay_status = #{payText}
+			</if>
+			<if test="isSolution !=null and isSolution !='' ">
+				AND od.cate_type not in(#{isSolution})
+			</if>
+			<if test="cateTypeNot !=null and cateTypeNot !='' ">
+				AND od.cate_type not in(${cateTypeNot})
+			</if>
+			<if test="orderStatusOther !=null and orderStatusOther !='' ">
+				AND od.order_status not in(${orderStatusOther})
+			</if>
+			<if test="managerId !=null and managerId !=''">
+	 			AND tcc.manager_id = #{managerId}
+	 		</if>
+	 		<if test="partnerManagerId !=null and partnerManagerId !=''">
+	 			AND tcc.partner_manager_id = #{partnerManagerId}
+	 		</if>
+			</where>
+	</select>
+		<select id="loadOrderByPlateId" parameterType="java.lang.String" resultType="com.emotte.order.order.model.Order">
+		select 
+			od.id as id ,			
+			od.order_code as orderCode ,			
+			od.parent_id as parentId ,			
+			od.user_id as userId ,			
+			od.user_name as userName ,			
+			od.user_province as userProvince ,			
+			od.user_city as userCity ,			
+			od.user_area as userArea ,			
+			od.user_address as userAddress ,			
+			od.user_mobile as userMobile ,			
+			od.user_email as userEmail ,		
+			od.receiver_name as receiverName ,			
+			od.receiver_province as receiverProvince ,			
+			od.receiver_city as receiverCity ,			
+			od.receiver_area as receiverArea ,			
+			od.receiver_zipcode as receiverZipcode ,			
+			od.receiver_address as receiverAddress ,
+			od.longitude as longitude ,			
+			od.latitude as latitude ,	
+			od.receiver_mobile as receiverMobile ,			
+			od.receiver_email as receiverEmail ,			
+			od.order_type as orderType ,			
+			od.order_channel as orderChannel ,			
+			od.order_source_id as orderSourceId ,			
+			od.order_status as orderStatus ,			
+			od.auth_manager_id as authManagerId ,			
+			od.create_by as createBy ,			
+			to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime ,			
+			od.update_by as updateBy ,			
+			to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime ,			
+			od.version as version ,			
+			od.critical as critical ,				
+			od.remark as remark ,			
+			od.sendtime_type as sendtimeType ,			
+			od.is_invoice as isInvoice ,			
+			od.vendor_id as vendorId ,			
+			od.invoice_type as invoiceType ,			
+			od.invoice_memo as invoiceMemo ,			
+			od.pay_status as payStatus ,
+			decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,			
+			od.deliver_pay as deliverPay ,			
+			od.ip as ip ,		
+			od.price_type  as "priceType" ,			
+			od.invite_code as inviteCode ,			
+			od.user_level as userLevel ,			
+			od.order_groupid as orderGroupid ,
+			od.three_order_code as threeOrderCode,
+			od.user_sex as userSex,
+			od.user_birth as userBirth,
+			od.cate_type as cateType,
+			od.total_pay as totalPay,
+			od.recharge_by as "rechargeBy",
+			od.recharge_dept as "rechargeDept",
+            (select rech.real_name from t_auth_manager rech where od.recharge_by = rech.id) as rechargeByText,
+            (select orgr.name from t_auth_org orgr where od.recharge_dept = orgr.id ) as rechargeDeptText,
+			od.city
+		from t_order od 
+		where 1=1 
+			and od.three_order_code=#{threeOrderCode} and od.valid = 1 
+	</select>
+	<select id="queryChannelManagerType" parameterType="Long" resultType="Integer">
+	 SELECT 
+	   <![CDATA[(CASE WHEN (SELECT COUNT(1) FROM t_custom_channel cp WHERE cp.partner_manager_id=m.id AND cp.valid=1)>0 THEN 1
+	          WHEN (SELECT COUNT(1) FROM t_custom_channel cm WHERE cm.manager_id=m.id AND cm.valid=1)>0 THEN 2
+	          ELSE 3 END)]]>  AS channelManagerType
+       FROM t_auth_manager m JOIN t_auth_org o ON m.dept_id=o.id
+        WHERE m.state = 1
+        AND o.valid = 1
+        AND o.status = 1
+        AND m.id=#{id}
+	</select>
+	<select id="queryCallCenter" resultType="com.emotte.order.order.model.Managers" >
+		select m.id as id,
+		m.dept_id as deptId,
+		m.phone as phone
+		from t_auth_manager m   
+		where 1=1 and m.valid = 1 and m.state = 1 
+		and m.dept_id  in (select org.id from t_auth_org org where org.code like '100100470008%')
+   		and m.login_count != 0  
+		order by m.login_count desc, m.create_time desc
+	</select>
+	
+	<!-- 查询服务人员下一个订单负责人 -->
+	<select id="queryRechargeBy" resultType="com.emotte.order.order.model.ItemInterview" parameterType="com.emotte.order.order.model.ItemInterview">
+		select ee.id as "id",
+		       ee.emp_id as "personId" ,
+		       ee.order_id as "orderId",
+		       o.order_code as "orderCode",
+		       m.real_name as "managerName",
+		       m.id as "managerId",
+		       g.name as "orgName",
+		       m.phone as "managerPhone"
+		 from(SELECT e.id,e.emp_id,e.order_id
+		  FROM t_emp_personnel_schedule e
+		 <where>
+		 	e.emp_id = #{personId} and e.order_id not in (#{orderId}) and e.is_enable=2
+		 </where> 
+		   order by e.start_date) ee 
+		   left join t_order o
+		   on o.id = ee.order_id
+		   left join t_auth_manager m
+		   on m.id = o.recharge_by
+		   left join t_auth_org g
+		   on g.id = o.recharge_dept
+		   <where> rownum = 1</where> 
+	</select>
+	<!-- 查询冲突的订单 -->
+	<select id="queryByConflict" resultType="com.emotte.order.order.model.ItemInterview" parameterType="com.emotte.order.order.model.ItemInterview">
+		   select le.id as "id"
+     		from t_emp_personnel_schedule le
+    <where> 
+      le.order_id not in (#{orderId})
+      and le.emp_id = #{personId}
+      and le.start_date &gt;= #{starTime}
+      and le.start_date &lt;= #{endTime}
+      and le.status in (2,4)
+      and le.is_enable=2
+   </where> 
+   
+	</select>
+	<select id="loadOrderByCodeAndCategory" resultType="com.emotte.order.order.model.Order">
+		SELECT  
+		o.order_code orderCode
+		, o.user_name userName
+		, o.user_mobile userMobile
+		FROM t_order o 
+		WHERE EXISTS (
+		SELECT 1 FROM t_order_item i
+		INNER JOIN t_product_category c ON c.code = i.category_code AND REGEXP_LIKE(c.cname, #{1})
+		WHERE i.order_id = o.id AND i.valid = 1
+		) AND o.order_code = #{0}
+	</select>
+	
+	<select id="queryChangeOrder"  parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+		select
+			 id  as "id" ,			
+			 order_code  as "orderCode" ,			
+			 user_id  as "userId" ,			
+			 user_name  as "userName" ,			
+			 user_mobile  as "userMobile" ,			
+			 order_type  as "orderType" ,			
+			 order_channel  as "orderChannel" ,			
+			 order_source_id  as "orderSourceId" ,			
+			 order_status  as "orderStatus" ,			
+			 pay_status  as "payStatus" ,
+			 total_pay  as "totalPay" ,			
+			cate_type as cateType
+	from  t_order od 
+	<where> 
+	 1 = 1 and od.create_time &lt;=sysdate and od.valid = 1 and od.order_status in (7,8) 
+	 	   and od.cate_type = 2
+				<if test="id!=null and id!='' ">           
+		 and	od.id =  #{id} 		</if>
+				<if test="orderCode!=null and orderCode!='' ">           
+		and	od.order_code =  #{orderCode} 		</if>
+			    <if test="userMobile!=null and userMobile!='' ">           
+		and	od.user_mobile = #{userMobile}		</if>
+				<if test="orderCodeNotIn !=null and orderCodeNotIn !='' ">           
+		and	od.order_code != #{orderCodeNotIn}		</if>
+			</where>
+	order by od.create_time desc 
+	</select>
+	
+	<select id="orderEmpPushRminds" resultType="Map">
+		SELECT t.xinxi,t.recharge_by,t.xx_type,t.order_id,t.person_id FROM view_mianshi_info t
+	</select>
+	<select id="downloadEmpFileCard" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.PojoPersonnel">
+	SELECT 
+			p.id AS "p_id",
+			p.id_card_num AS "p_idCardNum",
+			p.specialty AS "p_specialty",
+			p.name as "p_name",
+			c.name AS "c_name",
+			p.age as "p_age",
+			to_char((SELECT replace(wm_concat(distinct t.emp_work_type_name),',','、') FROM t_emp_work_type t WHERE t.valid=1 AND t.emp_id=p.id)) w_empWorkTypeName,
+			p.working_life as "p_workingLife",
+			DECODE(p.education,1,'初中及以下',2,'初中及以下',3,'初中及以下',4,'中专/高中',5 ,'大专/本科',6,'研究生') as "p_education",
+			p.zodiac as "p_zodiac", 
+			DECODE(p.constellation,1,'水瓶座',2,'双鱼座',3,'白羊座',4,'金牛座',5,'双子座',6,'巨蟹座',7,'狮子座',8,'处女座',9,'天秤座',10,'天蝎座',11,'射手座',12,'摩羯座') AS constellationText,
+			DECODE(p.blood,'1','A型','2','B型','3','O型','4','AB型') AS bloodText,
+			p.home_address as "p_homeAddress",
+			DECODE(p.is_marry,1,'未婚'，2,'已婚',3,'离异')as "p_isMarry",
+			p.children_num as childrenNum,
+			decode(p.child_in_city,'1','是','2','否') as childInCityText,
+			decode(p.child_has_job,'1','是','2','否') as childHasJobText,
+			decode(p.couple_here,'1','是','2','否') as coupleHereText,
+			p.couple_profession as coupleProfession,
+			decode(p.parents_alive,'1','父在','2','母在','3','离世','4','健在') as parentsAliveText,
+			decode(p.parents_here,'1','是','2','否') as parentsHereText,
+			p.salary_expectation as "p_salaryExpectation",
+			to_char((SELECT replace(wm_concat(distinct t.work_type_level_name),',','、') FROM t_emp_work_type t WHERE t.valid=1 AND t.emp_id=p.id)) w_workTypeLevelName,
+			(SELECT m.real_name FROM t_auth_manager m WHERE m.valid=1 AND m.id=p.productid) productManagerName,
+			(SELECT pv.original_address FROM t_emp_pic_video pv WHERE pv.is_show=1 and pv.album_type_id=9 and pv.valid=1 AND ROWNUM=1 and pv.emp_id=p.id) as "original_address", 
+			to_char((SELECT wm_concat(vv.original_address) FROM ((SELECT v.emp_id,v.original_address  FROM t_emp_pic_video v WHERE v.is_show=1 and v.album_type_id IN (5,6) and v.valid=1)) vv WHERE ROWNUM &lt;=4 AND vv.emp_id=p.id)) AS workLifePhoto,
+			(SELECT wm_concat(v.filename) FROM  t_emp_pic_video v WHERE v.is_show=1 and v.album_type_id=4 and v.valid=1 AND v.emp_id=p.id) certificate,
+			(SELECT replace(wm_concat(distinct d.dict_name),',','、') from t_base_dictionary d JOIN t_emp_pic_video v
+				ON v.type_code=d.dict_code WHERE d.valid=1 AND v.valid=1 AND d.dict_code LIKE '20330003%' AND v.emp_id=p.id) AS typeCodes
+	FROM t_emp_personnel p
+	LEFT JOIN t_base_city c
+	ON p.origin = c.code
+	WHERE p.id = #{empId}
+	</select>
+	
+	<select id="queryOrderByUserMobile" parameterType="java.lang.String"  resultType="com.emotte.order.order.model.Order">
+		SELECT o.user_mobile   userMobile,
+		       o.recharge_by   as rechargeBy,
+		       o.recharge_dept as rechargeDept
+		  FROM t_order o
+		 WHERE o.user_mobile = #{userMobile}
+		 order by o.create_time desc
+	</select>
+	
+	<select id="querySolutionResponsiblePerson" parameterType="Long"  resultType="Map">
+						SELECT t.recharge_by AS rechargeBy, t.recharge_dept AS rechargeDept
+					  FROM t_order t
+					 WHERE t.valid = 1
+					   AND t.cate_type = 8
+					   AND t.id = #{id}
+	</select>
+	
+	<select id="querySolutionUserMobile" parameterType="com.emotte.order.order.model.Order"  resultMap="clobToMap">
+								SELECT wm_concat(DISTINCT o.user_mobile) userMobile
+					  FROM t_order o
+					   JOIN t_solution_cust_solution s 
+    						ON s.id=o.id
+					 WHERE o.valid = 1
+					   AND s.solution_status != 5
+					   AND o.cate_type = 8
+					   AND o.recharge_by = #{followBy}
+	</select>
+	
+	
+	<select id="queryOrderUserMobile" parameterType="com.emotte.order.order.model.Order"  resultMap="clobToMap" >
+							SELECT wm_concat(DISTINCT o.user_mobile) userMobile
+					  FROM t_order o
+					 WHERE o.valid = 1
+					   AND o.cate_type != 8
+					   AND o.recharge_by = #{followBy}
+	</select>
+	
+	<resultMap type="java.util.Map" id="clobToMap">
+		<result property="userMobile" column="userMobile" jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+	
+	<select id="queryRecommendUserId" parameterType="String" resultType="Long">
+		SELECT t.cust_id FROM emotte.t_user_login_log t WHERE t.oauth_code=#{oauthCode}
+	</select>
+
+	<!--根据订单ID查询订单对象-->
+	<select id="findOrderById" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Order">
+		SELECT * FROM T_ORDER WHERE ID = #{orderId}
+	</select>
+
+	<!--根据ID查询管家信息-->
+	<select id="findManagerById" parameterType="java.lang.Long" resultType="com.emotte.order.authmaner.model.Manager">
+		SELECT ID as id, REAL_NAME as realName,PHONE as phone FROM T_AUTH_MANAGER WHERE ID = #{authManagerId}
+	</select>
+
+	<!--根据订单ID查询缴费总额-->
+	<select id="checkAccountTotal" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT
+			NVL(SUM(NVL(a.FEE_SUM,0)),0)
+		FROM T_ORDER_PAYFEE a
+		LEFT JOIN T_ACCOUNT_PAY b ON a.ORDER_ID = b.ID AND b.VALID = 1 AND b.IS_BACK_TYPE = 2
+		LEFT JOIN T_ORDER c ON b.ORDER_ID = c.ID
+		WHERE
+		a.VALID = 1
+		AND a.IS_BACK_TYPE = 1
+		AND c.ID = #{id}
+	</select>
+	
+	<!--根据订单ID查询缴费的金额是否大于订单金额-->
+	<select id="queryPayCompareFeeSum" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT count(*)
+       			FROM  T_ORDER_PAYFEE T
+           		LEFT JOIN  T_ACCOUNT_PAY TP ON T.ORDER_ID = TP.ID
+           		AND T.VALID=1
+        WHERE  TP.ORDER_ID=#{id} AND TP.VALID=1
+	</select>
+	
+	
+	<!--查询订单的有效合同（T.Agreement_state !=5 是否与当前时间在30天之内-->
+	<select id="queryAgreenmentDate" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM DUAL     
+             WHERE SYSDATE-30 &lt; (SELECT MAX(FINISH_DATE) 
+             				       FROM T_ORDER_AGREEMENT T 
+             				       WHERE  T.VALID=1 AND T.AGREEMENT_STATE !=5 
+             				       AND T.ORDER_ID=#{orderId} ) OR (SELECT COUNT(1)
+             				       FROM T_ORDER_AGREEMENT T 
+             				       WHERE  T.VALID=1 AND T.AGREEMENT_STATE !=5
+             				       AND T.ORDER_ID=#{orderId} )=0
+	</select>
+	
+	
+	
+	<!-- 查询，录入订单的相关回显信息 -->
+	<select id="queryOrderEcho" parameterType="java.lang.Long"  resultMap="clobToMap">
+		SELECT TOI.IS_INSURE AS  "isInsure",
+	       TOI.FORESTSSERVER AS "forestsserver",
+	       TOI.HOME_FORESTS AS  "homeForests",
+	       TOI.INSURE_AMOUNT AS "insureAmount",
+	       TOI.FAMILYS AS "familys",
+	       TOI.EDUCATION AS "education",
+	       TOI.PERSON_LEVEL AS "personLevel",
+	       TOI.ORIGIN AS "origin",
+	       TOI.INTERVIEW_ADDRESS AS "interviewAddress",
+	       TOI.PERSON_NUMBER AS "personNumber",
+	       TOI.MIN_AGE AS "minAge",
+	       TOI.MAX_AGE AS "maxAge",
+	       TOI.SEX AS "sex",
+	       TI.PRODUCT_CODE AS "productCode",
+	       TI.PRODUCT_NAME AS "productName",
+	       TI.CATEGORY_CODE AS "categoryCode",
+	       TI.QUANTITY AS "quantity",
+       	   T.RECHARGE_TYPE AS  "rechargeType",
+       	   T.RECHARGE_BY AS "rechargeBy",
+       	   T.ORDER_CHANNEL AS "orderChannel",
+       	   T.CITY AS "city",
+       	   T.SERVICE_OBJECT AS "serviceObject",
+       	   T.RECHARGE_DEPT AS "rechargeDept"
+		   FROM T_ORDER T LEFT JOIN T_ORDER_ITEM TI ON T.id=TI.Order_Id AND TI.VALID=1
+                       LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER TOI ON TOI.ITEM_ID=TI.ID AND TOI.VALID=1
+                        WHERE T.id=#{orderId} AND T.VALID=1
+	</select>
+</mapper>

@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreeOrderBaseMapper">
+	<select id="queryDictionaryMapper" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "id" ,
+		pid as "pid" ,
+		types as "types" ,
+		dkey as "dkey" ,
+		dvalue as "dvalue" ,
+		valid as "valid" ,
+		create_by as "createBy" ,
+<!-- 		date_format(create_time,'%Y-%m-%d %H:%i:%s') as "createTime" , -->
+		to_char(create_time,'yyyy-mm-dd HH:mi:ss') as createTime,
+		remarks as "remarks"
+		from t_order_dictionary
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="pid!=null and pid!='' ">
+				and pid = #{pid}
+			</if>
+			<if test="types!=null and types!='' ">
+				and types = #{types}
+			</if>
+			<if test="dkey!=null and dkey!='' ">
+				and dkey = #{dkey}
+			</if>
+			<if test="dvalue!=null and dvalue!='' ">
+				and dvalue = #{dvalue}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="createBy !=null and createBy !='' ">
+				and create_by = #{createBy}
+			</if>
+			<if test="createTime !=null and createTime !='' ">
+				and to_char(create_date,'yyyy-mm-dd') = #{create_time}		</if>
+			<if test="remarks!=null and remarks!='' ">
+				and remarks = #{remarks}
+			</if>
+		</where>
+		order by dkey
+	</select>
+	<select id="queryUserMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select * from (select rownum rn,t.* from (
+		select
+		id as "id" ,
+		real_name as "realName" ,
+		sex as "userSex" ,
+		mobile as "userMobile" ,
+		create_by as "createBy" ,
+		to_char(create_time,'yyyy-mm-dd HH:mi:ss') as createTime,
+		card_type as "cardType" ,
+		card_num as "cardNum" ,
+		birthday as "userBirth" ,
+		province as "userProvince" ,
+		city as "userCity" ,
+		(
+        	select ct.name from t_base_city ct where ct.code=tc.city and ct.valid=1
+        ) as userCityText,
+		valid as "valid" ,
+		version as "version"
+		from emerp.t_customer tc
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+		</where>
+		order by update_time desc ) t)
+		<if test="flagPage!=1"> where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  </if>
+<!-- 		<if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if> -->
+	</select>
+	<select id="countUserMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="java.lang.Integer">
+		select count(0)
+		from emerp.t_customer
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+	</select>
+	<select id="queryUserAddressMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		id as "id" ,
+		contact_phone as "contactPhone" ,
+		contact_name as "contactName" ,
+		address_detail as "addressDetail" ,
+		province as "province" ,
+		city as "city" ,
+		country as "country" ,
+		valid as "valid" ,
+		version as "version"
+		from emotte.t_user_address
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and cust_id = #{userId}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and contact_phone = #{contactPhone}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and contact_name = #{contactName}
+			</if>
+			<if test="addressDetail!=null and addressDetail!='' ">
+				and address_detail = #{addressDetail}
+			</if>
+			<if test="city!=null and city!='' ">
+				and city = #{city}
+			</if>
+			<if test="country!=null and country!='' ">
+				and country = #{country}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+		order by update_time desc
+	</select>
+	<select id="queryUserAddressOrder" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		receiver_name as "contactName" ,
+		receiver_province as "province" ,
+		receiver_city as "city" ,
+		receiver_area as "country" ,
+		receiver_address as "addressDetail" ,
+		receiver_mobile as "contactPhone" 
+		from t_order
+		<where>
+			1 = 1
+			<if test="orderId!=null and orderId!='' ">
+				and id = #{orderId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserAddressByMobile" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		ads.id as "id" ,
+		tus.unicode as "unicode",
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.head_photo as "userAddress" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		to_char(tus.birthday,'yyyy-mm-dd HH:mi:ss') as userBirth,
+		ads.contact_phone as "contactPhone" ,
+		ads.contact_name as "contactName" ,
+		ads.address_detail as "addressDetail" ,
+		ads.province as "province" ,
+		ads.city as "city" ,
+		ads.country as "country" ,
+		ads.valid as "valid" ,
+		ads.version as "version"
+		from t_customer tus LEFT JOIN emotte.t_user_address ads ON
+		tus.unicode=ads.unicode
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and tus.mobile = #{contactPhone}
+			</if>
+			<if test="realName !=null and realName !='' ">
+				and tus.real_name = #{realName}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and ads.contact_name = #{contactName}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+			<if test="adValid!=null and adValid !='' ">
+				and ads.valid = #{adValid}
+			</if>
+		</where>
+		order by ads.id desc
+	</select>
+	<select id="queryBaseCity" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		select
+		id as "id" ,
+		pid as "pid" ,
+		code as "code" ,
+		name as "name" ,
+		short_name as "shortName"
+		from emerp.t_base_city
+		<where>
+			1 = 1
+			and code like '${address}%'
+			and length(code)=#{age}
+			and valid=1
+		</where>
+		order by code
+	</select>
+	<select id="queryOrderBasicServer" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+	SELECT DISTINCT
+	od.id as "id",
+	od.order_code as "orderCode",
+	od.user_id as "userId",
+	it.id as code,
+	it.version as version,
+	(
+	SELECT pc.cname FROM t_product_category pc
+	WHERE pc.code = od.order_type
+	) AS typeText,
+	to_char(it.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+	to_char(it.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+	to_char(it.interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime,
+	od.critical as critical,
+	(
+	SELECT
+	t.dvalue
+	FROM
+	t_order_dictionary t
+	WHERE
+	t.dkey = od.critical
+	AND t.types = 'critical'
+	AND t.valid = 1
+	) AS "criticalText",
+	od.order_status as orderStatus ,
+	od.order_source_id as orderSourceId,
+	it.address as "address",
+	it.interview_address as "interviewAddress",
+	od.remark as "remark",
+	it.min_age as "minAge",
+	it.max_age as "maxAge",
+	it.origin as "origin",
+	it.home_forests as homeForests,
+	it.familys as familys,
+	item.product_name as "productName",
+	it.person_level as personLevel,
+	 (
+				case order_status
+				when '1' then '新单'
+				when '2' then '已受理'
+				when '3' then '匹配中'
+				when '4' then '已匹配'
+				when '5' then '待面试'
+				when '6' then '面试成功'
+				when '7' then '已签约'
+				when '8' then '已上户'
+				when '9' then '已完成'
+				when '10' then '已取消'
+				when '11' then '已下户'
+				when '12' then '已终止'
+				when '13' then '捡货中'
+				when '14' then '配送中'
+				when '16' then '三方订单匹配失败'
+				end
+			) AS "statusText",
+			(
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = od.order_channel
+			) AS "sourceText" ,
+	(
+	SELECT
+	t.dvalue
+	FROM
+	t_order_dictionary t
+	WHERE
+	t.dkey = it.person_level
+	AND t.pid = 0
+	AND t.types = 'personLevel'
+	AND t.valid = 1
+	) AS "personLevelText",
+	it.education as education,
+	(
+	SELECT
+	t.dvalue
+	FROM
+	t_order_dictionary t
+	WHERE
+	t.dkey = it.education
+	AND t.pid = 0
+	AND t.types = 'education'
+	AND t.valid = 1
+	) AS "educationText",
+	(
+	SELECT t.dvalue
+	FROM t_order_dictionary t ,t_base_dictionary bd
+	WHERE t.dkey = bd.dict_code AND t.pid = 0 AND t.types = 'orderChannel' AND t.valid = 1 and bd.valid = 1
+	) AS "channelText",
+	od.user_name  as "order.userName" ,			
+	od.user_mobile  as "order.userMobile" ,	
+	od.receiver_name as "order.receiverName",
+	od.receiver_address as "order.receiverAddress",
+	od.receiver_mobile as "order.receiverMobile",
+	od.order_type  as "order.orderType" ,			
+	od.order_channel  as "order.orderChannel" ,			
+	od.order_source_id  as "order.orderSourceId" ,			
+	od.order_status  as "order.orderStatus" ,	
+	od.remark  as "order.remark" ,	
+	od.user_birth as "birth",
+	od.user_sex as "sex" ,
+	od.user_address as "userAddress",
+	tam.real_name as "authManagerName",
+	tam.phone as "authManagertPhone"
+	FROM t_order od
+    left join t_order_item item on od.id = item.order_id 
+    left join t_order_item_detail_server it on item.id = it.item_id
+    left join t_auth_manager tam on od.auth_manager_id = tam.id
+		<where>
+			1 = 1 and od.id = #{id} and item.valid = 1 and it.valid = 1 and od.valid =1 
+		</where>
+		order by it.id desc
+	</select>
+	<select id="queryOrderNeedServer" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		SELECT
+			per.id as id,
+			per.name as name,
+			per.sex,
+			per.age,
+			per.education,
+			(
+				SELECT
+				t.dvalue
+				FROM
+				emerp.t_order_dictionary t
+				WHERE
+				t.dkey = per.education
+				AND t.pid = 0
+				AND t.types = 'education'
+				AND t.valid = 1
+			) AS "educationText",
+			per.origin,
+			per.zodiac,
+			if(per.is_marry=1,"未婚","已婚") as isMarry,
+			per.current_address AS userAddress,
+			per.home_address AS address,
+			per.id_card_num AS idCardNum,
+			per.working_life AS workingLife,
+			per.salary_expectation AS salary,
+			per.job_expectation_content AS jobContent,
+			per.specialty,
+			per.fear_pet AS fearPet,
+			if(per.staff_type=1,"员工制","非员工制") as staffType,
+			us.real_name AS realName,
+			us.mobile AS mobile,
+			wor.emp_work_type_name as serverText
+			
+		FROM
+			emerp.t_emp_personnel per,
+			emerp.t_emp_work_type wor,
+			emerp.t_customer us
+		<where>
+			per.id = wor.emp_id
+			AND per.productid = us.id
+			<if test="pid !=null and pid !='' ">
+				and per.id not in (select person_id from emerp.t_order_item_interview where order_id=#{pid})
+			</if>
+			<if test="id !=null and id !='' ">
+				and per.id = #{id}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and per.origin = #{origin}
+			</if>
+			<if test="education !=null and education !='' ">
+				and per.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and per.nation = #{nation}
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and per.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and per.age &lt;= #{maxAge}
+			</if>
+			<if test="sex !=null and sex !='' ">
+				and per.sex = #{sex}
+			</if>
+			<if test="valid !=null and valid !='' ">
+				and per.valid = #{valid}
+			</if>
+		</where>
+		<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if>
+	</select>	
+	<select id="countOrderNeedServer" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM emerp.t_emp_personnel per,
+			emerp.t_emp_work_type wor,
+			emerp.t_customer us
+		<where>
+			per.id = wor.emp_id
+		AND per.productid = us.id
+			<if test="pid !=null and pid !='' ">
+				and per.id not in (select person_id from emerp.t_order_item_interview where order_id=#{pid})
+			</if>
+			<if test="id !=null and id !='' ">
+				and per.id = #{id}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and per.origin = #{origin}
+			</if>
+			<if test="education !=null and education !='' ">
+				and per.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and per.nation = #{nation}
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and per.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and per.age &lt;= #{maxAge}
+			</if>
+			<if test="sex !=null and sex !='' ">
+				and per.sex = #{sex}
+			</if>
+			<if test="valid !=null and valid !='' ">
+				and per.valid = #{valid}
+			</if>	
+		</where>
+	</select>
+	<select id="queryOrderNeeds" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		SELECT
+			per.id as id,
+			per.name as name,
+			per.sex,
+			per.age,
+			per.education,
+			(
+				SELECT
+				t.dvalue
+				FROM
+				emerp.t_order_dictionary t
+				WHERE
+				t.dkey = per.education
+				AND t.pid = 0
+				AND t.types = 'education'
+				AND t.valid = 1
+			) AS "educationText",
+			per.origin,
+			per.zodiac,
+			decode(per.is_marry,1,'未婚','已婚') as isMarry,
+			per.current_address AS userAddress,
+			per.home_address AS address,
+			per.id_card_num AS idCardNum,
+			per.working_life AS workingLife,
+			per.salary_expectation AS salary,
+			per.job_expectation_content AS jobContent,
+			per.specialty,
+			per.fear_pet AS fearPet,
+			decode(per.staff_type,1,'员工制','非员工制') as staffType,
+			us.real_name AS realName,
+			us.mobile AS mobile,
+			wor.emp_work_type_name as serverText
+		FROM emerp.t_emp_personnel per,
+			emerp.t_emp_work_type wor,
+			emerp.t_customer us
+		<where>
+			per.id = wor.emp_id
+		AND per.productid = us.id
+			<if test="pid !=null and pid !='' ">
+				and per.id not in (select person_id from emerp.t_order_item_interview where order_id=#{pid})
+			</if>
+			<if test="id !=null and id !='' ">
+				and per.id = #{id}
+			</if>
+			<if test="id !=null and id !='' ">
+				and per.id = #{id}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and per.origin = #{origin}
+			</if>
+			<if test="education !=null and education !='' ">
+				and per.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and per.nation = #{nation}
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and per.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and per.age &lt;= #{maxAge}
+			</if>
+			<if test="sex !=null and sex !='' ">
+				and per.sex = #{sex}
+			</if>
+			<if test="valid !=null and valid !='' ">
+				and per.valid = #{valid}
+			</if>
+			<if test="idsAry !=null and idsAry !='' ">
+				and per.id in 
+				<foreach item="item" index="index" collection="idsAry" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+			</if>	
+		</where>
+		and rownum&lt;=2 ;
+	</select>
+	
+	
+	<select id="querLoadUser" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.head_photo as "userAddress" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		to_char(tus.birthday,'yyyy-MM-dd') as userBirth,
+		ads.id as id,
+	    ads.contact_phone as contactPhone,
+	    ads.contact_name as contactName,
+	    ads.address_detail as addressDetail,
+	    ads.province as province,
+	    ads.city as city,
+	    ads.country as country
+	    from emerp.t_customer tus 
+         left join emotte.t_user_address ads on tus.id=ads.cust_id
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and tus.id = #{userId}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+		</where>
+		and rownum=1
+	</select>
+	
+	<select id="queryAddress" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		ads.id as "id" ,
+		ads.contact_phone as "contactPhone" ,
+		ads.contact_name as "contactName" ,
+		ads.address_detail as "addressDetail" ,
+		ads.province as "province" ,
+		ads.city as "city" ,
+		ads.country as "country" ,
+		ads.valid as "valid" ,
+		ads.version as "version"
+		from emerp.t_customer tus 
+		LEFT JOIN emotte.t_user_address ads ON
+		tus.unicode=ads.unicode
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and tus.mobile = #{contactPhone}
+			</if>
+			<if test="realName !=null and realName !='' ">
+				and tus.real_name = #{realName}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+		</where>
+		order by tus.id desc
+	</select>
+	
+	<select id="queryUserAdressMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		ads.id as "id" ,
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.head_photo as "userAddress" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		to_char(tus.birthday,'yyyy-MM-dd') as userBirth,
+		ads.contact_phone as "contactPhone" ,
+		ads.contact_name as "contactName" ,
+		ads.address_detail as "addressDetail" ,
+		ads.province as "province" ,
+		ads.city as "city" ,
+		ads.country as "country" ,
+		ads.valid as "valid" ,
+		ads.version as "version"
+		from emerp.t_customer tus LEFT JOIN emotte.t_user_address ads ON
+		tus.unicode=ads.unicode
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and tus.mobile = #{contactPhone}
+			</if>
+			<if test="realName !=null and realName !='' ">
+				and tus.real_name = #{realName}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and ads.contact_name = #{contactName}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+			<if test="adValid!=null and adValid !='' ">
+				and ads.valid = #{adValid}
+			</if>
+		</where>
+		order by ads.id desc
+	</select>
+	
+</mapper>

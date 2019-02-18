@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrSliceMapper">
+
+	<insert id="insertSlice" parameterType="com.emotte.order.order.model.Slice">
+		insert into T_ORDER_SLICE ( 
+			ID ,		
+			ORDER_ID ,		
+			IS_OTHER ,		
+			PERSON_ID ,		
+			CREATE_TIME ,		
+			CREATE_BY ,		
+			DIVIDE_ID ,
+			IS_DEFAULT		
+		) values (
+			#{id} ,		
+			#{orderId} ,		
+			#{isOther} ,		
+			#{personId} ,		
+			sysdate ,		
+			#{createBy} ,		
+			#{divideId},
+			#{isDefault} 		
+		)
+	</insert>
+
+	<update id="updateSlice" parameterType="com.emotte.order.order.model.Slice">
+		update T_ORDER_SLICE	
+		 <set>  
+			<if test="id!=null and id!='' "> 
+				ID =  #{id} 
+			</if>		
+			<if test="orderId!=null and orderId!='' "> 
+				,ORDER_ID =  #{orderId} 
+			</if>		
+			<if test="isOther!=null and isOther!='' "> 
+				,IS_OTHER =  #{isOther} 
+			</if>		
+			<if test="personId!=null and personId!='' "> 
+				,PERSON_ID =  #{personId} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  #{createTime} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="divideId!=null and divideId!='' "> 
+				,DIVIDE_ID =  #{divideId} 
+			</if>		
+       </set>
+		where
+				
+	</update>
+	
+</mapper>

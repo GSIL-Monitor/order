@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.RePersonnelScheduleMapper">
+	<select id="querySchedule" parameterType="com.emotte.order.order.model.PersonnelSchedule"
+		resultType="com.emotte.order.order.model.PersonnelSchedule">
+						SELECT t.id     AS id,
+					       t.order_id   AS orderId,
+					       t.emp_id     AS empId,
+					       t.start_date AS startDate,
+					       t.end_date   AS endDate,
+					       t.start_time AS startTime,
+					       t.end_time   AS endTime,
+					       t.weekday    AS weekday,
+					       t.status     AS status
+					  FROM t_emp_personnel_schedule t
+					 WHERE t.is_enable = 1
+					   AND t.emp_id = #{empId}
+  					   AND t.order_id = #{orderId}
+	</select>
+
+	<select id="queryConflictSchedule" parameterType="com.emotte.order.order.model.PersonnelSchedule"
+		resultType="com.emotte.order.order.model.PersonnelSchedule">
+					SELECT 
+					       (SELECT ao.name FROM t_auth_org ao WHERE ao.valid = 1 AND ao.id = o.recharge_dept) AS rechargeDeptName,
+					       (SELECT m.real_name FROM t_auth_manager m WHERE m.valid = 1 AND m.id = o.recharge_by) AS rechargeByName,
+					       o.recharge_dept AS rechargeDept,
+					       o.recharge_by AS rechargeBy,
+					       o.id AS orderId,
+					       o.order_code AS orderCode,
+					       t.id,
+					       t.emp_id AS empId,
+					       t.start_date AS startDate,
+					       t.end_date AS endDate,
+					       t.start_time AS startTime,
+					       t.end_time AS endTime,
+					       t.weekday AS weekday
+					  FROM t_emp_personnel_schedule t
+					  JOIN t_order_server_lined l
+					    ON l.order_id = t.order_id
+					  JOIN t_order o
+					    ON o.id = t.order_id
+					 WHERE t.status IN (2,4)
+					       AND t.is_enable = 2
+					       AND t.emp_id = #{empId}
+						   AND ((${startDate} &gt;= t.start_date AND ${startDate} &lt; t.end_date) OR
+						       (${startDate} &gt; t.start_date AND ${startDate} &lt;= t.end_date) OR
+						       (t.start_date &gt;= ${startDate} AND t.start_date &lt; ${endDate}) OR
+						       (t.start_date &gt; ${startDate} AND t.start_date &lt;= ${endDate}) OR
+						       (t.start_date = ${startDate} AND t.start_date = ${endDate}))
+						   <if test="startTime != null and endTime != null">
+						   AND ((${startTime} &gt;= t.start_time AND ${startTime} &lt; t.end_time) OR
+						       (${startTime} &gt; t.start_time AND ${startTime} &lt;= t.end_time) OR
+						       (t.start_time &gt;= ${startTime} AND t.start_time &lt; ${endTime}) OR
+						       (t.start_time &gt; ${startTime} AND t.start_time &lt;= ${endTime}) OR
+						       (t.start_time = ${startTime} AND t.start_time = ${endTime}))
+						   </if> 
+						   <if test="weekday != null and weekday != '' ">
+						   AND t.weekday IN (${weekday})
+						   </if> 
+						   order by o.id, t.start_date
+	</select>
+	
+	<select id="loadPersonnel" parameterType="Long" resultType="com.emotte.order.order.model.Personnel">
+		SELECT ID                      AS id,
+			       NAME                    AS NAME,
+			       SEX                     AS sex,
+			       AGE                     AS age,
+			       ORIGIN                  AS origin,
+			       ZODIAC                  AS zodiac,
+			       ID_CARD_NUM             AS idCardNum,
+			       MANDARIN                AS mandarin,
+			       NATION                  AS nation,
+			       MOBILE                  AS mobile,
+			       IS_MARRY                AS isMarry,
+			       USUAL_LNG               AS usualLng,
+			       USUAL_LAT               AS usualLat,
+			       CURRENT_ADDRESS         AS currentAddress,
+			       HOME_ADDRESS            AS homeAddress,
+			       EDUCATION               AS education,
+			       EMERGENCY_CONTACT_PHONE AS emergencyContactPhone,
+			       IS_HOME                 AS isHome,
+			       WORKING_LIFE            AS workingLife,
+			       HEALTH_CERTIFICATE      AS healthCertificate,
+			       FEAR_PET                AS fearPet,
+			       SALARY_EXPECTATION      AS salaryExpectation,
+			       JOB_EXPECTATION_CONTENT AS jobExpectationContent,
+			       SPECIALTY               AS specialty,
+			       VALID                   AS valid,
+			       IS_INSCHOOL             AS isInschool,
+			       APPOINTMENT_SCHOOL_TIME AS appointmentSchoolTime,
+			       L1_CHANNEL              AS l1Channel,
+			       L2_CHANNEL              AS l2Channel,
+			       L3_CHANNEL              AS l3Channel,
+			       CREATE_BY               AS createBy,
+			       UPDATE_BY               AS updateBy,
+			       CREATETIME              AS createtime,
+			       UPDATETIME              AS updatetime,
+			       PRODUCTID               AS productid,
+			       BASE_ID                 AS baseId,
+			       STAFF_TYPE              AS staffType,
+			       IS_BLACK                AS isBlack,
+			       BLACK_SO                AS blackSo,
+			       HOPE_WORK_TYPE          AS hopeWorkType,
+			       IS_PASS                 AS isPass,
+			       RECOMMEND_NAME          AS recommendName,
+			       RECOMMEND_PHONE         AS recommendPhone,
+			       VERSION                 AS version,
+			       IN_CITY                 AS inCity
+			  FROM T_EMP_PERSONNEL
+					WHERE VALID=1 AND ID=#{id} 	
+	</select>
+</mapper>
+	

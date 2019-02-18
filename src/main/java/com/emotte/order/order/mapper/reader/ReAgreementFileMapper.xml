@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReAgreementFileMapper">
+	<select id="loadAgreementFile" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.AgreementFile">
+		select
+		ID as id ,
+		URL as url ,
+		AGREEMENT_ID as
+		agreementId,
+		CREATE_BY as createBy ,
+		to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as createTime,
+		to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as updateTime,
+		UPDATE_BY as
+		updateBy ,
+		VALID as valid ,
+		VERSION as
+		version,
+		rank_number as rankNumber
+		from t_order_agreement_file
+		where VALID = 1 and ID = #{id}
+	</select>
+
+	<select id="queryAgreementFile" parameterType="com.emotte.order.order.model.AgreementFile"
+		resultType="com.emotte.order.order.model.AgreementFile">
+		select
+		ID as id ,
+		URL as url ,
+		AGREEMENT_ID as agreementId ,
+		CREATE_BY as createBy ,
+		to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as createTime,
+		to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as updateTime,
+		UPDATE_BY as
+		updateBy ,
+		VALID as valid ,
+		VERSION as
+		version,
+		rank_number as rankNumber
+		from t_order_agreement_file
+		<where>
+				VALID = 1
+			<if test="id!=null and id!='' ">
+				and ID = #{id}
+			</if>
+			<if test="url!=null and url!='' ">
+				and URL = #{url}
+			</if>
+			<if test="agreementId!=null and agreementId!='' ">
+				and AGREEMENT_ID = #{agreementId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and CREATE_TIME = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and UPDATE_BY = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and UPDATE_TIME = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="version!=null and version!='' ">
+				and VERSION = #{version}
+			</if>
+			<if test="rankNumber!=null and rankNumber!='' ">
+				and rank_number = #{rankNumber}
+			</if>
+		</where>
+		ORDER BY agreement_id ASC, rank_number ASC
+	</select>
+
+
+	<select id="countAgreementFile" parameterType="com.emotte.order.order.model.AgreementFile"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM t_order_agreement_file
+		<where>
+				VALID = 1
+			<if test="id!=null and id!='' ">
+				and ID = #{id}
+			</if>
+			<if test="url!=null and url!='' ">
+				and URL = #{url}
+			</if>
+			<if test="agreementId!=null and agreementId!='' ">
+				and AGREEMENT_ID = #{agreementId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and CREATE_TIME = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and UPDATE_BY = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and UPDATE_TIME = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="version!=null and version!='' ">
+				and VERSION = #{version}
+			</if>
+			<if test="rankNumber!=null and rankNumber!='' ">
+				and rank_number = #{rankNumber}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryAgreementFileByRankNumber" parameterType="com.emotte.order.order.model.AgreementFile"
+		resultType="com.emotte.order.order.model.AgreementFile">
+		select
+		ID as id ,
+		URL as url ,
+		AGREEMENT_ID as agreementId ,
+		CREATE_BY as createBy ,
+		to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as createTime,
+		to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as updateTime,
+		UPDATE_BY as
+		updateBy ,
+		VALID as valid ,
+		VERSION as
+		version,
+		rank_number as rankNumber
+		from t_order_agreement_file
+		<where>
+				VALID = 1
+				and AGREEMENT_ID = #{agreementId}
+				and rank_number = #{rankNumber}
+		</where>
+	</select>
+
+</mapper>

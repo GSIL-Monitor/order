@@ -1,0 +1,976 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台系统代码规范</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link id="css" href="../css/sb-admin-2.css" rel="stylesheet" type="text/css" title="gray">
+    <!-- Custom Fonts -->
+    <link href="../css/awesome/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: '微软雅黑';
+            background-color: #F7F7F7;
+        }
+
+        .wrapper {
+            width: 1024px;
+            margin: 0 auto;
+        }
+
+        .wrapper > section {
+            min-height: 300px;
+            margin-bottom: 30px;
+            box-shadow: 1px 1px 4px #DDD;
+            background-color: #FFF;
+        }
+
+        .wrapper > header {
+            text-align: center;
+            line-height: 1;
+            padding: 20px;
+            margin-bottom: 10px;
+            font-size: 30px;
+            color:#000;
+            background-color: inherit;
+        }
+
+        .wrapper section > header {
+            line-height: 1;
+            padding: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            background-color: #EEE;
+        }
+
+        .wrapper .wrap-box {
+            padding: 20px;
+        }
+        .wrap-box .explain {
+            font-size: 16px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <header>后台系统代码规范</header>
+    <section>
+        <header>1.关于表单的规范</header>
+        <div class="wrap-box">
+            <h3>1.1表单的代码规范</h3>
+            <p class="explain">form的类名为<code>form-inline</code>,<code>row</code>,<code>form-group</code>,<code>form-control</code>不可少，<code>col-xs-_</code> 根据需要设置大小，占满一行为<code>col-xs-12</code>,占半行为<code>col-xs-6</code>,表单名称（例：服务人员姓名：）必须包含在p标签里，用来控制所有的表单名称有一个共同的宽度。
+            </p>
+            <h4>表单全:</h4>
+            <div>
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>服务人员姓名：</p>
+                                <input type="text" class="form-control" placeholder="Jane">
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-sm-2 control-label"><p>性别：</p></label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="男"> 男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="女"> 女
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>渠道一级：</p>
+                                <select class="form-control">
+                                    <option>学校录入</option>
+                                    <option>合伙人</option>
+                                    <option>呼叫中心</option>
+                                    <option>基地录入</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>预约到校时间：</p>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                &nbsp;至&nbsp;
+                                <input id="d4312" class="Wdate form-control" class="" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h4>表单代码全：</h4>
+            <textarea cols="100" rows="17">
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>服务人员姓名：</p>
+                                <input type="text" class="form-control" placeholder="Jane">
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-sm-2 control-label"><p>性别：</p></label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="男"> 男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="女"> 女
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>渠道一级：</p>
+                                <select class="form-control">
+                                    <option>学校录入</option>
+                                    <option>合伙人</option>
+                                    <option>呼叫中心</option>
+                                    <option>基地录入</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label>
+                                <p>预约到校时间：</p>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                &nbsp;至&nbsp;
+                                <input id="d4312" class="Wdate form-control" class="" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </textarea>
+            <h4>单选框:</h4>
+            <div>
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-12 pl100">
+                            <label class="col-sm-1 control-label"><p>性别：</p></label>
+                            <div class="col-sm-11">
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="男"> 男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="女"> 女
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h4>单选框代码：</h4>
+            <textarea cols="100" rows="13">
+                <div class="form-group col-xs-12 pl100">
+                    <label class="col-sm-1 control-label"><p>性别：</p></label>
+                    <div class="col-sm-11">
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="男"> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="女"> 女
+                        </label>
+                    </div>
+                </div>
+            </textarea>
+            <h4>下拉框:</h4>
+            <div>
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>
+                                <p>渠道一级：</p>
+                                <select class="form-control">
+                                    <option>学校录入</option>
+                                    <option>合伙人</option>
+                                    <option>呼叫中心</option>
+                                    <option>基地录入</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h4>下拉框代码:</h4>
+            <textarea cols="100" rows="12">
+                <div class="form-group col-xs-12">
+                    <label>
+                        <p>渠道一级：</p>
+                        <select class="form-control">
+                            <option>学校录入</option>
+                            <option>合伙人</option>
+                            <option>呼叫中心</option>
+                            <option>基地录入</option>
+                        </select>
+                    </label>
+                </div>
+            </textarea>
+            <h4>文本框:</h4>
+            <p class="explain">
+                文本框可自己家行内样式调节宽度，需用百分比的宽度设置。
+            </p>
+            <div>
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>
+                                <p>备注：</p>
+                                <textarea class="form-control form-textarea"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h4>文本框代码:</h4>
+            <p class="explain">
+                    <span class="nt">&lt;textarea</span>
+                    <span class="na">class=</span>
+                    <span class="s">"form-control</span>
+                    <span class="na">form-textarea"</span>
+                    <span class="na">rows=</span>
+                    <span class="s">"3"</span>
+                    <span class="nt">&gt;&lt;/textarea&gt;</span>
+                </p>
+            <h3>1.2表单的设计规范</h3>
+            <p class="explain">表单设计高度为30px，字号为12px，表单名称的宽度为90px。</p>
+            <h3>1.3表单验证</h3>
+            <h4>表单验证效果：</h4>
+            <p class="explain">表单验证模板在 ： 品类管理——模态框中(module.html)，模式如下：</p>
+            <div>
+                <!--表单验证模板-->
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <input class="form-control" data-require value="" type="text" name="name"  data-valid="isNonEmpty||onlyZh||between:2-5" data-error="姓名不能为空||姓名只能为中文||姓名长度为2-5位">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <input class="form-control" data-require value="" type="text" name="hh"  data-valid="isEmail" data-error="2333">
+                        </div>
+                        </div>
+			        <div class="row">
+                        <div class="form-group col-xs-12">
+                            <span data-require data-valid="isChecked" data-error="性别必选">
+			                <label class="radio-inline"><input type="radio" name="sex">男</label>
+			                <label class="radio-inline"><input type="radio" name="sex">女</label>
+			                <label class="radio-inline"><input type="radio" name="sex">未知</label>
+			                </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <span data-require data-valid="isChecked" data-error="标签至少选择一项" >
+			                <label class="radio-inline"><input type="checkbox" name="label">红</label>
+			                <label class="radio-inline"><input type="checkbox" name="label">绿</label>
+			                <label class="radio-inline"><input type="checkbox" name="label">蓝</label>
+			                </span>
+			            </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <select class="form-control" data-require data-valid="isNonEmpty" data-error="省份必填">
+                                <option value="">请选择省份</option>
+                                <option value="001">001</option>
+                                <option value="002">002</option>
+                                <option value="003">003</option>
+                                <option value="004">004</option>
+                                <option value="005">005</option>
+                                <option value="006">006</option>
+                                <option value="007">007</option>
+                                <option value="008">008</option>
+                                <option value="009">009</option>
+                                <option value="010">010</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" onclick="ss()">提价</button>
+                </form>
+
+                <script type="text/javascript">
+                    function ss(){
+                        var d = $('form').formValidate({ });
+                        alert(d);
+                    }
+                </script>
+            </div>
+            <h4>表单验证代码：</h4>
+            <textarea cols="100" rows="20">
+                <!--表单验证模板-->
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <input class="form-control" data-require value="" type="text" name="name"  data-valid="isNonEmpty||onlyZh||between:2-5" data-error="姓名不能为空||姓名只能为中文||姓名长度为2-5位">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <input class="form-control" data-require value="" type="text" name="hh"  data-valid="isEmail" data-error="2333">
+                        </div>
+                    </div>
+                    <br/>
+			      <span data-require data-valid="isChecked" data-error="性别必选">
+			          <label><input type="radio" name="sex">男</label>
+			          <label><input type="radio" name="sex">女</label>
+			          <label><input type="radio" name="sex">未知</label>
+			      </span>
+                    <br/>
+			      <span data-require data-valid="isChecked" data-error="标签至少选择一项" >
+			          <label><input type="checkbox" name="label">红</label>
+			          <label><input type="checkbox" name="label">绿</label>
+			          <label><input type="checkbox" name="label">蓝</label>
+			      </span>
+                    <br/>
+                    <select data-require data-valid="isNonEmpty" data-error="省份必填">
+                        <option value="">请选择省份</option>
+                        <option value="001">001</option>
+                        <option value="002">002</option>
+                        <option value="003">003</option>
+                        <option value="004">004</option>
+                        <option value="005">005</option>
+                        <option value="006">006</option>
+                        <option value="007">007</option>
+                        <option value="008">008</option>
+                        <option value="009">009</option>
+                        <option value="010">010</option>
+                    </select>
+                    <br/>
+                    <button type="button" onclick="ss()">提价</button>
+                </form>
+
+                <script type="text/javascript">
+                    function ss(){
+                        var d = $('form').formValidate({ });
+                        alert(d);
+                    }
+                </script>
+            </textarea>
+        </div>
+        <header>2.关于字体的规范</header>
+        <div class="wrap-box">
+            <h3>2.1字号统一</h3>
+            <p class="explain">12号字体为基本字号。</p>
+        </div>
+        <header>3.关于表格的规范</header>
+        <div class="wrap-box">
+            <h3>3.1表格的使用</h3>
+            <p class="explain">1.表格主要使用的是<code>bootstrop</code>中的鼠标悬停加隔行变色表格。通过添加<code>.table-hover</code>类可以让<code><tbody></code>中的每一行对鼠标悬停状态作出响应。</p>
+            <p class="explain">表格中选中一行加高亮效果，给<code>tr</code>加一个类名为<code>info</code>,</p>
+            <div>
+                <div class="panel-content table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width:5%"><input type="checkbox"></th>
+                            <th style="width:10%">序号</th>
+                            <th class="text-l" style="width:10%">新闻标题</th>
+                            <th style="width:10%">性别</th>
+                            <th style="width:15%">联系方式</th>
+                            <th style="width:10%">渠道</th>
+                            <th style="width:15%">创建时间</th>
+                            <th style="width:20%">预约到校时间</th>
+                            <th style="width:15%">是否到校</th>
+                            <th style="width:15%">期望工种</th>
+                            <th style="width:20%">预约到校时间</th>
+                            <th style="width:15%">是否到校</th>
+                            <th style="width:15%">期望工种</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="info">
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <textarea cols="100" rows="20">
+                <div class="panel-content table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width:5%"><input type="checkbox"></th>
+                            <th style="width:10%">序号</th>
+                            <th class="text-l" style="width:10%">新闻标题</th>
+                            <th style="width:10%">性别</th>
+                            <th style="width:15%">联系方式</th>
+                            <th style="width:10%">渠道</th>
+                            <th style="width:15%">创建时间</th>
+                            <th style="width:20%">预约到校时间</th>
+                            <th style="width:15%">是否到校</th>
+                            <th style="width:15%">期望工种</th>
+                            <th style="width:20%">预约到校时间</th>
+                            <th style="width:15%">是否到校</th>
+                            <th style="width:15%">期望工种</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="info">
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td><p class="phone" data-state="show">152****7223</p><i class="glyphicon glyphicon-eye-open phone-show pl10"></i></td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td class="text-l">张三李四王五赵六哇哈哈</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td class="text-l">张三天阿卡会的话嘿嘿</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td class="text-l">张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </textarea>
+            <h3>3.2表格中的按钮使用</h3>
+            <h4>3.2.1超小按钮（建议使用）</h4>
+            <p>
+                <button type="button" class="btn btn-primary btn-xs">（超小尺寸）</button>
+            </p>
+            <textarea cols="100" rows="3">
+                <button type="button" class="btn btn-primary btn-xs">（超小尺寸）</button>
+            </textarea>
+        </div>
+        <header>4.关于按钮的规范</header>
+        <div class="wrap-box">
+            <h3>4.1按钮的使用位置</h3>
+            <h4>4.1.1小按钮（表单，右侧栏外侧整个页面默认使用）</h4>
+            <p>
+                <button class="xinzeng btn btn-sm btn-default" type="button" onclick="openModule('xinzeng.html')"><em class="add glyphicon glyphicon-plus-sign"></em>新增</button>
+            </p>
+            <textarea cols="100" rows="10">
+                <button class="xinzeng btn btn-sm btn-default" type="button" onclick="openModule('xinzeng.html')"><em class="add glyphicon glyphicon-plus-sign"></em>新增</button>            </p>
+            </textarea>
+            <h4>4.1.2小按钮（右侧栏使用）</h4>
+            <p>
+                <button type="button" class="btn btn-primary btn-sm">（小按钮）Small button</button>
+            </p>
+            <textarea cols="100" rows="3">
+                <button type="button" class="btn btn-primary btn-sm">（小按钮）Small button</button>
+            </textarea>
+            <h4>4.1.3超小按钮（表格中使用）</h4>
+            <p>
+                <button type="button" class="btn btn-primary btn-xs">（超小尺寸</button>
+            </p>
+            <textarea cols="100" rows="3">
+                <button type="button" class="btn btn-primary btn-xs">（超小尺寸</button>
+            </textarea>
+            <h4>4.1.4禁用按钮</h4>
+            <p>
+                <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Primary button</button>
+            </p>
+            <textarea cols="100" rows="5">
+                <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Primary button</button>
+            </textarea>
+            <h3>4.2关于按钮的放置规范</h3>
+            <p class="explain">
+                按钮在表单，右侧栏的位置一般位于右侧,表格之上的按钮如有两个按钮，分别在有右侧，如有一个按钮则规定在左侧。
+            </p>
+        </div>
+        <header>5.关于右侧栏的规范</header>
+        <div class="wrap-box">
+            <p class="explain">
+                右侧tab栏滑动，如果没有超出，js代码部分（/*原声JS写Tab栏滑动*/）改为<code>else if(target <= 0){target = 0;}</code>如果超出一个为80px,js代码为<code>else if(target <= -80){target = -80;}</code>两个为-160。（注：小屏最多显示四个，超出四个target就要有负值）
+            </p>
+            <div>
+            </div>
+        </div>
+        <header>6.关于弹框的规范</header>
+        <div class="wrap-box">
+            <p>弹框模板为module.html</p>
+        </div>
+        <header>7.关于分页的规范</header>
+        <div class="wrap-box">
+            <div><img src="../images/fenyejietu.png" alt=""/></div>
+            <textarea cols="100" rows="20">
+                <div class="pagination" id="pageInfoDivware"></div>
+                <script>
+                    /**
+                     * 分页跳转使用
+                     * @param num
+                     * @param count
+                     */
+                    function ware_topage(num,count) {
+                        if (null == num || "" == num || isNaN(parseInt(num))) {
+                            alert("请输入数字");
+                            return;
+                        }
+                        select_ware_prod(num,(count?count:15));
+                    }
+
+                    /*查询的js页面里使用*/
+                    $("#pageInfoDivware").pagination(data.page,ware_topage);
+
+                </script>
+            </textarea>
+        </div>
+        <header>8.关于滚动条使用的说明</header>
+        <div class="wrap-box">
+            <p class="explain">如果想给一个横向滚动条，则在外面套如下<code>div</code></p>
+            <textarea cols="100" rows="5">
+                <div class="panel-content table-responsive">
+                </div>
+            </textarea>
+            <p class="explain">横向纵向滚动条都有套如下div</p>
+            <textarea cols="100" rows="5">
+                <div class="table-scroll"></div>
+            </textarea>
+            <p class="explain">纵向滚动条套如下div</p>
+            <textarea cols="100" rows="5">
+                <div class="table-scroll-y"></div>
+            </textarea>
+        </div>
+        <header>9.关于样式类方便使用的说明</header>
+        <div class="wrap-box">
+            <p class="explain">
+                如需要加外边距或内边距，字体颜色，字体大小，背景颜色，浮动，对齐方式，边框可用以下 几种样式：
+            </p>
+            <textarea cols="100" rows="20">
+                .ofh{
+    overflow: hidden;
+}
+.fr{
+    float:right;
+}
+.fcb a{
+    color:#337ab7;
+}
+.blue{
+    color:#337ab7;
+}
+.red{
+    color:#ff0000;
+}
+.orange{
+    color:#ff7e00;
+}
+.green{
+    color:#008800;
+}
+.bggray{
+    background-color: #f4f4f4;
+}
+.font20{
+    font-size: 20px;
+}
+.font40{
+    font-size: 40px;
+}
+.text-l{
+    text-align: left;
+}
+.text-c{
+    text-align: center;
+}
+.text-r{
+    text-align: right;
+}
+.bor-l{
+    border-left:1px solid #ddd;
+}
+.bor-r{
+    border-right:1px solid #ddd;
+}
+.bor-b{
+    border-bottom:1px solid #ddd;
+}
+.bor-all{
+    border:1px solid #ddd;
+}
+.pl10{
+    padding-left:10px;
+}
+.pl20{
+    padding-left: 20px;
+}
+.pl40{
+    padding-left:40px;
+}
+.pl100{
+    padding-left:100px;
+}
+.pb10{
+    padding-bottom: 10px;
+}
+.mb10{
+    margin-bottom: 10px;
+}
+.mr20{
+    margin-right:20px;
+}
+            </textarea>
+        </div>
+    </section>
+</div>
+<!-- jQuery -->
+<script src="../js/jquery/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../js/bootstrap/bootstrap.min.js"></script>
+<!--表单验证框架-->
+<script src="../js/jquery-validate.js"></script>
+<!--分页-->
+<script src="../js/creat_page.js"></script>
+<!--表单日期插件-->
+<script src="../js/My97DatePicker/WdatePicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReProductDivideMapper">
+	 <select id="queryProductDivide" parameterType="com.emotte.order.order.model.ProductDivide" resultType="com.emotte.order.order.model.ProductDivide">
+		select 
+			t.product_dict_price_id as productDictPriceId,
+			t.service_info_scale as serviceInfoScale,
+			t.service_labour_scale as serviceLabourScale,
+			t.id as id,
+			t.divide_type as divideType,
+			t.customer_info_fee as customerInfoFee,
+			t.service_info_fee as serviceInfoFee,
+			t.service_labour_fee as serviceLabourFee,
+			t.is_employee as isEmployee,
+			t.cycle as cycle,
+			t.month as month,
+			t.is_default as isDefault,
+			t.flag as flag,
+			t.create_by as createBy,
+			t.update_by as updateBy,
+			to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+			to_char(t.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime,
+			t.valid as valid,
+			t.version as version
+	 		from t_product_divide t 
+		<where>
+			1 = 1 
+			<if test="productDictPriceId != null and productDictPriceId != ''">
+				and t.product_dict_price_id = #{productDictPriceId} 
+			</if>
+			<if test="serviceInfoScale != null and serviceInfoScale != ''">
+				and t.service_info_scale = #{serviceInfoScale} 
+			</if>
+			<if test="serviceLabourScale != null and serviceLabourScale != ''">
+				and t.service_labour_scale = #{serviceLabourScale} 
+			</if>
+			<if test="id != null and id != ''">
+				and t.id = #{id} 
+			</if>
+			<if test="divideType != null and divideType != ''">
+				and t.divide_type = #{divideType} 
+			</if>
+			<if test="customerInfoFee != null and customerInfoFee != ''">
+				and t.customer_info_fee = #{customerInfoFee} 
+			</if>
+			<if test="serviceInfoFee != null and serviceInfoFee != ''">
+				and t.service_info_fee = #{serviceInfoFee} 
+			</if>
+			<if test="serviceLabourFee != null and serviceLabourFee != ''">
+				and t.service_labour_fee = #{serviceLabourFee} 
+			</if>
+			<if test="isEmployee != null and isEmployee != ''">
+				and t.is_employee = #{isEmployee} 
+			</if>
+			<if test="cycle != null and cycle != ''">
+				and t.cycle = #{cycle} 
+			</if>
+			<if test="month != null and month != ''">
+				and t.month = #{month} 
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				and t.is_default = #{isDefault} 
+			</if>
+			<if test="flag != null and flag != ''">
+				and t.flag = #{flag} 
+			</if>
+			<!-- <if test="createBy != null and createBy != ''">
+				and t.create_by = #{createBy} 
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and t.update_by = #{updateBy} 
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and t.create_time = #{createTime} 
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and t.update_time = #{updateTime} 
+			</if> -->
+			<if test="valid != null and valid != ''">
+				and t.valid = #{valid} 
+			</if>
+			<if test="version != null and version != ''">
+				and t.version = #{version} 
+			</if>
+		</where>
+	</select>
+</mapper>

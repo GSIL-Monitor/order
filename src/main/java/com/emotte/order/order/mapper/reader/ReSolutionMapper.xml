@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReSolutionMapper">
+	<select id="loadSolution" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Solution">
+		select 
+			s.ID as "id" ,
+			(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = s.ORDER_SOURCE_ID
+			AND t.dict_code like '2018%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+			)	as "orderSourceId" ,			
+			s.MANAGER_ID as "managerId" ,	
+			s.SOLUTION_CODE as "solutionCode",	
+			s.SOLUTION_STATUS as "solutionStatus" ,			
+			s.TOTAL_PAY as "totalPay" ,			
+			s.PAYER_NAME as "payerName" ,			
+			s.PAYER_MOBILE as "payerMobile" ,			
+			s.CREATE_TIME as "createTime" ,			
+			s.CREATE_BY as "createBy" ,			
+			s.VERSION as "version" ,
+			(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = s.MCODE
+			AND t.dict_code like '2019%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+			)	as "mcode" 	, 
+			s.BLESSING as "blessing" , 
+			s.REMARK as "remark" , 
+			s.FEE_CARD_NUM as "feeCardNum",
+			s.pay_status as "payStatus",
+			s.active_money as "activeMoney",
+			
+		    orgma.REAL_NAME as "managerName",
+		    rech.NAME as "rechargeDeptName",
+		    rech.ID as "rechargeDept",
+	    	rechma.REAL_NAME as "rechargeByName",
+	    	rechma.ID as "rechargeBy",
+	    	rechma.phone as "rechManagerPhone",
+	    	foll.NAME as "followDeptName",
+	    	foll.ID as "followDept",
+	    	follma.REAL_NAME as "followByName",
+	    	follma.ID as "followBy",
+	      	follma.phone as "managerPhone",
+	    	o.follow_time as "followTime"
+	    	
+		FROM t_solution_cust_solution s
+	  	LEFT JOIN T_ORDER o ON o.ID=s.ID
+	  	LEFT JOIN T_AUTH_ORG org ON s.CID = org.id
+	  	LEFT JOIN T_AUTH_MANAGER orgma ON s.MANAGER_ID = orgma.ID
+	  	LEFT JOIN T_AUTH_ORG rech ON o.RECHARGE_DEPT=rech.ID
+	  	LEFT JOIN T_AUTH_MANAGER rechma ON o.RECHARGE_BY=rechma.ID
+	  	LEFT JOIN T_AUTH_MANAGER follma ON o.FOLLOW_BY=follma.ID
+	  	LEFT JOIN T_AUTH_ORG foll ON o.FOLLOW_DEPT=foll.ID
+		where
+			s.ID=#{id} 	</select>
+	
+	<select id="querySolutionItem"  parameterType="com.emotte.order.order.model.Solution" resultType="com.emotte.order.order.model.Solution">
+		select
+			 si.ID  as "itemId" ,			
+			 si.SOLUTION_CUST__SOLUTION_ID  as "solutionCust_solutionId" ,			
+			 si.QTY  as "qty" ,			
+			 si.FREQUENCY  as "frequency" ,			
+			 si.START_SERVICE_TIME as "startServiceTime" ,
+			 si.QTY_ONCE as "qtyOnce" ,
+			 pb.NAME as "proudctName",
+			 sp.qty_once as "surplusNum"
+       
+			 FROM  T_SOLUTION_CUST_SOLUTION_ITEM si 
+       		 LEFT JOIN  (SELECT SUM(pla.QTY_ONCE) as qty_once, pla.CUST_SOLUTION_ITEM_ID 
+	             FROM T_SOLUTION_CUST_SOLUTION_PLAN pla where pla.ORDER_ID IS NULL AND	pla.DEL_FLAG != 1 
+	             GROUP BY pla.CUST_SOLUTION_ITEM_ID) sp  on si.ID = sp.CUST_SOLUTION_ITEM_ID
+			 LEFT JOIN T_PRODUCT_CITY pc on pc.PRODUCT_CODE = si.PROUDCT_CODE
+			 LEFT JOIN T_PRODUCT p on p.ID = pc.PRODUCT_ID
+       		 LEFT JOIN T_PRODUCT_BASE pb on pb.ID = p.BASE_ID
+
+	<where> 
+	 	1 = 1
+	 	and pb.VALID = 1
+	 	and p.VALID = 1
+	 	and pc.VALID = 1
+				<if test="itemId!=null and itemId!='' ">           
+		and	si.ID =  #{itemId} 		</if>
+				<if test="solutionCust_solutionId!=null and solutionCust_solutionId!='' ">           
+		and	si.SOLUTION_CUST__SOLUTION_ID =  #{solutionCust_solutionId} 		</if>
+			</where>
+	order by si.CREATE_TIME desc 
+	</select>
+	
+	<select id="querySolutionPlanFee"  parameterType="com.emotte.order.order.model.Solution" resultType="java.math.BigDecimal">
+		select sum(nvl(scsp.qty_once, 0) * nvl(scsp.once_prirce, 0)) planFeeSum
+  		from t_solution_cust_solution_plan scsp
+	<where> 
+	 	1 = 1 and scsp.DEL_FLAG = #{delFlag} and scsp.order_id is null
+			<if test="id!=null and id!='' ">           
+		and	scsp.SOLUTION_CUST__SOLUTION_ID =  #{id} 		</if>
+			</where>
+	</select>
+	
+	<select id="querySolutionAgreement"  parameterType="com.emotte.order.order.model.Solution" resultType="com.emotte.order.order.model.Solution">
+		select
+			 sa.ID  as "agreementId" ,			
+			 sa.SOLUTION_ID  as "id" 			
+			 FROM  T_SOLUTION_AGREEMENT sa 
+	<where> 
+	 	1 = 1
+	 	and sa.VALID = 1 and sa.SOLUTION_ID =  #{id} 
+	 </where>
+	</select>
+
+	<!--根据用户手机号查询关联方案订单表-->
+	<select id="findSolutionByPhone" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT SOLUTION_CODE FROM T_SOLUTION_CUST_SOLUTION
+		<where>
+			PAYER_MOBILE = #{phoneNumber}
+		</where>
+	</select>
+</mapper>

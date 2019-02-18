@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAfterFeesMapper">
+
+	<insert id="insertAfterFees" parameterType="com.emotte.order.order.model.AfterFees">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		insert into t_order_after_fees ( 
+			ID ,		
+			TYPE ,		
+			PAYFEE_ID ,		
+			FEE_MONEY ,		
+			CREATE_BY ,		
+			UPDATE_BY ,		
+			CREATE_TIME ,		
+			UPDATE_TIME ,		
+			VALID ,		
+			VERSION ,
+			ORDER_ID,		
+			LOG ,		
+			STATUS 		
+		) values (
+			#{id} ,		
+			#{type} ,		
+			#{payfeeId} ,		
+			#{feeMoney} ,		
+			#{createBy} ,		
+			#{updateBy} ,		
+			sysdate,	
+			to_date(#{updateTime} ,'yyyy-mm-dd hh24:mi:ss'),		
+			1 ,		
+			1 ,
+			#{orderId} ,		
+			#{log}  ,		
+			#{status} 			
+		)
+	</insert>
+
+	<update id="updateAfterFees" parameterType="com.emotte.order.order.model.AfterFees">
+		update t_order_after_fees	
+		 <set>  
+		 		VERSION =  VERSION+1
+			<if test="type!=null and type!='' "> 
+				,TYPE =  #{type} 
+			</if>		
+			<if test="payfeeId!=null and payfeeId!='' "> 
+				,PAYFEE_ID =  #{payfeeId} 
+			</if>		
+			<if test="feeMoney!=null"> 
+				,FEE_MONEY =  #{feeMoney} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="updateBy!=null and updateBy!='' "> 
+				,UPDATE_BY =  #{updateBy} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="updateTime!=null and updateTime!='' "> 
+				,UPDATE_TIME =  to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>		
+			<if test="valid!=null and valid!='' "> 
+				,VALID =  #{valid} 
+			</if>		
+			<if test="log!=null and log!='' "> 
+				,LOG =  #{log} 
+			</if>		
+			<if test="status!=null and status!='' "> 
+				,STATUS =  #{status} 
+			</if>		
+       </set>
+		WHERE ID=#{id}
+	</update>
+	
+</mapper>

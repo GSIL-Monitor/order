@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReItemDetailFaMapper">
+	<select id="loadItemDetailFa" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.ItemDetailFa">
+		select 
+			id as id ,			
+			order_item_id as orderItemId ,			
+			pick_quantity as pickQuantity ,			
+			express_code as expressCode ,			
+			delivery_phone as deliveryPhone ,			
+			delivery_name as deliveryName ,			
+			delivery_time as deliveryTime ,			
+			recive_time as reciveTime ,			
+			create_by as createBy ,			
+			create_time as createTime ,			
+			update_by as updateBy ,			
+			update_time as updateTime ,			
+			version as version ,
+			product_inventory_id as "productInventoryId" ,			
+			remarks as remarks 			
+		from t_order_item_detail_fa
+		where
+			id=#{id} 	</select>
+	
+	<select id="queryItemDetailFa"  parameterType="com.emotte.order.order.model.ItemDetailFa" resultType="com.emotte.order.order.model.ItemDetailFa">
+	select
+			 id  as "id" ,			
+			 order_item_id  as "orderItemId" ,			
+			 pick_quantity  as "pickQuantity" ,			
+			 express_code  as "expressCode" ,			
+			 delivery_phone  as "deliveryPhone" ,			
+			 delivery_name  as "deliveryName" ,		
+			product_inventory_id as "productInventoryId" ,	
+			date_format(delivery_time,'%Y-%m-%d %H:%i')  as "deliveryTime" ,			
+			date_format(recive_time,'%Y-%m-%d %H:%i')  as "reciveTime" ,			
+			 create_by  as "createBy" ,			
+			date_format(create_time,'%Y-%m-%d %H:%i')  as "createTime" ,			
+			 update_by  as "updateBy" ,			
+			date_format(update_time,'%Y-%m-%d %H:%i')  as "updateTime" ,			
+			 version  as "version" ,			
+			 remarks  as "remarks" 			
+	from  t_order_item_detail_fa 
+	<where> 
+	 1 = 1
+				<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="orderItemId!=null and orderItemId!='' ">           
+		and	order_item_id =  #{orderItemId} 		</if>
+					<if test="productInventoryId!=null and productInventoryId!='' ">
+				and product_inventory_id = #{productInventoryId}
+			</if>
+				  <if test="pickQuantity!=null and pickQuantity!='' ">           
+		and	pick_quantity =  #{pickQuantity} 		</if>
+				  <if test="expressCode!=null and expressCode!='' ">           
+		and	express_code =  #{expressCode} 		</if>
+				  <if test="deliveryPhone!=null and deliveryPhone!='' ">           
+		and	delivery_phone =  #{deliveryPhone} 		</if>
+				  <if test="deliveryName!=null and deliveryName!='' ">           
+		and	delivery_name =  #{deliveryName} 		</if>
+				  <if test="deliveryTime!=null and deliveryTime!='' ">           
+		and	delivery_time = date_format(#{deliveryTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="reciveTime!=null and reciveTime!='' ">           
+		and	recive_time = date_format(#{reciveTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	create_by =  #{createBy} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	create_time = date_format(#{createTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	update_time = date_format(#{updateTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	version =  #{version} 		</if>
+				  <if test="remarks!=null and remarks!='' ">           
+		and	remarks =  #{remarks} 		</if>
+			</where>
+	order by id desc  <if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if>
+	</select>
+	<select id="countItemDetailFa"  parameterType="com.emotte.order.order.model.ItemDetailFa" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_order_item_detail_fa 
+		<where> 
+	         1 = 1
+					<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="orderItemId!=null and orderItemId!='' ">           
+		and	order_item_id =  #{orderItemId} 		</if>
+					<if test="productInventoryId!=null and productInventoryId!='' ">
+				and product_inventory_id = #{productInventoryId}
+			</if>
+				  <if test="pickQuantity!=null and pickQuantity!='' ">           
+		and	pick_quantity =  #{pickQuantity} 		</if>
+				  <if test="expressCode!=null and expressCode!='' ">           
+		and	express_code =  #{expressCode} 		</if>
+				  <if test="deliveryPhone!=null and deliveryPhone!='' ">           
+		and	delivery_phone =  #{deliveryPhone} 		</if>
+				  <if test="deliveryName!=null and deliveryName!='' ">           
+		and	delivery_name =  #{deliveryName} 		</if>
+				  <if test="deliveryTime!=null and deliveryTime!='' ">           
+		and	delivery_time = date_format(#{deliveryTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="reciveTime!=null and reciveTime!='' ">           
+		and	recive_time = date_format(#{reciveTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="createBy!=null and createBy!='' ">           
+		and	create_by =  #{createBy} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	create_time = date_format(#{createTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="updateBy!=null and updateBy!='' ">           
+		and	update_by =  #{updateBy} 		</if>
+				  <if test="updateTime!=null and updateTime!='' ">           
+		and	update_time = date_format(#{updateTime},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	version =  #{version} 		</if>
+				  <if test="remarks!=null and remarks!='' ">           
+		and	remarks =  #{remarks} 		</if>
+			</where>
+	</select>		
+	
+	<select id="queryItemQuery"  parameterType="com.emotte.order.order.model.ItemFaQuery" resultType="com.emotte.order.order.model.ItemFaQuery">
+	select * from (select rownum rn,t.* from (
+	select
+ o.order_code as "orderCode",o.receiver_name as "receiverName",o.receiver_mobile  as "receiverMobile" ,
+ o.user_mobile  as "userMobile",o.user_address as "userAddress" ,o.create_time  "createTime" ,
+ o.receipt_time  "recetptTime",item.product_name  as "productName",item.quantity  as "quantity",
+  item.product_spec  as "productSpec" ,  ch.name  as "orderChannel" ,org.name  as "name",
+(
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = o.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 )   as "orderSourceId",  o.remark  as "remark"
+   from t_order o left join t_order_item  item on  o.id=item.order_id 
+        left join t_auth_org org on o.order_groupid=org.id
+        left join t_custom_channel ch on o.order_channel=ch.id
+        	<where> 
+	 	1 = 1 
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	  o.order_code =  #{orderCode} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	   o.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	   o.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	   o.user_mobile =  #{userMobile} 			</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	   o.user_address =  #{userAddress} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	   to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTime} 	</if>
+				<if test="createTimeend!=null and createTimeend!='' ">           
+		and 	to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeend} 	</if>
+				<if test="recetptTime!=null and recetptTime!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTime} 	</if>
+				<if test="recetptTimeend!=null and recetptTimeend!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTimeend} 	</if>
+				  <if test="productName!=null and productName!='' ">           
+		and	  item.product_name =  #{productName} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and  o.order_channel	=#{orderChannel}	</if>
+					<if test="name!=null and name!='' ">           
+		and org.name=#{name}	</if>
+					<if test="orderSourceId!=null and orderSourceId!='' ">           
+		and o.order_source_id	=#{orderSourceId}	</if>
+					<if test="remark!=null and remark!='' ">           
+		and o.remark	=#{remark}	</if>
+        </where>	
+    <!--   order   by  o.create_time    desc -->
+        	) t
+	<if test="flagPage!=1">
+		where rownum&lt;=(#{pageSize}+#{beginRow})) where rn&gt;=#{beginRow}+1
+	</if>
+	<if test="flagPage==1">
+		)
+	</if>
+	</select>		
+	<select id="countOrder"  parameterType="com.emotte.order.order.model.ItemFaQuery" resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM t_order o
+		<where> 
+	 	1 = 1 
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	  o.order_code =  #{orderCode} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	   o.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	   o.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	   o.user_mobile =  #{userMobile} 			</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	   o.user_address =  #{userAddress} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	   to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTime} 	</if>
+				<if test="createTimeend!=null and createTimeend!='' ">           
+		and 	to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeend} 	</if>
+				<if test="recetptTime!=null and recetptTime!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTime} 	</if>
+				<if test="recetptTimeend!=null and recetptTimeend!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTimeend} 	</if>
+				  <if test="productName!=null and productName!='' ">           
+		and	  item.product_name =  #{productName} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and  o.order_channel	=#{orderChannel}	</if>
+					<if test="name!=null and name!='' ">           
+		and org.name=#{name}	</if>
+					<if test="orderSourceId!=null and orderSourceId!='' ">           
+		and o.order_source_id	=#{orderSourceId}	</if>
+					<if test="remark!=null and remark!='' ">           
+		and o.remark	=#{remark}	</if>
+        </where>	
+	</select>		
+	<select id="queryOrderList"  parameterType="com.emotte.order.order.model.ItemFaQuery" resultType="com.emotte.order.order.model.ItemFaQuery">
+	select
+ o.order_code as "orderCode",o.receiver_name as "receiverName",o.receiver_mobile  as "receiverMobile" ,
+ o.user_mobile  as "userMobile",o.user_address as "userAddress" ,o.create_time  "createTime" ,
+ o.receipt_time  "recetptTime",item.product_name  as "productName",item.quantity  as "quantity",
+  item.product_spec  as "productSpec" ,  ch.name  as "orderChannel" ,org.name  as "name",
+(
+				SELECT
+				t.dict_name
+				FROM
+				t_base_dictionary t
+				WHERE
+				t.dict_code = o.order_source_id
+				and length(t.dict_code)=8
+				AND t.valid = 1
+			 )   as "orderSourceId",  o.remark  as "remark"
+   from t_order o left join t_order_item  item on  o.id=item.order_id 
+        left join t_auth_org org on o.order_groupid=org.id
+        left join t_custom_channel ch on o.order_channel=ch.id
+        	<where> 
+	 	1 = 1 
+				  <if test="orderCode!=null and orderCode!='' ">           
+		and	  o.order_code =  #{orderCode} 		</if>
+				  <if test="receiverName!=null and receiverName!='' ">           
+		and	   o.receiver_name =  #{receiverName} 		</if>
+				  <if test="receiverMobile!=null and receiverMobile!='' ">           
+		and	   o.receiver_mobile =  #{receiverMobile} 		</if>
+				  <if test="userMobile!=null and userMobile!='' ">           
+		and	   o.user_mobile =  #{userMobile} 			</if>
+				  <if test="userAddress!=null and userAddress!='' ">           
+		and	   o.user_address =  #{userAddress} 		</if>
+				  <if test="createTime!=null and createTime!='' ">           
+		and	   to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTime} 	</if>
+				<if test="createTimeend!=null and createTimeend!='' ">           
+		and 	to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeend} 	</if>
+				<if test="recetptTime!=null and recetptTime!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTime} 	</if>
+				<if test="recetptTimeend!=null and recetptTimeend!='' ">           
+		and		to_char(o.receipt_time,'yyyy-mm-dd') &gt;= #{recetptTimeend} 	</if>
+				  <if test="productName!=null and productName!='' ">           
+		and	  item.product_name =  #{productName} 		</if>
+				  <if test="orderChannel!=null and orderChannel!='' ">           
+		and  o.order_channel	=#{orderChannel}	</if>
+					<if test="name!=null and name!='' ">           
+		and org.name=#{name}	</if>
+					<if test="orderSourceId!=null and orderSourceId!='' ">           
+		and o.order_source_id	=#{orderSourceId}	</if>
+					<if test="remark!=null and remark!='' ">           
+		and o.remark	=#{remark}	</if>
+        </where>	
+        order by o.create_time  desc
+	</select>		
+</mapper>

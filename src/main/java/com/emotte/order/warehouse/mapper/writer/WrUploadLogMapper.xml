@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.writer.WrUploadLogMapper">
+
+	<insert id="insertUploadLog" parameterType="com.emotte.order.warehouse.model.UploadLog">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT 
+            getseq()    
+            FROM dual 
+	 	</selectKey>
+		insert into t_warehouse_upload_log ( 
+			ID ,		
+			PACKAGE_ID ,		
+			STATE ,		
+			REASON ,		
+			CREATE_BY ,		
+			CREATE_TIME ,		
+			IS_OLD_DATA ,		
+			LOG 		
+		) values (
+			#{id} ,		
+			#{packageId} ,		
+			#{state} ,		
+			#{reason} ,		
+			#{createBy} ,		
+			to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			#{isOldData} ,		
+			#{log} 		
+		)
+	</insert>
+
+	<update id="updateUploadLog" parameterType="com.emotte.order.warehouse.model.UploadLog">
+		update t_warehouse_upload_log	
+		 <set>  
+			<if test="id!=null and id!='' "> 
+				ID =  #{id} 
+			</if>		
+			<if test="packageId!=null and packageId!='' "> 
+				,PACKAGE_ID =  #{packageId} 
+			</if>		
+			<if test="state!=null and state!='' "> 
+				,STATE =  #{state} 
+			</if>		
+			<if test="reason!=null and reason!='' "> 
+				,REASON =  #{reason} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  #{createTime} 
+			</if>		
+			<if test="isOldData!=null and isOldData!='' "> 
+				,IS_OLD_DATA =  #{isOldData} 
+			</if>		
+			<if test="log!=null and log!='' "> 
+				,LOG =  #{log} 
+			</if>		
+       </set>
+		where
+				
+	</update>
+	
+</mapper>

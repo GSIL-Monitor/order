@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReSerialMapper">
+	<select id="loadSerial" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Serial">
+		select
+			id as id ,
+			order_id as orderId ,
+			order_id_front as orderIdFront ,
+			order_id_after as orderIdAfter ,
+			create_time as createTime ,
+			update_time as updateTime ,
+			version as version
+		from t_order_serial
+		where
+		id=#{id} 
+	</select>
+
+	<select id="querySerial" parameterType="com.emotte.order.order.model.Serial"
+		resultType="com.emotte.order.order.model.Serial">
+		select
+			id as "id" ,
+			order_id as "orderId" ,
+			order_id_front as "orderIdFront" ,
+			order_id_after as "orderIdAfter" ,
+			to_char(create_time,'yyyy-MM-dd HH:mi:ss') as createTime,
+			to_char(update_time,'yyyy-MM-dd HH:mi:ss') as updateTime,
+			version as "version"
+		from t_order_serial
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="orderIdFront!=null and orderIdFront!='' ">
+				and order_id_front = #{orderIdFront}
+			</if>
+			<if test="orderIdAfter!=null and orderIdAfter!='' ">
+				and order_id_after = #{orderIdAfter}
+			</if>
+			<if test="createTime !=null and createTime !='' ">
+				and to_char(create_time,'yyyy-MM-dd') = to_char(to_date(#{createTime},'yyyy-MM-dd'),'yyyy-MM-dd') 		</if>
+			<if test="updateTime !=null and updateTime !='' ">
+				and to_char(update_time,'yyyy-MM-dd') = to_char(to_date(#{updateTime},'yyyy-MM-dd'),'yyyy-MM-dd') 		</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+		order by id desc
+		<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if>
+	</select>
+	<select id="countSerial" parameterType="com.emotte.order.order.model.Serial"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM t_order_serial
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="orderIdFront!=null and orderIdFront!='' ">
+				and order_id_front = #{orderIdFront}
+			</if>
+			<if test="orderIdAfter!=null and orderIdAfter!='' ">
+				and order_id_after = #{orderIdAfter}
+			</if>
+			<if test="createTime !=null and createTime !='' ">
+				and to_char(create_time,'yyyy-MM-dd') = to_char(to_date(#{createTime},'yyyy-MM-dd'),'yyyy-MM-dd') 		</if>
+			<if test="updateTime !=null and updateTime !='' ">
+				and to_char(update_time,'yyyy-MM-dd') = to_char(to_date(#{updateTime},'yyyy-MM-dd'),'yyyy-MM-dd') 		</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+	</select>
+	<select id="getOrderMinSerial" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Serial">
+		select
+			id as id ,
+			order_id as orderId ,
+			order_id_front as orderIdFront ,
+			order_id_after as orderIdAfter ,
+			create_time as createTime ,
+			update_time as updateTime ,
+			version as version
+		from t_order_serial where version = #{version} and rownum=1
+	</select>
+	<select id="querySerialFronts" 
+		resultType="java.lang.Long">
+		select distinct order_id_front as orderIdFront from
+		t_order_serial
+	</select>
+
+</mapper>

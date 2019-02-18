@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrThreeOrderItemDetailMapper">
+	<insert id="insertThreeOrderItemDetail" parameterType="com.emotte.order.order.model.ThreeOrderItemDetailServer">
+		insert into t_order_item_detail_server ( 
+			id ,			
+			item_id ,			
+			order_id ,			
+			education ,			
+			person_level ,				
+			min_age ,			
+			max_age ,
+			origin ,			
+			address ,
+			start_time ,			
+			end_time ,
+			interview_time ,
+			valid,	
+			home_forests,
+			familys ,
+			interview_address ,
+			server_type	,
+			remark ,
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version		
+		) values (
+			getseq() ,				
+			#{itemId} ,				
+			#{orderId} ,				
+			#{education} ,				
+			#{personLevel} ,						
+			#{minAge} ,				
+			#{maxAge} ,
+			#{origin} ,				
+			#{address} ,
+			to_date( #{startTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			to_date( #{interviewTime},'yyyy-mm-dd hh24:mi:ss') ,				
+			#{valid},
+			#{homeForests},
+			#{familys} ,
+			#{interviewAddress} ,
+			#{serverType} ,
+			#{remark} ,		
+			#{createBy} ,			
+			sysdate ,			
+			#{updateBy} ,			
+			sysdate ,			
+			#{version}		
+		)		
+	</insert>
+</mapper>

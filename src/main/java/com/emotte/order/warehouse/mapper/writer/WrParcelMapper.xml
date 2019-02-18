@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.writer.WrParcelMapper">
+
+	<insert id="insertParcel" parameterType="com.emotte.order.warehouse.model.Parcel">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT 
+            getseq()    
+            FROM dual 
+	 	</selectKey>
+		insert into t_warehouse_parcel ( 
+			ID ,		
+			WAREHOUSE_ID ,		
+			ORDER_ID ,		
+			DICTARY_CODE ,		
+			PACKAGE_NUMBER ,		
+			CREATE_BY ,		
+			CREATE_TIME ,		
+			UPDATE_BY ,		
+			UPDATE_TIME ,		
+			VERSION ,		
+			VALID ,		
+			STATE ,		
+			LOGISTICS_NUMBER ,		
+			IS_OLD_DATA ,		
+			LOG ,		
+			TYPE 		
+		) values (
+			#{id} ,		
+			#{warehouseId} ,		
+			#{orderId} ,		
+			#{dictaryCode} ,		
+			getseq()   ,	
+			#{createBy} ,		
+			to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') ,		
+			#{updateBy} ,
+			to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') ,			
+			#{version} ,		
+			#{valid} ,		
+			#{state} ,		
+			#{logisticsNumber} ,		
+			#{isOldData} ,		
+			#{log} ,		
+			#{type} 		
+		)
+	</insert>
+
+	<update id="updateParcel" parameterType="com.emotte.order.warehouse.model.Parcel">
+		update t_warehouse_parcel	
+		 <set>  
+			<if test="id!=null and id!='' "> 
+				ID =  #{id} 
+			</if>		
+			<if test="warehouseId!=null and warehouseId!='' "> 
+				,WAREHOUSE_ID =  #{warehouseId} 
+			</if>		
+			<if test="orderId!=null and orderId!='' "> 
+				,ORDER_ID =  #{orderId} 
+			</if>		
+			<if test="dictaryCode!=null and dictaryCode!='' "> 
+				,DICTARY_CODE =  #{dictaryCode} 
+			</if>		
+			<if test="packageNumber!=null and packageNumber!='' "> 
+				,PACKAGE_NUMBER =  #{packageNumber} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  #{createTime} 
+			</if>		
+			<if test="updateBy!=null and updateBy!='' "> 
+				,UPDATE_BY =  #{updateBy} 
+			</if>		
+			<if test="updateTime != null and updateTime != ''"> 
+				, update_time = to_date(#{updateTime}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="version!=null and version!='' "> 
+				,VERSION =  #{version} +1
+			</if>		
+			<if test="valid!=null and valid!='' "> 
+				,VALID =  #{valid} 
+			</if>		
+			<if test="state!=null and state!='' "> 
+				,STATE =  #{state} 
+			</if>		
+			<if test="logisticsNumber!=null and logisticsNumber!='' "> 
+				,LOGISTICS_NUMBER =  #{logisticsNumber} 
+			</if>		
+			<if test="isOldData!=null and isOldData!='' "> 
+				,IS_OLD_DATA =  #{isOldData} 
+			</if>		
+			<if test="log!=null and log!='' "> 
+				,LOG =  #{log} 
+			</if>		
+			<if test="type!=null and type!='' "> 
+				,TYPE =  #{type} 
+			</if>		
+       </set>
+		where ID =  #{id} 
+				
+	</update>
+	<update id="updateParcelLogistion" parameterType="com.emotte.order.warehouse.model.Parcel">
+		update T_WAREHOUSE_PARCEL	
+		 <set>  
+		 <if test="packageNumber!=null and packageNumber!='' "> 
+				PACKAGE_NUMBER =  #{packageNumber} 
+			</if>
+			<if test="dictaryCode!=null and dictaryCode!='' "> 
+				,DICTARY_CODE =  #{dictaryCode} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				, create_time = to_date(#{createTime}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="updateBy!=null and updateBy!='' "> 
+				,UPDATE_BY =  #{updateBy} 
+			</if>		
+			<if test="updateTime!=null and updateTime!='' "> 
+					, update_time = to_date(#{updateTime}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="version!=null and version!='' "> 
+				,VERSION =  #{version} +1
+			</if>		
+			<if test="valid!=null and valid!='' "> 
+				,VALID =  #{valid} 
+			</if>		
+			<if test="state!=null and state!='' "> 
+				,STATE =  #{state} 
+			</if>		
+			<if test="logisticsNumber!=null and logisticsNumber!='' "> 
+				,LOGISTICS_NUMBER =  #{logisticsNumber} 
+			</if>		
+       </set>
+       where
+			PACKAGE_NUMBER=#{packageNumber}
+				
+	</update>
+</mapper>

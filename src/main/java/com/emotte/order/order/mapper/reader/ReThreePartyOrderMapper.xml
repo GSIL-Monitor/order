@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreePartyOrderMapper">
+
+
+	<!--查询三方订单（对内）  -->
+	<select id="queryPartyOrder" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		select * from (select rownum rn,t.* from (
+			SELECT 
+        o.ID,
+        o.order_code orderCode,
+        o.cate_type cateType,
+        i.product_name productName,
+        o.br.name brandName,
+        o.user_id userId,
+        o.user_name userName,
+        o.user_mobile userMobile,
+        ca.cname typeText,
+        o.order_status orderStatus,
+        o.city city,
+        o.receiver_province receiverProvince,
+        o.receiver_city receiverCity,
+        o.total_pay totalPay,
+        o.pay_status payStatus,
+        ao.name,
+        (select m.real_name from t_auth_manager m where m.id=o.create_by and m.valid=1 and m.state=1) as realName,
+        <!-- (select mm.real_name from t_auth_manager mm where mm.id=o.follow_by and mm.valid=1 and mm.state=1) as followByName, -->
+        (select mmm.real_name from t_auth_manager mmm where mmm.id=o.recharge_by and mmm.valid=1 and mmm.state=1) as rechargeByName,
+        <!-- (select aoo.name from t_auth_org aoo where aoo.id=o.follow_dept and aoo.valid=1 and  aoo.status=1  ) as followDeptName, -->
+        (select aooo.name from t_auth_org aooo where aooo.id=o.recharge_dept and aooo.valid=1 and aooo.status=1    ) as rechargeDeptName,
+        TO_CHAR(o.follow_time, 'yyyy-MM-dd HH:mi:ss') followTime, 
+        (
+          SELECT T.dict_name FROM t_base_dictionary T 
+          WHERE T.dict_code = o.order_source_id AND T.valid = 1
+        ) AS sourceText,
+        (
+          select   ch.name  from      t_custom_channel ch    where   o.order_channel=ch.id
+          AND ch.valid=1
+        ) AS channelText,
+        TO_CHAR(o.create_time, 'yyyy-MM-dd HH:mi:ss') createTime
+      FROM 
+        T_ORDER o
+        LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = o.ID
+        LEFT JOIN (
+          SELECT tpc.product_code, tpc.product_id 
+          FROM T_PRODUCT_CITY tpc 
+          WHERE tpc.valid = 1
+          GROUP BY tpc.product_code, tpc.product_id
+        ) v ON v.product_code = i.product_code
+        LEFT JOIN T_PRODUCT p ON p.id = v.product_id
+        LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+        LEFT JOIN T_PRODUCT_BRAND br ON br.id = b.brand_id
+        LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = o.order_type
+        LEFT JOIN  t_auth_org ao   ON   ao.id = o.create_dept
+                     		 and ao.valid = 1     and ao.status = 1 
+      <where>  
+      			 o.cate_type = '4'   and  o.create_time &lt;=sysdate
+				<if test="id!=null and id!='' ">
+					and o.id = #{id}
+				</if>
+				<if test="orderCode!=null and orderCode!='' ">
+					and o.order_code = #{orderCode} 
+				</if>
+				<if test="userName!=null and userName!='' ">
+					and o.user_name like '%'||#{userName}||'%'
+				</if>
+				<if test="createTimeStart!=null and createTimeStart!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeStart}
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+				</if>
+				<if test="userMobile!=null and userMobile!='' ">
+					and o.user_mobile like '%'||#{userMobile}||'%'
+				</if>
+				<if test="orderType!=null and orderType!='' ">
+					and o.order_type = #{orderType}
+				</if>
+				<if test="orderStatus!=null and orderStatus!='' ">
+					and o.order_status = #{orderStatus}
+				</if>
+				<if test="orderSourceId!=null and orderSourceId!='' ">
+					and o.order_source_id = #{orderSourceId}
+				</if>
+				<if test="orderChannel!=null and orderChannel!='' ">
+					and o.order_channel = #{orderChannel}
+				</if>
+				<if test="provinceCode!=null and provinceCode!='' ">
+					and o.user_city_code in (
+						SELECT tbc.code
+						FROM t_base_city tbc
+						WHERE tbc.code LIKE #{provinceCode}||'%'
+						AND LENGTH (tbc.code) = 9
+					)
+				</if>
+				<if test="cityCode!=null and cityCode!='' ">
+					and o.user_city_code = #{cityCode}
+				</if>
+				<if test="rechargeDeptName!=null and rechargeDeptName!='' ">
+					and ao.name = #{rechargeDeptName}
+				</if>
+			</where>
+			order by o.create_time desc nulls last, o.update_time desc nulls last) t
+		)
+		<if test="flagPage!=1"> 
+			where rn&gt;=#{beginRow}+1 and rn&lt;=(#{pageSize}+#{beginRow})  
+		</if>
+	</select>
+	<!--查询一条三方订单（对内）  -->
+	<select id="loadPartyOrderId" parameterType="com.emotte.order.order.model.ThreeOrder" 
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		SELECT DISTINCT
+			od. ID AS id,
+			od.order_code AS orderCode,
+			i.product_name productName,
+			it. ID AS code,
+			it. VERSION AS version,
+			ca.cname typeText,
+			TO_CHAR (it.start_time, 'yyyy-mm-dd HH:mi:ss') AS startTime,
+			TO_CHAR (it.end_time, 'yyyy-mm-dd HH:mi:ss') AS endTime,
+			TO_CHAR (it.interview_time,'yyyy-mm-dd HH:mi:ss') AS interviewTime,
+			od.critical AS critical,
+			od.order_source_id AS orderSourceId,
+			(
+				SELECT T.dict_name FROM t_base_dictionary T 
+				WHERE T.dict_code = od.order_source_id AND T.valid = 1
+			) AS sourceText,
+			od.orderStatus,
+			od.remark AS remark,
+			it.address AS address,
+			it.interview_address AS interviewAddress,
+			it.min_age AS minAge,
+			it.max_age AS maxAge,
+			it.origin AS origin,
+			it.home_forests AS homeForests,
+			it.familys AS familys,
+			it.person_level AS personLevel,
+			it.education AS education,
+			od.user_id AS userId,
+			od.user_name AS userName,
+			od.user_mobile AS userMobile,
+			od.user_birth AS birth,
+			od.user_sex AS sex,
+			od.user_address AS userAddress,
+			od.receiver_province receiverProvince,
+			od.receiver_city receiverCity,
+			od.receiver_area receiverArea,
+			od.receiver_address receiverAddress,
+			am.real_name authManagerRealName,
+			am.phone authManagerPhone
+		FROM T_ORDER od
+		LEFT JOIN T_AUTH_MANAGER am ON AM.ID = OD.AUTH_MANAGER_ID
+		LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER it ON od. ID = it.order_id
+		LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = od.ID
+		LEFT JOIN T_PRODUCT_CITY c ON c.product_code = i.product_code
+		LEFT JOIN T_PRODUCT p ON p.id = c.product_id
+		LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+		LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = b.category_code
+		where
+			od.ID = #{id} 
+		ORDER BY
+			it.ID DESC
+	</select>
+	<!--查询三方订单条数  -->
+	
+	<select id="countPartyOrder" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="java.lang.Integer">
+		SELECT count(0) FROM t_order o
+		   LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = o.ID
+        LEFT JOIN (
+          SELECT tpc.product_code, tpc.product_id 
+          FROM T_PRODUCT_CITY tpc 
+          WHERE tpc.valid = 1
+          GROUP BY tpc.product_code, tpc.product_id
+        ) v ON v.product_code = i.product_code
+        LEFT JOIN T_PRODUCT p ON p.id = v.product_id
+        LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+        LEFT JOIN T_PRODUCT_BRAND br ON br.id = b.brand_id
+        LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = o.order_type
+        left join t_auth_manager tam on tam.id = o.create_by
+        left join t_auth_org ao on ao.id = o.recharge_dept      and ao.valid = 1     and ao.status = 1 
+        left join t_auth_org tao on tao.id = o.follow_dept    
+      <where>  
+      				 o.cate_type = '4' 
+				<if test="id!=null and id!='' ">
+					and o.id = #{id}
+				</if>
+				<if test="orderCode!=null and orderCode!='' ">
+					and o.order_code like '%'||#{orderCode}||'%'
+				</if>
+				<if test="userName!=null and userName!='' ">
+					and o.user_name like '%'||#{userName}||'%'
+				</if>
+				<if test="createTimeStart!=null and createTimeStart!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &gt;= #{createTimeStart}
+				</if>
+				<if test="createTimeEnd!=null and createTimeEnd!='' ">
+					and to_char(o.create_time,'yyyy-mm-dd') &lt;= #{createTimeEnd}
+				</if>
+				<if test="userMobile!=null and userMobile!='' ">
+					and o.user_mobile like '%'||#{userMobile}||'%'
+				</if>
+				<if test="orderType!=null and orderType!='' ">
+					and o.order_type = #{orderType}
+				</if>
+				<if test="orderStatus!=null and orderStatus!='' ">
+					and o.order_status = #{orderStatus}
+				</if>
+				<if test="orderSourceId!=null and orderSourceId!='' ">
+					and o.order_source_id = #{orderSourceId}
+				</if>
+				<if test="orderChannel!=null and orderChannel!='' ">
+					and o.order_channel = #{orderChannel}
+				</if>
+				<if test="provinceCode!=null and provinceCode!='' ">
+					and o.user_city_code in (
+						SELECT tbc.code
+						FROM t_base_city tbc
+						WHERE tbc.code LIKE #{provinceCode}||'%'
+						AND LENGTH (tbc.code) = 9
+					)
+				</if>
+				<if test="cityCode!=null and cityCode!='' ">
+					and o.user_city_code = #{cityCode}
+				</if>
+				<if test="rechargeDeptName!=null and rechargeDeptName!='' ">
+					and ao.name = #{rechargeDeptName}
+				</if>
+		</where>
+	</select>
+	<!--查询一条三方订单（对内）  负责部门-->
+	<select id="queryPartyOrderDeptName" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+	<!-- select
+		DISTINCT
+			 ao.id,ao.name as "rechargeDept",
+       ao.code as "code"
+	from t_order od
+  	LEFT JOIN t_auth_org ao ON ao.id = od.recharge_dept
+    where 
+    od.cate_type='4' and ao.valid = 1 and ao.status=1 and length(code)= 12 -->
+     select DISTINCT  ao.name as "rechargeDept" from t_auth_org ao where ao.type='99' and ao.valid=1 and   ao.status=1
+	</select>
+		<select id="queryPartyOrderList" parameterType="com.emotte.order.order.model.ThreeOrder"
+		resultType="com.emotte.order.order.model.ThreeOrder">
+		SELECT
+		o.ID "ID",
+		o.city,
+		o.ORDER_CODE "orderCode",
+		i.product_name productName,
+		user_name userName,
+		user_mobile userMobile,
+		o.RECEIVER_NAME "receiverName",
+		o.RECEIVER_MOBILE "receiverMobile",
+		ca.cname typeText,
+		o.CATE_TYPE cateType,
+		o.ORDER_TYPE "orderType",
+		o.RECEIVER_PROVINCE "receiverProvince",
+		o.RECEIVER_CITY "receiverCity",
+		o.RECEIVER_AREA "receiverArea",
+		o.RECEIVER_ADDRESS "receiverAddress",
+		ODD.START_TIME "startTime",
+		ODD.END_TIME "endTime",
+		to_char(o.CREATE_TIME,'yyyy-MM-dd hh24:mi:ss') as "createTime",
+		ODD.PERSON_NAME "personName",
+		ODD.POST_ID "postId",
+		o.TOTAL_PAY "totalPay",
+		 ao.name as rechargeByName,
+		(
+			case ORDER_STATUS
+			when '1' then '新单'
+			when '2' then '已受理'
+			WHEN '18' THEN '待受理'
+			when '4' then '已匹配'
+			when '9' then '已完成'
+			when '10' then '已取消'
+			end
+		)AS "orderStatus",
+		o.REMARK "remark"
+		FROM T_ORDER o
+		LEFT JOIN T_ORDER_ITEM odi ON ODI.ORDER_ID = o.ID
+		LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER odd ON odd.item_id = odi.id
+		LEFT JOIN T_ORDER_ITEM i ON i.ORDER_ID = o.ID
+		LEFT JOIN (
+			SELECT tpc.product_code, tpc.product_id 
+			FROM T_PRODUCT_CITY tpc 
+			WHERE tpc.valid = 1
+			GROUP BY tpc.product_code, tpc.product_id
+		) v ON v.product_code = i.product_code
+		LEFT JOIN T_PRODUCT p ON p.id = v.product_id
+		LEFT JOIN T_PRODUCT_BASE b ON b.id = p.base_id
+		LEFT JOIN T_PRODUCT_CATEGORY ca ON ca.code = b.category_code
+		left join t_auth_org ao on ao.id = o.recharge_dept    and ao.valid=1  and ao.status=1
+		<where>
+				 o.cate_type = '4' 
+			<if test="id!=null and id!='' ">
+				and o.id = #{id}
+			</if>
+			<if test="orderCode!=null and orderCode!='' ">
+				and o.order_code like '%'||#{orderCode}||'%'
+			</if>
+			<if test="userName!=null and userName!='' ">
+				and o.user_name like '%'||#{userName}||'%'
+			</if>
+			<if test="startTime!=null and startTime!='' ">
+				and to_char(o.create_time,'yyyy-mm-dd') &gt;=
+				#{startTime}
+			</if>
+			<if test="endTime!=null and endTime!='' ">
+				and to_char(o.create_time,'yyyy-mm-dd') &lt;=
+				#{endTime}
+			</if>
+			<if test="userMobile!=null and userMobile!='' ">
+				and o.user_mobile like '%'||#{userMobile}||'%'
+			</if>
+			<if test="orderType!=null and orderType!='' ">
+				and o.order_type = #{orderType}
+			</if>
+			<if test="orderStatus!=null and orderStatus!='' ">
+				and o.order_status = #{orderStatus}
+			</if>
+			<if test="orderSourceId!=null and orderSourceId!='' ">
+				and o.order_source_id = #{orderSourceId}
+			</if>
+			<if test="orderChannel!=null and orderChannel!='' ">
+				and o.order_channel = #{orderChannel}
+			</if>
+			<if test="provinceCode!=null and provinceCode!='' ">
+					and o.user_city_code in (
+						SELECT tbc.code
+						FROM t_base_city tbc
+						WHERE tbc.code LIKE #{provinceCode}||'%'
+						AND LENGTH (tbc.code) = 9
+					)
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and o.user_city_code = #{cityCode}
+			</if>
+			<if test="rechargeDeptName!=null and rechargeDeptName!='' ">
+					and ao.name = #{rechargeDeptName}
+				</if>
+		</where>
+		order by o.create_time desc
+	</select>
+	
+</mapper>

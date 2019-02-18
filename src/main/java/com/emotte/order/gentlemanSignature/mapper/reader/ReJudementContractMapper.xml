@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.gentlemanSignature.mapper.reader.ReJudementContractMapper">
+
+  <select id="judementContract"  parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+	SELECT
+			OA.ID AS id ,	
+			OA.AGREEMENT_CODE AS agreementCode,
+			OA.AGREEMENT_MODEL AS agreementModel,
+			OA.ELEC_CLIENT_STATE AS elecClientState,
+			OA.ELEC_SERVE_STATE AS elecServeState,
+			OA.ELEC_OTHER_STATE AS elecOtherState,
+			OA.AGREEMENT_STATE AS agreementState,
+			OA.VALID AS valid,
+			OA.NORMAL_CONTACT_FILE AS normalContactFile		
+	FROM  T_ORDER_AGREEMENT OA
+	<where> 
+	    1=1
+		<if test="id!=null and id!='' ">           
+			AND	OA.ID =  #{id} 		
+		</if>	
+		<if test="cardNum!=null and cardNum!='' ">           
+			AND	OA.cardNum =  #{cardNum} 		
+		</if>
+	</where>
+	ORDER BY OA.CREATE_TIME DESC
+	</select>
+	
+	<select id="queryContract"  parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+				OA.ID AS id,
+				OA.AGREEMENT_CODE AS agreementCode,
+				OA.ELEC_CLIENT_STATE AS elecClientState,
+				OA.ELEC_SERVE_STATE AS elecServeState,
+				OA.ELEC_OTHER_STATE AS elecOtherState,
+				OA.AGREEMENT_STATE AS agreementState,
+				OA.VALID AS valid,
+				OA.NORMAL_CONTACT_FILE AS normalContactFile		
+		FROM  T_ORDER_AGREEMENT OA
+		<where> 
+		    1=1
+			<if test="id!=null and id!='' ">           
+				AND	OA.ID = #{id}  		
+			</if>	
+			<if test="elecServeState !=null and elecClientState!='' ">           
+				AND	OA.ELEC_CLIENT_STATE =  #{elecClientState}  		
+			</if>
+			<if test="elecServeState !=null and elecServeState !='' ">           
+				AND	OA.ELEC_SERVE_STATE =  #{elecClientState}  		
+			</if>
+		</where>
+		</select>
+</mapper>

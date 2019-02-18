@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.authmaner.mapper.writer.WrManagerMapper">
+	<sql id="colunms">
+		ID ,
+		USER_NAME ,
+		PASSWORD ,
+		REAL_NAME ,
+		LOGIN_COUNT ,
+		LAST_LOGIN_TIME ,
+		LAST_LOGIN_IP ,
+		STATE ,
+		DEPT_ID ,
+		PHONE ,
+		MANAGER_TYPE ,
+		STYLE_COLOR ,
+		REMARK ,
+		CREATE_BY ,
+		CREATE_TIME ,
+		PERMISSION_LEVEL ,
+		UPDATE_TIME ,
+		UPDATE_BY ,
+		VERSION ,
+		VALID ,
+		POST ,
+		WITH_USER ,
+		JOB_NUMBER ,
+		IS_OLD_DATA ,
+		LOG 
+	</sql>
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.emotte.order.authmaner.model.Manager">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq()	FROM dual
+		</selectKey>
+		insert into t_auth_manager (
+			<include refid="colunms" />
+		) values (
+			#{id} ,
+			#{userName} ,
+			#{password} ,
+			#{realName} ,
+			#{loginCount} ,
+			#{lastLoginTime} ,
+			#{lastLoginIp} ,
+			#{state} ,
+			#{deptId} ,
+			#{phone} ,
+			#{managerType} ,
+			#{styleColor} ,
+			#{remark} ,
+			#{createBy} ,
+			#{createTime} ,
+			#{permissionLevel} ,
+			#{updateTime} ,
+			#{updateBy} ,
+			#{version} ,
+			#{valid} ,
+			#{post} ,
+			#{withUser} ,
+			#{jobNumber} ,
+			#{isOldData} ,
+			#{log} 
+		)
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="com.emotte.order.authmaner.model.Manager">
+		update t_auth_manager	
+		<set>  
+			<if test="id != null and id != ''">
+				ID = #{id}
+			</if>
+			<if test="userName != null and userName != ''">
+				,USER_NAME = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD = #{password}
+			</if>
+			<if test="realName != null and realName != ''">
+				,REAL_NAME = #{realName}
+			</if>
+			<if test="loginCount != null and loginCount != ''">
+				,LOGIN_COUNT = #{loginCount}
+			</if>
+			<if test="lastLoginTime != null and lastLoginTime != ''">
+				,LAST_LOGIN_TIME = #{lastLoginTime}
+			</if>
+			<if test="lastLoginIp != null and lastLoginIp != ''">
+				,LAST_LOGIN_IP = #{lastLoginIp}
+			</if>
+			<if test="state != null and state != ''">
+				,STATE = #{state}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				,DEPT_ID = #{deptId}
+			</if>
+			<if test="phone != null and phone != ''">
+				,PHONE = #{phone}
+			</if>
+			<if test="managerType != null and managerType != ''">
+				,MANAGER_TYPE = #{managerType}
+			</if>
+			<if test="styleColor != null and styleColor != ''">
+				,STYLE_COLOR = #{styleColor}
+			</if>
+			<if test="remark != null and remark != ''">
+				,REMARK = #{remark}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				,CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				,CREATE_TIME = #{createTime}
+			</if>
+			<if test="permissionLevel != null and permissionLevel != ''">
+				,PERMISSION_LEVEL = #{permissionLevel}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				,UPDATE_TIME = #{updateTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,UPDATE_BY = #{updateBy}
+			</if>
+			<if test="version != null and version != ''">
+				,VERSION = #{version}
+			</if>
+			<if test="valid != null and valid != ''">
+				,VALID = #{valid}
+			</if>
+			<if test="post != null and post != ''">
+				,POST = #{post}
+			</if>
+			<if test="withUser != null and withUser != ''">
+				,WITH_USER = #{withUser}
+			</if>
+			<if test="jobNumber != null and jobNumber != ''">
+				,JOB_NUMBER = #{jobNumber}
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				,IS_OLD_DATA = #{isOldData}
+			</if>
+			<if test="log != null and log != ''">
+				,LOG = #{log}
+			</if>
+		</set>
+		where 
+			 ID = #{id}
+	</update>
+	
+	<!-- 批量插入 -->
+	<insert id="multiInsert">
+		insert into t_auth_manager ( 
+			<include refid="colunms" />
+		) 
+		<foreach collection="list" item="item" open="(" close=")" separator="union all">
+			select
+				 #{id}
+				, #{userName}
+				, #{password}
+				, #{realName}
+				, #{loginCount}
+				, #{lastLoginTime}
+				, #{lastLoginIp}
+				, #{state}
+				, #{deptId}
+				, #{phone}
+				, #{managerType}
+				, #{styleColor}
+				, #{remark}
+				, #{createBy}
+				, #{createTime}
+				, #{permissionLevel}
+				, #{updateTime}
+				, #{updateBy}
+				, #{version}
+				, #{valid}
+				, #{post}
+				, #{withUser}
+				, #{jobNumber}
+				, #{isOldData}
+				, #{log}
+			from dual
+		</foreach>
+	</insert>
+	
+	<!-- 删除模板 -->
+	<delete id="multiDelete">
+		delete from t_auth_manager where id in 
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			#{id:NUMERIC}
+		</foreach>
+	</delete>
+</mapper>

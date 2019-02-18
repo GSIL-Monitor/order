@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReSliceMapper">
+	<select id="loadSlice" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Slice">
+		select 
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			IS_OTHER as isOther ,		
+			PERSON_ID as personId ,		
+			CREATE_TIME as createTime ,		
+			CREATE_BY as createBy ,		
+			DIVIDE_ID as divideId,
+			IS_DEFAULT as isDefault 		
+		from T_ORDER_SLICE
+		where
+	</select>
+	
+	<select id="querySlice"  parameterType="com.emotte.order.order.model.Slice" resultType="com.emotte.order.order.model.Slice">
+	select
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			IS_OTHER as isOther ,		
+			PERSON_ID as personId ,		
+			CREATE_TIME as createTime ,		
+			CREATE_BY as createBy ,		
+			DIVIDE_ID as divideId ,
+			IS_DEFAULT as isDefault 		
+	from  T_ORDER_SLICE
+	<where> 
+	 1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="isOther!=null and isOther!='' ">           
+			and	IS_OTHER =  #{isOther} 		
+		</if>	
+		<if test="personId!=null and personId!='' ">           
+			and	PERSON_ID =  #{personId} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="divideId!=null and divideId!='' ">           
+			and	DIVIDE_ID =  #{divideId} 		
+		</if>	
+	</where>
+	order by  desc
+	</select>
+	
+	
+	<select id="countSlice"  parameterType="com.emotte.order.order.model.Slice" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM T_ORDER_SLICE
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="isOther!=null and isOther!='' ">           
+			and	IS_OTHER =  #{isOther} 		
+		</if>	
+		<if test="personId!=null and personId!='' ">           
+			and	PERSON_ID =  #{personId} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="divideId!=null and divideId!='' ">           
+			and	DIVIDE_ID =  #{divideId} 		
+		</if>	
+			</where>
+	</select>
+	<select id="queryOtherDetail" >
+	select divide.id
+		 from 
+		 t_city_product_dict_price dict,
+		 T_PRODUCT_THIRD_DIVIDE divide
+	<where>
+		and dict.product_code=#{0}
+			and dict.dict_code=#{1}
+			and dict.valid=1
+			and divide.flag=2
+			and divide.valid=1
+	</where>
+	</select>
+	<select id="querySplitDetail" resultType="java.util.Map">
+		select divide.id,divide.is_default from 
+			t_city_product_dict_price dict,
+			t_product_divide divide 
+			<where>
+			 dict.id = divide.product_dict_price_id
+			and dict.product_code=#{0}
+			and dict.dict_code=#{1}
+			and dict.valid=1
+			and divide.is_employee=#{3}
+			</where>
+	</select>
+	
+	<select id="queryDefaultDetail" resultType="java.util.Map">
+		select divide.id from 
+			t_city_product_dict_price dict,
+			t_product_divide divide 
+			<where>
+			 dict.id = divide.product_dict_price_id
+			and dict.product_code=#{0}
+			and dict.dict_code=#{1}
+			and dict.valid=1
+			and divide.IS_DEFAULT=1
+			and divide.is_employee=#{2}
+			</where>
+	</select>
+	
+</mapper>

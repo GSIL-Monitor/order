@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAfterSalesMapper">
+
+	<insert id="insertAfterSales" parameterType="com.emotte.order.order.model.AfterSalesNew">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		insert into t_order_after_sales ( 
+			ID ,		
+			ORDER_ID ,		
+			ORDER_TYPE ,		
+			CREATE_BY ,		
+			UPDATE_BY ,		
+			UPDATE_TIME ,		
+			VERSION ,		
+			AFTER_SALES_KIND ,		
+			CUST_MOBILE ,		
+			CUST_NAME ,		
+			AUDIT_FLAG ,		
+			REASON ,		
+			AFTER_SALES_IMGS ,		
+			CREATE_TIME ,		
+			SERVER_TIME ,		
+			REFUND_TOTAL ,		
+			BANK_CARD ,		
+			BANK_NAME ,		
+			BANK_USER_NAME ,		
+			BANK_SUPPORT_ID ,		
+			BANK_CITY_CODE ,		
+			IS_OLD_DATA ,		
+			REMARK ,		
+			BANK_MAIN_NAME ,		
+			LOG ,		
+			ACCOUNT_PAY_ID ,		
+			VALID ,		
+			APPROVE_BY ,		
+			APPROVE_DEPT ,		
+			REFUND_MEMBERSHIP_FEE ,		
+			REFUND_SALARY_FEE ,		
+			CREATE_DEPT ,		
+			IS_AT ,		
+			VPH_ACCOUNT_ID ,		
+			VPH_FEE ,		
+			VPH_CANCLE_STATUS ,		
+			VPH_BACK_STATUS ,		
+			MOVE_TO_ORDER_ID ,		
+			MOVE_ORDER_BUS_FLAG ,		
+			IS_STOP ,		
+			REFUND_OBJECT ,		
+			REASON_FLAG ,		
+			FEE_ACCOUNT_ID 		
+		) values (
+			#{id} ,		
+			#{orderId} ,		
+			#{orderType} ,		
+			#{createBy} ,		
+			#{updateBy} ,		
+			to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),		
+			1,		
+			#{afterSalesKind} ,		
+			#{custMobile} ,		
+			#{custName} ,		
+			#{auditFlag} ,		
+			#{reason} ,		
+			#{afterSalesImgs} ,		
+			SYSDATE,		
+			SYSDATE,		
+			#{refundTotal} ,		
+			#{bankCard} ,		
+			#{bankName} ,		
+			#{bankUserName} ,		
+			#{bankSupportId} ,		
+			#{bankCityCode} ,		
+			#{isOldData} ,		
+			#{remark} ,		
+			#{bankMainName} ,		
+			#{log} ,		
+			#{accountPayId} ,		
+			1 ,		
+			#{approveBy} ,		
+			#{approveDept} ,
+			#{refundMembershipFee} ,		
+			#{refundSalaryFee} ,		
+			#{createDept} ,		
+			#{isAt} ,		
+			#{vphAccountId} ,		
+			#{vphFee} ,		
+			#{vphCancleStatus} ,		
+			#{vphBackStatus} ,		
+			#{moveToOrderId} ,		
+			1 ,		
+			#{isStop} ,		
+			#{refundObject} ,		
+			#{reasonFlag} ,		
+			#{feeAccountId} 		
+		)
+	</insert>
+
+	<update id="updateAfterSales" parameterType="com.emotte.order.order.model.AfterSalesNew">
+		update t_order_after_sales	
+		 <set>  
+		 		VERSION = VERSION + 1
+			<if test="id!=null and id!='' "> 
+				,ID =  #{id} 
+			</if>		
+			<if test="orderId!=null and orderId!='' "> 
+				,ORDER_ID =  #{orderId} 
+			</if>		
+			<if test="orderType!=null and orderType!='' "> 
+				,ORDER_TYPE =  #{orderType} 
+			</if>		
+			<if test="createBy!=null and createBy!='' "> 
+				,CREATE_BY =  #{createBy} 
+			</if>		
+			<if test="updateBy!=null and updateBy!='' "> 
+				,UPDATE_BY =  #{updateBy} 
+			</if>		
+			<if test="updateTime!=null and updateTime!='' "> 
+				,UPDATE_TIME =  to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="afterSalesKind!=null and afterSalesKind!='' "> 
+				,AFTER_SALES_KIND =  #{afterSalesKind} 
+			</if>		
+			<if test="custMobile!=null and custMobile!='' "> 
+				,CUST_MOBILE =  #{custMobile} 
+			</if>		
+			<if test="custName!=null and custName!='' "> 
+				,CUST_NAME =  #{custName} 
+			</if>		
+			<if test="auditFlag!=null and auditFlag!='' "> 
+				,AUDIT_FLAG =  #{auditFlag} 
+			</if>		
+			<if test="reason!=null and reason!='' "> 
+				,REASON =  #{reason} 
+			</if>		
+			<if test="afterSalesImgs!=null and afterSalesImgs!='' "> 
+				,AFTER_SALES_IMGS =  #{afterSalesImgs} 
+			</if>		
+			<if test="createTime!=null and createTime!='' "> 
+				,CREATE_TIME =  #{createTime} 
+			</if>		
+			<if test="serverTime!=null and serverTime!='' "> 
+				,SERVER_TIME =  #{serverTime} 
+			</if>		
+			<if test="refundTotal!=null"> 
+				,REFUND_TOTAL =  #{refundTotal} 
+			</if>		
+			<if test="bankCard!=null and bankCard!='' "> 
+				,BANK_CARD =  #{bankCard} 
+			</if>		
+			<if test="bankName!=null and bankName!='' "> 
+				,BANK_NAME =  #{bankName} 
+			</if>		
+			<if test="bankUserName!=null and bankUserName!='' "> 
+				,BANK_USER_NAME =  #{bankUserName} 
+			</if>		
+			<if test="bankSupportId!=null and bankSupportId!='' "> 
+				,BANK_SUPPORT_ID =  #{bankSupportId} 
+			</if>		
+			<if test="bankCityCode!=null and bankCityCode!='' "> 
+				,BANK_CITY_CODE =  #{bankCityCode} 
+			</if>		
+			<if test="isOldData!=null and isOldData!='' "> 
+				,IS_OLD_DATA =  #{isOldData} 
+			</if>		
+			<if test="remark!=null and remark!='' "> 
+				,REMARK =  #{remark} 
+			</if>		
+			<if test="bankMainName!=null and bankMainName!='' "> 
+				,BANK_MAIN_NAME =  #{bankMainName} 
+			</if>		
+			<if test="log!=null and log!='' "> 
+				,LOG =  #{log} 
+			</if>		
+			<if test="accountPayId!=null and accountPayId!='' "> 
+				,ACCOUNT_PAY_ID =  #{accountPayId} 
+			</if>		
+			<if test="valid!=null and valid!='' "> 
+				,VALID =  #{valid} 
+			</if>		
+			<if test="approveBy!=null and approveBy!='' "> 
+				,APPROVE_BY =  #{approveBy} 
+			</if>		
+			<if test="approveDept!=null and approveDept!='' "> 
+				,APPROVE_DEPT =  #{approveDept} 
+			</if>		
+			<if test="refundMembershipFee!=null "> 
+				,REFUND_MEMBERSHIP_FEE =  #{refundMembershipFee} 
+			</if>		
+			<if test="refundSalaryFee!=null"> 
+				,REFUND_SALARY_FEE =  #{refundSalaryFee} 
+			</if>		
+			<if test="createDept!=null and createDept!='' "> 
+				,CREATE_DEPT =  #{createDept} 
+			</if>		
+			<if test="isAt!=null and isAt!='' "> 
+				,IS_AT =  #{isAt} 
+			</if>		
+			<if test="vphAccountId!=null and vphAccountId!='' "> 
+				,VPH_ACCOUNT_ID =  #{vphAccountId} 
+			</if>		
+			<if test="vphFee!=null and vphFee!='' "> 
+				,VPH_FEE =  #{vphFee} 
+			</if>		
+			<if test="vphCancleStatus!=null and vphCancleStatus!='' "> 
+				,VPH_CANCLE_STATUS =  #{vphCancleStatus} 
+			</if>		
+			<if test="vphBackStatus!=null and vphBackStatus!='' "> 
+				,VPH_BACK_STATUS =  #{vphBackStatus} 
+			</if>		
+			<if test="moveToOrderId!=null and moveToOrderId!='' "> 
+				,MOVE_TO_ORDER_ID =  #{moveToOrderId} 
+			</if>		
+			<if test="moveOrderBusFlag!=null and moveOrderBusFlag!='' "> 
+				,MOVE_ORDER_BUS_FLAG =  #{moveOrderBusFlag} 
+			</if>		
+			<if test="isStop!=null and isStop!='' "> 
+				,IS_STOP =  #{isStop} 
+			</if>		
+			<if test="refundObject!=null and refundObject!='' "> 
+				,REFUND_OBJECT =  #{refundObject} 
+			</if>		
+			<if test="reasonFlag!=null and reasonFlag!='' "> 
+				,REASON_FLAG =  #{reasonFlag} 
+			</if>		
+			<if test="feeAccountId!=null and feeAccountId!='' "> 
+				,FEE_ACCOUNT_ID =  #{feeAccountId} 
+			</if>		
+       </set>
+		WHERE ID = #{id}
+	</update>
+
+	<!--根据卡号将卡片置为无效-->
+	<update id="discard">
+		UPDATE T_CARD SET UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE,LOG = LOG||';'||SYSDATE||'卡售后置为无效,更改之前卡状态为：'||CARD_STATUS,CARD_STATUS = 301 WHERE CARD_NUMB = #{cardNumber}
+	</update>
+
+	<!--根据 提成 账户id 扣除管家提成-->
+	<update id="updateBanlance" parameterType="com.emotte.order.order.model.ModeServeBalancePayment">
+		UPDATE T_SERVE_ACCOUNT SET TOTAL = TOTAL - #{money},WITHDRAW_DEPOSIT = WITHDRAW_DEPOSIT - #{money},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE
+		<where>
+			ID = #{accountId}
+		</where>
+	</update>
+
+	<!--退卡售后收支表新增冲红记录-->
+	<insert id="addBanlancePayment" parameterType="com.emotte.order.order.model.ModeServeBalancePayment">
+		insert into t_Serve_Balance_payment (
+		ID ,
+		ACCOUNT_ID ,
+		TYPE ,
+		TYPE_DETAIL ,
+		CREATE_BY ,
+		UPDATE_BY ,
+		CREATE_TIME ,
+		UPDATE_TIME ,
+		VALID ,
+		VERSION ,
+		LOG ,
+		MONEY ,
+		READ ,
+		AWARD_TYPE ,
+		INVITE_ID ,
+		BALANCE ,
+		BUSI_TYPE,
+		REVERSE_RELATION
+		) values (
+		GETSEQ ,
+		#{accountId} ,
+		2 ,
+		5 ,
+		#{createBy} ,
+		#{updateBy} ,
+		SYSDATE ,
+		NULL ,
+		#{vaild} ,
+		#{version} ,
+		#{log}||';'||SYSDATE||'卡片：'||#{cardNum}||'售后添加;' ,
+		#{money} ,
+		#{read} ,
+		7 ,
+		#{inviteId} ,
+		#{banlance} - #{money} ,
+		#{busiType},
+		#{cardNum}
+		)
+	</insert>
+
+	<!--修改方案status为取消-->
+	<update id="updateSolutionStatus">
+		UPDATE T_SOLUTION_CUST_SOLUTION SET SOLUTION_STATUS = 6,UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{solutionId}
+	</update>
+
+	<!--修改排期订单删除标记为4-->
+	<update id="updatePlanStatus" parameterType="java.lang.Long">
+		UPDATE T_SOLUTION_CUST_SOLUTION_PLAN SET
+			DEL_FLAG = 1 ,
+			LOG = LOG||';'||SYSDATE||'(解决方案售后标记删除)',
+			UPDATE_BY = #{updateBy},
+			UPDATE_TIME = SYSDATE
+		WHERE ORDER_ID IS NULL
+		AND SOLUTION_CUST__SOLUTION_ID = #{solutionId}
+	</update>
+
+	<!--根据代扣卡号，修改余额为0-->
+	<update id="removeCardBalance" parameterType="java.lang.String">
+		UPDATE T_CARD SET CARD_BALANCE = 0 WHERE CARD_NUMB = #{cardNumber}
+	</update>
+
+	<!--排期订单余额回冲代扣卡-->
+	<update id="updateCardBalance">
+		UPDATE T_CARD SET CARD_BALANCE = CARD_BALANCE + #{totalBalance} WHERE CARD_NUMB = #{cardNumber}
+	</update>
+
+	<!--测试回滚-->
+	<update id="updateAgeForTest">
+		update "test" set USER_AGE = 20 where USER_NAME = 'zhangsan'
+	</update>
+
+	<insert id="addForTest">
+		INSERT INTO "test"(USER_NAME) VALUES ('zhanghao')
+	</insert>
+
+	<!--根据订单id扣除订单余额字段-->
+	<update id="subtractionOrderBalanceForBaiTiao">
+		UPDATE T_ORDER SET TOTAL_PAY = TOTAL_PAY - #{baiTiaoAmount},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{orderId}
+	</update>
+
+	<!--根据订单id增加订单余额字段-->
+	<update id="addOrderBalanceForBaiTiao">
+		UPDATE T_ORDER SET TOTAL_PAY = TOTAL_PAY + #{baiTiaoAmount},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{orderId}
+	</update>
+
+	<!--保存结算单-->
+	<insert id="saveAccountPay" parameterType="com.emotte.order.order.model.Payfee">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		INSERT INTO T_ACCOUNT_PAY(
+		ID,
+		ORDER_ID,
+		ACCOUNT_AMOUNT,
+		CREATE_TIME,
+		CREATE_BY,
+		UPDATE_BY,
+		UPDATE_TIME,
+		VERSION,
+		PAY_STATUS,
+		PAY_TYPE,
+		BACK_FROM_ACCOUN_ID,
+		IS_BACK_TYPE,
+		START_TIME,
+		END_TIME,
+		VALID,
+		PAY_KIND,
+		BUSS_STATUS,
+		REMARK,
+		IS_OLD_DATA,
+		IS_MANUAL,
+		MEMBER_FEE,
+		FEE_TO_DATE,
+		TMP_VAILD,
+		LOG,
+		FINISH_REFUND_TIME,
+		CUSTOMER_FEE,
+		PERSONAL_FEE,
+		PERSONT_AND_DATE,
+		OLD_ACCOUNT_ID,
+		PLATFORM_ALL_FEE,
+		VPH_STATUS,
+		VPH_BACK_STATUS,
+		OA_NUMBER,
+		PAY_BANKNUM,
+		LS_ID,
+		REFUND_OBJECT,
+		REMARK2,
+		CREATE_TYPE
+		)
+		VALUES
+		(
+		#{id},
+		#{orderId},
+		#{accountAmount},
+		to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),
+		#{createBy},
+		#{updateBy},
+		to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),
+		#{version},
+		#{payStatus},
+		#{payType},
+		#{backFromAccounId},
+		#{isBackType},
+		#{startTime},
+		#{endTime},
+		#{valid},
+		#{payKind},
+		#{bussStatus},
+		#{remark},
+		#{isOldData},
+		#{isManual},
+		#{memberFee},
+		#{feeToDate},
+		#{tmpVaild},
+		#{log},
+		#{finishRefundTime},
+		#{customerFee},
+		#{personalFee},
+		#{persontAndDate},
+		#{oldAccountId},
+		#{platformAllFee},
+		#{vphStatus},
+		#{vphBackStatus},
+		#{oaNumber},
+		#{payBanknum},
+		#{bankFlowNum},
+		#{refundObject},
+		#{remark2},
+		#{createType}
+		)
+	</insert>
+
+	<!--保存缴费单-->
+	<insert id="savePayFee" parameterType="com.emotte.order.order.model.Payfee">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		insert into T_ORDER_PAYFEE (
+			ID, ORDER_ID, FEE_POST,
+			FEE_TYPE, POST_NUM, CARDS_NUM,
+			IS_BACK_TYPE, FEE_STATRT_PERIOD, FEE_END_PERIOD,
+			FEE_TO_DATE, FEE_SUM, ACCOUNT_STATUS,
+			CREATE_TIME, CREATE_BY, UPDATE_TIME,
+			UPDATE_BY, VERSION, AGENT_USER,
+			BANK_FLOW_NUM, SPLIT_STATUS, VALID,
+			PAY_STATUS, POST_BANK, POST_USER,
+			COLLECTION_ENTITY, POST_TERMINAL_NO, SUBMIT_STATUS,
+			IS_OLD_DATA, TMP_VALID, LOG,
+			PERSONT_AND_DATE, OLD_ORDER_ID, PLATFORM_FEE,
+			COLLECTION_CHANNEL, PLATFORM_ORDER_ID, POUNDAGE,
+			IS_HANDLE, IS_MANUAL, POS_IMG_URL,
+			PAY_RESULT, WPH_NAME, POS_TYPE,
+			POS_CHECK_BY, POS_CHECK_DEPT, POS_CHECK_DATE,
+			POS_FAIL_REASON, POS_CHECK_STATUS, SOURCE_PAYFEE_ID,
+			SOURCE_FEE_POST, VIPSHOP_NAME, HJBL_NAME,
+			HJBL_BANK, HJBL_CARD, HJBL_CARD_BANK,
+			WITHDRAW_NUM, TERM)
+		values
+		(
+			#{id}, #{orderId}, #{feePost},
+			#{feeType}, #{postNum}, #{cardsNum},
+			#{isBackType}, #{feeStatrtPeriod}, #{feeEndPeriod},
+			to_date(#{feeToDate},'yyyy-mm-dd hh24:mi:ss'), #{feeSum}, #{accountStatus},
+			to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'), #{createBy}, to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),
+			#{updateBy}, #{version}, #{agentUser},
+			#{bankFlowNum}, #{splitStatus}, #{valid},
+			#{payStatus}, #{postBank}, #{postUser},
+			#{collectionEntity}, #{postTerminalNo}, #{submitStatus},
+			#{isOldData}, #{tmpValid}, #{log},
+			to_date(#{persontAndDate},'yyyy-mm-dd hh24:mi:ss'), #{oldOrderId}, #{platformFee},
+			#{collectionChannel}, #{platformOrderId}, #{poundage},
+			#{isHandle}, #{isManual}, #{posImgUrl},
+			#{payResult}, #{wphName}, #{posType},
+			#{posCheckBy}, #{posCheckDept}, to_date(#{posCheckDate},'yyyy-mm-dd hh24:mi:ss'),
+			#{posFailReason}, #{posCheckStatus}, #{sourcePayfeeId},
+			#{sourceFeePost}, #{vipshopName}, #{hjblName},
+			#{hjblBank}, #{hjblCard}, #{hjblCardBank},
+			#{withdrawNum}, #{term}
+		)
+	</insert>
+
+	<!--排期余额回冲解决方案-->
+	<update id="chargeActiveMonry">
+		UPDATE T_SOLUTION_CUST_SOLUTION SET ACTIVE_MONEY = NVL(ACTIVE_MONEY,0) + #{totalBalance},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{solutionId}
+	</update>
+</mapper>

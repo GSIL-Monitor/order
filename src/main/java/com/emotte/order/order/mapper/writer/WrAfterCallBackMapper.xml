@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAfterCallBackMapper">
+    <!--保存-->
+    <insert id="addCallBack" parameterType="com.emotte.order.order.model.AfterCallBack">
+		insert into t_order_after_callback (
+			ID ,
+			STATUS ,
+			NEXT_TIME ,
+			REASON ,
+			REMARK ,
+			CREATE_BY ,
+			CREATE_TIME ,
+			UPDATE_BY ,
+			UPDATE_TIME ,
+			VERSION ,
+			VALID,
+			ORDER_ID,
+			AFTER_SALES_ID,
+			IS_OLD
+		) values (
+			GETSEQ ,
+			#{status} ,
+			TO_DATE(#{nextTime}, 'yyyy-mm-dd hh24:mi:ss') ,
+			#{reason} ,
+			#{remark} ,
+			#{createBy} ,
+			SYSDATE ,
+			#{updateBy} ,
+			SYSDATE ,
+			#{version} ,
+			#{valid},
+			#{orderId},
+			#{afterSalesId},
+			#{isOld}
+		)
+	</insert>
+
+    <!--更新-->
+    <update id="update" parameterType="com.emotte.order.order.model.AfterCallBack">
+        update t_order_after_callback
+        <set>
+            VERSION = VERSION + 1
+            ,UPDATE_TIME = SYSDATE
+            <if test="status!=null and status!='' ">
+                ,STATUS = #{status}
+            </if>
+            <if test="nextTime!=null and nextTime!='' ">
+                ,NEXT_TIME = TO_DATE(#{nextTime}, 'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="reason!=null and reason!='' ">
+                ,REASON = #{reason}
+            </if>
+            <if test="remark!=null and remark!='' ">
+                ,REMARK = #{remark}
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                ,UPDATE_BY = #{updateBy}
+            </if>
+            <if test="valid!=null and valid!='' ">
+                ,VALID = #{valid}
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+	<!--更新回访记录为历史数据-->
+	<update id="updateToHistory">
+		UPDATE T_ORDER_AFTER_CALLBACK SET IS_OLD = 1,UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE AFTER_SALES_ID = #{afterSalesId} AND ORDER_ID = #{orderId}
+	</update>
+</mapper>

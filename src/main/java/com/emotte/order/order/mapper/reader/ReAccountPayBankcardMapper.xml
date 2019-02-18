@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReAccountPayBankcardMapper">
+	 <select id="queryAccountPayBankcard" parameterType="com.emotte.order.order.model.AccountPayBankcard" resultType="com.emotte.order.order.model.AccountPayBankcard">
+		select 
+			t.id as id,
+			t.bank_card as bankCard,
+			t.bank_name as bankName,
+			t.bank_user_name as bankUserName,
+			t.user_id as userId,
+			t.account_pay_id as accountPayId,
+			t.city as city,
+			t.bank_detail as bankDetail,
+			t.bank_support_id as bankSupportId,
+			t.bank_main_name as bankMainName,
+			t.is_old_data as isOldData
+	 		from t_account_pay_bankcard t 
+		<where>
+			1 = 1 and t.valid = 1
+			<if test="id != null and id != ''">
+				and t.id = #{id} 
+			</if>
+			<if test="bankCard != null and bankCard != ''">
+				and t.bank_card = #{bankCard} 
+			</if>
+			<if test="bankName != null and bankName != ''">
+				and t.bank_name = #{bankName} 
+			</if>
+			<if test="bankUserName != null and bankUserName != ''">
+				and t.bank_user_name = #{bankUserName} 
+			</if>
+			<if test="userId != null and userId != ''">
+				and t.user_id = #{userId} 
+			</if>
+			<if test="accountPayId != null and accountPayId != ''">
+				and t.account_pay_id = #{accountPayId} 
+			</if>
+			<if test="city != null and city != ''">
+				and t.city = #{city} 
+			</if>
+			<if test="bankDetail != null and bankDetail != ''">
+				and t.bank_detail = #{bankDetail} 
+			</if>
+			<if test="bankMainName != null and bankMainName != ''">
+				and t.bank_main_name = #{bankMainName},
+			</if>
+			<if test="bankSupportId != null and bankSupportId != ''">
+				and t.bank_support_id = #{bankSupportId},
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				and t.is_old_data = #{isOldData} 
+			</if>
+		</where>
+		order by t.create_time desc 
+	</select>
+</mapper>

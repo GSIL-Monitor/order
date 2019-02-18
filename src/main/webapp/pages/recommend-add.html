@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog order-add-content" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增方案订单</h4>
+            </div>
+            <div class="modal-body modal-order">
+                <div class="order-add-client">
+                    <h3>客户信息</h3>
+                    <ul>
+                        <li>
+                            <label for="">联系方式：
+                                <input type="text"/>
+                            </label>
+                            <label for="">客户姓名：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                        <li>
+                            <label for="">收货/服务信息：
+                                <input type="text" style="width:220px"/>&nbsp;要维修一套的信息，收货人，电话，地址
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order-add-client">
+                    <h3>需求信息</h3>
+                    <ul>
+                        <li>
+                            <label for="">方案类型：
+                                <select name="" id="">
+                                    <option value="">智能方案</option>
+                                    <option value="">推荐方案</option>
+                                    <option value="定制方案">定制方案</option>
+                                </select>
+                            </label>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-order-2">查询</button>
+                            <label for="">请输入产品名称：
+                                <input type="text" style="width:220px"/>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>方案包含项目</div>
+                            <div class="table-scroll">
+                                <table class="table focus-table">
+                                    <thead>
+                                    <tr>
+                                        <th><input type="checkbox">序号</th>
+                                        <th>名称</th>
+                                        <th>数量</th>
+                                        <th>频次</th>
+                                        <th>市场价总价</th>
+                                        <th>解决方案价总价</th>
+                                        <th>首次服务时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><input type="checkbox">1</td>
+                                        <td>应季有机蔬菜（4KG/次）</td>
+                                        <td>10</td>
+                                        <td>下拉选择频次</td>
+                                        <td>128</td>
+                                        <td>98</td>
+                                        <td></td>
+                                        <td>删除</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox">1</td>
+                                        <td>应季有机蔬菜（4KG/次）</td>
+                                        <td>10</td>
+                                        <td>下拉选择频次</td>
+                                        <td>128</td>
+                                        <td>98</td>
+                                        <td></td>
+                                        <td>删除</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox">1</td>
+                                        <td>应季有机蔬菜（4KG/次）</td>
+                                        <td>10</td>
+                                        <td>下拉选择频次</td>
+                                        <td>128</td>
+                                        <td>98</td>
+                                        <td></td>
+                                        <td>删除</td>
+                                    </tr>
+                                    <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>可参与定制方案服务/商品列表</div>
+                            <div class="table-scroll">
+                                <table class="table focus-table">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox">序号</th>
+                                    <th>名称</th>
+                                    <th>分类</th>
+                                    <th>起订数量</th>
+                                    <th>市场价</th>
+                                    <th>解决方案价</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="checkbox">1</td>
+                                    <td>应季有机蔬菜（4KG/次）</td>
+                                    <td>农产品配送</td>
+                                    <td>4</td>
+                                    <td>128</td>
+                                    <td>98</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox">1</td>
+                                    <td>应季有机蔬菜（4KG/次）</td>
+                                    <td>农产品配送</td>
+                                    <td>4</td>
+                                    <td>128</td>
+                                    <td>98</td>
+                                </tr>
+                                <tr></tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>
+                            <label for="">开始时间：
+                                <input type="text"/>
+                            </label>
+                            <label for="">结束时间：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                        <li>
+                            <label for="">创建时间：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order-sum">
+                    订单金额:120元
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

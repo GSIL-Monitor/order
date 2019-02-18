@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.reader.ReParcelMapper">
+	<select id="loadParcel" parameterType="java.lang.Long" resultType="com.emotte.order.warehouse.model.Parcel">
+		select 
+			ID as id ,		
+			WAREHOUSE_ID as warehouseId ,		
+			ORDER_ID as orderId ,		
+			DICTARY_CODE as dictaryCode ,		
+			PACKAGE_NUMBER as packageNumber ,		
+			CREATE_BY as createBy ,		
+			CREATE_TIME as createTime ,		
+			UPDATE_BY as updateBy ,		
+			UPDATE_TIME as updateTime ,		
+			VERSION as version ,		
+			VALID as valid ,		
+			STATE as state ,		
+			LOGISTICS_NUMBER as logisticsNumber ,		
+			IS_OLD_DATA as isOldData ,		
+			LOG as log ,		
+			TYPE as type 		
+		from t_warehouse_parcel
+		where
+	</select>
+	
+	<select id="queryParcellistPage"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+	select p.ID               as "id",
+       p.WAREHOUSE_ID     as "warehouseId",
+       p.ORDER_ID         as "orderId",
+       p.DICTARY_CODE     as "dictaryCode",
+       p.PACKAGE_NUMBER   as "packageNumber",
+       p.CREATE_BY        as "createBy",
+       p.CREATE_TIME      as "createTime",
+       p.UPDATE_BY        as "updateBy",
+       p.UPDATE_TIME      as "updateTime",
+       p.VERSION          as "version",
+       p.VALID            as "valid",
+       p.STATE            as "state",
+       p.LOGISTICS_NUMBER as "logisticsNumber",
+       p.IS_OLD_DATA      as "isOldData",
+       p.LOG              as "log",
+       p.TYPE             as "type",
+       o.id as "order.Id",
+       o.user_mobile as "order.userMobile",
+       o.order_code as "order.orderCode",
+       to_char(o.create_time, 'yyyy-mm-dd hh24:mi:ss') as "order.createTime",
+       to_char(o.receipt_time, 'yyyy-mm-dd') as "order.receiptTime",
+       o.order_status as "order.orderStatus",
+       (SELECT m.real_name FROM t_auth_manager m where m.id = o.recharge_by) as "orderRechargeBy",
+       (SELECT g.name FROM t_auth_org g where g.id = o.recharge_dept) as "orderRechargeDept",
+       am.real_name as "orderCreateBy",
+       ao.name as "createByDept"
+  from t_warehouse_parcel p
+  left join t_order o
+    on o.id = p.order_id
+  left join t_auth_manager am
+    on am.id = o.create_by
+  left join t_auth_org ao
+    on ao.id = am.dept_id
+  left join t_auth_org tao
+    on tao.id = o.recharge_dept
+	<where> 
+	 p.valid = 1 and p.type = 2
+	 	<if test="Citycode!=null and Citycode!='' ">           
+			and tao.code like '${Citycode}'||'%' 
+		</if>
+		<if test="id!=null and id!='' ">           
+			and	p.ID =  #{id} 		
+		</if>	
+		<if test="warehouseId!=null and warehouseId!='' ">           
+			and	p.WAREHOUSE_ID =  #{warehouseId} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	p.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="dictaryCode!=null and dictaryCode!='' ">           
+			and	p.DICTARY_CODE =  #{dictaryCode} 		
+		</if>	
+		<if test="packageNumber!=null and packageNumber!='' ">           
+			and	p.PACKAGE_NUMBER =  #{packageNumber} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	p.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">        
+			and p.CREATE_TIME like ('%' || to_date('${createTime}', 'yyyy-mm-dd')|| '%')  </if>        
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	p.UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">  
+			and	p.UPDATE_TIME like ('%' || to_date('${updateTime}', 'yyyy-mm-dd')|| '%') 		</if>   	
+		<if test="version!=null and version!='' ">           
+			and	p.VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	p.VALID =  #{valid} 		
+		</if>	
+		<if test="state!=null and state!='' ">           
+			and	p.STATE =  #{state} 		
+		</if>	
+		<if test="logisticsNumber!=null and logisticsNumber!='' ">           
+			and	p.LOGISTICS_NUMBER =  #{logisticsNumber} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	p.IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	p.LOG =  #{log} 		
+		</if>	
+		<if test="type!=null and type!='' ">           
+			and	p.TYPE =  #{type} 		
+		</if>	
+		<if test="order.orderCode!=null and order.orderCode!='' ">           
+			and	o.order_code like ('%'|| '${order.orderCode}' || '%' )	
+		</if>
+		<if test="order.orderStatus!=null and order.orderStatus!='' ">           
+			and	o.order_status =  #{order.orderStatus}	
+		</if>
+		<if test="submitStartTime!=null and submitStartTime!=''">
+			AND o.create_time &gt; = to_date(#{submitStartTime}, 'yyyy-mm-dd hh24:mi:SS')
+		</if>
+		<if test="submitEndTime!=null and submitEndTime!=''">
+			AND o.create_time &lt; = to_date(#{submitEndTime}, 'yyyy-mm-dd hh24:mi:SS')
+		</if>
+		<if test="order.receiverMobile!=null and order.receiverMobile!='' ">           
+			and	o.receiver_mobile like ('%'|| '${order.receiverMobile}' || '%' )	
+		</if>
+		<if test="order.receiptTime!=null and order.receiptTime!=''">
+			AND to_char(o.receipt_time, 'yyyy-mm-dd' ) &gt; = #{order.receiptTime}
+		</if>
+		<if test="order.receiptTimes!=null and order.receiptTimes!=''">
+			AND to_char(o.receipt_time, 'yyyy-mm-dd' ) &lt; = #{order.receiptTimes}
+		</if>
+	</where>
+	order by p.create_time desc
+	</select>
+	<select id="mergeQueryParcel"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+	select p.ID               as "id",
+       p.WAREHOUSE_ID     as "warehouseId",
+       p.ORDER_ID         as "orderId",
+       p.DICTARY_CODE     as "dictaryCode",
+       p.PACKAGE_NUMBER   as "packageNumber",
+       p.CREATE_BY        as "createBy",
+       p.CREATE_TIME      as "createTime",
+       p.UPDATE_BY        as "updateBy",
+       p.UPDATE_TIME      as "updateTime",
+       p.VERSION          as "version",
+       p.VALID            as "valid",
+       p.STATE            as "state",
+       p.LOGISTICS_NUMBER as "logisticsNumber",
+       p.IS_OLD_DATA      as "isOldData",
+       p.LOG              as "log",
+       p.TYPE             as "type"
+  from t_warehouse_parcel p
+	<where> 
+	 p.valid = 1 and p.type = 2
+		<if test="idStr!=null and idStr!='' ">           
+			and	p.ID in  (${idStr}) 		
+		</if>	
+		<if test="warehouseId!=null and warehouseId!='' ">           
+			and	p.WAREHOUSE_ID =  #{warehouseId} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	p.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="dictaryCode!=null and dictaryCode!='' ">           
+			and	p.DICTARY_CODE =  #{dictaryCode} 		
+		</if>	
+		<if test="packageNumber!=null and packageNumber!='' ">           
+			and	p.PACKAGE_NUMBER =  #{packageNumber} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	p.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	p.CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	p.UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	p.UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	p.VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	p.VALID =  #{valid} 		
+		</if>	
+		<if test="state!=null and state!='' ">           
+			and	p.STATE =  #{state} 		
+		</if>	
+		<if test="logisticsNumber!=null and logisticsNumber!='' ">           
+			and	p.LOGISTICS_NUMBER =  #{logisticsNumber} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	p.IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	p.LOG =  #{log} 		
+		</if>	
+		<if test="type!=null and type!='' ">           
+			and	p.TYPE =  #{type} 		
+		</if>	
+	</where>
+	order by p.id desc
+	</select>
+	<select id="queryDeliveryReturn"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+		select wp.ID as "id",
+	       wp.ORDER_ID as "orderId",
+	       wp.warehouse_id as "warehouseId",
+	       wp.DICTARY_CODE as "dictaryCode",
+	       wp.VERSION as "version",
+	       od.user_name as "order.userName",
+	       od.id as "order.id",
+	       od.user_mobile as "order.userMobile",
+	       od.receiver_address as "order.receiverAddress",
+	       od.receiver_province as "order.receiverProvince",
+	       od.receiver_city as "order.receiverCity",
+	       od.receiver_area as "order.receiverArea",
+	       to_char(od.receipt_time, 'yyyy-MM-dd') as "order.receiptTime",
+	       c.name as "item.productName",
+	       it.id as "item.id",
+	       it.now_price as "item.nowPrice",
+	       it.quantity as "item.quantity",
+	       it.product_code as "item.productCode",
+	       it.product_price_type as "item.productPriceType",
+	       tbda.dict_name as "item.productPriceTypeText",
+	       it.product_unit as "item.productUnit",
+	       tbdb.dict_name as "item.productUnitText",
+	       it.product_spec as "item.productSpec"
+	  from T_WAREHOUSE_PARCEL wp
+	 left join t_warehouse_package_item_ref pi
+	    on pi.package_id = wp.id
+	  left join t_order_item it
+	    on pi.order_item_id = it.id
+	     left join t_order od
+	    on od.id = it.order_id
+	  left join t_base_dictionary tbda
+	    on it.product_price_type = tbda.dict_code
+	  left join t_base_dictionary tbdb
+	    on it.product_unit = tbdb.dict_code
+	  left join v_product c
+        on c.product_code = it.product_code
+	 where  wp.package_number = #{packageNumber} 
+	</select>
+	
+	
+	<select id="countParcel"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_warehouse_parcel
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="warehouseId!=null and warehouseId!='' ">           
+			and	WAREHOUSE_ID =  #{warehouseId} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="dictaryCode!=null and dictaryCode!='' ">           
+			and	DICTARY_CODE =  #{dictaryCode} 		
+		</if>	
+		<if test="packageNumber!=null and packageNumber!='' ">           
+			and	PACKAGE_NUMBER =  #{packageNumber} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="state!=null and state!='' ">           
+			and	STATE =  #{state} 		
+		</if>	
+		<if test="logisticsNumber!=null and logisticsNumber!='' ">           
+			and	LOGISTICS_NUMBER =  #{logisticsNumber} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+		<if test="type!=null and type!='' ">           
+			and	TYPE =  #{type} 		
+		</if>	
+			</where>
+	</select>
+	<select id="queryNewOrderCount"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+			   select to_char(B.times, 'yyyy-mm-dd') as "createTime",
+		       sum(nvl2(a.id, 1, 0)) ordercount,
+		       (case
+		         when B.times = trunc(sysdate) then
+		          1
+		         when B.times = trunc(sysdate - 1) then
+		          2
+		         when B.times = trunc(sysdate - 2) then
+		          3
+		       end) dateNumber
+		  from (select trunc(sysdate - rownum + 1) times
+		          from all_objects B
+		         where rownum &lt;= 3) B
+		  left join (select *
+		               from T_WAREHOUSE_PARCEL t
+		              where t.state = 1
+		                and t.valid = 1
+		                and t.type = 2) A
+		    on trunc（A.create_time） = B.times
+		 group by b.times
+		 order by times desc
+	</select>
+	<select id="queryTobeshippedOrderCount"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+			   select to_char(B.times, 'yyyy-mm-dd') as "createTime",
+		       sum(nvl2(a.id, 1, 0)) ordercount,
+		       (case
+		         when B.times = trunc(sysdate) then
+		          1
+		         when B.times = trunc(sysdate - 1) then
+		          2
+		         when B.times = trunc(sysdate - 2) then
+		          3
+		       end) dateNumber
+		  from (select trunc(sysdate - rownum + 1) times
+		          from all_objects B
+		         where rownum &lt;= 3) B
+		  left join (select *
+		               from T_WAREHOUSE_PARCEL t
+		              where t.state = 2
+		                and t.valid = 1
+		                and t.type = 2) A
+		    on trunc（A.update_time） = B.times
+		 group by b.times
+		 order by times desc
+	</select>
+	<select id="queryAlreadyshippedOrderCount"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+			   select to_char(B.times, 'yyyy-mm-dd') as "createTime",
+		       sum(nvl2(a.id, 1, 0)) ordercount,
+		       (case
+		         when B.times = trunc(sysdate) then
+		          1
+		         when B.times = trunc(sysdate - 1) then
+		          2
+		         when B.times = trunc(sysdate - 2) then
+		          3
+		       end) dateNumber
+		  from (select trunc(sysdate - rownum + 1) times
+		          from all_objects B
+		         where rownum &lt;= 3) B
+		  left join (select *
+		               from T_WAREHOUSE_PARCEL t
+		              where t.state = 3
+		                and t.valid = 1
+		                and t.type = 2) A
+		    on trunc（A.update_time） = B.times
+		 group by b.times
+		 order by times desc
+	</select>
+	<select id="queryParcelDetails" parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+		SELECT od.id as "order.id",
+       od.order_code as "order.orderCode",
+       to_char(od.create_time, 'yyyy-MM-dd HH:mi:ss') as "order.createTime",
+       od.order_status as "order.orderStatus",
+       (select tbd.dict_name from t_base_dictionary tbd where tbd.dict_code = od.pay_status) as "order.payStatusText",
+       od.user_name as "order.userName",
+       od.user_mobile as "order.userMobile",
+       od.receiver_name as "order.receiverName",
+       od.receiver_mobile as "order.receiverMobile",
+       od.receiver_address as "order.receiverAddress",
+       od.receiver_province as "order.receiverProvince",
+       od.receiver_city as "order.receiverCity",
+       od.receiver_area as "order.receiverArea",
+       od.remark as "order.remark",
+       to_char(od.receipt_time, 'yyyy-MM-dd') as "order.receiptTime",
+       c.name as "item.productName",
+       (select tbd.dict_name from t_base_dictionary tbd where it.product_unit = tbd.dict_code) as "item.productUnitText",
+       (select tbd.dict_name from t_base_dictionary tbd where it.product_price_type = tbd.dict_code) as "item.productPriceTypeText",
+       (select br.name from t_product_brand br where br.id = (select b.brand_id from t_product_base b where b.id = 
+       			(select p.base_id from t_product p where p.id = 
+       			(select c.product_id from t_product_city c where c.product_code = it.product_code)))) as "item.brandName",
+       it.now_price as "item.nowPrice",
+       it.quantity as "item.quantity",
+       it.product_spec as "item.productSpec"
+  FROM t_warehouse_parcel p
+  left join t_warehouse_package_item_ref pi
+    on pi.package_id = p.id
+  left join t_order_item it
+    on pi.order_item_id = it.id
+  left join t_order od
+    on od.id = it.order_id
+  left join v_product c
+    on c.product_code = it.product_code
+ where 1 = 1
+   and p.package_number = #{packageNumber}
+   and it.valid = 1
+   and od.cate_type = 3
+	 	</select>	
+	<select id="queryParcelLogistics" parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+		SELECT p.id as "id",
+	       p.logistics_number as "packageNumber",
+	       bd.dict_name as "dictName",
+	       wm_concat(it.product_name) as "item.productName",
+	       lt.json as "json"
+	  FROM t_warehouse_parcel p
+	  left join t_warehouse_package_item_ref pi
+	    on pi.package_id = p.id
+	  left join t_order_item it
+	    on pi.order_item_id = it.id
+	  left join t_warehouse_logistics_tracking lt
+	    on lt.logistics_number = p.logistics_number and lt.valid = 1
+	  left join t_base_dictionary bd 
+	    on bd.dict_code = p.dictary_code
+	 where 1 = 1
+	   and p.package_number = #{packageNumber}
+	   and it.valid = 1
+	 group by lt.json, p.id, p.logistics_number,bd.dict_name
+	</select>	
+	<select id="queryExcelList"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+	 select 
+	 			wp.ID as "id",
+	 			wp.WAREHOUSE_ID as "warehouseId",
+                 wp.ORDER_ID as "orderId",
+                 wp.DICTARY_CODE as "dictaryCode",
+                 wp.PACKAGE_NUMBER as "packageNumber",
+                 wp.CREATE_BY as "createBy",
+                 to_char(wp.CREATE_TIME, 'yyyy-mm-dd hh24:mi:ss') as "createTime",
+                 wp.UPDATE_BY as "updateBy",
+                 to_char(wp.UPDATE_TIME, 'yyyy-mm-dd hh24:mi:ss') as "updateTime",
+                 wp.VERSION as "version",
+                 wp.VALID as "valid",
+                 wp.STATE as "state",
+                 wp.LOGISTICS_NUMBER as "logisticsNumber",
+                 to_char(o.create_time, 'yyyy-mm-dd hh24:mi:ss') as "order.createTime",
+                 to_char(o.receipt_time, 'yyyy-mm-dd') as "order.receiptTime",
+                 o.order_code as "order.orderCode",
+                 o.user_name as "order.userName",
+                 o.receiver_mobile as "order.receiverMobile",
+                 o.receiver_name as "order.receiverName",
+                 o.order_source_id as "order.orderSourceId",
+                 o.receiver_province as "order.receiverProvince",
+       			 o.receiver_city as "order.receivercity",
+       			 o.receiver_area as "order.receiverarea",
+                 o.receiver_address as "order.receiverAddress",
+                 o.remark as "order.remark",
+                 o.user_mobile as "order.userMobile",
+                 bd.dict_name as "dictName",
+                 bd.dict_code as "dictCode",
+                 tbd.dict_name as "orderSourceName",
+                 wm_concat('商品：'  ||c.name  ||'，数量：'  ||i.quantity) as "item.productName",
+                  wm_concat(i.category_code)
+             from t_warehouse_parcel wp 
+                 left JOIN t_order o
+                ON o.id = wp.ORDER_ID
+                 left JOIN t_warehouse_package_item_ref pi
+                ON pi.package_id = wp.id
+               left join t_order_item i
+              	on i.id = pi.order_item_id
+               LEFT JOIN t_base_dictionary bd
+                 ON bd.dict_code = wp.dictary_code
+               LEFT JOIN t_base_dictionary tbd
+                 ON tbd.dict_code = o.order_source_id 
+               left join t_auth_org tao
+    			 on tao.id = o.recharge_dept
+    		   left join v_product c
+   				 on c.product_code = i.product_code
+	<where> 
+	 1 = 1 and wp.valid = 1 and wp.state = 1 and wp.type = 2
+	 	<if test="Citycode!=null and Citycode!='' ">           
+			and tao.code like '${Citycode}'||'%' 
+		</if>
+		<if test="id!=null and id!='' ">           
+			and	wp.ID =  #{id} 		
+		</if>	
+		<if test="warehouseId!=null and warehouseId!='' ">           
+			and	wp.WAREHOUSE_ID =  #{warehouseId} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	wp.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="dictaryCode!=null and dictaryCode!='' ">           
+			and	wp.DICTARY_CODE =  #{dictaryCode} 		
+		</if>	
+		<if test="packageNumber!=null and packageNumber!='' ">           
+			and	wp.PACKAGE_NUMBER like ('%'|| '${packageNumber}' || '%' )		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	wp.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">        
+			and wp.CREATE_TIME like ('%' || to_date('${createTime}', 'yyyy-mm-dd')|| '%')  </if>              
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	wp.UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">  
+			and	wp.UPDATE_TIME = to_char(#{updateTime},'yyyy-mm-dd hh24:mi:ss') 		</if>         
+		<if test="version!=null and version!='' ">           
+			and	wp.VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	wp.VALID =  #{valid} 		
+		</if>	
+		<if test="logisticsNumber!=null and logisticsNumber!='' ">           
+			and	wp.LOGISTICS_NUMBER =  #{logisticsNumber} 		
+		</if>
+		<if test="order.orderCode!=null and order.orderCode!='' ">           
+			and	o.order_code like ('%'|| '${order.orderCode}' || '%' )	
+		</if>
+		<if test="order.orderStatus!=null and order.orderStatus!='' ">           
+			and	o.order_status =  #{order.orderStatus}	
+		</if>
+		<if test="submitStartTime!=null and submitStartTime!=''">
+			AND o.create_time &gt; = to_date(#{submitStartTime}, 'yyyy-mm-dd hh24:mi:SS')
+		</if>
+		<if test="submitEndTime!=null and submitEndTime!=''">
+			AND o.create_time &lt; = to_date(#{submitEndTime}, 'yyyy-mm-dd hh24:mi:SS')
+		</if>
+		<if test="order.receiverMobile!=null and order.receiverMobile!='' ">           
+			and	o.receiver_mobile like ('%'|| '${order.receiverMobile}' || '%' )	
+		</if>
+		<if test="order.receiptTime!=null and order.receiptTime!=''">
+			AND to_char(o.receipt_time, 'yyyy-mm-dd' ) &gt; = #{order.receiptTime}
+		</if>
+		<if test="order.receiptTimes!=null and order.receiptTimes!=''">
+			AND to_char(o.receipt_time, 'yyyy-mm-dd' ) &lt; = #{order.receiptTimes}
+		</if>
+	</where>
+	group by wp.id, wp.WAREHOUSE_ID,
+                 wp.ORDER_ID ,
+                 wp.DICTARY_CODE ,
+                 wp.PACKAGE_NUMBER ,
+                 wp.CREATE_BY ,
+                 wp.CREATE_TIME,
+                 wp.UPDATE_BY ,
+                 wp.UPDATE_TIME,
+                 wp.VERSION ,
+                 wp.VALID ,
+                 wp.STATE ,
+                 wp.LOGISTICS_NUMBER,
+                 o.create_time,
+                 o.receipt_time,
+                 o.order_code,
+                 o.user_name,
+                 o.receiver_mobile ,
+                 o.receiver_name ,
+                 o.order_source_id,
+                 o.order_type,
+                 o.receiver_address,
+                 o.remark,
+                 o.user_mobile,
+                 bd.dict_name,
+                  bd.dict_code,
+                 tbd.dict_name,
+                  o.receiver_province ,
+                  o.receiver_city ,
+                  o.receiver_area
+                 <!-- having   wm_concat(i.category_code) like ('%'|| '${item.categoryCode}' || '%' ) -->
+                 order by wp.id desc
+	</select>
+	<select id="queryPackageNumberExistence"  parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+	select wp.ID as "id",
+       wp.WAREHOUSE_ID as "warehouseId",
+       wp.ORDER_ID as "orderId",
+       wp.DICTARY_CODE as "dictaryCode",
+       wp.PACKAGE_NUMBER as "packageNumber",
+       wp.CREATE_BY as "createBy",
+       to_char(wp.CREATE_TIME, 'yyyy-mm-dd hh24:mi:ss') as "createTime",
+       wp.UPDATE_BY as "updateBy",
+       to_char(wp.UPDATE_TIME, 'yyyy-mm-dd hh24:mi:ss') as "updateTime",
+       wp.VERSION as "version",
+       wp.VALID as "valid",
+       wp.STATE as "state",
+       wp.LOGISTICS_NUMBER as "logisticsNumber",
+       o.receiver_name as "order.receiverName"
+    from T_WAREHOUSE_PARCEL wp
+  LEFT JOIN t_order o
+    ON o.id = wp.ORDER_ID and wp.type = 2
+	<where> 
+	 1 = 1 and wp.valid = 1
+		<if test="id!=null and id!='' ">           
+			and	wp.ID =  #{id} 		
+		</if>	
+		<if test="warehouseId!=null and warehouseId!='' ">           
+			and	wp.WAREHOUSE_ID =  #{warehouseId} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	wp.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="dictaryCode!=null and dictaryCode!='' ">           
+			and	wp.DICTARY_CODE =  #{dictaryCode} 		
+		</if>	
+		<if test="packageNumber!=null and packageNumber!='' ">           
+			and	wp.PACKAGE_NUMBER like ('%'|| '${packageNumber}' || '%' )		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	wp.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">        
+			and	wp.CREATE_TIME = to_char(#{createTime},'yyyy-mm-dd hh24:mi:ss') 		</if>            
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	wp.UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">  
+			and	wp.UPDATE_TIME = to_char(#{updateTime},'yyyy-mm-dd hh24:mi:ss') 		</if>         
+		<if test="version!=null and version!='' ">           
+			and	wp.VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	wp.VALID =  #{valid} 		
+		</if>	
+		<if test="logisticsNumber!=null and logisticsNumber!='' ">           
+			and	wp.LOGISTICS_NUMBER =  #{logisticsNumber} 		
+		</if>
+		<if test="order.receiverName!=null and order.receiverName!='' ">           
+			and	o.receiver_name = #{order.receiverName}
+		</if>
+	</where>
+	order by wp.id desc
+	</select>
+	<select id="queryParcelJudgment" parameterType="com.emotte.order.warehouse.model.Parcel" resultType="com.emotte.order.warehouse.model.Parcel">
+			select 
+				ID as "id" ,		
+				WAREHOUSE_ID as "warehouseId" ,		
+				ORDER_ID as "orderId" ,		
+				DICTARY_CODE as "dictaryCode" ,		
+				PACKAGE_NUMBER as "packageNumber" ,		
+				CREATE_BY as "createBy" ,
+				to_char(CREATE_TIME, 'yyyy-MM-dd') as "createTime",		
+				UPDATE_BY as "updateBy" ,	
+				to_char(UPDATE_TIME, 'yyyy-MM-dd') as "updateTime",			
+				VERSION as "version" ,		
+				VALID as "valid" ,		
+				STATE as "state" ,		
+				LOGISTICS_NUMBER as "logisticsNumber" 		
+			from T_WAREHOUSE_PARCEL
+			where 
+	 	1 = 1 and valid = 1 and ORDER_ID =  #{orderId} 		
+ 	</select>
+ 	<select id="queryOrderItem" parameterType="java.lang.Long" resultType="com.emotte.order.warehouse.model.Order">
+ 		select 
+       		o.id as "id",
+       		to_char(wm_concat(i.id)) as "itemiId"
+	    from t_order o
+	    left join t_order_item i
+	    on i.order_id = o.id and i.valid = 1 
+	 where o.id = #{id}  group by o.id
+ 	</select>
+</mapper>

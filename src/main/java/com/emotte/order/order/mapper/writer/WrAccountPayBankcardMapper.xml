@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAccountPayBankcardMapper">
+	 <insert id="insertAccountPayBankcard" parameterType="com.emotte.order.order.model.AccountPayBankcard" >
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getSeq()	FROM dual
+		</selectKey>
+		insert into t_account_pay_bankcard(
+			id,
+			bank_card,
+			bank_name,
+			bank_user_name,
+			user_id,
+			account_pay_id,
+			city,
+			bank_detail,
+			bank_support_id,
+			bank_main_name,
+			valid,
+			create_time ,			
+			create_by ,			
+			update_time ,			
+			update_by ,			
+			version ,
+			is_old_data
+		)values(
+			#{id},
+			#{bankCard},
+			#{bankName},
+			#{bankUserName},
+			#{userId},
+			#{accountPayId},
+			#{city},
+			#{bankDetail},
+			#{bankSupportId},
+			#{bankMainName},
+			#{valid},
+			sysdate ,				
+			#{createBy} ,
+			#{updateTime} ,
+			#{updateBy} ,				
+			1 ,
+			#{isOldData}
+		)
+	</insert>
+	 <update id="updateAccountPayBankcard" parameterType="com.emotte.order.order.model.AccountPayBankcard" >
+		update t_account_pay_bankcard t 
+		<set>
+			<if test="id != null and id != ''">
+				t.id = #{id},
+			</if>
+			<if test="bankCard != null and bankCard != ''">
+				t.bank_card = #{bankCard},
+			</if>
+			<if test="bankName != null and bankName != ''">
+				t.bank_name = #{bankName},
+			</if>
+			<if test="bankUserName != null and bankUserName != ''">
+				t.bank_user_name = #{bankUserName},
+			</if>
+			<if test="userId != null and userId != ''">
+				t.user_id = #{userId},
+			</if>
+			<if test="accountPayId != null and accountPayId != ''">
+				t.account_pay_id = #{accountPayId},
+			</if>
+			<if test="city != null and city != ''">
+				t.city = #{city},
+			</if>
+			<if test="bankDetail != null and bankDetail != ''">
+				t.bank_detail = #{bankDetail},
+			</if>
+			<if test="bankMainName != null and bankMainName != ''">
+				t.bank_main_name = #{bankMainName},
+			</if>
+			<if test="bankSupportId != null and bankSupportId != ''">
+				t.bank_support_id = #{bankSupportId},
+			</if>
+			<if test="updateBy != null and updateBy != ''"> 
+				t.update_by = #{updateBy} ,
+			</if>
+	 		<if test="updateTime != null and updateTime != ''"> 
+				t.update_time = sysdate ,
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				t.is_old_data = #{isOldData},
+			</if>
+				t.version = t.version + 1
+		</set>
+		where t.account_pay_id = #{accountPayId} 
+	</update>
+</mapper>

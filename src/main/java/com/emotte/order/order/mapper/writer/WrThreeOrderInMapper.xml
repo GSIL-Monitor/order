@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrThreeOrderInMapper">
+	<insert id ="insertThreeOrder" parameterType="com.emotte.order.order.model.Order">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as ID from DUAL  
+   </selectKey> 
+		insert into t_order ( 
+			id ,			
+			order_code ,			
+			parent_id ,			
+			user_id ,			
+			user_name ,			
+			user_province ,			
+			user_city ,			
+			user_area ,			
+			user_address ,			
+			user_mobile ,			
+			user_email ,			
+			receiver_name ,			
+			receiver_province ,			
+			receiver_city ,			
+			receiver_area ,			
+			receiver_zipcode ,			
+			receiver_address ,
+			longitude ,			
+			latitude ,		
+			receiver_mobile ,			
+			receiver_email ,			
+			order_type ,			
+			order_channel ,			
+			order_source_id ,			
+			order_status ,			
+			auth_manager_id ,			
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version ,			
+			critical ,			
+			remark ,			
+			sendtime_type ,			
+			is_invoice ,			
+			vendor_id ,			
+			invoice_type ,			
+			invoice_memo ,			
+			pay_status ,			
+			total_pay ,			
+			deliver_pay ,			
+			ip ,			
+			invite_code ,			
+			user_level ,			
+			order_groupid ,
+			user_sex ,
+			user_birth ,
+			cate_type
+		) values (		
+			#{id},		
+			getseq(),				
+			#{parentId} ,				
+			#{userId} ,				
+			#{userName} ,				
+			#{userProvince} ,				
+			#{userCity} ,				
+			#{userArea} ,				
+			#{userAddress} ,				
+			#{userMobile} ,				
+			#{userEmail} ,	
+			#{receiverName} ,				
+			#{receiverProvince} ,				
+			#{receiverCity} ,				
+			#{receiverArea} ,				
+			#{receiverZipcode} ,				
+			#{receiverAddress} ,
+			#{longitude} ,				
+			#{latitude} ,	
+			#{receiverMobile} ,				
+			#{receiverEmail} ,				
+			#{orderType} ,				
+			#{orderChannel} ,				
+			#{orderSourceId} ,				
+			#{orderStatus} ,				
+			#{authManagerId} ,				
+			#{createBy} ,				
+			sysdate ,				
+			#{updateBy} ,				
+			sysdate ,				
+			#{version} ,				
+			#{critical} ,				
+			#{remark} ,				
+			#{sendtimeType} ,				
+			#{isInvoice} ,				
+			#{vendorId} ,				
+			#{invoiceType} ,				
+			#{invoiceMemo} ,				
+			#{payStatus} ,				
+			#{totalPay} ,				
+			#{deliverPay} ,				
+			#{ip} ,				
+			#{inviteCode} ,				
+			#{userLevel} ,				
+			#{orderGroupid} ,
+			#{userSex} ,
+			to_date( #{userBirth},'yyyy-MM-dd hh24:mi:ss') ,
+			#{cateType}
+		)
+		
+	</insert>
+	
+	<update id="updateOrder" parameterType="com.emotte.order.order.model.Order">
+		update t_order	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderCode != null and orderCode != ''"> 
+				,order_code = #{orderCode} 
+			</if>
+			
+	 <if test="parentId != null and parentId != ''"> 
+				,parent_id = #{parentId} 
+			</if>
+			
+	 <if test="userId != null and userId != ''"> 
+				,user_id = #{userId} 
+			</if>
+			
+	 <if test="userName != null and userName != ''"> 
+				,user_name = #{userName} 
+			</if>
+			
+	 <if test="userProvince != null and userProvince != ''"> 
+				,user_province = #{userProvince} 
+			</if>
+			
+	 <if test="userCity != null and userCity != ''"> 
+				,user_city = #{userCity} 
+			</if>
+			
+	 <if test="userArea != null and userArea != ''"> 
+				,user_area = #{userArea} 
+			</if>
+			
+	 <if test="userAddress != null and userAddress != ''"> 
+				,user_address = #{userAddress} 
+			</if>
+			
+	 <if test="userMobile != null and userMobile != ''"> 
+				,user_mobile = #{userMobile} 
+			</if>
+			
+	 <if test="userEmail != null and userEmail != ''"> 
+				,user_email = #{userEmail} 
+			</if>
+	 <if test="receiverName != null and receiverName != ''"> 
+				,receiver_name = #{receiverName} 
+			</if>
+			
+	 <if test="receiverProvince != null and receiverProvince != ''"> 
+				,receiver_province = #{receiverProvince} 
+			</if>
+			
+	 <if test="receiverCity != null and receiverCity != ''"> 
+				,receiver_city = #{receiverCity} 
+			</if>
+			
+	 <if test="receiverArea != null and receiverArea != ''"> 
+				,receiver_area = #{receiverArea} 
+			</if>
+			
+	 <if test="receiverZipcode != null and receiverZipcode != ''"> 
+				,receiver_zipcode = #{receiverZipcode} 
+			</if>
+			
+	 <if test="receiverAddress != null and receiverAddress != ''"> 
+				,receiver_address = #{receiverAddress} 
+			</if>
+			
+	<if test="longitude != null and longitude != ''"> 
+				,longitude = #{longitude} 
+			</if>
+			
+	 <if test="latitude != null and latitude != ''"> 
+				,latitude = #{latitude} 
+			</if>
+			
+	 <if test="receiverMobile != null and receiverMobile != ''"> 
+				,receiver_mobile = #{receiverMobile} 
+			</if>
+			
+	 <if test="receiverEmail != null and receiverEmail != ''"> 
+				,receiver_email = #{receiverEmail} 
+			</if>
+			
+	 <if test="orderType != null and orderType != ''"> 
+				,order_type = #{orderType:NUMERIC} 
+			</if>
+			
+	 <if test="orderChannel != null and orderChannel != ''"> 
+				,order_channel = #{orderChannel:NUMERIC} 
+			</if>
+			
+	 <if test="orderSourceId != null and orderSourceId != ''"> 
+				,order_source_id = #{orderSourceId} 
+			</if>
+			
+	 <if test="orderStatus != null and orderStatus != ''"> 
+				,order_status = #{orderStatus:NUMERIC} 
+			</if>
+			
+	 <if test="authManagerId != null and authManagerId != ''"> 
+				,auth_manager_id = #{authManagerId} 
+			</if>
+			
+	 <if test="createBy != null and createBy != ''"> 
+				,create_by = #{createBy} 
+			</if>
+			
+	 <if test="createTime != null and createTime != ''"> 
+				,create_time = #{createTime:DATE} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = #{updateTime:DATE} 
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version +1} 
+			</if>
+			
+	 <if test="critical != null and critical != ''"> 
+				,critical = #{critical:NUMERIC} 
+			</if>
+			
+	 <if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+			
+	 <if test="sendtimeType != null and sendtimeType != ''"> 
+				,sendtime_type = #{sendtimeType:NUMERIC} 
+			</if>
+			
+	 <if test="isInvoice != null and isInvoice != ''"> 
+				,is_invoice = #{isInvoice:NUMERIC} 
+			</if>
+			
+	 <if test="vendorId != null and vendorId != ''"> 
+				,vendor_id = #{vendorId} 
+			</if>
+			
+	 <if test="invoiceType != null and invoiceType != ''"> 
+				,invoice_type = #{invoiceType} 
+			</if>
+			
+	 <if test="invoiceMemo != null and invoiceMemo != ''"> 
+				,invoice_memo = #{invoiceMemo} 
+			</if>
+			
+	 <if test="payStatus != null and payStatus != ''"> 
+				,pay_status = #{payStatus:NUMERIC} 
+			</if>
+			
+	 <if test="totalPay != null and totalPay != ''"> 
+				,total_pay = #{totalPay:NUMERIC} 
+			</if>
+			
+	 <if test="deliverPay != null and deliverPay != ''"> 
+				,deliver_pay = #{deliverPay:NUMERIC} 
+			</if>
+			
+	 <if test="ip != null and ip != ''"> 
+				,ip = #{ip} 
+			</if>
+			
+	 <if test="inviteCode != null and inviteCode != ''"> 
+				,invite_code = #{inviteCode} 
+			</if>
+			
+	 <if test="userLevel != null and userLevel != ''"> 
+				,user_level = #{userLevel:NUMERIC} 
+			</if>
+			
+	 <if test="orderGroupid != null and orderGroupid != ''"> 
+				,order_groupid = #{orderGroupid} 
+			</if>
+	<if test="userSex != null and userSex != ''"> 
+				,user_sex = #{userSex} 
+			</if>
+	<if test="userBirth != null and userBirth != ''"> 
+				,user_birth = #{userBirth} 
+			</if>
+       </set>
+		where
+			id=#{id}
+				
+	</update>
+	
+	
+	<update id="updateOrderByOrderCode" parameterType="com.emotte.order.order.model.Order">
+		update t_order	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderCode != null and orderCode != ''"> 
+				,order_code = #{orderCode} 
+			</if>
+			
+	 <if test="parentId != null and parentId != ''"> 
+				,parent_id = #{parentId} 
+			</if>
+			
+	 <if test="userId != null and userId != ''"> 
+				,user_id = #{userId} 
+			</if>
+			
+	 <if test="userName != null and userName != ''"> 
+				,user_name = #{userName} 
+			</if>
+			
+	 <if test="userProvince != null and userProvince != ''"> 
+				,user_province = #{userProvince} 
+			</if>
+			
+	 <if test="userCity != null and userCity != ''"> 
+				,user_city = #{userCity} 
+			</if>
+			
+	 <if test="userArea != null and userArea != ''"> 
+				,user_area = #{userArea} 
+			</if>
+			
+	 <if test="userAddress != null and userAddress != ''"> 
+				,user_address = #{userAddress} 
+			</if>
+			
+	 <if test="userMobile != null and userMobile != ''"> 
+				,user_mobile = #{userMobile} 
+			</if>
+			
+	 <if test="userEmail != null and userEmail != ''"> 
+				,user_email = #{userEmail} 
+			</if>
+	 <if test="receiverName != null and receiverName != ''"> 
+				,receiver_name = #{receiverName} 
+			</if>
+			
+	 <if test="receiverProvince != null and receiverProvince != ''"> 
+				,receiver_province = #{receiverProvince} 
+			</if>
+			
+	 <if test="receiverCity != null and receiverCity != ''"> 
+				,receiver_city = #{receiverCity} 
+			</if>
+			
+	 <if test="receiverArea != null and receiverArea != ''"> 
+				,receiver_area = #{receiverArea} 
+			</if>
+			
+	 <if test="receiverZipcode != null and receiverZipcode != ''"> 
+				,receiver_zipcode = #{receiverZipcode} 
+			</if>
+			
+	 <if test="receiverAddress != null and receiverAddress != ''"> 
+				,receiver_address = #{receiverAddress} 
+			</if>
+			
+	<if test="longitude != null and longitude != ''"> 
+				,longitude = #{longitude} 
+			</if>
+			
+	 <if test="latitude != null and latitude != ''"> 
+				,latitude = #{latitude} 
+			</if>
+			
+	 <if test="receiverMobile != null and receiverMobile != ''"> 
+				,receiver_mobile = #{receiverMobile} 
+			</if>
+			
+	 <if test="receiverEmail != null and receiverEmail != ''"> 
+				,receiver_email = #{receiverEmail} 
+			</if>
+			
+	 <if test="orderType != null and orderType != ''"> 
+				,order_type = #{orderType:NUMERIC} 
+			</if>
+			
+	 <if test="orderChannel != null and orderChannel != ''"> 
+				,order_channel = #{orderChannel:NUMERIC} 
+			</if>
+			
+	 <if test="orderSourceId != null and orderSourceId != ''"> 
+				,order_source_id = #{orderSourceId} 
+			</if>
+			
+	 <if test="orderStatus != null and orderStatus != ''"> 
+				,order_status = #{orderStatus:NUMERIC} 
+			</if>
+			
+	 <if test="authManagerId != null and authManagerId != ''"> 
+				,auth_manager_id = #{authManagerId} 
+			</if>
+			
+	 <if test="createBy != null and createBy != ''"> 
+				,create_by = #{createBy} 
+			</if>
+			
+	 <if test="createTime != null and createTime != ''"> 
+				,create_time = #{createTime:DATE} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = #{updateTime:DATE} 
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version +1} 
+			</if>
+			
+	 <if test="critical != null and critical != ''"> 
+				,critical = #{critical:NUMERIC} 
+			</if>
+			
+	 <if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+			
+	 <if test="sendtimeType != null and sendtimeType != ''"> 
+				,sendtime_type = #{sendtimeType:NUMERIC} 
+			</if>
+			
+	 <if test="isInvoice != null and isInvoice != ''"> 
+				,is_invoice = #{isInvoice:NUMERIC} 
+			</if>
+			
+	 <if test="vendorId != null and vendorId != ''"> 
+				,vendor_id = #{vendorId} 
+			</if>
+			
+	 <if test="invoiceType != null and invoiceType != ''"> 
+				,invoice_type = #{invoiceType} 
+			</if>
+			
+	 <if test="invoiceMemo != null and invoiceMemo != ''"> 
+				,invoice_memo = #{invoiceMemo} 
+			</if>
+			
+	 <if test="payStatus != null and payStatus != ''"> 
+				,pay_status = #{payStatus:NUMERIC} 
+			</if>
+			
+	 <if test="totalPay != null and totalPay != ''"> 
+				,total_pay = #{totalPay:NUMERIC} 
+			</if>
+			
+	 <if test="deliverPay != null and deliverPay != ''"> 
+				,deliver_pay = #{deliverPay:NUMERIC} 
+			</if>
+			
+	 <if test="ip != null and ip != ''"> 
+				,ip = #{ip} 
+			</if>
+			
+	 <if test="inviteCode != null and inviteCode != ''"> 
+				,invite_code = #{inviteCode} 
+			</if>
+			
+	 <if test="userLevel != null and userLevel != ''"> 
+				,user_level = #{userLevel:NUMERIC} 
+			</if>
+			
+	 <if test="orderGroupid != null and orderGroupid != ''"> 
+				,order_groupid = #{orderGroupid} 
+			</if>
+	<if test="userSex != null and userSex != ''"> 
+				,user_sex = #{userSex} 
+			</if>
+	<if test="userBirth != null and userBirth != ''"> 
+				,user_birth = #{userBirth} 
+			</if>
+       </set>
+		where
+			orderCode=#{orderCode}
+	</update>
+	
+	
+	<insert id ="saveThreeOrderIn" parameterType="java.util.List">
+			insert into t_order ( 
+				id,
+				user_id,
+				order_code,
+				three_order_code,
+				user_name
+				user_province,
+				user_city,
+				user_area,
+				user_address,
+				user_mobile,
+				receiver_name,
+				receiver_mobile,
+				cate_type,
+				order_type,
+				receiver_province,
+				receiver_city,
+				receiver_area,
+				receiver_address,
+				create_time,
+				total_pay,
+				order_status,
+				order_source_id ,
+				remark
+			)
+			select A.* from
+			(
+			<foreach item="order" index="index" collection="list" separator="u=UNION ALL">
+				select
+				#{order.id},
+				1,
+				getseq(),
+				#{order.threeOrderCode},
+				#{order.receiverName},
+				#{order.receiverProvince},	
+			    #{order.receiverCity},
+				#{order.receiverArea},
+				#{order.receiverAddress},
+				#{order.receiverMobile},
+				#{order.receiverName},
+				#{order.receiverMobile},
+				#{order.cateType},
+				#{order.orderType},	
+				#{order.receiverProvince},	
+				#{order.receiverCity},
+				#{order.receiverArea},
+				#{order.receiverAddress},
+				to_date( #{order.createTime},'yyyy-MM-dd hh24:mi:ss'),
+				#{order.totalPay},
+				#{order.orderStatus},
+				20180007,		
+				#{order.remark}
+				from dual		
+			</foreach>
+			) A
+		
+	</insert>
+	
+	<insert id ="saveThreeOrderInItem" parameterType="java.util.List">
+			insert into t_order_item ( 
+				id,
+				order_id,
+				product_name,
+				create_time
+			) 
+			select A.*from
+			(
+				<foreach item="order" index="index" collection="list" separator="u=UNION ALL">
+				select
+				#{order.threeOrderItemId},
+				#{order.id},
+				#{order.serverText},
+				to_date( #{order.createTime},'yyyy-MM-dd hh24:mi:ss')
+				from dual
+				</foreach>
+			)A
+			
+	</insert>
+	
+	<insert id ="saveThreeOrderInServerDetail" parameterType="java.util.List">
+			<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	       SELECT getseq() as ID from DUAL  
+	   </selectKey> 
+			insert into t_order_item_detail_server ( 
+				id,
+				item_id,
+				person_name,
+				start_time,
+				end_time,
+				address,
+				create_time,
+				post_id	,			
+				order_id
+			) select  #{id},A.* from
+			(
+				<foreach item="order" index="index" collection="list">
+				select
+				#{threeOrderItemId},
+				#{servicerName},
+				to_date( #{startTime},'yyyy-MM-dd hh24:mi'),
+				to_date( #{endTime},'yyyy-MM-dd hh24:mi'),
+				#{receiverAddress},
+				to_date( #{createTime},'yyyy-MM-dd hh24:mi'),
+				#{postId},
+				#{id}
+				from dual
+				</foreach>
+			)A
+		
+	</insert>
+	<insert id ="saveThreeOrder" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	       SELECT getseq() as ID from DUAL  
+	  	</selectKey> 
+		insert into t_order ( 
+				id,
+				user_id,
+				order_code,
+				three_order_code,
+				user_name,
+				user_mobile,
+				receiver_name,
+				receiver_mobile,
+				cate_type,
+				order_type,
+				receiver_province,
+				receiver_city,
+				receiver_area,
+				receiver_address,
+				create_time,
+				update_time,
+				total_pay,
+				order_status,
+				order_channel,
+				order_source_id ,
+				user_city_code,
+				receiver_city_code,
+				remark,
+				valid
+			)values(
+				#{id},
+				#{userId},
+				getseq(),
+				#{threeOrderCode},
+				#{userName},
+				#{userMobile},
+				#{receiverName},
+				#{receiverMobile},
+				#{cateType},
+				#{orderType},	
+				#{receiverProvince},	
+				#{receiverCity},
+				#{receiverArea},
+				#{receiverAddress},
+				to_date(#{createTime},'yyyy-MM-dd hh24:mi'),
+				to_date(#{createTime},'yyyy-MM-dd hh24:mi'),
+				#{totalPay},
+				#{orderStatus},
+				#{orderChannel},
+				20180007,		
+				#{cityCode},
+				#{receiverAreaCode},
+				#{remark},
+				1
+		)
+	</insert>
+	
+	<insert id ="saveThreeOrderItem" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="itemId">  
+	       SELECT getseq() as itemId from DUAL  
+	  	</selectKey> 
+		insert into t_order_item ( 
+				id,
+				order_id,
+				product_code,
+				product_name,
+				now_price,
+				quantity,
+				remark,
+				create_time,
+				valid
+			) values(
+				#{itemId},
+				#{id},
+				#{productCode},
+				#{productName},
+				#{productPrice},
+				#{quantity},
+				#{remark},
+				to_date( #{createTime},'yyyy-MM-dd hh24:mi'),
+				1
+		)
+	</insert>
+	
+	
+	<insert id ="saveThreeOrderServerDetailServer" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="detailId">  
+	       SELECT getseq() as detailId from DUAL  
+	  	</selectKey> 
+		insert into t_order_item_detail_server ( 
+				id,
+				item_id,
+				person_name,
+				start_time,
+				end_time,
+				address,
+				create_time,
+				post_id	,			
+				order_id,
+				valid
+			)  values(
+				#{detailId},
+				#{itemId},
+				#{sevicerName},
+				to_date( #{startTime},'yyyy-MM-dd hh24:mi'),
+				to_date( #{endTime},'yyyy-MM-dd hh24:mi'),
+				#{receiverAddress},
+				to_date( #{createTime},'yyyy-MM-dd hh24:mi'),
+				#{postId},
+				#{id},
+				1
+		)
+	</insert>
+	
+	<insert id ="saveFaItemDetail" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="detailId">  
+	       SELECT getseq() as detailId from DUAL  
+	  	</selectKey> 
+		insert into t_order_item_detail_fa ( 
+				id,
+				order_item_id,
+				create_by,
+				create_time,
+				express_code,			
+				recive_time
+			)  values(
+				#{detailId},
+				#{itemId},
+				#{createBy},
+				to_date(#{createTime},'yyyy-MM-dd hh24:mi'),
+				#{postId},
+				to_date(#{receiveTime},'yyyy-MM-dd hh24:mi')
+		)
+	</insert>
+	
+	<insert id ="saveUser" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">  
+	       SELECT getseq() as userId from DUAL  
+	  	</selectKey> 
+		insert into t_customer ( 
+				id,
+				real_name,
+				login_name,
+				mobile,
+				province,
+				city,
+				citycode,
+				create_time,
+				valid
+			)  values(
+				#{userId},
+				#{userName},
+				#{userMobile},
+				#{userMobile},
+				#{receiverProvince},
+				#{receiverCity},
+				#{cityCode},
+				sysdate,
+				1
+		)
+	</insert>
+	<insert id ="saveReceiver" parameterType="com.emotte.order.order.model.ThreeOrderIn">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="receiverId">  
+	       SELECT getseq() as receiverId from DUAL  
+	  	</selectKey> 
+		insert into t_customer ( 
+				id,
+				real_name,
+				login_name,
+				mobile,
+				citycode,
+				valid
+			)  values(
+				#{receiverId},
+				#{receiverName},
+				#{receiverMobile},
+				#{receiverMobile},
+				#{receiverCityCode},
+				1
+		)
+	</insert>
+	<insert id="savaExcelRecord" >
+		 insert into t_order_imporexp_record(
+		 		id,
+		 		path,
+		 		file_name,
+		 		is_export,
+		 		create_by,
+		 		three_give_type,
+		 		create_time
+		 	) values (
+		 		getseq(),
+		 		#{url},
+		 		#{fileName},
+		 		2,
+		 		#{createBy},
+		 		1,
+		 		sysdate
+		 )
+	
+	</insert>
+	
+</mapper>

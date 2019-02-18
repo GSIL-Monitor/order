@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.RePersonInterviewServiceMapper">
+ <select id="selectOrder" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Order">
+		select 
+			od.id as id ,			
+			od.order_code as orderCode ,			
+			od.parent_id as parentId ,			
+			od.user_id as userId ,			
+			od.user_name as userName ,			
+			od.user_province as userProvince ,			
+			od.user_city as userCity ,			
+			od.user_area as userArea ,			
+			od.user_address as userAddress ,			
+			od.user_mobile as userMobile ,			
+			od.user_email as userEmail ,		
+			od.receiver_name as receiverName ,			
+			od.receiver_province as receiverProvince ,			
+			od.receiver_city as receiverCity ,			
+			od.receiver_area as receiverArea ,			
+			od.receiver_zipcode as receiverZipcode ,			
+			od.receiver_address as receiverAddress ,
+			od.longitude as longitude ,			
+			od.latitude as latitude ,	
+			od.receiver_mobile as receiverMobile ,			
+			od.receiver_email as receiverEmail ,			
+			od.order_type as orderType ,			
+			od.order_channel as orderChannel ,			
+			od.order_source_id as orderSourceId ,			
+			od.order_status as orderStatus ,			
+			od.auth_manager_id as authManagerId ,			
+			od.create_by as createBy ,			
+			to_char(od.create_time,'yyyy-MM-dd hh24:mi:ss') as createTime ,			
+			od.update_by as updateBy ,			
+			to_char(od.update_time,'yyyy-MM-dd hh24:mi:ss') as updateTime ,			
+			od.version as version ,			
+			od.critical as critical ,				
+			od.remark as remark ,			
+			od.sendtime_type as sendtimeType ,			
+			od.is_invoice as isInvoice ,			
+			od.vendor_id as vendorId ,			
+			od.invoice_type as invoiceType ,			
+			od.invoice_memo as invoiceMemo ,			
+			od.pay_status as payStatus ,
+			decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,			
+			od.deliver_pay as deliverPay ,			
+			od.ip as ip ,		
+			od.price_type  as "priceType" ,			
+			od.invite_code as inviteCode ,			
+			od.user_level as userLevel ,			
+			od.order_groupid as orderGroupid ,
+			od.three_order_code as threeOrderCode,
+			od.user_sex as userSex,
+			od.user_birth as userBirth,
+			od.cate_type as cateType,
+			od.total_pay as totalPay,
+			odp.cate_type as cateTypeParent,
+			od.recharge_by as rechargeBy,
+			od.recharge_dept as rechargeDept,
+			od.city
+		from t_order od left join t_order odp on od.parent_id=odp.id
+		where 1=1 
+			and od.id=#{id} and od.valid = 1 
+	</select>
+	
+		<!-- 排期功能 -->
+	<select id="loadOrderServerLined" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as id ,
+		order_id as orderId ,
+		to_char(start_time,'yyyymmdd') as startTime ,
+		to_char(end_time,'yyyymmdd') as endTime ,
+		lined_type as linedType,
+		weeks as weeks,
+		days as days,
+		hours as hours ,
+		remark as remark ,
+		create_by as createBy ,
+		lined_type as lineTyped,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+		version as version 
+		from t_order_server_lined
+		where
+		order_id=#{orderId} and rownum=1
+	</select>
+	
+	<select id="selectItemDetailServer" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as id ,
+		item_id as itemId ,
+		order_id as orderId ,
+		education as education ,
+		person_level as personLevel ,
+		remark as remark ,
+		min_age as minAge ,
+		max_age as maxAge ,
+		origin as origin ,
+		address as address ,
+		to_char(start_time,'yyyy-mm-dd hh24:mi:ss') as startTime ,
+		to_char(end_time,'yyyy-mm-dd hh24:mi:ss') as endTime ,
+		to_char(interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime ,
+		valid as valid,
+		home_forests as homeForests,
+		familys as familys ,
+		create_by as createBy ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+		version as version 
+		from t_order_item_detail_server
+		where
+		order_id=#{orderId}
+	</select>
+	
+	<update id="updateOrderStatus" parameterType="com.emotte.order.order.model.Order">
+		update t_order set order_status = 4, update_by = #{updateBy}, update_time = sysdate where id = #{id}
+	</update>
+</mapper>

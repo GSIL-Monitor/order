@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrPayfeeDetailMapper">
+
+	<insert id="insertPayfeeDetail" parameterType="com.emotte.order.order.model.PayfeeDetail">
+		insert into t_order_payfee_detail ( 
+			id ,			
+			charge_code ,			
+			person_type ,			
+			order_payfee_id ,			
+			person_id ,			
+			fee_detail_sum ,			
+			create_time ,			
+			create_by ,			
+			update_time ,			
+			update_by ,			
+			version ,			
+			bank_status ,			
+			remark 			
+		) values (
+			#{id} ,				
+			#{chargeCode} ,				
+			#{personType} ,				
+			#{orderPayfeeId} ,				
+			#{personId} ,				
+			#{feeDetailSum} ,				
+			#{createTime} ,				
+			#{createBy} ,				
+			#{updateTime} ,				
+			#{updateBy} ,				
+			#{version} ,				
+			#{bankStatus} ,				
+			#{remark} 				
+		)
+	</insert>
+
+	<update id="updatePayfeeDetail" parameterType="com.emotte.order.order.model.PayfeeDetail">
+		update t_order_payfee_detail	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="chargeCode != null and chargeCode != ''"> 
+				,charge_code = #{chargeCode} 
+			</if>
+			
+	 <if test="personType != null and personType != ''"> 
+				,person_type = #{personType:NUMERIC} 
+			</if>
+			
+	 <if test="orderPayfeeId != null and orderPayfeeId != ''"> 
+				,order_payfee_id = #{orderPayfeeId} 
+			</if>
+			
+	 <if test="personId != null and personId != ''"> 
+				,person_id = #{personId} 
+			</if>
+			
+	 <if test="feeDetailSum != null and feeDetailSum != ''"> 
+				,fee_detail_sum = #{feeDetailSum:NUMERIC} 
+			</if>
+			
+	 <if test="createTime != null and createTime != ''"> 
+				,create_time = #{createTime:DATE} 
+			</if>
+			
+	 <if test="createBy != null and createBy != ''"> 
+				,create_by = #{createBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = #{updateTime:DATE} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version} 
+			</if>
+			
+	 <if test="bankStatus != null and bankStatus != ''"> 
+				,bank_status = #{bankStatus:NUMERIC} 
+			</if>
+			
+	 <if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+			
+       </set>
+		where
+			id=#{id}   and VERSION = #version
+				
+	</update>
+	
+</mapper>

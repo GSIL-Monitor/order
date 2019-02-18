@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderSliceMapper">
+	 <insert id="insertOrderSlice" parameterType="com.emotte.order.order.model.OrderSlice" >
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+	</selectKey>
+		insert into t_order_slice(
+			id,
+			order_id,
+			is_other,
+			person_id,
+			create_time,
+			create_by,
+			divide_id,
+			is_default,
+			divide_money
+		)values(
+			#{id},
+			#{orderId},
+			#{isOther},
+			#{personId},
+			sysdate,
+			#{createBy},
+			#{divideId},
+			#{isDefault},
+			#{divideMoney}
+		)
+	</insert>
+	 <update id="updateOrderSlice" parameterType="com.emotte.order.order.model.OrderSlice" >
+		update t_order_slice t 
+		<set>
+			<if test="id != null and id != ''">
+				t.id = #{id},
+			</if>
+			<if test="orderId != null and orderId != ''">
+				t.order_id = #{orderId},
+			</if>
+			<if test="isOther != null and isOther != ''">
+				t.is_other = #{isOther},
+			</if>
+			<if test="personId != null and personId != ''">
+				t.person_id = #{personId},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				t.create_time = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') ,
+			</if>
+			<if test="createBy != null and createBy != ''">
+				t.create_by = #{createBy},
+			</if>
+			<if test="divideId != null and divideId != ''">
+				t.divide_id = #{divideId},
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				t.is_default = #{isDefault},
+			</if>
+			<if test="divideMoney != null and divideMoney != ''">
+				t.divide_money = #{divideMoney}
+			</if>
+		</set>
+		where id = #{id}  
+	</update>
+</mapper>

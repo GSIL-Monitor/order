@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReAccountPayMapper">
+	 <select id="queryAccountPay" parameterType="com.emotte.order.order.model.AccountPay" resultType="com.emotte.order.order.model.AccountPay">
+		select 
+			t.is_back_type as isBackType,
+			to_char(t.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+			to_char(t.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+			t.valid as valid,
+			t.remark as remark,
+			t.back_from_accoun_id as backFromAccounId,
+			t.id as id,
+			t.order_id as orderId,
+			t.account_amount as accountAmount,
+			to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+			t.create_by as createBy,
+			t.update_by as updateBy,
+			to_char(t.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime,
+			t.version as version,
+			t.pay_status as payStatus,
+			t.pay_type as payType,
+			t.pay_kind as payKind,
+			t.buss_status as bussStatus,
+			t.is_old_data as isOldData,
+			od.cate_type as cateType,
+			nvl(od.total_pay,0) as totalPay,
+			od.pay_status as payStatusOrder,
+			od.order_status as orderStatus
+	 		from t_account_pay t left join t_order od on t.order_id=od.id
+		<where>
+			1 = 1  
+			and (t.pay_status='20110002' or t.pay_status='20110003')
+			<!-- 押金类型结算单不计算余额 -->
+			<!-- 分期手续费类型结算单不计算余额 -->
+			<!-- 单次的押金类型可以被查到-为了生成包裹20180810-->
+			AND (t.pay_type NOT IN (2, 8, 10, 11, 12) OR (od.cate_type IN (3,7) AND  t.pay_type NOT IN (8, 10, 11, 12))) 
+			and not exists( select 1 from t_order s where s.id = t.order_id and s.order_status in ('9','10','12') ) 
+			<if test="isBackType != null and isBackType != ''">
+				and t.is_back_type = #{isBackType} 
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and t.start_time = #{startTime} 
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and t.end_time = #{endTime} 
+			</if>
+			<if test="valid != null and valid != ''">
+				and t.valid = #{valid} 
+			</if>
+			<if test="remark != null and remark != ''">
+				and t.remark = #{remark} 
+			</if>
+			<if test="backFromAccounId != null and backFromAccounId != ''">
+				and t.back_from_accoun_id = #{backFromAccounId} 
+			</if>
+			<if test="id != null and id != ''">
+				and t.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and t.order_id = #{orderId} 
+			</if>
+			<if test="accountAmount != null and accountAmount != ''">
+				and t.account_amount = #{accountAmount} 
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and t.create_time = #{createTime} 
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and t.create_by = #{createBy} 
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and t.update_by = #{updateBy} 
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and t.update_time = #{updateTime} 
+			</if>
+			<if test="version != null and version != ''">
+				and t.version = #{version} 
+			</if>
+			<if test="payStatus != null and payStatus != ''">
+				and t.pay_status = #{payStatus} 
+			</if>
+			<if test="payType != null and payType != ''">
+				and t.pay_type = #{payType} 
+			</if>
+			<if test="payKind != null and payKind != ''">
+				and t.pay_kind = #{payKind} 
+			</if>
+			<if test="bussStatus != null and bussStatus != ''">
+				and t.buss_status = #{bussStatus} 
+			</if>
+		</where>
+		order by t.order_id,t.pay_type 
+	</select>
+	<!-- 
+	 * ①延续订单(状态不为已结束，已取消，已完成)
+	 * ②结算状态为完成结算
+	 * ③非逆向结算单
+	 * ④业务状态为未处理
+	 * ⑤结算类型为订单
+	 * ⑥有效
+	 * 7：结算单下的缴费全部分账
+	 * 8:押金结算单不计入余额
+	 * 9：分期手续费结算单不计入余额
+	-->
+	<select id="queryNoBuss" resultType="com.emotte.order.order.model.AccountPay">
+	SELECT 
+      p.id, p.order_id orderId, p.account_amount accountAmount, p.pay_type payType
+    FROM 
+      emerp.t_account_pay p 
+    WHERE p.valid = 1 
+      AND p.is_back_type = 2 
+      AND p.pay_status = '20110003' 
+      AND p.pay_kind = '2' 
+      AND p.buss_status = 1
+      AND p.pay_type NOT IN (2,8,10,11,12)
+      AND EXISTS ( select 1 from emerp.t_order s where s.id = p.order_id AND s.valid = 1 AND s.cate_type = '2' AND s.order_status NOT IN (9, 10, 12))
+      AND (p.pay_type IN (4,6) OR EXISTS (SELECT 1 FROM emerp.t_order_payfee f WHERE f.valid = 1 AND f.order_id = p.id GROUP BY f.order_id HAVING COUNT(1) = SUM(NVL(f.split_status, 2))))
+	</select>
+	<!-- 判断结算单下的所有有效缴费是否已经分账，由于已分账的状态是1，所以如果全部已分账，那么分账状态值求和等于数量 -->
+	<select id="isAllPayFeeSplit" resultType="java.util.Map">
+		SELECT sum(nvl(f.split_status, 0)) - COUNT(1) re FROM emerp.t_order_payfee f WHERE f.valid = 1 AND f.order_id = #{0} GROUP BY f.order_id
+	</select>
+		<select id="queryAccountById"  parameterType="com.emotte.order.order.model.AccountPay" resultType="com.emotte.order.order.model.AccountPay">
+	select 
+			act.is_back_type as isBackType,
+			to_char(act.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+			to_char(act.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+			act.remark as remark,
+			act.back_from_accoun_id as backFromAccounId,
+			act.id as id,
+			act.order_id as orderId,
+			act.account_amount as accountAmount,
+			to_char(act.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+			act.create_by as createBy,
+			act.update_by as updateBy,
+			to_char(act.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime,
+			act.version as version,
+			act.pay_status as payStatus,
+			act.pay_type as payType,
+			act.pay_kind as payKind,
+			act.buss_status as bussStatus,
+			act.valid as valid,
+			od.cate_type as cateType,
+			nvl(od.total_pay,0) as totalPay,
+			od.pay_status as payStatusOrder,
+			od.order_status as orderStatus	
+		from t_account_pay act 
+			left join t_order od on act.order_id=od.id
+			left join t_auth_manager tama on (act.create_by=tama.id and tama.valid=1)
+	<where> 
+	 1 = 1
+				<if test="id!=null and id!='' ">           
+		 and	act.id =  #{id} 		</if>
+				  <if test="orderId!=null and orderId!='' ">           
+		and	act.order_id =  #{orderId} 		</if>
+				  <if test="payStatus!=null and payStatus!='' ">           
+		and	act.pay_status =  #{payStatus} 		</if>
+				  <if test="isBackType!=null and isBackType!='' ">           
+		and	act.is_back_type =  #{isBackType} 		</if>
+				  <if test="valid!=null and valid!='' ">           
+		and	act.valid =  #{valid} 		</if>
+				  <if test="version!=null and version!='' ">           
+		and	act.version =  #{version} 		</if>
+			</where>
+	order by act.create_time desc 
+	</select>
+	<select id="queryAccountInfo" resultType="java.util.Map">
+		SELECT p.id, p.buss_status bussStatus, p.account_amount accountAmount, o.total_pay totalPay 
+		FROM t_account_pay p 
+		INNER JOIN t_order o ON o.id = p.order_id WHERE p.id = #{0}
+	</select>
+	
+	<select id="selectAccountPay" parameterType="com.emotte.order.order.model.AccountPay" resultType="com.emotte.order.order.model.AccountPay">
+		select 
+		    ta.service_money as money,
+			t.is_back_type as isBackType,
+			to_char(t.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+			to_char(t.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+			t.valid as valid,
+			t.remark as remark,
+			t.back_from_accoun_id as backFromAccounId,
+			t.id as id,
+			t.order_id as orderId,
+			t.account_amount as accountAmount,
+			to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+			t.create_by as createBy,
+			t.update_by as updateBy,
+			to_char(t.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime,
+			t.version as version,
+			t.pay_status as payStatus,
+			t.pay_type as payType,
+			t.pay_kind as payKind,
+			t.buss_status as bussStatus,
+			t.is_old_data as isOldData,
+			od.cate_type as cateType,
+			nvl(od.total_pay,0) as totalPay,
+			od.pay_status as payStatusOrder,
+			od.order_status as orderStatus
+	 		from t_account_pay t left join t_order od on t.order_id=od.id left join t_order_agreement ta on ta.order_id=od.id
+		<where>
+			1 = 1  
+			<if test="isBackType != null and isBackType != ''">
+				and t.is_back_type = #{isBackType} 
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and t.start_time = #{startTime} 
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and t.end_time = #{endTime} 
+			</if>
+			<if test="valid != null and valid != ''">
+				and t.valid = #{valid} 
+			</if>
+			<if test="remark != null and remark != ''">
+				and t.remark = #{remark} 
+			</if>
+			<if test="backFromAccounId != null and backFromAccounId != ''">
+				and t.back_from_accoun_id = #{backFromAccounId} 
+			</if>
+			<if test="id != null and id != ''">
+				and t.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and t.order_id = #{orderId} 
+			</if>
+			<if test="accountAmount != null and accountAmount != ''">
+				and t.account_amount = #{accountAmount} 
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and t.create_time = #{createTime} 
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and t.create_by = #{createBy} 
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and t.update_by = #{updateBy} 
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and t.update_time = #{updateTime} 
+			</if>
+			<if test="version != null and version != ''">
+				and t.version = #{version} 
+			</if>
+			<if test="payStatus != null and payStatus != ''">
+				and t.pay_status = #{payStatus} 
+			</if>
+			<if test="payType != null and payType != ''">
+				and t.pay_type = #{payType} 
+			</if>
+			<if test="payKind != null and payKind != ''">
+				and t.pay_kind = #{payKind} 
+			</if>
+			<if test="bussStatus != null and bussStatus != ''">
+				and t.buss_status = #{bussStatus} 
+			</if>
+		</where>
+		order by t.order_id,t.pay_type 
+	</select>
+
+	<!--根据结算单ID查询结算状态为【未结算，部分结算】的结算单信息-->
+	<select id="findCountByAccountIdForDelete" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(ID) FROM T_ACCOUNT_PAY WHERE VALID = 1 AND PAY_STATUS IN ('20110001','20110002') AND ID = #{id}
+	</select>
+
+	<!--根据结算单ID查询订单ID-->
+	<select id="findOrderIdByAccountId" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT ORDER_ID FROM T_ACCOUNT_PAY WHERE ID = #{accountId}
+	</select>
+
+	<!--根据订单ID查询结算完成的结算单-->
+	<select id="findAccountByOrderIdAndPayStatus" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(ID) FROM T_ACCOUNT_PAY WHERE PAY_STATUS = '20110003' AND ORDER_ID = #{orderId};
+	</select>
+</mapper>

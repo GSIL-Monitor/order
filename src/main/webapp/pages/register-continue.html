@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <ol class="page-header breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">服务人员管理系统</a></li>
+            <li><a href="#">上户管理</a></li>
+            <li class="active">小时工</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <tbody class="dataTable_wrapper">
+                <div class="dataTable-info">
+                    <header>
+                        <h4>查询</h4>
+                        <!--表单显示及隐藏-->
+                        <div class="drop-on">
+                            <span><i class="glyphicon glyphicon-chevron-up"></i></span>
+                        </div>
+                        <div class="drop-down">
+                            <span><i class="glyphicon glyphicon-chevron-down"></i></span>
+                        </div>
+                    </header>
+                    <div class="info">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-4">
+                                    <label>
+                                        <p>姓名：</p>
+                                        <input type="text" class="form-control" placeholder="Jane">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label>
+                                        <p>是否员工制：</p>
+                                        <select class="form-control">
+                                            <option>是</option>
+                                            <option>否</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label>
+                                        <p>培训工种：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-4">
+                                    <label>
+                                        <p>身份证号：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label class="mr20">
+                                        <p>培训状态：</p>
+                                        <select class="form-control">
+                                            <option>未报名</option>
+                                            <option>已报名</option>
+                                            <option>培训中</option>
+                                            <option>培训结束</option>
+                                            <option>通过考核</option>
+                                            <option>未通过考核</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label class="mr20">
+                                        <p>评级状态：</p>
+                                        <select class="form-control">
+                                            <option>未评级</option>
+                                            <option>已评级</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-4">
+                                    <label class="mr20">
+                                        <p>推送基地：</p>
+                                        <select class="form-control">
+                                            <option></option>
+                                            <option></option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-8">
+                                    <label>
+                                        <p>考核通过时间：</p>
+                                        <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                        &nbsp;至&nbsp;
+                                        <input id="d4312" class="Wdate form-control" class="" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <button type="button" class="btn btn-default fr mr20">查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel-heading panel-new">
+                    <button class="xinzeng btn btn-default" type="button" onclick="openModule('xinzeng.html')"><em class="add glyphicon glyphicon-plus-sign"></em>新增</button>
+                    <button class="tuisong btn btn-default" type="button"><em  class="add glyphicon glyphicon-transfer"></em>推送培训</button>
+                </div>
+                <!-- /.列表开始 -->
+                <div class="panel-content table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox"/></th>
+                            <th>序号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>联系方式</th>
+                            <th>渠道</th>
+                            <th>创建时间</th>
+                            <th>预约到校时间</th>
+                            <th>是否到校</th>
+                            <th>期望工种</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>1</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>2</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>3</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>4</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>5</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>6</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>7</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"/></td>
+                            <td>8</td>
+                            <td>张三</td>
+                            <td>男</td>
+                            <td>15201097223</td>
+                            <td>基地录入</td>
+                            <td>2016-01-01</td>
+                            <td>2016-02-02</td>
+                            <td>是</td>
+                            <td>月嫂</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </tbody>
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- /.panel -->
+    <!-- /.col-lg-12 -->
+    <div class="aside-tab col-lg-4">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li role="presentation" class="active"><a href="#person" aria-controls="person" role="tab" data-toggle="tab">基本信息</a></li>
+            <li role="presentation"><a href="#order" aria-controls="order" role="tab" data-toggle="tab">需求订单</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="person">
+                <div class="widget">
+                    <a href="#"><em class="widget-x glyphicon glyphicon-pencil"></em><span>修改</span></a>
+                    <a href="#"><em class="widget-d glyphicon glyphicon-trash"></em><span>删除</span></a>
+                </div>
+                <div class="widget-content">
+                    <table class="table table-condensed">
+                        <tr>
+                            <td>
+                                姓名：陈好
+                            </td>
+                            <td>
+                                性别：女
+                            </td>
+                            <td rowspan="3" colspan="2">
+                                <img src="../images/touxiang.png" alt="" style="width:100px; height:100px;"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                年龄：32
+                            </td>
+                            <td>
+                                属相：马
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                民族：汉
+                            </td>
+                            <td>
+                                学历:初中
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                籍贯：北京
+                            </td>
+                            <td colspan="2">
+                                婚姻状况：已婚
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">紧急联系：122939794749</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">联系方式：12345678913</td>
+                            <td colspan="2">普通话：标准</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">身份证号：370923199132334449</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">现住地址：北京市石景山区万商大厦</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">原籍住址：北京市石景山区万商大厦</td>
+                        </tr>
+                        <tr>
+                            <td>从事家政年限：2年</td>
+                            <td colspan="2">健康证状况：检验证明</td>
+                        </tr>
+                        <tr>
+                            <td>期望工种：小时工</td>
+                            <td colspan="2">期望工作：打扫家务</td>
+                        </tr>
+                        <tr>
+                            <td>期望薪资：5000</td>
+                            <td colspan="2">是否怕宠物：否</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span>有何特长：</span>
+                                <textarea cols="30" rows="2"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span>初试评价：</span>
+                                <textarea cols="30" rows="2"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                渠道：呼叫中心
+                            </td>
+                            <td colspan="2">
+                                录入人：王杰
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="order">
+                <div class="widget continue-widget">
+                    <button type="button" class="btn btn-examin" onclick="openModule('continue-need-details.html')">查看详情</button>
+                    <button type="button" class="btn btn-examin">确定人员</button>
+                    <button type="button" class="btn btn-examin" onclick="openModule('photo-add.html')">调换人员</button>
+                </div>
+                <div class="widget-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>订单编号</th>
+                            <th>需求类型</th>
+                            <th>请求时间</th>
+                            <th>请求状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>213787493</td>
+                            <td>月嫂</td>
+                            <td>2016.02.12</td>
+                            <td>未处理</td>
+                        </tr>
+                        <tr>
+                            <td>213787493</td>
+                            <td>月嫂</td>
+                            <td>2016.02.12</td>
+                            <td>未处理</td>
+                        </tr>
+                        <tr>
+                            <td>213787493</td>
+                            <td>月嫂</td>
+                            <td>2016.02.12</td>
+                            <td>未处理</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        /*表单合并*/
+        $(".drop-on").on("click",function(){
+            $(".info").slideUp();
+            $(".drop-on").hide();
+            $(".drop-down").show();
+        });
+        $(".drop-down").on("click",function(){
+            $(".info").slideDown();
+            $(".drop-down").hide();
+            $(".drop-on").show();
+        });
+    });
+    /*tab栏*/
+    $(function(){
+        $(".mytabs>li").click(function(){
+            $(this).addClass("tab-active").siblings().removeClass("tab-active");
+            var index = $(this).index();
+            $(".main")
+                    .eq(index)
+                    .addClass("tab-selected")
+                    .siblings(".main")
+                    .removeClass("tab-selected");
+        });
+    });
+</script>
+</body>
+
+</html>
+

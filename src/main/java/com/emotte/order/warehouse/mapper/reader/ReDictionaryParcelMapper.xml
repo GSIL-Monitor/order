@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.reader.ReDictionaryParcelMapper">
+	
+	<select id="queryDictionary"  parameterType="com.emotte.order.warehouse.model.Dictionary" resultType="com.emotte.order.warehouse.model.Dictionary">
+	select
+			ID as id ,		
+			FID as fid ,		
+			DICT_NAME as dictName ,		
+			REMARK as remark ,		
+			DICT_CODE as dictCode ,		
+			ORG_CODE as orgCode ,		
+			PRIORITY as priority ,		
+			ICON as icon ,		
+			CREATE_BY as createBy ,		
+			UPDATE_BY as updateBy ,		
+			CREATE_TIME as createTime ,		
+			UPDATE_TIME as updateTime ,		
+			VALID as valid ,		
+			VERSION as version ,		
+			IS_OLD_DATA as isOldData ,		
+			LOG as log 		
+	from  t_base_dictionary
+	<where> 
+	 1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="fid!=null and fid!='' ">           
+			and	FID =  #{fid} 		
+		</if>	
+		<if test="dictName!=null and dictName!='' ">           
+			and	DICT_NAME =  #{dictName} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="dictCode!=null and dictCode!='' ">           
+			and	DICT_CODE =  #{dictCode} 		
+		</if>	
+		<if test="orgCode!=null and orgCode!='' ">           
+			and	ORG_CODE =  #{orgCode} 		
+		</if>	
+		<if test="priority!=null and priority!='' ">           
+			and	PRIORITY =  #{priority} 		
+		</if>	
+		<if test="icon!=null and icon!='' ">           
+			and	ICON =  #{icon} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+	</where>
+	order by CREATE_TIME desc
+	</select>
+	
+</mapper>

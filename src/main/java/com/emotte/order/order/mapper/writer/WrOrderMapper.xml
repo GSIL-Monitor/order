@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderMapper">
+	<insert id="insertOrder" parameterType="com.emotte.order.order.model.Order">
+		<selectKey resultType="String" order="BEFORE" keyProperty="orderCode">
+		<if test="orderCode == null or orderCode == ''">
+			select ''||getseq()||'' as orderCode from dual
+		</if> 
+	   </selectKey> 
+		insert into t_order ( 
+			id ,			
+			order_code ,			
+			parent_id ,			
+			user_id ,			
+			user_name ,			
+			user_province ,			
+			user_city ,			
+			user_area ,			
+			user_address ,			
+			user_mobile ,			
+			user_email ,	
+			receiver_name ,			
+			receiver_province ,			
+			receiver_city ,			
+			receiver_area ,			
+			receiver_zipcode ,			
+			receiver_address ,
+			longitude ,			
+			latitude ,		
+			receiver_mobile ,			
+			receiver_email ,			
+			order_type ,			
+			order_channel ,			
+			order_source_id ,			
+			order_status ,			
+			auth_manager_id ,			
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version ,			
+			critical ,			
+			remark ,			
+			sendtime_type ,			
+			is_invoice ,			
+			vendor_id ,			
+			invoice_type ,			
+			invoice_memo ,			
+			pay_status ,			
+			total_pay ,			
+			deliver_pay ,			
+			ip ,			
+			invite_code ,			
+			user_level ,			
+			order_groupid ,
+			user_sex ,
+			user_birth ,
+			cate_type ,
+			city ,
+			receiver_city_code ,
+			user_city_code ,
+			three_order_code ,
+			receipt_time ,
+			price_type ,
+			valid,
+			create_dept,
+			recharge_by,
+			recharge_dept,
+			three_match_lock,
+			recharge_type,
+			emp_id,
+			RECOMMEND_USER_MOBILE,
+			otype,
+			recommend_user_id,
+			order_push_type,
+			cancel_text,
+			service_object,
+			is_show
+		) values (		
+			#{id},		
+			#{orderCode},				
+			#{parentId} ,				
+			#{userId} ,				
+			#{userName} ,				
+			#{userProvince} ,				
+			#{userCity} ,				
+			#{userArea} ,				
+			#{userAddress} ,				
+			#{userMobile} ,				
+			#{userEmail} ,			
+			#{receiverName} ,				
+			#{receiverProvince} ,				
+			#{receiverCity} ,				
+			#{receiverArea} ,				
+			#{receiverZipcode} ,				
+			#{receiverAddress} ,
+			#{longitude} ,				
+			#{latitude} ,	
+			#{receiverMobile} ,				
+			#{receiverEmail} ,				
+			#{orderType} ,				
+			#{orderChannel} ,				
+			#{orderSourceId} ,				
+			#{orderStatus} ,				
+			#{authManagerId} ,				
+			#{createBy} ,				
+			sysdate ,				
+			#{updateBy} ,				
+			sysdate ,				
+			#{version} ,				
+			#{critical} ,				
+			#{remark} ,				
+			#{sendtimeType} ,				
+			#{isInvoice} ,				
+			#{vendorId} ,				
+			#{invoiceType} ,				
+			#{invoiceMemo} ,				
+			#{payStatus} ,				
+			#{totalPay} ,				
+			#{deliverPay} ,				
+			#{ip} ,				
+			#{inviteCode} ,				
+			#{userLevel} ,				
+			#{orderGroupid} ,
+			#{userSex} ,
+			to_date( #{userBirth},'yyyy-MM-dd hh24:mi:ss') ,
+			#{cateType} ,
+			#{city} ,
+			#{receiverCityCode} ,
+			#{userCityCode} ,
+			#{threeOrderCode} ,
+			to_date(#{receiptTime},'yyyy-MM-dd hh24:mi:ss') ,
+			#{priceType},
+			1,
+			#{createDept},
+			#{rechargeBy},
+			#{rechargeDept},
+	        #{threeMatchLock},
+	        #{orderFenfa},
+	        #{emp_id},
+	        #{recommendUserMobile},
+	        #{otype},
+	        #{recommendUserId},
+	        #{orderPushType},
+	        #{cancelText},
+	        nvl(#{serviceObject},2),
+	        #{isShow}
+		)
+	</insert>
+
+	<update id="updateOrder" parameterType="com.emotte.order.order.model.Order">
+		update t_order	
+		 <set>  
+		 	   update_time = sysdate
+	 <if test="orderCode != null and orderCode != ''"> 
+				,order_code = #{orderCode} 
+			</if>
+			
+	 <if test="parentId != null and parentId != ''"> 
+				,parent_id = #{parentId} 
+			</if>
+			
+	 <if test="userId != null and userId != ''"> 
+				,user_id = #{userId} 
+			</if>
+			
+	 <if test="userName != null and userName != ''"> 
+				,user_name = #{userName} 
+			</if>
+			
+	 <if test="userProvince != null and userProvince != ''"> 
+				,user_province = #{userProvince} 
+			</if>
+			
+	 <if test="userCity != null and userCity != ''"> 
+				,user_city = #{userCity} 
+			</if>
+			
+	 <if test="userArea != null and userArea != ''"> 
+				,user_area = #{userArea} 
+			</if>
+			
+	 <if test="userAddress != null and userAddress != ''"> 
+				,user_address = #{userAddress} 
+			</if>
+			
+	 <if test="userMobile != null and userMobile != ''"> 
+				,user_mobile = #{userMobile} 
+			</if>
+			
+	 <if test="userEmail != null and userEmail != ''"> 
+				,user_email = #{userEmail} 
+			</if>
+	 <if test="receiverName != null and receiverName != ''"> 
+				,receiver_name = #{receiverName} 
+			</if>
+			
+	 <if test="receiverProvince != null and receiverProvince != ''"> 
+				,receiver_province = #{receiverProvince} 
+			</if>
+			
+	 <if test="receiverCity != null and receiverCity != ''"> 
+				,receiver_city = #{receiverCity} 
+			</if>
+			
+	 <if test="receiverArea != null and receiverArea != ''"> 
+				,receiver_area = #{receiverArea} 
+			</if>
+			
+	 <if test="receiverZipcode != null and receiverZipcode != ''"> 
+				,receiver_zipcode = #{receiverZipcode} 
+			</if>
+			
+	 <if test="receiverAddress != null and receiverAddress != ''"> 
+				,receiver_address = #{receiverAddress} 
+			</if>
+			
+	<if test="longitude != null and longitude != ''"> 
+				,longitude = #{longitude} 
+			</if>
+			
+	 <if test="latitude != null and latitude != ''"> 
+				,latitude = #{latitude} 
+			</if>
+			
+	 <if test="receiverMobile != null and receiverMobile != ''"> 
+				,receiver_mobile = #{receiverMobile} 
+			</if>
+			
+	 <if test="receiverEmail != null and receiverEmail != ''"> 
+				,receiver_email = #{receiverEmail} 
+			</if>
+			
+	 <if test="orderType != null and orderType != ''"> 
+				,order_type = #{orderType} 
+			</if>
+			
+	 <if test="orderChannel != null and orderChannel != ''"> 
+				,order_channel = #{orderChannel} 
+			</if>
+			
+	 <if test="orderSourceId != null and orderSourceId != ''"> 
+				,order_source_id = #{orderSourceId} 
+			</if>
+	<!-- FA修改订单状态需判断是否已经完成 -->
+	 <if test="orderStatus != null and (orderStatus==13 or orderStatus==14)"> 
+				,order_status = decode(order_status,'9','9','10','10',(''||#{orderStatus})) 
+			</if>
+	<if test="orderStatus != null and orderStatus!=13 and orderStatus!=14"> 
+				,order_status = ''||#{orderStatus} 
+			</if>	
+	 <if test="authManagerId != null and authManagerId != ''"> 
+				,auth_manager_id = #{authManagerId} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+			
+	 <if test="version != null and version != ''"> 
+				,version = version +1
+			</if>
+			
+	 <if test="critical != null and critical != ''"> 
+				,critical = #{critical} 
+			</if>
+			
+	 <if test="remark != null">
+				,remark = #{remark} 
+			</if>
+			
+	 <if test="sendtimeType != null and sendtimeType != ''"> 
+				,sendtime_type = #{sendtimeType} 
+			</if>
+			
+	 <if test="isInvoice != null and isInvoice != ''"> 
+				,is_invoice = #{isInvoice} 
+			</if>
+			
+	 <if test="vendorId != null and vendorId != ''"> 
+				,vendor_id = #{vendorId} 
+			</if>
+			
+	 <if test="invoiceType != null and invoiceType != ''"> 
+				,invoice_type = #{invoiceType} 
+			</if>
+			
+	 <if test="invoiceMemo != null and invoiceMemo != ''"> 
+				,invoice_memo = #{invoiceMemo} 
+			</if>
+			
+	 <if test="payStatus != null and payStatus != ''"> 
+				,pay_status = #{payStatus} 
+			</if>
+			
+	 <if test="totalPayD != null and totalPayD != ''"> 
+				,total_pay = #{totalPayD} 
+			</if>	
+			
+	 <if test="deliverPay != null and deliverPay != ''"> 
+				,deliver_pay = #{deliverPay} 
+			</if>
+			
+	 <if test="ip != null and ip != ''"> 
+				,ip = #{ip} 
+			</if>
+			
+	 <if test="inviteCode != null and inviteCode != ''"> 
+				,invite_code = #{inviteCode} 
+			</if>
+			
+	 <if test="userLevel != null and userLevel != ''"> 
+				,user_level = #{userLevel} 
+			</if>
+			
+	 <if test="orderGroupid != null and orderGroupid != ''"> 
+				,order_groupid = #{orderGroupid} 
+			</if>
+	<if test="userSex != null and userSex != ''"> 
+				,user_sex = #{userSex} 
+			</if>
+	<if test="userBirth != null and userBirth != ''"> 
+				,user_birth =  to_date(substr(#{userBirth},0,19),'yyyy-MM-dd hh24:mi:ss') 
+			</if>
+	<if test="cateType != null and cateType != ''"> 
+				,cate_type = #{cateType} 
+			</if>
+	<if test="city != null and city != ''"> 
+				,city = #{city} 
+			</if>
+	<if test="receiverCityCode != null and receiverCityCode != ''"> 
+				,receiver_city_code = #{receiverCityCode} 
+			</if>
+	<if test="userCityCode != null and userCityCode != ''"> 
+				,user_city_code = #{userCityCode} 
+			</if>
+	<if test="threeOrderCode != null and threeOrderCode != ''"> 
+				,three_order_code = #{threeOrderCode} 
+			</if>
+	<if test="receiptTime != null and receiptTime != ''"> 
+				,receipt_time = to_date(#{receiptTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+	<if test="priceType != null and priceType != ''"> 
+				,price_type = #{priceType} 
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+	<if test="salaryStatus != null and salaryStatus != ''"> 
+				,salary_status = #{salaryStatus} 
+			</if>
+	<if test="createDept != null and createDept != ''"> 
+				,create_dept = #{createDept} 
+			</if>
+	<if test="rechargeBy != null and rechargeBy != ''"> 
+				,recharge_by = #{rechargeBy} 
+			</if>
+	<if test="rechargeDept != null and rechargeDept != ''"> 
+				,recharge_dept = #{rechargeDept} 
+			</if>
+			<if test="isShow != null and isShow != '' ">
+				,is_show = #{isShow}
+			</if>
+       </set>
+		where
+			id=#{id}
+				
+	</update>
+	
+	<update id="updateTotalPay">
+		UPDATE emerp.t_order o SET o.total_pay = NVL(o.total_pay, 0) + #{1}, o.update_time = sysdate,o.pay_status = '20110002' WHERE o.id = #{0} <!-- ,o.pay_status = '20110002' -->
+	</update>
+	<!-- 分包,转包 -->
+	<update id="updateOrderFollow" parameterType="com.emotte.order.order.model.Dictionary">
+		update emerp.t_order o 
+		set <!-- o.follow_by=#{followBy},o.follow_dept=#{followDept},
+			o.follow_time=decode(o.follow_time,null,sysdate,o.follow_time), -->
+			o.recharge_by=decode(o.recharge_by,null,#{followBy},o.recharge_by),
+			o.recharge_dept=decode(o.recharge_by,null,#{followDept},o.recharge_dept),
+			o.update_by=#{updateBy},o.update_time=sysdate
+		where 
+			o.user_id=#{userId} and o.valid=1 and o.follow_dept is not null and o.order_status not in (9)
+			and o.cate_type in (1,2,3,4,8)
+	</update>
+	<!-- 离职转单 -->
+	<update id="updateOrderFollowUpdate" parameterType="com.emotte.order.order.model.Dictionary">
+		update emerp.t_order o 
+			set <!-- o.follow_by=decode(o.follow_by,#{followBy},#{rechargeBy},o.follow_by),
+				o.follow_dept=decode(o.follow_by,#{followBy},#{rechargeDept},o.follow_dept), -->
+				o.recharge_by=decode(o.recharge_by,#{followBy},#{rechargeBy},o.recharge_by),
+				o.recharge_dept=decode(o.recharge_by,#{followBy},#{rechargeDept},o.recharge_dept),
+				o.update_by=#{updateBy},o.update_time = sysdate
+		where  o.recharge_by=#{followBy} and o.valid=1 and o.cate_type!=8
+	</update>
+	<update id="updateOrderFollowUpdate_solution" parameterType="com.emotte.order.order.model.Dictionary">
+		update emerp.t_order o 
+			set <!-- o.follow_by=decode(o.follow_by,#{followBy},#{rechargeBy},o.follow_by),
+				o.follow_dept=decode(o.follow_by,#{followBy},#{rechargeDept},o.follow_dept), -->
+				o.recharge_by=decode(o.recharge_by,#{followBy},#{rechargeBy},o.recharge_by),
+				o.recharge_dept=decode(o.recharge_by,#{followBy},#{rechargeDept},o.recharge_dept),
+				o.update_by=#{updateBy},o.update_time = sysdate
+		where  o.recharge_by=#{followBy} and o.valid=1 and o.cate_type=8  
+		AND EXISTS (SELECT 1 FROM t_solution_cust_solution s WHERE s.solution_status != 5 AND s.id=o.id)
+	</update>
+	<!-- 记录订单余额日志 -->
+	<insert id="inserOrderTotalPayLog" >
+		INSERT INTO t_order_totalpay_history (
+			ID
+			, CREATE_BY
+			, CREATE_TIME
+			, VALID
+			, VERSION
+			, MONEY
+			, ACCOUNT_ID
+			, ORDER_ID
+			)
+		values (
+			getSeq()
+			, 1
+			, sysdate
+			, 1
+			, 1
+			, #{money}
+			, #{accountId}
+			, #{orderId}
+			)
+	</insert>
+	
+	
+	<insert id ="saveOrderImport" parameterType="com.emotte.order.order.model.OrderImport">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	       SELECT getseq() as ID from DUAL  
+	  	</selectKey> 
+	  	insert into t_order (
+	  	id,
+		order_code,
+		user_id,
+		user_name,
+		user_province,
+		user_city,
+		user_area,
+		user_address,
+		user_mobile,
+		cate_type,
+		receiver_name,
+		receiver_province,
+		receiver_city,
+		receiver_area,
+		receiver_address,
+		longitude,
+		latitude,
+		receiver_mobile,
+		order_type,
+		order_channel,
+		order_source_id,
+		order_status,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		version,
+		critical,
+		remark,
+		pay_status,
+		total_pay,
+		city,
+		price_type,
+		three_order_code,
+		valid,
+		create_dept,
+		recharge_by,
+		recharge_dept,
+		sync_status,
+		recharge_type,
+		emp_id,
+		log,
+		SERVICE_OBJECT
+	  	) values(
+	  	#{id},
+		getseq(),
+		#{userId},
+		#{userName},
+		#{userProvince},
+		#{userCity},
+		#{userArea},
+		#{userAddress},
+		#{userMobile},
+		#{cateType},
+		#{receiverName},
+		#{receiverProvince},
+		#{receiverCity},
+		#{receiverArea},
+		#{receiverAddress},
+		#{longitude},
+		#{latitude},
+		#{receiverMobile},
+		#{categoryCode},
+		#{orderChannel},
+		20180007,
+		2,
+		#{createBy},
+		sysdate,
+		#{createBy},
+		sysdate,
+		1,
+		2,
+		#{remark},
+		#{payStatus},
+		#{totalPay},
+		#{cityCode},
+		#{productPriceType},
+		#{threeOrderCode},
+		1,
+		#{createDept},
+		#{rechargeBy},
+		#{rechargeDept},
+		1,
+		1,
+		0,
+		#{log},
+		2
+	  	)
+	  	
+	  	
+		<!-- insert into t_order ( 
+				id,
+				user_id,
+				order_code,
+				three_order_code,
+				user_name,
+				user_mobile,
+				receiver_name,
+				receiver_mobile,
+				cate_type,
+				order_type,
+				receiver_province,
+				receiver_city,
+				receiver_area,
+				receiver_address,
+				create_time,
+				update_time,
+				total_pay,
+				order_status,
+				order_channel,
+				order_source_id ,
+				user_city_code,
+				receiver_city_code,
+				remark,
+				valid
+			)values(
+				#{id},
+				#{userId},
+				getseq(),
+				#{threeOrderCode},
+				#{userName},
+				#{userMobile},
+				#{receiverName},
+				#{receiverMobile},
+				#{cateType},
+				#{orderType},	
+				#{receiverProvince},	
+				#{receiverCity},
+				#{receiverArea},
+				#{receiverAddress},
+				to_date(#{createTime},'yyyy-MM-dd hh24:mi'),
+				to_date(#{createTime},'yyyy-MM-dd hh24:mi'),
+				#{totalPay},
+				#{orderStatus},
+				#{orderChannel},
+				20180007,		
+				#{cityCode},
+				#{receiverAreaCode},
+				#{remark},
+				1 
+		) -->
+	</insert>
+	
+	<insert id ="saveOrderImportItem" parameterType="com.emotte.order.order.model.OrderImport">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="itemId">  
+	       SELECT getseq() as itemId from DUAL  
+	  	</selectKey> 
+	  	insert into t_order_item ( 
+		  	id,
+			order_id,
+			product_code,
+			product_name,
+			now_price,
+			quantity,
+			sale_type,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			version,
+			valid,
+			product_img,
+			category_code,
+			product_price_type,
+			product_unit,
+			product_spec
+		) values (
+			#{itemId},
+			#{id},
+			#{productCode},
+			#{productName},
+			#{productPrice},
+			#{quantity},
+			1,
+			#{createBy},
+			sysdate,
+			#{createBy},
+			sysdate,
+			1,
+			1,
+			#{productImg},
+			#{categoryCode},
+			#{productPriceType},
+			#{productUnit},
+			#{productSpec}
+		)	
+		<!-- insert into t_order_item ( 
+				id,
+				order_id,
+				product_code,
+				product_name,
+				now_price,
+				quantity,
+				remark,
+				create_time,
+				valid
+			) values(
+				#{itemId},
+				#{id},
+				#{productCode},
+				#{productName},
+				#{productPrice},
+				#{quantity},
+				#{remark},
+				to_date( #{createTime},'yyyy-MM-dd hh24:mi'),
+				1
+		) -->
+	</insert>
+	
+	
+	<insert id ="saveOrderImportDetailServer" parameterType="com.emotte.order.order.model.OrderImport">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="detailId">  
+	       SELECT getseq() as detailId from DUAL  
+	  	</selectKey> 
+	  	insert into t_order_item_detail_server (
+			id,
+			item_id,
+			address,
+			start_time,
+			end_time,
+			valid,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			version,
+			person_number,
+			order_id
+	  	)  values(
+	  		#{detailId},
+			#{itemId},
+			#{receiverAddress},
+			to_date( #{startTime},'yyyy-mm-dd hh24:mi:ss'),
+			to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss'),
+			1,
+			#{remark},
+			#{createBy},
+			sysdate ,
+			#{createBy},
+			sysdate ,
+			1,
+			#{personNumber},
+			#{id}
+	  	)
+	  	
+		<!-- insert into t_order_item_detail_server ( 
+				id,
+				item_id,
+				person_name,
+				start_time,
+				end_time,
+				address,
+				create_time,
+				post_id	,			
+				order_id,
+				valid
+			)  values(
+				#{detailId},
+				#{itemId},
+				#{sevicerName},
+				to_date( #{startTime},'yyyy-MM-dd hh24:mi'),
+				to_date( #{endTime},'yyyy-MM-dd hh24:mi'),
+				#{receiverAddress},
+				to_date( #{createTime},'yyyy-MM-dd hh24:mi'),
+				#{postId},
+				#{id},
+				1
+		) -->
+	</insert>
+	
+	
+	<update id="updateSalaryStatus" parameterType="com.emotte.order.order.model.Order">
+		update t_order	
+		 <set>  
+			salary_status = ( case when salary_status is null then  1  else null end)
+	     </set>
+	     where id=#{id}
+	</update>
+
+	<!--修改服务人员状态-->
+	<update id="updatePersonnalStatus">
+		UPDATE T_EMP_PERSONNEL SET MANAGEMENT_STATUS = #{status} WHERE ID = #{personnelId}
+	</update>
+	
+	<update id="updateOrderHandover" parameterType="com.emotte.order.order.model.Dictionary">
+		UPDATE t_order o 
+			SET o.recharge_by=decode(o.recharge_by,#{followBy},#{rechargeBy},o.recharge_by),
+				o.recharge_dept=decode(o.recharge_by,#{followBy},#{rechargeDept},o.recharge_dept),
+				o.update_by=#{updateBy},o.update_time = sysdate,
+				o.log=o.log||'|'||to_char(SYSDATE,'yyyymmddhh24mi')||'离职交接转单,原负责人'||o.recharge_by||',接收人'||#{rechargeBy}
+		WHERE  o.recharge_by=#{followBy} AND o.valid=1 AND o.cate_type!=8
+	</update>
+	
+	<update id="updateSolutionHandover" parameterType="com.emotte.order.order.model.Dictionary">
+		UPDATE t_order o 
+			SET o.recharge_by=decode(o.recharge_by,#{followBy},#{rechargeBy},o.recharge_by),
+				o.recharge_dept=decode(o.recharge_by,#{followBy},#{rechargeDept},o.recharge_dept),
+				o.update_by=#{updateBy},o.update_time = sysdate,
+				o.log=o.log||'|'||to_char(SYSDATE,'yyyymmddhh24mi')||'离职交接转单,原负责人'||o.recharge_by||',接收人'||#{rechargeBy}
+		WHERE  o.recharge_by=#{followBy} AND o.valid=1 AND o.cate_type=8  
+		 AND EXISTS (SELECT 1 FROM t_solution_cust_solution s WHERE s.solution_status != 5 AND s.id=o.id)
+	</update>
+
+	<!--根据订单ID修改订单状态【order_status】为【已取消】-->
+	<update id="chengeOrderStauts">
+		UPDATE T_ORDER SET ORDER_STATUS = #{orderStatus} WHERE ID = #{id}
+	</update>
+</mapper>

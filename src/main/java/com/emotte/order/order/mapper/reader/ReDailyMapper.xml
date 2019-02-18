@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReDailyMapper">
+	<select id="loadDaily" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Daily">
+		select 
+			id as id ,			
+			order_id as orderId ,			
+			user_name as userName ,			
+			user_ip as userIp ,			
+			user_id as userId ,			
+			create_date as createDate ,			
+			tablename as tablename ,			
+			pid as pid ,			
+			logs as logs 			
+		from t_order_daily
+		where
+			id=#{id} 	</select>
+	
+	<select id="queryDaily"  parameterType="com.emotte.order.order.model.Daily" resultType="com.emotte.order.order.model.Daily">
+	select
+			 id  as "id" ,			
+			 order_id  as "orderId" ,			
+			 user_name  as "userName" ,			
+			 user_ip  as "userIp" ,			
+			 user_id  as "userId" ,			
+			date_format(create_date,'%Y-%m-%d %H:%i')  as "createDate" ,			
+			 tablename  as "tablename" ,			
+			 pid  as "pid" ,			
+			 logs  as "logs" 			
+	from  t_order_daily 
+	<where> 
+	 1 = 1
+				<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="orderId!=null and orderId!='' ">           
+		and	order_id =  #{orderId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	user_name =  #{userName} 		</if>
+				  <if test="userIp!=null and userIp!='' ">           
+		and	user_ip =  #{userIp} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	user_id =  #{userId} 		</if>
+				  <if test="createDate!=null and createDate!='' ">           
+		and	create_date = date_format(#{createDate},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="tablename!=null and tablename!='' ">           
+		and	tablename =  #{tablename} 		</if>
+				  <if test="pid!=null and pid!='' ">           
+		and	pid =  #{pid} 		</if>
+				  <if test="logs!=null and logs!='' ">           
+		and	logs =  #{logs} 		</if>
+			</where>
+	order by id desc  <if test="flagPage!=1">  limit ${beginRow},${pageSize}  </if>
+	</select>
+	<select id="countDaily"  parameterType="com.emotte.order.order.model.Daily" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_order_daily 
+		<where> 
+	         1 = 1
+					<if test="id!=null and id!='' ">           
+		 and	id =  #{id} 		</if>
+				  <if test="orderId!=null and orderId!='' ">           
+		and	order_id =  #{orderId} 		</if>
+				  <if test="userName!=null and userName!='' ">           
+		and	user_name =  #{userName} 		</if>
+				  <if test="userIp!=null and userIp!='' ">           
+		and	user_ip =  #{userIp} 		</if>
+				  <if test="userId!=null and userId!='' ">           
+		and	user_id =  #{userId} 		</if>
+				  <if test="createDate!=null and createDate!='' ">           
+		and	create_date = date_format(#{createDate},'%Y-%m-%d %H:%i') 		</if>
+				  <if test="tablename!=null and tablename!='' ">           
+		and	tablename =  #{tablename} 		</if>
+				  <if test="pid!=null and pid!='' ">           
+		and	pid =  #{pid} 		</if>
+				  <if test="logs!=null and logs!='' ">           
+		and	logs =  #{logs} 		</if>
+			</where>
+	</select>		
+	
+</mapper>

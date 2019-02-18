@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReThreeOrderProCategoryMapper">
+<!-- 	<select id="getProductCategory" parameterType="com.emotte.order.order.model.ProductCategory"
+		resultType="com.emotte.order.order.model.ProductCategory">
+		select
+			tpc.id as id,
+			tpc.code as code,
+			tpc.cname as cname,
+			tpc.ename as ename,
+			tpc.display as display,
+			tpc.valid as valid,
+			tpc.cate_type as cateType
+			from t_product_category tpc 
+				join T_PRODUCT_CATEGORY_CITY tpcc on tpc.code = tpcc.CATEGORY_CODE
+			<where>
+				tcp.valid = 1 and tpcc.valid = 1
+				<if test=" level !=null and level != '' ">
+					(length(tcp.org_code) - length(replace(tcp.org_code,'-','')) = #{level})
+				</if>
+				<if test=" code != null and code !='' ">
+					tpc.code = #{code}
+				</if>
+				<if test=" cityCode !=null and cityCode != '' ">
+					and tpcc.CITY_CODE = #{cityCode}
+				</if>
+			</where>
+			order by create_time asc 
+	</select> -->
+	
+	<resultMap id="ProductModelResultMap" type="com.emotte.order.order.model.ThreeOrderInProductModel" >
+		<id column="product_code" property="product_code" />
+        <collection column="product_code"
+            ofType="com.emotte.order.order.model.ThreeOrderInProductPriceDiscMo" property="priceDiscList"
+            select="getProductDiscPrice" />
+	</resultMap>
+	
+	<select id="getProductList" parameterType="com.emotte.order.order.model.ThreeOrderInProductModel"
+		resultMap="ProductModelResultMap">
+		SELECT 
+			t2.id as productId,
+			t3.product_code as product_code,
+			T1.NAME as product_name,
+			t2.product_img as product_img,
+			t1.least_unit as leastUnit,
+			T1.IS_PROD_SERVE as serve_type,
+			T1.CATEGORY_CODE as category_code,
+			T3.city_code as city_code,
+			t3.MIN_UNIT_COUNT as minUnitCount,
+			t4.price as price,
+			t4.dict_code as dict_code,
+			t_spec.typeSpecName as typeSpecName ,
+			t_spec.typeSpecValue as typeSpecValue
+		from T_PRODUCT_BASE t1 
+			join T_PRODUCT t2 on t2.BASE_ID = t1.ID 
+			join T_PRODUCT_CITY t3 on t2."ID" = t3.product_id 
+			join T_CITY_PRODUCT_DICT_PRICE t4 on t4.product_code = t3.product_code
+			left join (
+				select t.product_id,
+		            replace(wm_concat(t.type_spec_name),',','|') typeSpecName,
+               		replace(wm_concat(t.type_spec_value),',','|') typeSpecValue
+				from t_product_spec t where t.valid = 1
+		        group by t.product_id
+			) t_spec
+			on t_spec.product_id = t2.ID
+			left join t_product_category pc on t1.category_code = pc.code 
+		<where>
+			T1.VALID = 1 
+			and T2.VALID = 1 
+			and t3.valid = 1 
+			and t4.valid = 1
+			and t3.status = 1
+			and pc.valid = 1
+			<if test=" productId != null and productId !='' ">
+				and t2.id = #{productId}
+			</if>
+			<if test=" product_code != null and product_code != '' ">
+				and t3.product_code = #{product_code}
+			</if>
+			<if test=" category_code != null and category_code != '' ">
+				and T1.CATEGORY_CODE = #{category_code}
+			</if>
+			<if test=" city_code !=null and city_code != '' ">
+				and T3.city_code = #{city_code}
+			</if>
+			<if test=" dict_code !=null and dict_code !='' ">
+				and t4.dict_code = #{dict_code} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="getProductDiscPrice" parameterType="java.lang.String"
+		resultType="com.emotte.order.order.model.ThreeOrderInProductPriceDiscMo">
+		select 
+			t.PRODUCT_CODE,
+			t.PRICE,
+			t.DICT_CODE 
+		from T_CITY_PRODUCT_DICT_PRICE t 
+		<where>
+			t.VALID = 1 and t.product_code = #{product_code}
+		</where> 
+	</select>
+	
+	<select id="getProductListByCodes" parameterType="java.util.Map"
+		resultType="com.emotte.order.order.model.ThreeOrderInProductModel">
+		SELECT 
+			t2.id as productId,
+			t3.product_code as product_code,
+			T1.NAME as product_name,
+			t2.product_img as product_img,
+			t1.least_unit as leastUnit,
+			T1.IS_PROD_SERVE as serve_type,
+			T1.CATEGORY_CODE as category_code,
+			T3.city_code as city_code,
+			t3.MIN_UNIT_COUNT as minUnitCount,
+			t4.price as price,
+			t4.dict_code as dict_code,
+			t_spec.typeSpecName as typeSpecName ,
+			t_spec.typeSpecValue as typeSpecValue
+		from T_PRODUCT_BASE t1 
+			join T_PRODUCT t2 on t2.BASE_ID = t1.ID 
+			join T_PRODUCT_CITY t3 on t2."ID" = t3.product_id 
+			join T_CITY_PRODUCT_DICT_PRICE t4 on t4.product_code = t3.product_code
+			left join (
+				select t.product_id,
+		            replace(wm_concat(t.type_spec_name),',','|') typeSpecName,
+               		replace(wm_concat(t.type_spec_value),',','|') typeSpecValue
+				from t_product_spec t where t.valid = 1
+		        group by t.product_id
+			) t_spec
+			on t_spec.product_id = t2.ID
+		<where>
+			T1.VALID = 1 
+			and T2.VALID = 1 
+			and t3.valid = 1 
+			and t4.valid = 1
+			<if test="product_code_list != null and product_code_list.size() != 0">
+				and t3.product_code in 
+				<foreach collection="product_code_list" item="product_code" 
+					index="index" open="(" close=")" separator=",">
+					 #{product_code}
+				</foreach>
+			</if>
+			<if test=" city_code !=null and city_code != '' ">
+				and T3.city_code = #{city_code}
+			</if>
+			<if test=" dict_code !=null and dict_code !='' ">
+				and t4.dict_code = #{dict_code} 
+			</if>
+			<if test=" category_code !=null and category_code != '' ">
+				and T1.CATEGORY_CODE = #{category_code}
+			</if>
+		</where>
+	</select>
+</mapper>

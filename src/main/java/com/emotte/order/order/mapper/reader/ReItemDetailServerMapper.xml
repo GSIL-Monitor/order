@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReItemDetailServerMapper">
+	<select id="loadItemDetailServer" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as id ,
+		item_id as itemId ,
+		order_id as orderId ,
+		education as education ,
+		person_level as personLevel ,
+		remark as remark ,
+		min_age as minAge ,
+		max_age as maxAge ,
+		origin as origin ,
+		address as address ,
+		to_char(start_time,'yyyy-mm-dd hh24:mi:ss') as startTime ,
+		to_char(end_time,'yyyy-mm-dd hh24:mi:ss') as endTime ,
+		to_char(interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime ,
+		valid as valid,
+		home_forests as homeForests,
+		familys as familys ,
+		create_by as createBy ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+		version as version 
+		from t_order_item_detail_server
+		where
+		id=#{id}
+	</select>
+	<select id="loadItemDetailServerByOrderId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		ds.id as id ,
+		ds.item_id as itemId ,
+		ds.order_id as orderId ,
+		ds.education as education ,
+		ds.person_level as personLevel ,
+		ds.remark as remark ,
+		ds.min_age as minAge ,
+		ds.max_age as maxAge ,
+		ds.origin as origin ,
+		ds.address as address ,
+		to_char(ds.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime ,
+		to_char(ds.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime ,
+		to_char(ds.interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime ,
+		ds.valid as valid,
+		ds.home_forests as homeForests,
+		ds.familys as familys ,
+		ds.create_by as createBy ,
+		to_char(ds.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		ds.update_by as updateBy ,
+		to_char(ds.update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+		ds.version as version ,
+		ds.person_number as personNumber ,
+		od.longitude as longitude ,
+		od.latitude as latitude ,
+		od.cate_type as cateType ,
+		item.product_code as productCode
+		from t_order od,t_order_item_detail_server ds, t_order_item item
+		where
+		od.id = ds.order_id and trim(translate(od.order_status,'0123456789',' ')) is null
+		and od.id = item.order_id
+		and od.id=#{orderId}
+		and item.valid=1
+	</select>
+	<select id="queryItemDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as "id" ,
+		item_id as "itemId" ,
+		order_id as "orderId" ,
+		education as "education" ,
+		person_level as "personLevel" ,
+		remark as "remark" ,
+		min_age as "minAge" ,
+		max_age as "maxAge" ,
+		origin as "origin" ,
+		address as "address" ,
+		to_char(start_time,'yyyy-mm-dd hh24:mi:ss') as "startTime" ,
+		to_char(end_time,'yyyy-mm-dd hh24:mi:ss') as "endTime" ,
+		to_char(interview_time,'yyyy-mm-dd hh24:mi:ss') as "interviewTime" ,
+		valid as "valid" ,
+		home_forests as "homeForests" ,
+		familys as "familys" ,
+		create_by as createBy ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+		version as version 
+		from t_order_item_detail_server
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="itemId!=null and itemId!='' ">
+				and item_id = #{itemId}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="education!=null and education!='' ">
+				and education = #{education}
+			</if>
+			<if test="personLevel!=null and personLevel!='' ">
+				and person_level = #{personLevel}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				and remark = #{remark}
+			</if>
+			<if test="minAge!=null and minAge!='' ">
+				and min_age = #{minAge}
+			</if>
+			<if test="maxAge!=null and maxAge!='' ">
+				and max_age = #{maxAge}
+			</if>
+			<if test="origin != null and origin != ''">
+				and origin = #{origin}
+			</if>
+			<if test="address != null and address != ''">
+				and address = #{address}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and to_char(start_time,'yyyy-mm-dd') = to_char(to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and to_char(end_time,'yyyy-mm-dd') = to_char(to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="interviewTime != null and interviewTime != ''">
+				and to_char(interview_time,'yyyy-mm-dd') = to_char(to_date(#{interviewTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="valid != null and valid != ''">
+				and valid = #{valid}
+			</if>
+			<if test="homeForests != null and homeForests != ''">
+				and home_forests = #{homeForests}
+			</if>
+			<if test="createBy!=null and createBy!='' ">           
+				and	create_by =  #{createBy} 		</if>
+		  <if test="createTime!=null and createTime!='' ">        
+		  		and to_char(create_time,'yyyy-mm-dd') = to_char(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')  
+			</if>
+		  <if test="updateBy!=null and updateBy!='' ">           
+				and	update_by =  #{updateBy} 		</if>
+		  <if test="updateTime!=null and updateTime!='' ">           
+		  		and to_char(update_time,'yyyy-mm-dd') = to_char(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd') 
+			</if>
+		  <if test="version!=null and version!='' ">           
+				and	version =  #{version} 		</if>
+			<if test="familys != null and familys != ''">
+				and familys = #{familys}
+			</if>
+		</where>
+		order by id desc
+		<if test="flagPage!=1"> limit ${beginRow},${pageSize}  </if>
+	</select>
+	<select id="countItemDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM t_order_item_detail_server
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="itemId!=null and itemId!='' ">
+				and item_id = #{itemId}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="education!=null and education!='' ">
+				and education = #{education}
+			</if>
+			<if test="personLevel!=null and personLevel!='' ">
+				and person_level = #{personLevel}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				and remark = #{remark}
+			</if>
+			<if test="minAge!=null and minAge!='' ">
+				and min_age = #{minAge}
+			</if>
+			<if test="maxAge!=null and maxAge!='' ">
+				and max_age = #{maxAge}
+			</if>
+			<if test="origin != null and origin != ''">
+				and origin = #{origin}
+			</if>
+			<if test="address != null and address != ''">
+				and address = #{address}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and to_char(start_time,'yyyy-mm-dd') = to_char(to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and to_char(end_time,'yyyy-mm-dd') = to_char(to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="interviewTime != null and interviewTime != ''">
+				and to_char(interview_time,'yyyy-mm-dd') = to_char(to_date(#{interviewTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+			<if test="valid != null and valid != ''">
+				and valid = #{valid}
+			</if>
+			<if test="homeForests != null and homeForests != ''">
+				and home_forests = #{homeForests}
+			</if>
+			<if test="familys != null and familys != ''">
+				and familys = #{familys}
+				</if>
+			<if test="createBy!=null and createBy!='' ">           
+				and	create_by =  #{createBy} 		</if>
+		  	<if test="createTime!=null and createTime!='' ">           
+		  		and to_char(create_time,'yyyy-mm-dd') = to_char(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+		 	<if test="updateBy!=null and updateBy!='' ">           
+				and	update_by =  #{updateBy} 		</if>
+			<if test="updateTime!=null and updateTime!='' ">           
+				and to_char(update_time,'yyyy-mm-dd') = to_char(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+			</if>
+		  	<if test="version!=null and version!='' ">           
+				and	version =  #{version} 		</if>
+		</where>
+	</select>
+
+
+	<!-- 排期功能 -->
+	<select id="loadOrderServerLined" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		SELECT t.*
+			  FROM (SELECT id AS id,
+			               order_id AS orderId,
+			               to_char(start_time, 'yyyy-mm-dd') AS startTime,
+			               to_char(end_time, 'yyyy-mm-dd') AS endTime,
+			               lined_type AS linedType,
+			               weeks AS weeks,
+			               days AS days,
+			               hours AS hours,
+			               remark AS remark,
+			               create_by AS createBy,
+			               lined_type AS lineTyped,
+			               to_char(create_time, 'yyyy-mm-dd hh24:mi:ss') AS createTime,
+			               update_by AS updateBy,
+			               to_char(update_time, 'yyyy-mm-dd hh24:mi:ss') AS updateTime,
+			               version AS version,
+			               ROWNUM rn
+			          FROM t_order_server_lined
+			         WHERE order_id = #{orderId}
+			         ORDER BY create_time DESC) t
+			 WHERE t.rn = 1
+	</select>
+	<!-- 查询时间 -->
+	<select id="showTime" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as id ,
+		order_id as orderId ,
+		to_char(start_time,'yyyy-mm-dd hh24:mi') as startTime ,
+		to_char(end_time,'yyyy-mm-dd hh24:mi') as endTime ,
+		lined_type as linedType,
+		weeks as weeks,
+		days as days,
+		hours as hours ,
+		remark as remark ,
+		create_by as createBy ,
+		lined_type as lineTyped,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as updateTime ,
+		version as version 
+		from t_order_server_lined
+		where
+		order_id=#{orderId} and rownum=1
+	</select>
+	<select id="queryOrderServerLined" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select
+		id as "id" ,
+		order_id as "orderId" ,
+		years as "years" ,
+		months as "months" ,
+		weeks as "weeks" ,
+		days as "days" ,
+		hours as "hours",
+		start_time as "startTime" ,
+		end_time as "endTime" ,
+		remark as "remark" ,
+		create_by as createBy ,
+		lined_type as "linedType",
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+		version as version 
+		from t_order_server_lined
+		<where>
+			1 = 1 
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+		  <if test="version!=null and version!='' ">           
+				and	version =  #{version} 		</if>
+		</where>
+	</select>
+	<select id="queryWorkTypeLevel" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select * from t_base_work_type_level
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="pid !=null and pid !='' ">
+				and work_type_id = #{pid}
+			</if>
+		</where>
+	</select>
+	<select id="queryWorkTypeAll" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select bwta.id as id , bwta.name as dvalue from t_base_work_type_all bwta
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and bwta.id = #{id}
+			</if>
+		</where>
+	</select>
+	<select id="queryPersonSchedule" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		select distinct p.name as "userName" ,p.id as "emp_id" from 
+					t_emp_personnel p
+		<where>
+			1 = 1   and p.id in
+			
+				<foreach collection="personId" index="index" item="item" open="(" separator="," close=")">                          
+				  	     #{item}
+			     </foreach> 
+			    
+			  and  exists(
+                                select 1
+                           from t_emp_personnel_schedule l 
+                           where l.emp_id=p.id and l.is_enable=2
+                           and l.order_id not in (#{orderId})
+                           and l.status != 1 
+                           and ( (#{startDate} &gt;= l.start_date and #{startDate} &lt; l.end_date)
+				              or (#{startDate} &gt;= l.start_date and #{startDate} &lt;= l.end_date)
+				              or (l.start_date &gt;= #{startDate} and l.start_date &lt; #{endDate})
+				              or (l.start_date &gt; #{startDate} and l.start_date &lt;= #{endDate})
+				              or (l.start_date = #{startDate} and l.start_date = #{endDate}))
+                           <if test="updateTime!=null and updateTime!='' ">
+                           	 and ((#{startLineTime} &gt;= l.start_time and #{startLineTime} &lt; l.end_time) or
+					               (#{startLineTime} &gt;= l.start_time and #{startLineTime} &lt;= l.end_time) or
+					               (l.start_time &gt;= #{startLineTime} and l.start_time &lt; #{endLineTime}) or
+					               (l.start_time &gt; #{startLineTime} and l.start_time &lt;= #{endLineTime}) or
+					               (l.start_time = #{startLineTime} and l.start_time = #{endLineTime}))
+							</if>
+							<if test="weeky!=null and weeky!='' ">
+								and l.weekday in
+					              	 <foreach collection="weeky" index="index" item="item" open="(" separator="," close=")">                          
+									  	     #{item}
+								     </foreach> 
+							</if>
+							
+                                 )  
+                                 
+                  and not  exists
+					     (select 1
+					          from t_emp_personnel_schedule l
+					         where l.emp_id = p.id and l.is_enable=2
+					               and (#{startDate} &gt;= l.start_date and #{endDate} &lt;= l.end_date) 
+				                <if test="updateTime!=null and updateTime!='' ">
+	                           	 and (#{startLineTime} &gt;= l.start_time and #{endLineTime} &lt; l.end_time) 
+								</if>
+					      )  
+				<!--  <if test="weeky!=null and weeky!='' ">
+				 		and  not exists
+						      (select 1
+						          from t_emp_personnel_schedule l
+						         where l.emp_id = p.id
+						               and l.weekday in
+					              	 <foreach collection="weeky" index="index" item="item" open="(" separator="," close=")">                          
+									  	     #{item}
+								     </foreach> 
+						      )
+							
+				</if> -->		       
+					            
+		</where>
+	</select>
+	
+	<!-- 查询服务人员库存数量 -->
+	<select id="checkNumStock" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="java.lang.Integer">
+			select tsi.stock as "count"
+			from t_emp_service_inventory_detail tsi ,t_emp_service_inventory ti 
+			<where>
+				 tsi.valid=1 and ti.valid=1 and  ti.id=tsi.inventory_id 
+				 <if test="dkey != null and dkey != '' ">
+					AND ti.city_code = #{dkey}
+				 </if>
+				 <if test="dvalue !=null and dvalue !=''">
+		 			AND ti.cate_code = #{dvalue}
+		 		 </if>	
+		 		 <if test="remarks != null and remarks != '' ">
+					 and to_char(tsi.selection_time,'yyyy-MM-dd') = #{remarks}
+				 </if>
+				 <if test="level !=null and level !=''">
+		 			AND tsi.start_time = #{level}
+		 		 </if>	
+		 		 <if test="types !=null and types !=''">
+		 			AND tsi.end_time = #{types}
+		 		 </if>	
+			</where>
+	</select>
+	
+	<!-- 查询服务人员排期 -->
+	<select id="loadPersonServerLined" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		 select   
+           to_char(to_date(to_char(eps.start_date),'yyyy-MM-dd'),'yyyy-MM-dd') as startDate ,
+           to_char(to_date(to_char(eps.end_date),'yyyy-MM-dd'),'yyyy-MM-dd') as endDate 	         
+	 from  t_order_item_interview oii, t_emp_personnel_schedule eps
+     <where>
+         1=1 
+           <if test="emp_id !=null and emp_id !=''">
+		        and oii.person_id = #{emp_id}
+		   </if>
+		   <if test="orderId !=null and orderId !=''">
+	           and oii.order_id = #{orderId}
+		   </if>	
+           and oii.person_id = eps.emp_id
+           and oii.interview_type = 8
+           and eps.order_id = oii.order_id
+           and eps.status =4
+           and oii.valid=1 
+           and eps.is_enable=2
+     </where>
+     </select>
+	<!-- 查询服务人员排期 -->
+	<select id="queryPersonLineTime" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+		SELECT t.*,t.rowid FROM t_emp_personnel_schedule t
+     <where>
+       t.is_enable=2
+		   <if test="orderId !=null and orderId !=''">
+	            and t.order_id = #{orderId}
+		   </if>	
+     </where>
+	</select>
+	<!-- 查询订单工种-->
+	<select id="queryEmpSchedule" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+	 select   
+           eps.start_date as startDate ,
+           eps.end_date as endDate 	         
+	 from  t_emp_personnel_schedule eps
+     <where>
+         1=1  and eps.is_enable=2
+           <if test="emp_id !=null and emp_id !=''">
+		        and eps.emp_id = #{emp_id}
+		   </if>
+		   <if test="orderId !=null and orderId !=''">
+	           and eps.order_id = #{orderId}
+		   </if>	
+           and eps.status =4
+     </where>
+	</select>
+	<!-- 查询服务人员排期 -->
+	<select id="queryOrderDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer"
+		resultType="com.emotte.order.order.model.ItemDetailServer">
+	 select 
+	 	oii.person_id as emp_id  
+	 from  t_order_item_interview oii
+	     <where>
+	         1=1  and oii.interview_type in (1,4) and oii.valid = 1
+			   <if test="orderId !=null and orderId !=''">
+		           and oii.order_id = #{orderId}
+			   </if>	
+	     </where>
+	</select>
+	<!-- 查询订单工种 -->
+	<select id="selectOrderWorkType" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+	 SELECT wm_concat(DISTINCT tl."level") as gradeText,wm_concat(DISTINCT ta.name) as orderTypeText
+     FROM t_order o
+     JOIN t_order_item i
+       ON o.id = i.order_id
+     JOIN t_product_city pc
+       ON pc.product_code = i.product_code
+     JOIN t_product p
+       ON p.id = pc.product_id
+     JOIN t_product_worktype_level_ref lr
+       ON lr.product_base_id = p.base_id
+     JOIN t_base_work_type_level tl
+       ON tl.id = lr.work_type_level_id
+     JOIN t_base_work_type_all ta
+       ON ta.id = tl.work_type_id
+    WHERE i.valid = 1
+      AND pc.valid = 1
+      AND p.valid = 1
+      AND lr.valid = 1
+      AND o.id=#{orderId}
+	</select>
+	
+	<!-- 查询服务人员等级-->
+	<select id="selectPersonnelLevel" resultType="com.emotte.order.order.model.PersonaLevel">
+		SELECT t.id as "id",t."level" as levelName,t.type_code as typeCode FROM t_base_work_type_level t
+	</select>
+	<!-- 查询籍贯-->
+	<select id="queryCitys" parameterType="com.emotte.order.order.model.BaseCity"  resultType="com.emotte.order.order.model.BaseCity">
+					SELECT bc.id AS id,
+				       bc.pid AS pid,
+				       bc.code AS code,
+				       bc.org_code AS orgCode,
+				       bc.name AS name,
+				       bc.short_name AS shortName,
+				       bc.levels AS levels,
+				       DECODE(bc.id,#{id},'true','false') AS checked
+				  FROM t_base_city bc
+				 WHERE bc.valid = 1
+				 <if test="code != null and code != '' ">
+					 AND bc.code LIKE #{code}||'%'
+				 </if>
+				 <if test="levels != null and levels != '' ">
+					 AND bc.levels = #{levels}
+				 </if>
+				 ORDER BY bc.code
+	</select>
+	
+	<select id="selectPersonnelSchedules" parameterType="java.lang.Long"  resultType="com.emotte.order.order.model.PersonnelSchedule">
+					SELECT 
+							ts.emp_id as empId,
+       					    ts.status as status,
+       					  	ts.order_id as orderId,
+                   			ts.id as id
+						  FROM t_order_item_interview t
+						 inner join t_emp_personnel_schedule ts
+						    on t.person_id = ts.emp_id
+						   and ts.order_id = t.order_id
+						 WHERE t.valid = 1
+						   AND t.order_id = #{orderId}
+						   and t.interview_type in (1, 2, 4, 6)
+	</select>
+</mapper>

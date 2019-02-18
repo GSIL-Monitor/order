@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReActivityMoneyGradeMapper">
+<select id="queryActivityMoneyGrade" parameterType="com.emotte.order.order.model.ActivityMoneyGrade" resultType="com.emotte.order.order.model.ActivityMoneyGrade">
+		 select distinct t.id as id,
+		                 t.money    as moneyAndMonth,
+		                 topc.account_balance as balance
+		   from t_op_present_account_recharge t
+		   join  t_op_present_continuitydeposit   top
+		     on t.MAIN_ID = top.mainid
+		   left join t_op_present_config topc
+		     on t.id = topc.hierarchy_id
+		  INNER JOIN T_OP_PRESENT_RECHARGE A
+		     on A.ID = T.MAIN_ID
+		  where t.id=#{id}
+		    AND top.valid = 1
+		    AND T.valid = 1
+		    and a.SERVICE_STATUS = 2
+		  order by topc.account_balance desc
+</select>
+</mapper>

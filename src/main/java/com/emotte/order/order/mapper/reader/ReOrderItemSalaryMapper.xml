@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.reader.ReOrderItemSalaryMapper">
+	 <select id="queryOrderItemSalary" parameterType="com.emotte.order.order.model.OrderItemSalary" resultType="com.emotte.order.order.model.OrderItemSalary">
+		select 
+			t.id as id,
+			t.order_id as orderId,
+			t.person_id as personId,
+			t.account_id as accountId,
+			t.valid as valid,
+			t.create_time as createTime,
+			t.create_by as createBy,
+			t.update_time as updateTime,
+			t.update_by as updateBy,
+			t.version as version
+	 		from t_order_item_salary t 
+		<where>
+			1 = 1 
+			<if test="id != null and id != ''">
+				and t.id = #{id} 
+			</if>
+			<if test="orderId != null and orderId != ''">
+				and t.order_id = #{orderId} 
+			</if>
+			<if test="personId != null and personId != ''">
+				and t.person_id = #{personId} 
+			</if>
+			<if test="accountId != null and accountId != ''">
+				and t.account_id = #{accountId} 
+			</if>
+			<if test="valid != null and valid != ''">
+				and t.valid = #{valid} 
+			</if>
+			<if test="createBy!=null and createBy!='' ">           
+				and	t.create_by =  #{createBy} 		</if>
+			<if test="createTime!=null and createTime!='' ">           
+				and	to_char(t.create_time,'yyyy-mm-dd') = #{createTime} 		
+			</if>
+			 <if test="updateBy!=null and updateBy!='' ">           
+				and	t.update_by =  #{updateBy} 		</if>
+			 <if test="updateTime!=null and updateTime!='' ">           
+				and	to_char(t.update_time,'yyyy-MM-dd') = #{updateTime} 		</if>
+			<if test="version != null and version != ''">
+				and t.version = #{version} 
+			</if>
+		</where>
+	</select>
+</mapper>

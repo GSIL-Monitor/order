@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrDailyMapper">
+
+	<insert id="insertDaily" parameterType="com.emotte.order.order.model.Daily">
+		insert into t_order_daily ( 
+			id ,			
+			order_id ,			
+			user_name ,			
+			user_ip ,			
+			user_id ,			
+			create_date ,			
+			tablename ,			
+			pid ,			
+			logs 			
+		) values (
+			#{id} ,				
+			#{orderId} ,				
+			#{userName} ,				
+			#{userIp} ,				
+			#{userId} ,				
+			#{createDate} ,				
+			#{tablename} ,				
+			#{pid} ,				
+			#{logs} 				
+		)
+	</insert>
+
+	<update id="updateDaily" parameterType="com.emotte.order.order.model.Daily">
+		update t_order_daily	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="userName != null and userName != ''"> 
+				,user_name = #{userName} 
+			</if>
+			
+	 <if test="userIp != null and userIp != ''"> 
+				,user_ip = #{userIp} 
+			</if>
+			
+	 <if test="userId != null and userId != ''"> 
+				,user_id = #{userId} 
+			</if>
+			
+	 <if test="createDate != null and createDate != ''"> 
+				,create_date = #{createDate:DATE} 
+			</if>
+			
+	 <if test="tablename != null and tablename != ''"> 
+				,tablename = #{tablename} 
+			</if>
+			
+	 <if test="pid != null and pid != ''"> 
+				,pid = #{pid} 
+			</if>
+			
+	 <if test="logs != null and logs != ''"> 
+				,logs = #{logs} 
+			</if>
+			
+       </set>
+		where
+			id=#{id}   and VERSION = #version
+				
+	</update>
+	
+</mapper>

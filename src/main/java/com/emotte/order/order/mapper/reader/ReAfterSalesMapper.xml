@@ -1,0 +1,1157 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReAfterSalesMapper">
+	<select id="loadAfterSales" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+		select 
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			ORDER_TYPE as orderType ,		
+			CREATE_BY as createBy ,		
+			UPDATE_BY as updateBy ,		
+			UPDATE_TIME as updateTime ,		
+			VERSION as version ,		
+			AFTER_SALES_KIND as afterSalesKind ,		
+			CUST_MOBILE as custMobile ,		
+			CUST_NAME as custName ,		
+			AUDIT_FLAG as auditFlag ,		
+			REASON as reason ,		
+			AFTER_SALES_IMGS as afterSalesImgs ,		
+			CREATE_TIME as createTime ,		
+			SERVER_TIME as serverTime ,		
+			REFUND_TOTAL as refundTotal ,		
+			BANK_CARD as bankCard ,		
+			BANK_NAME as bankName ,		
+			BANK_USER_NAME as bankUserName ,		
+			BANK_SUPPORT_ID as bankSupportId ,		
+			BANK_CITY_CODE as bankCityCode ,		
+			IS_OLD_DATA as isOldData ,		
+			REMARK as remark ,		
+			BANK_MAIN_NAME as bankMainName ,		
+			LOG as log ,		
+			ACCOUNT_PAY_ID as accountPayId ,		
+			VALID as valid ,		
+			APPROVE_BY as approveBy ,		
+			APPROVE_DEPT as approveDept ,		
+			REFUND_MEMBERSHIP_FEE as refundMembershipFee ,		
+			REFUND_SALARY_FEE as refundSalaryFee ,		
+			CREATE_DEPT as createDept ,		
+			IS_AT as isAt ,		
+			VPH_ACCOUNT_ID as vphAccountId ,		
+			VPH_FEE as vphFee ,		
+			VPH_CANCLE_STATUS as vphCancleStatus ,		
+			VPH_BACK_STATUS as vphBackStatus ,		
+			MOVE_TO_ORDER_ID as moveToOrderId ,		
+			MOVE_ORDER_BUS_FLAG as moveOrderBusFlag ,		
+			IS_STOP as isStop ,		
+			REFUND_OBJECT as refundObject ,		
+			REASON_FLAG as reasonFlag ,		
+			FEE_ACCOUNT_ID as feeAccountId 		
+		from t_order_after_sales
+		where
+			ID=#{id} 	
+	</select>
+	
+	<select id="queryAfterSales"  parameterType="com.emotte.order.order.model.AfterSalesNew" resultType="com.emotte.order.order.model.AfterSalesNew">
+	select
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			ORDER_TYPE as orderType ,		
+			CREATE_BY as createBy ,		
+			UPDATE_BY as updateBy ,		
+			UPDATE_TIME as updateTime ,		
+			VERSION as version ,		
+			AFTER_SALES_KIND as afterSalesKind ,		
+			CUST_MOBILE as custMobile ,		
+			CUST_NAME as custName ,		
+			AUDIT_FLAG as auditFlag ,		
+			REASON as reason ,		
+			AFTER_SALES_IMGS as afterSalesImgs ,		
+			CREATE_TIME as createTime ,		
+			SERVER_TIME as serverTime ,		
+			REFUND_TOTAL as refundTotal ,		
+			BANK_CARD as bankCard ,		
+			BANK_NAME as bankName ,		
+			BANK_USER_NAME as bankUserName ,		
+			BANK_SUPPORT_ID as bankSupportId ,		
+			BANK_CITY_CODE as bankCityCode ,		
+			IS_OLD_DATA as isOldData ,		
+			REMARK as remark ,		
+			BANK_MAIN_NAME as bankMainName ,		
+			LOG as log ,		
+			ACCOUNT_PAY_ID as accountPayId ,		
+			VALID as valid ,		
+			APPROVE_BY as approveBy ,		
+			APPROVE_DEPT as approveDept ,		
+			REFUND_MEMBERSHIP_FEE as refundMembershipFee ,		
+			REFUND_SALARY_FEE as refundSalaryFee ,		
+			CREATE_DEPT as createDept ,		
+			IS_AT as isAt ,		
+			VPH_ACCOUNT_ID as vphAccountId ,		
+			VPH_FEE as vphFee ,		
+			VPH_CANCLE_STATUS as vphCancleStatus ,		
+			VPH_BACK_STATUS as vphBackStatus ,		
+			MOVE_TO_ORDER_ID as moveToOrderId ,		
+			MOVE_ORDER_BUS_FLAG as moveOrderBusFlag ,		
+			IS_STOP as isStop ,		
+			REFUND_OBJECT as refundObject ,		
+			REASON_FLAG as reasonFlag ,		
+			FEE_ACCOUNT_ID as feeAccountId,
+            PAYFEE_ID as payFeeId
+	from  t_order_after_sales
+	<where> 
+	 1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="orderType!=null and orderType!='' ">           
+			and	ORDER_TYPE =  #{orderType} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="afterSalesKind!=null and afterSalesKind!='' ">           
+			and	AFTER_SALES_KIND =  #{afterSalesKind} 		
+		</if>	
+		<if test="custMobile!=null and custMobile!='' ">           
+			and	CUST_MOBILE =  #{custMobile} 		
+		</if>	
+		<if test="custName!=null and custName!='' ">           
+			and	CUST_NAME =  #{custName} 		
+		</if>	
+		<if test="auditFlag!=null and auditFlag!='' ">           
+			and	AUDIT_FLAG =  #{auditFlag} 		
+		</if>	
+		<if test="reason!=null and reason!='' ">           
+			and	REASON =  #{reason} 		
+		</if>	
+		<if test="afterSalesImgs!=null and afterSalesImgs!='' ">           
+			and	AFTER_SALES_IMGS =  #{afterSalesImgs} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="serverTime!=null and serverTime!='' ">           
+			and	SERVER_TIME =  #{serverTime} 		
+		</if>	
+		<if test="refundTotal!=null and refundTotal!='' ">           
+			and	REFUND_TOTAL =  #{refundTotal} 		
+		</if>	
+		<if test="bankCard!=null and bankCard!='' ">           
+			and	BANK_CARD =  #{bankCard} 		
+		</if>	
+		<if test="bankName!=null and bankName!='' ">           
+			and	BANK_NAME =  #{bankName} 		
+		</if>	
+		<if test="bankUserName!=null and bankUserName!='' ">           
+			and	BANK_USER_NAME =  #{bankUserName} 		
+		</if>	
+		<if test="bankSupportId!=null and bankSupportId!='' ">           
+			and	BANK_SUPPORT_ID =  #{bankSupportId} 		
+		</if>	
+		<if test="bankCityCode!=null and bankCityCode!='' ">           
+			and	BANK_CITY_CODE =  #{bankCityCode} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="bankMainName!=null and bankMainName!='' ">           
+			and	BANK_MAIN_NAME =  #{bankMainName} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+		<if test="accountPayId!=null and accountPayId!='' ">           
+			and	ACCOUNT_PAY_ID =  #{accountPayId} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="approveBy!=null and approveBy!='' ">           
+			and	APPROVE_BY =  #{approveBy} 		
+		</if>	
+		<if test="approveDept!=null and approveDept!='' ">           
+			and	APPROVE_DEPT =  #{approveDept} 		
+		</if>	
+		<if test="refundMembershipFee!=null and refundMembershipFee!='' ">           
+			and	REFUND_MEMBERSHIP_FEE =  #{refundMembershipFee} 		
+		</if>	
+		<if test="refundSalaryFee!=null and refundSalaryFee!='' ">           
+			and	REFUND_SALARY_FEE =  #{refundSalaryFee} 		
+		</if>	
+		<if test="createDept!=null and createDept!='' ">           
+			and	CREATE_DEPT =  #{createDept} 		
+		</if>	
+		<if test="isAt!=null and isAt!='' ">           
+			and	IS_AT =  #{isAt} 		
+		</if>	
+		<if test="vphAccountId!=null and vphAccountId!='' ">           
+			and	VPH_ACCOUNT_ID =  #{vphAccountId} 		
+		</if>	
+		<if test="vphFee!=null and vphFee!='' ">           
+			and	VPH_FEE =  #{vphFee} 		
+		</if>	
+		<if test="vphCancleStatus!=null and vphCancleStatus!='' ">           
+			and	VPH_CANCLE_STATUS =  #{vphCancleStatus} 		
+		</if>	
+		<if test="vphBackStatus!=null and vphBackStatus!='' ">           
+			and	VPH_BACK_STATUS =  #{vphBackStatus} 		
+		</if>	
+		<if test="moveToOrderId!=null and moveToOrderId!='' ">           
+			and	MOVE_TO_ORDER_ID =  #{moveToOrderId} 		
+		</if>	
+		<if test="moveOrderBusFlag!=null and moveOrderBusFlag!='' ">           
+			and	MOVE_ORDER_BUS_FLAG =  #{moveOrderBusFlag} 		
+		</if>	
+		<if test="isStop!=null and isStop!='' ">           
+			and	IS_STOP =  #{isStop} 		
+		</if>	
+		<if test="refundObject!=null and refundObject!='' ">           
+			and	REFUND_OBJECT =  #{refundObject} 		
+		</if>	
+		<if test="reasonFlag!=null and reasonFlag!='' ">           
+			and	REASON_FLAG =  #{reasonFlag} 		
+		</if>	
+		<if test="feeAccountId!=null and feeAccountId!='' ">           
+			and	FEE_ACCOUNT_ID =  #{feeAccountId} 		
+		</if>	
+	</where>
+	order by ID desc
+	</select>
+	
+	
+	<select id="countAfterSales"  parameterType="com.emotte.order.order.model.AfterSalesNew" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_order_after_sales
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="orderType!=null and orderType!='' ">           
+			and	ORDER_TYPE =  #{orderType} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="afterSalesKind!=null and afterSalesKind!='' ">           
+			and	AFTER_SALES_KIND =  #{afterSalesKind} 		
+		</if>	
+		<if test="custMobile!=null and custMobile!='' ">           
+			and	CUST_MOBILE =  #{custMobile} 		
+		</if>	
+		<if test="custName!=null and custName!='' ">           
+			and	CUST_NAME =  #{custName} 		
+		</if>	
+		<if test="auditFlag!=null and auditFlag!='' ">           
+			and	AUDIT_FLAG =  #{auditFlag} 		
+		</if>	
+		<if test="reason!=null and reason!='' ">           
+			and	REASON =  #{reason} 		
+		</if>	
+		<if test="afterSalesImgs!=null and afterSalesImgs!='' ">           
+			and	AFTER_SALES_IMGS =  #{afterSalesImgs} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="serverTime!=null and serverTime!='' ">           
+			and	SERVER_TIME =  #{serverTime} 		
+		</if>	
+		<if test="refundTotal!=null and refundTotal!='' ">           
+			and	REFUND_TOTAL =  #{refundTotal} 		
+		</if>	
+		<if test="bankCard!=null and bankCard!='' ">           
+			and	BANK_CARD =  #{bankCard} 		
+		</if>	
+		<if test="bankName!=null and bankName!='' ">           
+			and	BANK_NAME =  #{bankName} 		
+		</if>	
+		<if test="bankUserName!=null and bankUserName!='' ">           
+			and	BANK_USER_NAME =  #{bankUserName} 		
+		</if>	
+		<if test="bankSupportId!=null and bankSupportId!='' ">           
+			and	BANK_SUPPORT_ID =  #{bankSupportId} 		
+		</if>	
+		<if test="bankCityCode!=null and bankCityCode!='' ">           
+			and	BANK_CITY_CODE =  #{bankCityCode} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="remark!=null and remark!='' ">           
+			and	REMARK =  #{remark} 		
+		</if>	
+		<if test="bankMainName!=null and bankMainName!='' ">           
+			and	BANK_MAIN_NAME =  #{bankMainName} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+		<if test="accountPayId!=null and accountPayId!='' ">           
+			and	ACCOUNT_PAY_ID =  #{accountPayId} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="approveBy!=null and approveBy!='' ">           
+			and	APPROVE_BY =  #{approveBy} 		
+		</if>	
+		<if test="approveDept!=null and approveDept!='' ">           
+			and	APPROVE_DEPT =  #{approveDept} 		
+		</if>	
+		<if test="refundMembershipFee!=null and refundMembershipFee!='' ">           
+			and	REFUND_MEMBERSHIP_FEE =  #{refundMembershipFee} 		
+		</if>	
+		<if test="refundSalaryFee!=null and refundSalaryFee!='' ">           
+			and	REFUND_SALARY_FEE =  #{refundSalaryFee} 		
+		</if>	
+		<if test="createDept!=null and createDept!='' ">           
+			and	CREATE_DEPT =  #{createDept} 		
+		</if>	
+		<if test="isAt!=null and isAt!='' ">           
+			and	IS_AT =  #{isAt} 		
+		</if>	
+		<if test="vphAccountId!=null and vphAccountId!='' ">           
+			and	VPH_ACCOUNT_ID =  #{vphAccountId} 		
+		</if>	
+		<if test="vphFee!=null and vphFee!='' ">           
+			and	VPH_FEE =  #{vphFee} 		
+		</if>	
+		<if test="vphCancleStatus!=null and vphCancleStatus!='' ">           
+			and	VPH_CANCLE_STATUS =  #{vphCancleStatus} 		
+		</if>	
+		<if test="vphBackStatus!=null and vphBackStatus!='' ">           
+			and	VPH_BACK_STATUS =  #{vphBackStatus} 		
+		</if>	
+		<if test="moveToOrderId!=null and moveToOrderId!='' ">           
+			and	MOVE_TO_ORDER_ID =  #{moveToOrderId} 		
+		</if>	
+		<if test="moveOrderBusFlag!=null and moveOrderBusFlag!='' ">           
+			and	MOVE_ORDER_BUS_FLAG =  #{moveOrderBusFlag} 		
+		</if>	
+		<if test="isStop!=null and isStop!='' ">           
+			and	IS_STOP =  #{isStop} 		
+		</if>	
+		<if test="refundObject!=null and refundObject!='' ">           
+			and	REFUND_OBJECT =  #{refundObject} 		
+		</if>	
+		<if test="reasonFlag!=null and reasonFlag!='' ">           
+			and	REASON_FLAG =  #{reasonFlag} 		
+		</if>	
+		<if test="feeAccountId!=null and feeAccountId!='' ">           
+			and	FEE_ACCOUNT_ID =  #{feeAccountId} 		
+		</if>	
+			</where>
+	</select>
+
+	<!--根据卡片编号查询收支记录-->
+	<select id="findMonyAndAccountByCardNumber" parameterType="java.lang.String" resultType="com.emotte.order.order.model.ModeServeBalancePayment">
+		SELECT * FROM (
+			SELECT
+				k."ID" id,
+				k.ACCOUNT_ID accountId,
+				k."TYPE" type,
+				k.TYPE_DETAIL typeDetail,
+				k.CREATE_BY createBy,
+				k.UPDATE_BY updateBy,
+				k.CREATE_TIME createTime,
+				k.UPDATE_TIME updateTime,
+				k.VALID vaild,
+				k."VERSION" version,
+				k."LOG" log,
+				ROUND(NVL(k.MONEY,0)/c.COUNT,2) money,
+				k.READ read,
+				k.AWARD_TYPE awardType,
+				k.INVITE_ID inviteId,
+				d.TOTAL banlance,
+				k.BUSI_TYPE busiType
+			FROM T_CARD a
+			INNER JOIN T_CARD_SELL_RECORD_SKU_CARD b ON a.ID = b.CARD_ID
+			INNER JOIN T_SERVE_BALANCE_PAYMENT k ON b.SELL_RECORD_ID = k.INVITE_ID
+			INNER JOIN T_CARD_SELL_RECORD_SKU c ON b.SELL_RECORD_ID = c.SELL_RECORD_ID
+			INNER JOIN T_SERVE_ACCOUNT d ON k.ACCOUNT_ID = d.ID
+			WHERE a.CARD_NUMB = #{cardNumber} ORDER BY k.CREATE_TIME ASC
+		) WHERE ROWNUM = 1
+	</select>
+
+	<!--根据id查询方案信息-->
+	<select id="findSolutionById" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.ModeSolutionCustSolution">
+		SELECT * FROM T_SOLUTION_CUST_SOLUTION WHERE ID = #{solutionId}
+	</select>
+
+	<!--校验方案是否赠送-->
+	<select id="checkSolutionIsFree" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.ModeSolutionCustSolution">
+		SELECT * FROM T_SOLUTION_CUST_SOLUTION WHERE ID = #{solutionId} AND ORDER_ID IS NOT NULL AND TYPE = 20120008
+	</select>
+
+	<!--根据方案ID查询排期订单占用金额-->
+	<select id="findPlanBalanceBySolutionId" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT
+			NVL(SUM(NVL(b.QTY_ONCE,0) * NVL(b.ONCE_PRIRCE,0)),0) totalBalance
+		FROM T_SOLUTION_CUST_SOLUTION a
+		LEFT JOIN T_SOLUTION_CUST_SOLUTION_PLAN b ON a.ID = b.SOLUTION_CUST__SOLUTION_ID AND b.ORDER_ID IS NULL
+		WHERE a.SOLUTION_STATUS IN (2, 3, 5)
+		AND a.PAY_STATUS = 20110002
+		AND b.DEL_FLAG = 2
+		AND b.PLAN_FREEZE = 2
+		AND a.ID = #{solutionId}
+	</select>
+
+	<!--根据方案id查询方案中的代扣卡编号-->
+	<select id="findCardNumberForSolution" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT FEE_CARD_NUM FROM T_SOLUTION_CUST_SOLUTION WHERE ID = #{solutionId}
+	</select>
+
+	<!--根据售后单ID查询退款金额-->
+	<select id="findVPHById" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT VPH_FEE FROM T_ORDER_AFTER_SALES WHERE ID = #{id}
+	</select>
+
+	<!--根据订单号查询缴费明细-->
+	<select id="findPayFeeDetail" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+		SELECT
+			c.FEE_POST feePost,
+			c.ID payFeeId,
+			c.source_fee_post sourceFeePost, 
+			NVL(c.FEE_SUM,0) payFeeAmount,
+			NVL(d.MONEY,0) payFeeDetail,
+			NVL(c.FEE_SUM,0) - NVL(d.MONEY,0) returnAmount
+		FROM T_ORDER a
+		INNER JOIN T_ACCOUNT_PAY b ON b.ORDER_ID = a.ID
+		INNER JOIN T_ORDER_PAYFEE c ON c.ORDER_ID = b.ID
+		LEFT JOIN (
+			SELECT PAYFEE_ID PAYFEE_ID,SUM(NVL(MONEY,0)) MONEY FROM T_PAYFEE_DETAIL WHERE VALID = 1 GROUP BY PAYFEE_ID
+		) d ON d.PAYFEE_ID = c.ID
+		WHERE 1=1
+		AND a.VALID = 1
+		AND b.VALID = 1
+		AND c.VALID = 1
+		AND b.IS_BACK_TYPE = 2
+		AND c.IS_BACK_TYPE = 1
+		AND c.ACCOUNT_STATUS = 1
+		AND decode (c.FEE_POST,20250029,c.source_fee_post,c.fee_post) IN (20250027, 20250033, 20250031,20250054)
+		<!-- AND c.FEE_POST IN (20250027,20250033,20250031) -->
+		and b.pay_status = 20110003
+		AND c.SPLIT_STATUS = 1
+		AND a.ID = #{orderId}
+		<if test="payFeeId != null and payFeeId != ''">
+			and c.id=#{payFeeId}
+		</if>
+	</select>
+	
+	
+	<select id="queryOrder" parameterType="com.emotte.order.order.model.Order" resultType="com.emotte.order.order.model.Order">
+									SELECT o.id AS id,
+								       o.order_code AS orderCode,
+								       o.user_id AS userId,
+								       o.user_name AS userName,
+								       o.user_province AS userProvince,
+								       o.user_city AS userCity,
+								       o.user_mobile AS userMobile,
+								       o.longitude AS longitude,
+								       o.latitude AS latitude,
+								       o.order_type AS orderType,
+								       o.order_channel AS orderChannel,
+								       o.order_source_id AS orderSourceId,
+								       o.order_status AS orderStatus,
+								       to_char(o.create_time, 'yyyy-MM-dd hh24:mi:ss') AS createTime,
+								       to_char(o.update_time, 'yyyy-MM-dd hh24:mi:ss') AS updateTime,
+								       o.price_type AS priceType,
+								       o.pay_status AS payStatus,
+								       o.total_pay AStotalPay,
+									   o.cate_type as cateType,
+									   o.city as city ,
+								        o.create_by AS createBy,
+								        o.update_by AS updateBy,
+							            o.recharge_by as rechargeBy,
+							            o.recharge_dept as rechargeDept,
+							            to_char(s.start_time, 'yyyy-MM-dd hh24:mi:ss') AS startTime,
+							            to_char(s.end_time, 'yyyy-MM-dd hh24:mi:ss') AS endTime,
+							            #{loginBy} as loginBy,
+								       decode(o.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,
+								       decode(o.cate_type,3,'商品',
+										 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = o.order_type AND pc.valid = 1),
+										 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = o.order_type AND pc.valid = 1),
+										 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = o.order_type AND pc.valid = 1),
+										 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+									   decode (o.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户',
+										 	'9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','20','撤销','') AS statusText,
+							            (SELECT rech.real_name from t_auth_manager rech where o.recharge_by = rech.id) as rechargeByText,
+							            (SELECT orgr.name from t_auth_org orgr where o.recharge_dept = orgr.id ) as rechargeDeptText,
+							            (SELECT ch.name from t_custom_channel ch where o.order_channel = to_char(ch.id)) as channelText,
+							            (SELECT t.dict_name FROM t_base_dictionary t WHERE t.dict_code = o.order_source_id AND t.valid = 1 ) AS sourceText,
+							            (SELECT ch.name FROM t_custom_channel ch WHERE o.order_channel = to_char(ch.id)) AS channelText
+								  FROM t_order o
+								  LEFT JOIN t_order_item_detail_server s
+								    ON s.order_id = o.id
+								    AND s.valid=1
+								 WHERE o.valid = 1
+								   AND o.order_status NOT IN (9, 10)
+								   AND o.cate_type=2
+								   AND o.create_time &lt;= SYSDATE
+								   <choose>
+										   <when test="type != null and type == 1">
+											   AND EXISTS (SELECT 1
+												          FROM t_account_pay ap
+												          JOIN t_order_payfee op
+												            ON op.order_id = ap.id
+												         WHERE ap.valid = 1
+												           AND op.valid = 1
+												           <!-- AND op.fee_post IN (20250027, 20250033, 20250031) -->
+												           AND decode (op.FEE_POST,20250029,op.source_fee_post,op.fee_post) IN (20250027, 20250033, 20250031,20250054)
+												           AND ap.order_id = o.id)
+										   </when>
+								   </choose>
+								    <if test="orderCode!=null and orderCode!='' ">           
+										AND o.order_code = #{orderCode} 		
+									</if>
+									<if test="userMobile!=null and userMobile!='' ">           
+										AND o.user_mobile = #{userMobile}
+									</if>
+									<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">
+										and (o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or
+										o.follow_by=#{loginBy})
+									</if>
+									<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">
+										and (o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or
+										o.follow_by=#{loginBy}
+										or o.create_dept = #{loginDept} or o.recharge_dept=#{loginDept} or
+										o.follow_dept=#{loginDept})
+									</if>
+									<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">
+											and (o.create_by = #{loginBy} or o.recharge_by = #{loginBy} or
+											o.follow_by = #{loginBy} or
+											exists(select 1 from t_auth_org orgaa
+											where o.create_dept=orgaa.id
+											and orgaa.code like '${loginOrgCode}%'
+											union all
+											select 1 from t_auth_org orgbb
+											where o.recharge_dept=orgbb.id
+											and orgbb.code like '${loginOrgCode}%'
+											union all
+											select 1 from t_auth_org orgcc
+											where o.follow_dept=orgcc.id
+											and orgcc.code like '${loginOrgCode}%'))
+									</if>
+									ORDER BY o.create_time DESC
+	</select>
+
+	<select id="queryFqafterSales" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+	select t.ID                    as id,
+       t.ORDER_ID              as orderId,
+       t.ORDER_TYPE            as orderType,
+       t.CREATE_BY             as createBy,
+       t.UPDATE_BY             as updateBy,
+       t.UPDATE_TIME           as updateTime,
+       t.VERSION               as version,
+       t.AFTER_SALES_KIND      as afterSalesKind,
+       t.CUST_MOBILE           as custMobile,
+       t.CUST_NAME             as custName,
+       t.AUDIT_FLAG            as auditFlag,
+       t.REASON                as reason,
+       t.AFTER_SALES_IMGS      as afterSalesImgs,
+       t.CREATE_TIME           as createTime,
+       t.SERVER_TIME           as serverTime,
+       t.REFUND_TOTAL          as refundTotal,
+       t.BANK_CARD             as bankCard,
+       t.BANK_NAME             as bankName,
+       t.BANK_USER_NAME        as bankUserName,
+       t.BANK_SUPPORT_ID       as bankSupportId,
+       t.BANK_CITY_CODE        as bankCityCode,
+       t.IS_OLD_DATA           as isOldData,
+       t.REMARK                as remark,
+       t.BANK_MAIN_NAME        as bankMainName,
+       t.LOG                   as log,
+       t.ACCOUNT_PAY_ID        as accountPayId,
+       t.VALID                 as valid,
+       t.APPROVE_BY            as approveBy,
+       t.APPROVE_DEPT          as approveDept,
+       t.REFUND_MEMBERSHIP_FEE as refundMembershipFee,
+       t.REFUND_SALARY_FEE     as refundSalaryFee,
+       t.CREATE_DEPT           as createDept,
+       t.IS_AT                 as isAt,
+       t.VPH_ACCOUNT_ID        as vphAccountId,
+       t.VPH_FEE               as vphFee,
+       t.VPH_CANCLE_STATUS     as vphCancleStatus,
+       t.VPH_BACK_STATUS       as vphBackStatus,
+       t.MOVE_TO_ORDER_ID      as moveToOrderId,
+       t.MOVE_ORDER_BUS_FLAG   as moveOrderBusFlag,
+       t.IS_STOP               as isStop,
+       t.REFUND_OBJECT         as refundObject,
+       t.REASON_FLAG           as reasonFlag,
+       t.FEE_ACCOUNT_ID        as feeAccountId,
+       t.PAYFEE_ID             as payFeeId,
+       o.order_code as orderCode
+	  from t_order_after_sales t
+	  left join t_order o
+	  on o.id=t.order_id
+	  and o.valid=1
+	 WHERE t.VALID = 1
+	   AND t.ID = #{0}
+	</select>
+
+	<!--根据订单ID查询分期手续费列表-->
+	<select id="findServiceChargeList" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+		SELECT
+			b.PAY_TYPE payType,
+			c.ID payFeeId,
+			NVL(c.FEE_SUM, 0) payFeeAmount,
+			NVL(d.MONEY, 0) payFeeDetail,
+			NVL(c.FEE_SUM, 0) - NVL(d.MONEY, 0) returnAmount
+		FROM T_ORDER a
+		INNER JOIN T_ACCOUNT_PAY b ON a.ID = b.ORDER_ID
+		INNER JOIN T_ORDER_PAYFEE c ON b.ID = c.ORDER_ID
+		LEFT JOIN (
+			SELECT PAYFEE_ID PAYFEE_ID,SUM(NVL(MONEY,0)) MONEY FROM T_PAYFEE_DETAIL WHERE VALID = 1 AND BTYPE in (117,118,112) GROUP BY PAYFEE_ID
+		) d ON c.ID = d.PAYFEE_ID
+		WHERE 1 = 1
+		AND b.PAY_TYPE IN (8, 11, 12)
+		AND c.SPLIT_STATUS = 1
+		AND b.IS_BACK_TYPE = 2
+		AND c.IS_BACK_TYPE = 1
+		AND b.VALID = 1
+		AND c.VALID = 1
+		AND c.ACCOUNT_STATUS = 1
+		AND a.ID = #{orderId}
+		<if test="payFeeId != null and payFeeId != ''">
+			and c.id=#{payFeeId}
+		</if>
+	</select>
+
+	<!--根据订单查询手续费退费金额-->
+	<select id="findServiceCharge" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT
+			NVL(c.FEE_SUM, 0) - NVL(d.MONEY, 0) returnAmount
+		FROM T_ORDER a
+		INNER JOIN T_ACCOUNT_PAY b ON a.ID = b.ORDER_ID
+		INNER JOIN T_ORDER_PAYFEE c ON b.ID = c.ORDER_ID
+		LEFT JOIN (
+			SELECT PAYFEE_ID PAYFEE_ID,SUM(NVL(MONEY,0)) MONEY FROM T_PAYFEE_DETAIL WHERE VALID = 1 AND BTYPE = 114 GROUP BY PAYFEE_ID
+		) d ON c.ID = d.PAYFEE_ID
+		WHERE 1 = 1
+		AND b.PAY_TYPE IN (8, 11, 12)
+		AND c.SPLIT_STATUS = 1
+		AND b.IS_BACK_TYPE = 2
+		AND c.IS_BACK_TYPE = 1
+		AND b.VALID = 1
+		AND c.VALID = 1
+		AND c.ACCOUNT_STATUS = 1
+		AND a.ID = #{orderId}
+	</select>
+	
+	<select id="queryCity" parameterType="com.emotte.order.order.model.BaseCity" resultType="com.emotte.order.order.model.BaseCity">
+					SELECT (SELECT bc.name
+				          FROM t_base_city bc
+				         WHERE bc.valid = 1
+				           AND bc.id = t.pid) ||'-'|| t.name AS fullName,
+				       t.id,
+				       t.pid,
+				       t.name,
+				       t.code,
+				       t.levels
+				  FROM t_base_city t
+				 WHERE t.valid = 1
+				   AND t.levels = 2
+				 ORDER BY t.code
+	</select>
+
+	<!--根据售后单ID查询退款金额(除VPH外其他)-->
+	<select id="findOtherAmountById" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT REFUND_TOTAL FROM T_ORDER_AFTER_SALES WHERE ID = #{id}
+	</select>
+
+	<!--根据订单id、服务人员服务费批次查询售后单信息-->
+	<select id="findBuyBackAfterSales" resultType="com.emotte.order.order.model.OrderAfterSales">
+		SELECT
+			a.ORDER_CODE orderCode,
+			d.SERVICE_LABOUR_FEE serviceLabourFee,
+			c.BATHNO bathno,
+			b.REAL_NAME realName,
+			b.MOBILE mobile
+		FROM T_ORDER a
+		LEFT JOIN T_CUSTOMER b ON a.USER_ID = b.ID
+		LEFT JOIN T_ORDER_HJBL_FORPUSH c ON a.ORDER_CODE = c.ORDERCODE AND c.BATHNO = #{bathno}
+		LEFT JOIN T_EMP_SALARY d ON c.SALARYID = d.ID
+		WHERE a.ID = #{orderId}
+	</select>
+	
+	<!--查询解决方案-->
+		<select id="querySolution" parameterType="com.emotte.order.order.model.Solution" resultType="com.emotte.order.order.model.Solution">
+			SELECT
+				  tsc.id as id,
+				   (SELECT o1.order_code FROM t_order o1 WHERE o1.id = tsc.order_id) as orderCode,
+				  tsc.solution_code as solutionCode,
+				  to_char(tsc.create_time,'yyyy-mm-dd hh24:mi') as createTime,
+				  tsc.solution_status as solutionStatus,
+				  tsc.PAYER_MOBILE as payerMobile,
+				  tsc.receiver_name as payerName,
+				  tsc.total_pay as totalPay,
+				  (SELECT rech.real_name from t_auth_manager rech where tsc.create_by = rech.id) as rechargeByText,
+					(SELECT orgr.name from t_auth_org orgr where tsc.cid = orgr.id ) as rechargeDeptText,
+				  tsc.ORDER_ID as orderId,
+				  tsc.type as solutionType,
+				  (SELECT t.card_balance FROM t_card t where t.card_numb=tsc.fee_card_num and t.valid=1) as balance,
+				  tsc.CUST_ID as custId
+				  FROM t_solution_cust_solution tsc
+				 inner join t_order o
+					on tsc.id = o.id
+				 where tsc.solution_status in (1,2,3,7)
+			<if test="solutionCode!=null and solutionCode!='' ">
+				AND tsc.SOLUTION_CODE = #{solutionCode}
+			</if>
+			<if test="payerMobile!=null and payerMobile!='' ">
+				AND tsc.PAYER_MOBILE = #{payerMobile}
+			</if>
+			<if test="loginLevel==null or loginLevel =='' or loginLevel==1 ">
+				and (o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or
+				o.follow_by=#{loginBy})
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and loginLevel==2 ">
+				and (o.create_by = #{loginBy} or o.recharge_by=#{loginBy} or
+				o.follow_by=#{loginBy}
+				or o.create_dept = #{loginDept} or o.recharge_dept=#{loginDept} or
+				o.follow_dept=#{loginDept})
+			</if>
+			<if test="loginLevel!=null and loginLevel !='' and (loginLevel==3 or loginLevel==4)">
+					and (o.create_by = #{loginBy} or o.recharge_by = #{loginBy} or
+					o.follow_by = #{loginBy} or
+					exists(select 1 from t_auth_org orgaa
+					where o.create_dept=orgaa.id
+					and orgaa.code like '${loginOrgCode}%'
+					union all
+					select 1 from t_auth_org orgbb
+					where o.recharge_dept=orgbb.id
+					and orgbb.code like '${loginOrgCode}%'
+					union all
+					select 1 from t_auth_org orgcc
+					where o.follow_dept=orgcc.id
+					and orgcc.code like '${loginOrgCode}%'))
+			</if>
+			ORDER BY o.create_time DESC
+	</select>
+	
+	<!--查询解决方案排期-->
+	<select id="querySolutionSchedule" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.CustSolutionPlan">
+		SELECT t.id as id,
+         t.order_id as orderId,
+         tsc.solution_status as solutionStatus,
+         t.once_prirce * t.QTY_ONCE as oncePrirce,
+         t.qty_once
+      FROM t_solution_cust_solution_plan t
+     inner join t_solution_cust_solution tsc
+        on tsc.id = t.solution_cust__solution_id
+     where
+       tsc.solution_status in (2, 3, 5)
+        and tsc.pay_status=20110002
+        and t.del_flag in (2,3)
+        and t.order_id is null
+       and t.solution_cust__solution_id =(select id from t_solution_cust_solution where SOLUTION_CODE=#{id}) 
+	</select>
+
+	<!--根据电话或卡号查询卡信息列表-->
+	<select id="findCardDetailForCardAfterSales" parameterType="com.emotte.order.order.model.AfterSalesNew" resultType="com.emotte.order.order.model.AfterSalesNew">
+		SELECT
+		a.id cardId,
+		a.bind_user_id custId,
+		a.CARD_NUMB cardNumber,
+		a.BIND_USER_MOBILE custMobile,
+		a.BIND_USER_NAME userName,
+		d.NAME recommendName,
+		d.MOBILE recommendInst,
+		a.CARD_STATUS cardStatus,
+		to_char(a.CREATE_TIME,'yyyy-mm-dd hh24:mi') openCardDate,
+		to_char(a.VALID_TIME,'yyyy-mm-dd hh24:mi') validDate,
+		d.ID,
+		CASE h.id WHEN 432454642096150 THEN h.name ELSE '管家帮' END channelName,
+		NVL(j.cardValue,0) totalMoney,
+		NVL(a.CARD_BALANCE,0) cardbalance,
+		a.IS_SIGN_GIVE isGive,
+		CASE h.id WHEN 432454642096150 THEN 1 ELSE 2 END isGJTK,
+		CASE i.money WHEN NULL THEN 2 ELSE 1 END isPushMoney,
+		i.personnelName personnelName,
+		ROUND(NVL(i.money,0)/NVL(k.COUNT,0),2) gjMoney,
+		ROUND(NVL(i.gjBalance,0) - NVL(i.money,0)/NVL(k.COUNT,0),2) gjBalance,
+		c.id AS cardSellRecordId,
+		c.sales_type salesType,
+		i.payMentId payMentId
+		FROM T_CARD a
+		INNER JOIN T_CARD_SELL_RECORD_SKU_CARD b ON a.ID = b.CARD_ID
+		INNER JOIN T_CARD_SELL_RECORD c ON b.SELL_RECORD_ID = c.ID
+		INNER JOIN T_CARD_DISTRIBUTION_SALESMAN s ON s.card_id=a.ID
+		LEFT JOIN T_EMP_CURSORPERSON d ON c.SERVICE_ID = d.ID
+		LEFT JOIN T_CUSTOM_CHANNEL h ON d.CHANNEL = h.ID
+		LEFT JOIN (
+		SELECT
+		c.ID payMentId,
+		a.CARD_NUMB cardNum,
+		e.NAME personnelName,
+		NVL(c.MONEY,0) money,
+		NVL(d.TOTAL,0) gjBalance
+		FROM T_CARD a
+		INNER JOIN T_CARD_SELL_RECORD_SKU_CARD b ON a.ID = b.CARD_ID
+		INNER JOIN T_SERVE_BALANCE_PAYMENT c ON b.SELL_RECORD_ID = c.INVITE_ID
+		INNER JOIN T_SERVE_ACCOUNT d ON c.ACCOUNT_ID = d.ID
+		INNER JOIN T_EMP_CURSORPERSON e ON d.EMP_ID = e.ID
+		WHERE a.CARD_STATUS IN (104,105,203,204) AND a.VALID = 1 AND c.TYPE = 1 AND b.VALID = 1 AND c.VALID = 1 AND d.VALID = 1
+		) i ON a.CARD_NUMB = i.cardNum
+		INNER JOIN (
+		SELECT
+		a.ID cardId,
+		d.CARD_VALUE cardValue
+		FROM T_CARD a
+		INNER JOIN T_CARD_BATCH b on b.ID=a.CARD_BATCH_ID
+		INNER JOIN T_CARD_SKU_RELATIONSHIP c on b.ID=c.CARD_BATCH_ID
+		INNER JOIN T_CARD_SKU d on c.SKU_ID=d.ID
+		)j ON a.ID = j.cardId
+		INNER JOIN T_CARD_SELL_RECORD_SKU k ON b.SELL_RECORD_ID = k.SELL_RECORD_ID
+		WHERE a.CARD_STATUS IN (104,105,203,204) AND a.VALID = 1 AND b.VALID = 1
+		<if test="cardNumber != null and cardNumber !='' ">
+			AND a.CARD_NUMB = #{cardNumber}
+		</if>
+		<if test="custMobile != null and custMobile !='' ">
+			AND a.BIND_USER_MOBILE = #{custMobile}
+		</if>
+	</select>
+
+	<!--根据卡编号查询卡片详情-->
+	<select id="findCardAfterSalesDetail" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+		SELECT
+			a.CARD_NUMB cardNumber,
+			a.CARD_STATUS cardStatus,
+			NVL(k.cardValue,0) totalMoney,
+			CASE h.id WHEN 432454642096150 THEN h.name ELSE '管家帮' END channelName,
+			d.NAME recommendName,
+			ROUND(NVL(i.money,0),2) gjMoney,
+			ROUND(NVL(i.gjBalance,0),2) gjBalance,
+			NVL(a.CARD_BALANCE,0) cardbalance,
+			j.CUST_NAME custName,
+			j.CUST_MOBILE custMobile,
+			j.AUDIT_FLAG auditFlag,
+			j.AFTER_SALES_KIND afterSalesKind,
+			j.REFUND_TOTAL refundTotal,
+			j.REASON reason
+		FROM T_CARD a
+		INNER JOIN T_CARD_SELL_RECORD_SKU_CARD b ON a.ID = b.CARD_ID
+		INNER JOIN T_CARD_SELL_RECORD c ON b.SELL_RECORD_ID = c.ID
+		LEFT JOIN T_EMP_CURSORPERSON d ON c.SERVICE_ID = d.ID
+		LEFT JOIN T_CUSTOM_CHANNEL h ON d.CHANNEL = h.ID
+		LEFT JOIN (
+			SELECT
+			a.CARD_NUMB cardNum,
+			e.NAME personnelName,
+			NVL(c.MONEY,0) money,
+			NVL(c.BALANCE,0) gjBalance
+			FROM T_CARD a
+			INNER JOIN T_SERVE_BALANCE_PAYMENT c ON a.CARD_NUMB = c.REVERSE_RELATION
+			INNER JOIN T_SERVE_ACCOUNT d ON c.ACCOUNT_ID = d.ID
+			INNER JOIN T_EMP_CURSORPERSON e ON d.EMP_ID = e.ID
+			WHERE a.CARD_STATUS = 301 AND c.TYPE = 2 AND c.VALID = 1 AND d.VALID = 1 AND a.ID = #{cardId}
+		) i ON a.CARD_NUMB = i.cardNum
+		LEFT JOIN T_ORDER_AFTER_SALES j ON a.ID = j.ORDER_ID
+		INNER JOIN (
+			SELECT
+				a.ID cardId,
+				d.CARD_VALUE cardValue
+			FROM T_CARD a
+			INNER JOIN T_CARD_BATCH b on b.ID=a.CARD_BATCH_ID
+			INNER JOIN T_CARD_SKU_RELATIONSHIP c on b.ID=c.CARD_BATCH_ID
+			INNER JOIN T_CARD_SKU d on c.SKU_ID=d.ID
+		)k ON a.ID = k.cardId
+		INNER JOIN T_CARD_SELL_RECORD_SKU l ON b.SELL_RECORD_ID = l.SELL_RECORD_ID
+		WHERE 1=1 AND a.CARD_STATUS = 301 AND b.VALID = 1 AND j.VALID = 1 AND a.ID = #{cardId}
+	</select>
+	
+	<!--查询解决方案排期-->
+	<select id="querySolutionMoney" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.AfterSalesNew">
+		    SELECT tsc.solution_code as solutionCode,
+		    (SELECT o1.order_code FROM t_order o1 WHERE o1.id=tsc.order_id) as orderCode,
+           tsc.active_money as cardbalance,
+       (SELECT sum(nvl(t.once_prirce, 0) * nvl(t.QTY_ONCE,0)) as oncePrirce
+          FROM t_solution_cust_solution_plan t
+         where tsc.id = t.solution_cust__solution_id
+           and tsc.solution_status in (2, 3, 5)
+           and tsc.pay_status = 20110002
+           and t.del_flag in (2,3)
+           and t.order_id is null) as allOncePrirce,
+           (SELECT sum(nvl(t.account_amount,0))
+          FROM t_account_pay t
+         inner join t_order_payfee tp
+            on t.id = tp.order_id
+           and t.valid = 1
+         where t.order_id = o.id
+           and tp.fee_post = 20250014
+           and tp.account_status = 1
+           and tp.valid = 1) as otherMoney,
+           ( SELECT sum(nvl(td.money,0))
+          FROM t_account_pay t
+       inner join t_order_payfee tp
+          on t.id = tp.order_id
+       inner join t_payfee_detail td
+          on tp.id = td.payfee_id
+         where t.order_id = o.id and t.valid=1 and   tp.fee_post = 20250014 ) as solutionExpend
+  FROM t_solution_cust_solution tsc
+ inner join t_order o
+    on tsc.id = o.id
+ where 
+ tsc.solution_status in (1,2,3,7)
+  AND tsc.SOLUTION_CODE = #{id}
+	</select>
+
+	<!--根据ID查询售后单-->
+	<select id="findAfterSales" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.OrderAfterSales">
+		SELECT ID as id,AUDIT_FLAG as auditFlag,IS_APP as isApp FROM T_ORDER_AFTER_SALES WHERE ID = #{id}
+	</select>
+	
+	<!--根据ID查询售后单-->
+	<select id="queryPremiumCheck"  resultType="java.lang.Integer">
+		SELECT COUNT(1) 
+			FROM T_ORDER_AFTER_SALES T 
+				WHERE T.VALID=1 AND AFTER_SALES_KIND =#{afterSalesKind}
+					   AND AUDIT_FLAG&lt;&gt;'20130008'  
+				 AND T.Order_Id=#{orderId}
+	</select>
+
+	<select id="queryPayGroupBy" resultType="HashMap" parameterType="com.emotte.order.order.model.OrderAfterSales">
+					WITH t_payfeetotal AS
+				 (SELECT o.id AS order_id,
+				         a.id AS account_id,
+				         p.id AS payfee_id,
+				         p.fee_post AS payfee_post,
+				         SUM(NVL(p.fee_sum, 0)) AS payfee_total,
+				         NVL((SELECT SUM(NVL(d.money, 0))
+				               FROM t_payfee_detail d
+				              WHERE d.valid = 1
+				                AND d.payfee_id = p.id
+				                <if test="id != null and id != '' ">
+				                AND d.relation_id !=${id}
+				                </if>
+				                ),
+				             0) AS detail_total
+				    FROM t_order o
+				    JOIN t_account_pay a
+				      ON a.order_id = o.id
+				    JOIN t_order_payfee p
+				      ON p.order_id = a.id
+				   WHERE a.valid = 1
+				     AND p.valid = 1
+				     AND o.cate_type = 2
+				     AND a.pay_type IN (3, 5)
+				     AND a.is_back_type = 2
+				     AND p.is_back_type = 1
+				     AND p.account_status = 1
+				     AND p.pay_status = 20110002
+				     AND p.fee_post NOT IN (20250011,
+				                            20250014,
+				                            20250016,
+				                            20250027,
+				                            20250028,
+				                            20250031,
+				                            20250033,
+				                            20250034,
+				                            20250035,
+				                            20250054)
+				     AND o.id = ${orderId}
+				   GROUP BY o.id, a.id, p.id, p.fee_post)
+				SELECT o.id,
+				       o.order_code,
+				       t.payfee_post,
+				       d.dict_name AS payfee_post_name,
+				       NVL(SUM(t.payfee_total), 0) AS in_total,
+				       NVL(SUM(t.detail_total), 0) AS out_total,
+				       CASE WHEN NVL(SUM(t.payfee_total), 0) - NVL(SUM(t.detail_total), 0) > 0  THEN NVL(SUM(t.payfee_total), 0) - NVL(SUM(t.detail_total), 0) ELSE 0 END AS refund_total
+				  FROM t_order o
+				  LEFT JOIN t_payfeetotal t
+				    ON t.order_id = o.id
+				  LEFT JOIN t_base_dictionary d
+				    ON d.dict_code = t.payfee_post
+				   AND d.valid = 1
+				 WHERE o.id = ${orderId}
+				 GROUP BY o.id, o.order_code, t.payfee_post, d.dict_name
+	</select>
+
+	<!--普通售后根据订单ID查询退款金额-->
+	<select id="queryAfterSalesAmountByOrderId" parameterType="java.lang.Long" resultType="java.util.HashMap">
+		SELECT
+			b.feeSum,
+			NVL(c.money,0) MONEY,
+			b.feeSum - NVL(c.money,0) RETURNAMOUNT,
+			NVL(d.RECHARGECUSTOMER,0) - NVL(e.RETURNCUSTOMER,0) CUSTOMERAMOUNT
+		FROM T_ORDER a
+		LEFT JOIN (
+			SELECT
+				b.ORDER_ID,
+				SUM(NVL(a.FEE_SUM,0)) feeSum
+			FROM T_ORDER_PAYFEE a
+			LEFT JOIN (
+				SELECT ID,ORDER_ID FROM T_ACCOUNT_PAY WHERE VALID = 1 AND IS_BACK_TYPE = 2 AND PAY_TYPE IN (3) GROUP BY ID,ORDER_ID
+			) b ON a.ORDER_ID = b.ID
+			WHERE 1=1
+			AND a.FEE_POST NOT IN(20250011,20250014,20250016,20250027,20250028,20250031,20250033,20250034,20250035)
+			AND a.ACCOUNT_STATUS = 1
+			AND a.SPLIT_STATUS = 1
+			AND a.VALID = 1
+			AND a.IS_BACK_TYPE = 1
+			GROUP BY b.ORDER_ID
+		) b ON a.ID = b.ORDER_ID
+		LEFT JOIN (
+			SELECT
+				TOP_ID,
+				SUM(NVL(MONEY,0)) money
+			FROM T_PAYFEE_DETAIL
+			WHERE 1=1
+			AND VALID = 1
+			AND BTYPE NOT IN(104,105,106,107,111,112,114,115,116,117,118,119,120,901)
+			GROUP BY TOP_ID
+		) c ON a.ID = c.TOP_ID
+		LEFT JOIN (
+			SELECT TOP_ID,SUM(NVL(MONEY,0)) RECHARGECUSTOMER FROM T_PAYFEE_DETAIL WHERE VALID = 1 AND BTYPE = 103 GROUP BY TOP_ID
+		) d ON a.ID = d.TOP_ID
+		LEFT JOIN (
+			SELECT TOP_ID,SUM(NVL(MONEY,0)) RETURNCUSTOMER FROM T_PAYFEE_DETAIL WHERE VALID = 1 AND BTYPE = 105 GROUP BY TOP_ID
+		) e ON a.ID = e.TOP_ID
+		WHERE a.ID = #{orderId};
+	</select>
+
+	<!--根据售后ID查询售后中的账户信息-->
+	<select id="findCustomerByAfterSalesId" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.OrderAfterSales">
+		SELECT BANK_USER_NAME bankUserName,BANK_NAME bankName,BANK_CARD bankCard FROM T_ORDER_AFTER_SALES WHERE ID = #{id}
+	</select>
+	
+	<select id="queryAfterReturnableSalary" resultType="HashMap" parameterType="com.emotte.order.order.model.AfterSalesNew">
+									WITH t_payfeetotal AS
+								 (SELECT o.id AS order_id,
+								         o.order_code,
+								         a.id a_id,
+								         p.id p_id,
+								         SUM(NVL(p.fee_sum, 0)) AS fee_total,
+								         NVL((SELECT SUM(NVL(d.money, 0))
+								               FROM t_payfee_detail d
+								              WHERE d.valid = 1
+								                AND d.payfee_id = p.id
+								                AND d.btype!=105
+								                <if test="id != null and id != '' ">
+								                AND d.relation_id != #{id}
+								                </if>
+								                ),
+								             0) AS detail_total
+								    FROM t_order o
+								    JOIN t_account_pay a
+								      ON a.order_id = o.id
+								    JOIN t_order_payfee p
+								      ON p.order_id = a.id
+								   WHERE a.valid = 1
+								     AND p.valid = 1
+								     AND o.cate_type = 2
+								     AND a.pay_type IN (3, 5)
+								     AND a.is_back_type = 2
+								     AND p.is_back_type = 1
+								     AND p.account_status = 1
+								     AND p.pay_status = 20110002
+								     AND p.fee_post NOT IN (20250011,
+								                            20250014,
+								                            20250016,
+								                            20250027,
+								                            20250028,
+								                            20250031,
+								                            20250033,
+								                            20250034,
+								                            20250035,
+								                            20250054)
+								     AND o.id = ${orderId}
+								   GROUP BY o.id, o.order_code, a.id, p.id)
+								SELECT o.id,
+								       o.order_code,
+								       NVL(SUM(t.fee_total), 0) AS in_total,
+								       NVL(SUM(t.detail_total), 0) AS out_total,
+								       CASE WHEN NVL(SUM(t.fee_total), 0) - NVL(SUM(t.detail_total), 0) > 0  THEN NVL(SUM(t.fee_total), 0) - NVL(SUM(t.detail_total), 0) ELSE 0 END AS refund_total
+								  FROM t_order o
+								  LEFT JOIN t_payfeetotal t
+								    ON t.order_id = o.id
+								 WHERE o.id = ${orderId}
+								 GROUP BY o.id, o.order_code
+	</select>
+	
+	<select id="queryAfterReturnableMessageFee" resultType="HashMap" parameterType="com.emotte.order.order.model.AfterSalesNew">
+									WITH t_accounttotal AS
+								 (SELECT o.id AS order_id,
+								         o.order_code,
+								         SUM(NVL(a.account_amount, 0)) AS account_total,
+								         NVL((SELECT SUM(NVL(d.money, 0))
+								               FROM t_payfee_detail d
+								              WHERE d.valid = 1
+								                AND d.btype = 105
+								                AND d.top_id = o.id
+								                <if test="id != null and id != '' ">
+								                AND d.relation_id != #{id}
+								                </if>
+								                ),
+								             0) AS detail_total
+								    FROM t_order o
+								    JOIN t_account_pay a
+								      ON a.order_id = o.id
+								   WHERE a.valid = 1
+								     AND o.valid = 1
+								     AND o.cate_type = 2
+								     AND a.pay_type = 6
+								     AND a.is_back_type = 2
+								     AND o.id = ${orderId}
+								   GROUP BY o.id, o.order_code)
+								SELECT o.id,
+								       o.order_code,
+								       NVL(SUM(t.account_total), 0) AS in_total,
+								       NVL(SUM(t.detail_total), 0) AS out_total,
+								       CASE WHEN NVL(SUM(t.account_total), 0) - NVL(SUM(t.detail_total), 0) > 0  THEN NVL(SUM(t.account_total), 0) - NVL(SUM(t.detail_total), 0) ELSE 0 END AS refund_total
+								  FROM t_order o
+								  LEFT JOIN t_accounttotal t
+								    ON t.order_id = o.id
+								 WHERE o.id = ${orderId}
+								 GROUP BY o.id, o.order_code
+	</select>
+	
+	<select id="queryAgreementSeaGlodPayFree" parameterType="java.lang.Long" resultType="java.lang.Integer">
+			SELECT count(1) FROM emerp.t_emp_salary s
+			inner join emerp.t_payfee_detail d on d.relation_id = s.id and d.valid = 1
+			and d.btype = 102
+			inner join emerp.t_order_payfee p on d.payfee_id = p.id and p.valid = 1 and
+			p.fee_post = 20250033
+			where s.valid =1 and s.STATE in (1,3,12) and p.id = #{payfeeId}
+	</select>
+	
+	<select id="queryProductByOrderId" parameterType="java.lang.Long" resultType="java.lang.String">
+			SELECT PRODUCT_CODE FROM T_ORDER_ITEM T WHERE T.ORDER_ID=#{orderId}
+	</select>
+	
+	<select id="selectProductThreeCode" parameterType="java.lang.Long" resultType="java.lang.Integer">
+			SELECT COUNT(1) FROM T_ORDER_ITEM T WHERE  CATEGORY_CODE NOT IN(101600010001,101600010002,101600010003,101600010004) AND T.ORDER_ID=#{orderId}
+	</select>
+</mapper>

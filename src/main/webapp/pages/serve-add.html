@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog modal-serve" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增服务</h4>
+            </div>
+            <div class="modal-body new-sort serve-new-sort" id="new_sort">
+                <div class="sort-content">
+                    <p>完成商品新增，需完成以下几步，请认真填写。其中，1、2、3为必填，4可直接跳过。</p>
+                    <ol class="breadcrumb">
+                        <li><a href="#">1.基本信息录入</a></li>
+                        <li class="active">2.库存信息录入</li>
+                        <li class="active">3.属性信息录入</li>
+                        <li class="active">4.其他基本信息</li>
+                    </ol>
+                    <h3>基本信息</h3>
+                    <div class="info clearfix">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>服务项目名称：</p>
+                                        <input type="text" class="form-control" placeholder="Jane">
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>服务项目简码：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>服务项目编号：</p>
+                                        <input type="text" class="form-control">
+                                        <span class="pl20">默认系统生成唯一的编号，不可修改</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>服务分类：</p>
+                                        <select class="form-control">
+                                            <option>三级分类</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label>
+                                        <p>品牌：</p>
+                                        <select class="form-control">
+                                            <option></option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>开通城市：</p>
+                                        <select class="form-control">
+                                            <option>北京</option>
+                                        </select>
+                                        <span class="pl20">默认为登录人员所属城市，但可以修改所属城市，此功能仅限总部人员；</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>计量单位：</p>
+                                        <input type="text" class="form-control">
+                                        <span>计量单位（SKU）</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>
+                                        <p>上传商品主图：</p>
+                                        <input type="text" class="form-control">
+                                    </label>
+                                    <p class="pl100">
+                                        <span>
+                                            最多可上传五张主图，仅支持JPG、JPEG、GIF、PNG格式的图片文件<br/>
+                                            文件不能<span class="red">大于2MB,标准尺寸为：？？？设计提供参考数据</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xs-12">
+                                        <label>
+                                            <p>商品详情：</p>
+                                            <textarea class="form-control form-textarea"></textarea>
+                                        </label>
+
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label>服务范围：
+                                        <select class="form-control">
+                                            <option value="">省（全境）</option>
+                                        </select>
+                                        <select class="form-control">
+                                            <option value="">市（全境）</option>
+                                        </select>
+                                        <select class="form-control">
+                                            <option value="">区（全境）</option>
+                                        </select>
+                                        <span class="pl10">【+】</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label class="radio-inline">
+                                        <input type="checkbox" name="way" value="备注">
+                                        <p>备注</p>
+                                    </label>
+                                </div>
+                                <div class="form-group col-xs-12 pl100">
+                                    <label class="radio-inline">
+                                        <textarea class="form-control form-textarea" placeholder="只可上传图片，最多五张，图片尺寸为：由设计提供参考数据"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.gentlemanSignature.mapper.writer.WrUpdateContractStatusMapper">
+	
+	
+	<update id="updateContractStatus"  parameterType="com.emotte.order.order.model.Agreement" >
+	   update T_ORDER_AGREEMENT 
+	    <set>
+	         <if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if> 
+	         <!-- <if test="cardNum != null and cardNum!='' ">  
+				   CARD_NUM = #{cardNum} 
+	            </if> --> 
+	       <if test="elecClientState != null and elecClientState!='' ">  
+				,ELEC_CLIENT_STATE = #{elecClientState} 
+	       </if>
+	       <if test="elecServeState != null and elecServeState!='' ">  
+				,ELEC_SERVE_STATE = #{elecServeState} 
+	       </if>
+	       <if test="elecOtherState != null and elecOtherState!='' ">  
+				,ELEC_OTHER_STATE = #{elecOtherState} 
+	       </if>
+	       <if test="agreementState != null  ">  
+				,AGREEMENT_STATE = #{agreementState} 
+	       </if>
+	       <if test="hashApplyNo != null and hashApplyNo!='' ">  
+				,HASH_APPLY_NO = #{hashApplyNo} 
+	       </if>
+	       <if test="checkStatus != null and checkStatus!='' ">  
+				,CHECK_STATUS = #{checkStatus} 
+	       </if>
+	    </set>   
+	        where  
+	            <if test="id != null and id!='' ">  
+				    id = #{id} 
+	            </if>
+	             <!-- <if test="cardNum != null and cardNum!='' ">  
+				  and  CARD_NUM = #{cardNum} 
+	            </if> --> 
+	</update>
+</mapper>

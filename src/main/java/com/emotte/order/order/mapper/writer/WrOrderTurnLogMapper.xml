@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderTurnLogMapper">
+	<insert id="insertOrderTurnLog" parameterType="com.emotte.order.order.model.OrderTurnLog">
+		INSERT INTO t_order_turn_log
+		(id,
+		order_id,
+		turn_by,
+		turn_dept,
+		recharge_by,
+		recharge_dept,
+		create_by,
+		create_time,
+		valid,
+		version,
+		remark,
+		create_dept)
+		VALUES
+		(getseq(),
+		#{orderId},
+		#{turnBy},
+		#{turnDept},
+		#{rechargeBy},
+		#{rechargeDept},
+		#{createBy},
+		SYSDATE,
+		1,
+		1,
+		#{remark},
+		#{createDept})
+	</insert>
+</mapper>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrItemMapper">
+
+	<insert id="insertItem" parameterType="com.emotte.order.order.model.Item">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id" >
+       	SELECT getseq() as ID from DUAL
+	</selectKey>
+		insert into t_order_item ( 
+			id ,			
+			order_id ,			
+			product_code ,				
+			product_name ,			
+			now_price ,			
+			quantity ,			
+			preferential_price ,			
+			preferential_reason ,			
+			voucher_number ,			
+			sale_type ,			
+			activity_price ,			
+			activity_id ,			
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version ,
+			valid,			
+			remark,
+			product_inventory_id,
+			category_code,
+			product_price_type,
+			product_unit,
+			product_spec ,
+			product_img		
+		) values (
+			#{id} ,				
+			#{orderId} ,				
+			#{productCode} ,					
+			#{productName} ,				
+			#{nowPrice} ,				
+			#{quantity} ,				
+			#{preferentialPrice} ,				
+			#{preferentialReason} ,				
+			#{voucherNumber} ,				
+			#{saleType} ,				
+			#{activityPrice} ,				
+			#{activityId} ,				
+			#{createBy} ,				
+			sysdate ,				
+			#{updateBy} ,				
+			sysdate ,				
+			0 ,
+			1,			
+			#{remark},
+			#{productInventoryId},
+			#{categoryCode},
+			#{productPriceType},
+			#{productUnit},
+			#{productSpec},
+			#{productImg}
+		)
+	</insert>
+
+	<update id="updateItem" parameterType="com.emotte.order.order.model.Item">
+		update t_order_item	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="productCode != null and productCode != ''"> 
+				,product_code = #{productCode} 
+			</if>
+			
+	 <if test="productName != null and productName != ''"> 
+				,product_name = #{productName} 
+			</if>
+			
+	 <if test="nowPrice != null and nowPrice != ''"> 
+				,now_price = #{nowPrice:NUMERIC} 
+			</if>
+			
+	 <if test="quantity != null and quantity != ''"> 
+				,quantity = #{quantity} 
+			</if>
+			
+	 <if test="preferentialPrice != null and preferentialPrice != ''"> 
+				,preferential_price = #{preferentialPrice} 
+			</if>
+			
+	 <if test="preferentialReason != null and preferentialReason != ''"> 
+				,preferential_reason = #{preferentialReason} 
+			</if>
+			
+	 <if test="voucherNumber != null and voucherNumber != ''"> 
+				,voucher_number = #{voucherNumber} 
+			</if>
+			
+	 <if test="saleType != null and saleType != ''"> 
+				,sale_type = #{saleType} 
+			</if>
+			
+	 <if test="activityPrice != null and activityPrice != ''"> 
+				,activity_price = #{activityPrice:NUMERIC} 
+			</if>
+			
+	 <if test="activityId != null and activityId != ''"> 
+				,activity_id = #{activityId} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = TO_DATE(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version}+1 
+			</if>
+			
+	 <if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+	<if test="productPriceType != null and productPriceType != ''"> 
+				,product_price_type = #{productPriceType} 
+			</if>
+	<if test="productUnit != null and productUnit != ''"> 
+				,product_unit = #{productUnit} 
+			</if>
+	<if test="productSpec != null and productSpec != ''"> 
+				,product_spec = #{productSpec} 
+			</if>
+       </set>
+		where
+			id=#{id} and version=#{version}
+				
+	</update>
+	
+	<update id="updateItemtype" parameterType="com.emotte.order.order.model.Item">
+		update t_order_item	
+		 <set>  
+	 <if test="orderId != null and orderId != ''"> 
+				order_id = #{orderId} 
+			</if>
+			
+	 <if test="productCode != null and productCode != ''"> 
+				,product_code = #{productCode} 
+			</if>
+			
+	 <if test="productName != null and productName != ''"> 
+				,product_name = #{productName} 
+			</if>
+			
+	 <if test="nowPrice != null and nowPrice != ''"> 
+				,now_price = #{nowPrice:NUMERIC} 
+			</if>
+			
+	 <if test="quantity != null and quantity != ''"> 
+				,quantity = #{quantity} 
+			</if>
+			
+	 <if test="categoryCode != null and categoryCode != ''"> 
+				,category_code = #{categoryCode} 
+			</if>
+			
+			
+	 <if test="activityPrice != null and activityPrice != ''"> 
+				,activity_price = #{activityPrice:NUMERIC} 
+			</if>
+			
+	 <if test="activityId != null and activityId != ''"> 
+				,activity_id = #{activityId} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = TO_DATE(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version}+1 
+			</if>
+			
+	 <if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+	<if test="productPriceType != null and productPriceType != ''"> 
+				,product_price_type = #{productPriceType} 
+			</if>
+	<if test="productUnit != null and productUnit != ''"> 
+				,product_unit = #{productUnit} 
+			</if>
+	<if test="productSpec != null and productSpec != ''"> 
+				,product_spec = #{productSpec} 
+			</if>
+       </set>
+		where
+			id=#{id}
+				
+	</update>
+	
+	<update id="updateItemQuantityByOrderId" parameterType="com.emotte.order.order.model.Item">
+		update t_order_item	
+		 <set>  
+			<if test="orderId != null and orderId != '' ">  
+				order_id = #{orderId} 
+	         </if>
+	 <if test="productCode != null and productCode != ''"> 
+				,product_code = #{productCode} 
+			</if>
+	<if test="quantity != null and quantity != ''"> 
+				,quantity = #{quantity} 
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+       </set>
+		where order_id=#{orderId} 
+	</update>
+</mapper>

@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReItemMapper">
+	<!--chesl城市和商品关联查询 -->
+	<select id="queryCityAndProduct" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+		SELECT pc.id               AS id,
+			pc.product_code     AS productCode,
+			pc.city_code        AS cityCode,
+			pc.is_solution      AS isSolution,
+			pc.solution_count   AS solutionCount,
+			pc.status           AS status,
+			decode(cpdps.price, null, cpdp.price, cpdps.price) AS marketPrice,
+			pb.product_img_main as productImg,
+			pb.is_prod_serve    as cateType,
+			pb.category_code    as categoryCode,
+			pb.name             as productName ,
+			tw.id               as productInventoryId ,
+			decode(cpdps.dict_code,
+              null,
+              '市场价:' || cpdp.price,
+              20000002,
+              '市场价:' || cpdp.price,
+              dict.dict_name || ':' || cpdps.price || '(市场价:' || cpdp.price || ')') as priceText,
+           decode(cpdps.price, null, cpdp.dict_code, cpdps.dict_code) AS productPriceType,
+           tbs.type_spec_value as productSpec,
+	       pb.least_unit as productUnit,
+	       tbda.dict_name as productUnitText
+		from t_product_base pb left join t_base_dictionary tbda
+				on (pb.least_unit=tbda.dict_code and tbda.valid=1) ,
+       		t_product tp
+       		left join (select aa.product_id,wm_concat(aa.spvalue) as type_spec_value from ( select t.product_id,t.type_spec_name||':'||t.type_spec_value as spvalue
+from t_product_spec t where t.valid=1 group by t.product_id,t.type_spec_name||':'||t.type_spec_value ) aa group by aa.product_id) tbs
+       			on tp.id=tbs.product_id ,
+			t_product_city pc
+			left join t_city_product_dict_price cpdps
+		    	on (pc.product_code = cpdps.product_code and cpdps.dict_code = #{dictCode} and cpdps.valid = 1)
+			left join t_base_dictionary dict
+		    	on (cpdps.dict_code = dict.dict_code and dict.valid = 1),
+		 	t_city_product_dict_price cpdp, t_warehouse tw, t_warehouse_city_ref twc,
+		 	t_warehouse_product_base_ref twp
+		<where>
+			1 = 1
+		    and pb.id = tp.base_id
+   			and tp.id = pc.product_id
+   			and pc.product_code = cpdp.product_code
+   			and pb.id = twp.product_base_id
+			and pc.city_code = twc.city_code
+			and tw.code = twc.warehouse_code
+			and tw.code = twp.warehouse_code
+   			and pb.valid = 1
+   			and tp.valid = 1
+   			and pc.valid = 1
+   			and cpdp.valid = 1
+			and tw.valid = 1
+			and twc.valid = 1
+			and twp.valid = 1
+			and cpdp.valid = 1
+			<if test="productId!=null and productId!='' ">
+				and pb.id = #{productId}
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and pc.product_code = #{productCode}
+			</if>
+			<if test="code!=null and code!='' ">
+				and pb.category_code = #{code}
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and pc.city_code = #{cityCode}
+			</if>
+			<!-- 商品下架会出现多个状态，所以判断不是下架(状态为2)时，就都是上架 -->
+			<if test="status!=null and status==2 ">
+				and pc.status = #{status}
+			</if>
+			<if test="status!=null and status!=2 ">
+				and pc.status in (1,3)
+			</if>
+			and cpdp.dict_code = 20000002
+		</where>
+		order by pc.id desc
+	</select>
+
+	<!--chesl服务类商品订单查询 -->
+	<select id="queryCityServerProduct" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+		select tpb.is_prod_serve as cateType,
+		       tpb.category_code as categoryCode,
+		       tpb.name as productName,
+		       tpc.product_code as productCode,
+		       decode(cpdps.price, null, cpdp.price, cpdps.price) as marketPrice,
+		       decode(cpdps.price, null, cpdp.dict_code, cpdps.dict_code) as productPriceType,
+		       decode(cpdps.dict_code,
+	              null,
+	              '市场价:' || cpdp.price,
+	              20000002,
+	              '市场价:' || cpdp.price,
+	              tbdb.dict_name || ':' || cpdps.price || '(市场价:' || cpdp.price || ')') as priceText,
+		       tbs.type_spec_value as productSpec,
+		       tpb.least_unit as productUnit,
+		       tbda.dict_name as productUnitText
+		  from t_product_base tpb
+		  left join t_base_dictionary tbda
+		    on (tpb.least_unit = tbda.dict_code and tbda.valid = 1), t_product tp
+		  left join (select aa.product_id,wm_concat(aa.spvalue) as type_spec_value from ( select t.product_id,t.type_spec_name||':'||t.type_spec_value as spvalue
+				from t_product_spec t where t.valid=1 group by t.product_id,t.type_spec_name||':'||t.type_spec_value ) aa group by aa.product_id) tbs
+       		on tp.id=tbs.product_id , t_product_city tpc
+		  left join t_city_product_dict_price cpdp
+		    on (tpc.product_code = cpdp.product_code and cpdp.dict_code = 20000002 and
+		       cpdp.valid = 1)
+		  left join t_city_product_dict_price cpdps
+		    on (tpc.product_code = cpdps.product_code and
+		       cpdps.dict_code = #{dictCode} and cpdps.valid = 1)
+		  left join t_base_dictionary tbdb
+		    on (cpdps.dict_code = tbdb.dict_code and tbdb.valid = 1)
+		<where>
+			1 = 1
+			and tpb.id = tp.base_id
+			and tp.id = tpc.product_id
+			and tpb.valid = 1
+			and tp.valid = 1
+			and tpc.valid = 1
+			<if test="productId !=null and productId !='' ">
+				and tpb.id = #{productId}
+			</if>
+			<if test="cateType !=null and cateType !='' ">
+				and tpb.is_prod_serve = #{cateType}
+			</if>
+			<if test="categoryCode !=null and categoryCode !='' ">
+				and tpb.category_code = #{categoryCode}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and tpc.city_code = #{cityCode}
+			</if>
+			<!-- 商品下架会出现多个状态，所以判断不是下架(状态为2)时，就都是上架 -->
+			<if test="status!=null and status==2 ">
+				and tpc.status = #{status}
+			</if>
+			<if test="status!=null and status!=2 ">
+				and tpc.status in (1,3)
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and tpc.product_code = #{productCode}
+			</if>
+		</where>
+		order by tpc.id desc
+	</select>
+	<!--chesl服务类商品订单查询 -->
+	<select id="queryProductCodeSpec" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+		select tpb.is_prod_serve as cateType,
+           tpb.category_code as categoryCode,
+           tpb.name as productName,
+           tpc.product_code as productCode,
+           tbs.type_spec_value as productSpec,
+           tpb.least_unit as productUnit,
+           tbda.dict_name as productUnitText
+      from t_product_base tpb
+      left join t_base_dictionary tbda
+        on (tpb.least_unit = tbda.dict_code and tbda.valid = 1), t_product tp
+      left join (select aa.product_id,wm_concat(aa.spvalue) as type_spec_value from ( select t.product_id,t.type_spec_name||':'||t.type_spec_value as spvalue
+        from t_product_spec t where t.valid=1 group by t.product_id,t.type_spec_name||':'||t.type_spec_value ) aa group by aa.product_id) tbs
+           on tp.id=tbs.product_id , t_product_city tpc
+    <where>
+      1 = 1
+      and tpb.id = tp.base_id
+      and tp.id = tpc.product_id
+      and tpb.valid = 1
+      and tp.valid = 1
+      and tpc.valid = 1
+			<if test="cateType !=null and cateType !='' ">
+				and tpb.is_prod_serve = #{cateType}
+			</if>
+			<if test="categoryCode !=null and categoryCode !='' ">
+				and tpb.category_code = #{categoryCode}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and tpc.city_code = #{cityCode}
+			</if>
+			<!-- 商品下架会出现多个状态，所以判断不是下架(状态为2)时，就都是上架 -->
+			<if test="status!=null and status==2 ">
+				and tpc.status = #{status}
+			</if>
+			<if test="status!=null and status!=2 ">
+				and tpc.status in (1,3)
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and tpc.product_code = #{productCode}
+			</if>
+		</where>
+		order by tpc.id desc
+	</select>
+	<!--chesl城市和商品关联记录数查询 -->
+	<select id="countCityAndProduct" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM
+		t_product_city AS pc ,
+		t_product AS p
+		<where>
+			1 = 1 and p.valid=1 and pc.valid=1 and pc.product_id = p.id
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and pc.product_code = #{productCode}
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and pc.city_code = #{cityCode}
+			</if>
+			<if test="isSolution!=null and isSolution!='' ">
+				and is_solution = #{isSolution}
+			</if>
+			<if test="solutionCount!=null and solutionCount!='' ">
+				and solution_count = #{solutionCount}
+			</if>
+			<!-- 商品下架会出现多个状态，所以判断不是下架(状态为2)时，就都是上架 -->
+			<if test="status!=null and status==2 ">
+				and pc.status = #{status}
+			</if>
+			<if test="status!=null and status!=2 ">
+				and pc.status in (1,3)
+			</if>
+			<if test="deliveryArea!=null and deliveryArea!='' ">
+				and delivery_area = #{deliveryArea}
+			</if>
+			<if test="safeRepertory!=null and safeRepertory!='' ">
+				and safe_repertory = #{safeRepertory}
+			</if>
+			<if test="usableRepertory!=null and usableRepertory!='' ">
+				and usable_repertory = #{usableRepertory}
+			</if>
+			<if test="transportationRepertory!=null and transportationRepertory!='' ">
+				and transportation_repertory = #{transportationRepertory}
+			</if>
+			<if test="fullNetworkRepertory!=null and fullNetworkRepertory!='' ">
+				and full_network_repertory = #{fullNetworkRepertory}
+			</if>
+			<if test="detail!=null and detail!='' ">
+				and detail = #{detail}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and create_by = #{createBy}
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and update_by = #{updateBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and to_char(create_time,'yyyymmdd') = to_char(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+				</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and to_char(update_time,'yyyymmdd') = to_char(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+				</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+		</where>
+	</select>
+
+	<select id="loadItem" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Item">
+		select
+		id as id ,
+		order_id as orderId ,
+		product_code as productCode ,
+		product_name as productName ,
+		now_price as nowPrice ,
+		quantity as quantity ,
+		preferential_price as preferentialPrice ,
+		preferential_reason as preferentialReason ,
+		voucher_number as voucherNumber ,
+		sale_type as saleType ,
+		activity_price as activityPrice ,
+		activity_id as activityId ,
+		create_by as createBy ,
+		create_time as createTime ,
+		update_by as updateBy ,
+		update_time as updateTime ,
+		version as version ,
+		remark as remark ,
+		from t_order_item
+		where
+		id=#{id}
+	</select>
+	<select id="loadItemByOrderId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.Item">
+		select
+		id as id ,
+		order_id as orderId ,
+		product_code as productCode ,
+		product_name as productName ,
+		now_price as nowPrice ,
+		quantity as quantity ,
+		preferential_price as preferentialPrice ,
+		preferential_reason as preferentialReason ,
+		voucher_number as voucherNumber ,
+		sale_type as saleType ,
+		activity_price as activityPrice ,
+		activity_id as activityId ,
+		create_by as createBy ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+		update_by as updateBy ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+		version as version ,
+		product_price_type as productPriceType,
+		remark as remark 
+		from t_order_item
+		where
+		order_id=#{orderId}
+	</select>
+
+	<select id="queryItem" parameterType="com.emotte.order.order.model.Item"
+		resultType="com.emotte.order.order.model.Item">
+		select * from (select rownum rn,t.* from (
+		select
+		id as "id" ,
+		order_id as "orderId" ,
+		product_code as "productCode" ,
+		product_name as "productName" ,
+		now_price as "nowPrice" ,
+		quantity as "quantity" ,
+		preferential_price as "preferentialPrice" ,
+		preferential_reason as "preferentialReason" ,
+		voucher_number as "voucherNumber" ,
+		sale_type as "saleType" ,
+		activity_price as "activityPrice" ,
+		activity_id as "activityId" ,
+		create_by as "createBy" ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+		update_by as "updateBy" ,
+		to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+		version as "version" ,
+		remark as "remark" ,
+		familys as "familys"
+		from t_order_item
+		<where>
+			1 = 1 and valid=1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and product_code = #{productCode}
+			</if>
+			<if test="productName!=null and productName!='' ">
+				and product_name = #{productName}
+			</if>
+			<if test="nowPrice!=null and nowPrice!='' ">
+				and now_price = #{nowPrice}
+			</if>
+			<if test="quantity!=null and quantity!='' ">
+				and quantity = #{quantity}
+			</if>
+			<if test="preferentialPrice!=null and preferentialPrice!='' ">
+				and preferential_price = #{preferentialPrice}
+			</if>
+			<if test="preferentialReason!=null and preferentialReason!='' ">
+				and preferential_reason = #{preferentialReason}
+			</if>
+			<if test="voucherNumber!=null and voucherNumber!='' ">
+				and voucher_number = #{voucherNumber}
+			</if>
+			<if test="saleType!=null and saleType!='' ">
+				and sale_type = #{saleType}
+			</if>
+			<if test="activityPrice!=null and activityPrice!='' ">
+				and activity_price = #{activityPrice}
+			</if>
+			<if test="activityId!=null and activityId!='' ">
+				and activity_id = #{activityId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and create_by = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and to_char(create_time,'yyyymmdd') = to_char(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+				</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and update_by = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and to_char(update_time,'yyyymmdd') = to_char(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+				</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				and remark = #{remark}
+			</if>
+		</where>
+		order by id desc) t)
+		<if test="flagPage!=1"> where rn &gt;=#{beginRow}+1 and rn &lt;=(#{pageSize}+#{beginRow})  </if>
+	</select>
+	<select id="countItem" parameterType="com.emotte.order.order.model.Item"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM t_order_item
+		<where>
+			1 = 1 and valid=1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="orderId!=null and orderId!='' ">
+				and order_id = #{orderId}
+			</if>
+			<if test="productCode!=null and productCode!='' ">
+				and product_code = #{productCode}
+			</if>
+			<if test="productName!=null and productName!='' ">
+				and product_name = #{productName}
+			</if>
+			<if test="nowPrice!=null and nowPrice!='' ">
+				and now_price = #{nowPrice}
+			</if>
+			<if test="quantity!=null and quantity!='' ">
+				and quantity = #{quantity}
+			</if>
+			<if test="preferentialPrice!=null and preferentialPrice!='' ">
+				and preferential_price = #{preferentialPrice}
+			</if>
+			<if test="preferentialReason!=null and preferentialReason!='' ">
+				and preferential_reason = #{preferentialReason}
+			</if>
+			<if test="voucherNumber!=null and voucherNumber!='' ">
+				and voucher_number = #{voucherNumber}
+			</if>
+			<if test="saleType!=null and saleType!='' ">
+				and sale_type = #{saleType}
+			</if>
+			<if test="activityPrice!=null and activityPrice!='' ">
+				and activity_price = #{activityPrice}
+			</if>
+			<if test="activityId!=null and activityId!='' ">
+				and activity_id = #{activityId}
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and create_by = #{createBy}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and create_time = date_format(#{createTime},'%Y-%m-%d %H:%i:%s') 		</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and update_by = #{updateBy}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and update_time = date_format(#{updateTime},'%Y-%m-%d %H:%i:%s') 		</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+			<if test="remark!=null and remark!='' ">
+				and remark = #{remark}
+			</if>
+		</where>
+	</select>
+	<select id="queryproductCategory" parameterType="com.emotte.order.order.model.ProductCategory"
+		resultType="com.emotte.order.order.model.ProductCategory">
+		select
+			catp.id as "id",
+		    catp.code as "code",
+		    catp.cname as "cname",
+		    catp.ename as "ename",
+		    catp.display as "display",
+		    catp.valid as "valid",
+		    catp.cate_type as "cateType",
+		    catc.city_code as "cityCode"
+		    from t_product_category catp,t_product_category_city catc
+		<where>
+			catp.code=catc.category_code
+			and catp.code like '${code}%'
+			and catc.city_code=#{cityCode}
+			and length(catp.code)=#{length}
+			and catp.valid=1
+			and catc.valid=1
+			<if test="cateType != null and cateType != ''">
+			and	catp.cate_type=#{cateType}
+			</if>
+		</where>
+		order by code
+	</select>
+
+	<select id="queryproductClassify" parameterType="com.emotte.order.order.model.ProductCategory"
+		resultType="com.emotte.order.order.model.ProductCategory">
+		select
+		id as "id",
+		fid as "fid",
+		product_type_id as "productTypeId",
+		cate_type as "cateType",
+		code as "code",
+		org_code as "orgCode",
+		cname as "cname",
+		ename as "ename",
+		display as "display",
+		valid as "valid"
+		from t_product_category
+		<where>
+			1 = 1 and valid=1
+			<if test="fid != null and fid != ''">
+				and fid = #{fid}
+			</if>
+		</where>
+	</select>
+	<select id="queryForDictPrice" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+  		select t.product_code as productCode, decode(tpr.price,null,t.price,tpr.price) as marketPrice,
+  			decode(tpr.price,null,t.dict_code,tpr.dict_code) as productPriceType,
+  			pb.category_code as categoryCode, null productInventoryId,
+        	pb.least_unit as productUnit,tbs.type_spec_value as productSpec,
+        	pb.product_img_main as productImg
+  		from t_product_city pc
+	      inner join t_product tp on (pc.product_id=tp.id and tp.valid=1)
+	      left join (select aa.product_id,wm_concat(aa.spvalue) as type_spec_value
+            from ( select t.product_id,t.type_spec_name||':'||t.type_spec_value as spvalue from t_product_spec t
+            where t.valid=1 group by t.product_id,t.type_spec_name||':'||t.type_spec_value ) aa group by aa.product_id) tbs
+            on tp.id=tbs.product_id
+	      inner join t_product_base pb on (tp.base_id=pb.id and pb.valid=1)
+	      inner join t_city_product_dict_price t on (pc.product_code = t.product_code and t.dict_code=20000002 and t.valid=1)
+          left join t_city_product_dict_price tpr on (tpr.product_code=pc.product_code and tpr.dict_code = #{dictCode} and tpr.valid=1 )
+  		<where>
+  			1=1
+  			and pc.city_code=#{cityCode}
+        	and pc.valid=1
+        	<if test="productCode != null and productCode != '' ">
+        	AND pc.product_code = #{productCode}
+        	</if>
+  		</where>
+	</select>
+	<select id="queryForDictPriceFA" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+  		select t.product_code as productCode, decode(tpr.price,null,t.price,tpr.price) as marketPrice,
+  			decode(tpr.price,null,t.dict_code,tpr.dict_code) as productPriceType,
+  			pb.category_code as categoryCode, tw.id as productInventoryId,
+  			pb.least_unit as productUnit,tbs.type_spec_value as productSpec,
+  			pb.product_img_main as productImg
+  		from t_product_city pc
+			inner join t_product tp on (pc.product_id=tp.id and tp.valid=1)
+			left join (select aa.product_id,wm_concat(aa.spvalue) as type_spec_value
+           		from ( select t.product_id,t.type_spec_name||':'||t.type_spec_value as spvalue from t_product_spec t
+            	where t.valid=1 group by t.product_id,t.type_spec_name||':'||t.type_spec_value ) aa group by aa.product_id) tbs
+            	on tp.id=tbs.product_id
+			inner join t_product_base pb on (tp.base_id=pb.id and pb.valid=1)
+			inner join t_city_product_dict_price t on (pc.product_code = t.product_code and t.dict_code=20000002 and t.valid=1)
+			left join t_city_product_dict_price tpr on (tpr.product_code=pc.product_code and tpr.dict_code = #{dictCode} and tpr.valid=1 )
+			inner join t_warehouse_product_base_ref twp on (pb.id = twp.product_base_id and twp.valid=1)
+			inner join t_warehouse tw on (twp.warehouse_code = tw.code and tw.valid=1)
+			inner join t_warehouse_city_ref twc on (pc.city_code = twc.city_code and tw.code=twc.warehouse_code and twc.valid=1)
+  		<where>
+  			1=1
+  			and pc.city_code=#{cityCode}
+        	and pc.valid=1
+        	<if test="productCode != null and productCode != '' ">
+        	AND pc.product_code = #{productCode}
+        	</if>
+  		</where>
+	</select>
+
+		<select id="queryItemByCodeAndType" parameterType="com.emotte.order.order.model.CityProduct"
+		resultType="com.emotte.order.order.model.CityProduct">
+  		select cpdp.id as id
+  		from t_city_product_dict_price cpdp
+  		<where>
+  			1=1 and cpdp.valid=1
+  			<if test="productCode != null and productCode != ''">
+	  			and cpdp.product_code=#{productCode}
+			</if>
+  			<if test="productPriceType != null and productPriceType != ''">
+	  			and cpdp.dict_code=#{productPriceType}
+			</if>
+  		</where>
+	</select>
+
+		<select id="queryAllItem" parameterType="com.emotte.order.order.model.Item"
+					resultType="com.emotte.order.order.model.Item">
+					select
+					id as "id" ,
+					order_id as "orderId" ,
+					product_code as "productCode" ,
+					product_name as "productName" ,
+					now_price as "nowPrice" ,
+					quantity as "quantity" ,
+					preferential_price as "preferentialPrice" ,
+					preferential_reason as "preferentialReason" ,
+					voucher_number as "voucherNumber" ,
+					sale_type as "saleType" ,
+					activity_price as "activityPrice" ,
+					activity_id as "activityId" ,
+					create_by as "createBy" ,
+					to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as "createTime" ,
+					update_by as "updateBy" ,
+					to_char(update_time,'yyyy-mm-dd hh24:mi:ss') as "updateTime" ,
+					version as "version" ,
+					remark as "remark" ,
+					product_price_type as "productPriceType"
+					from t_order_item
+					<where>
+						1 = 1 and valid=1
+						<if test="id!=null and id!='' ">
+							and id = #{id}
+						</if>
+						<if test="orderId!=null and orderId!='' ">
+							and order_id = #{orderId}
+						</if>
+						<if test="productCode!=null and productCode!='' ">
+							and product_code = #{productCode}
+						</if>
+						<if test="productName!=null and productName!='' ">
+							and product_name = #{productName}
+						</if>
+						<if test="nowPrice!=null and nowPrice!='' ">
+							and now_price = #{nowPrice}
+						</if>
+						<if test="quantity!=null and quantity!='' ">
+							and quantity = #{quantity}
+						</if>
+						<if test="preferentialPrice!=null and preferentialPrice!='' ">
+							and preferential_price = #{preferentialPrice}
+						</if>
+						<if test="preferentialReason!=null and preferentialReason!='' ">
+							and preferential_reason = #{preferentialReason}
+						</if>
+						<if test="voucherNumber!=null and voucherNumber!='' ">
+							and voucher_number = #{voucherNumber}
+						</if>
+						<if test="saleType!=null and saleType!='' ">
+							and sale_type = #{saleType}
+						</if>
+						<if test="activityPrice!=null and activityPrice!='' ">
+							and activity_price = #{activityPrice}
+						</if>
+						<if test="activityId!=null and activityId!='' ">
+							and activity_id = #{activityId}
+						</if>
+						<if test="createBy!=null and createBy!='' ">
+							and create_by = #{createBy}
+						</if>
+						<if test="createTime!=null and createTime!='' ">
+							and to_char(create_time,'yyyymmdd') =
+							to_char(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+						</if>
+						<if test="updateBy!=null and updateBy!='' ">
+							and update_by = #{updateBy}
+						</if>
+						<if test="updateTime!=null and updateTime!='' ">
+							and to_char(update_time,'yyyymmdd') =
+							to_char(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+						</if>
+						<if test="version!=null and version!='' ">
+							and version = #{version}
+						</if>
+						<if test="remark!=null and remark!='' ">
+							and remark = #{remark}
+						</if>
+					</where>
+					order by id desc
+			</select>
+		<select id="queryBaseProduct" parameterType="com.emotte.order.order.model.Product" resultType="com.emotte.order.order.model.Product">
+			SELECT
+				t.product_base_id as id ,
+				t.is_prod_serve as isProdServe ,
+				t.category_code as categoryCode ,
+				t.name as name
+  			FROM v_product t
+			<where>
+				t.valid = 1 and t.status in (1, 3)
+				<if test="categoryCode!=null and categoryCode!='' ">
+					and t.category_code like ('${categoryCode}' || '%' )
+				</if>
+				<if test="cityCode!=null and cityCode!='' ">
+					and t.city_code = #{cityCode}
+				</if>
+			</where>
+			group by t.product_base_id,t.is_prod_serve,t.category_code,t.name
+			order by t.product_base_id desc
+		</select>
+		<select id="selectUser" parameterType="Long" resultType="String">
+		 SELECT substr(t.citycode,0,9) as cityCode FROM emotte.t_user_address t where t.valid=1 and t.id=#{receiverId}
+		</select>
+		<select id="selectOrderClash" resultType="HashMap">
+   SELECT pc.product_code,
+       pb.name,
+       NVL((SELECT l.is_enable
+             FROM t_warehouse_product_base_ref wpbr
+             JOIN t_warehouse w
+               ON wpbr.warehouse_code = w.code
+             JOIN t_warehouse_city_ref wcr
+               ON wcr.warehouse_code = w.code
+             JOIN t_product_logistics l
+               ON l.product_base_id = wpbr.product_base_id
+              AND l.warehouse_code = w.code
+            WHERE wpbr.valid = 1
+              AND w.valid = 1
+              AND wcr.valid = 1
+              AND l.valid = 1
+              AND wcr.city_code = pc.city_code
+              AND wpbr.product_base_id = pb.id
+              AND l.city_code =
+                  (SELECT substr(ud.citycode, 1, 9)
+                     FROM emotte.t_user_address ud
+                    WHERE ud.id =#{1} )),
+           2) AS is_enable
+  FROM t_product_city pc
+  JOIN t_product p
+    ON pc.product_id = p.id
+  JOIN t_product_base pb
+    ON pb.id = p.base_id
+ WHERE pc.valid = 1
+   AND p.valid = 1
+   AND pb.valid = 1
+   AND pb.is_prod_serve IN (3, 7)
+   AND pc.status IN (1, 3)
+   AND pc.product_code = #{0}
+		</select>
+
+    <!--根据商品code查询商品市场价-->
+    <select id="findMarketPriceByProductCode" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+        SELECT NVL(PRICE,0) FROM T_CITY_PRODUCT_DICT_PRICE WHERE PRODUCT_CODE = #{productCode} AND DICT_CODE = '20000002' AND VALID = 1
+    </select>
+
+	<!--根据订单ID查询商品市场价汇总-->
+	<select id="findMarketPriceByOrderId" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT
+			SUM(NVL(a.PRICE, 0) * NVL(b.quantity, 0) *
+           DECODE(c.order_type,
+                  100200020002,
+                  NVL(s.person_number, 1),
+                  100200020004,
+                  NVL(s.person_number, 1),
+                  1)) marketPrice
+		FROM T_CITY_PRODUCT_DICT_PRICE a
+		 JOIN T_ORDER_ITEM b ON a.PRODUCT_CODE = b.PRODUCT_CODE AND b.VALID = 1
+		 JOIN T_ORDER c ON c.ID = b.ORDER_ID AND c.VALID = 1
+		 LEFT JOIN T_ORDER_ITEM_DETAIL_SERVER s ON s.order_id = c.id AND s.valid = 1
+		WHERE a.DICT_CODE = '20000002'
+		AND a.VALID = 1
+		AND c.ID = #{orderId}
+	</select>
+</mapper>

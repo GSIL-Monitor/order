@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReScheduleCheckMapper">
+	
+	<select id="queryScheduleCheck"  parameterType="com.emotte.order.order.model.ScheduleCheck" resultType="com.emotte.order.order.model.ScheduleCheck">
+	select k.id as "id",
+         l.id as "detailId",
+         to_char(l.start_time,'yyyy-MM-dd') as detailStartTime ,			
+         to_char(l.end_time,'yyyy-MM-dd') as detailEndTime ,			
+         o.order_code as "orderCode",
+         m.real_name as "managerName",
+         m.phone as "managerPhone",
+         g.name as "orgName",
+         to_char(sl.start_time,'yyyy-MM-dd') as startTime ,			
+         to_char(sl.end_time,'yyyy-MM-dd') as endTime 
+    from T_EMP_SCHEDULE_CHECK k
+    left join T_EMP_SCHEDULE_CHECK_DETAIL l
+      on l.id = k.check_id
+    left join t_order o
+      on o.id = k.order_id
+    left join t_auth_manager m
+      on m.id = k.check_by
+    left join t_auth_org g
+      on g.id = m.dept_id
+    left join t_order_server_lined sl
+      on sl.order_id = k.CLASH_ORDER_ID
+	<where> 
+	 1 = 1 and k.valid = 1 and k.check_status= 1
+		<if test="id!=null and id!='' ">           
+			and	k.ID =  #{id} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	k.CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	k.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="checkTime!=null and checkTime!='' ">           
+			and	k.CHECK_TIME =  #{checkTime} 		
+		</if>	
+		<if test="checkBy!=null and checkBy!='' ">           
+			and	k.CHECK_BY =  #{checkBy} 		
+		</if>	
+		<if test="checkDetail!=null and checkDetail!='' ">           
+			and	k.CHECK_DETAIL =  #{checkDetail} 		
+		</if>	
+		<if test="checkId!=null and checkId!='' ">           
+			and	k.CHECK_ID =  #{checkId} 		
+		</if>	
+		<if test="checkStatus!=null and checkStatus!='' ">           
+			and	k.CHECK_STATUS =  #{checkStatus} 		
+		</if>	
+		<if test="checkType!=null and checkType!='' ">           
+			and	k.CHECK_TYPE =  #{checkType} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	k.VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	k.VALID =  #{valid} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	k.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="personId!=null and personId!='' ">           
+			and	k.PERSON_ID =  #{personId} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	k.UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	k.UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="clashOrderId!=null and clashOrderId!='' ">           
+			and	k.CLASH_ORDER_ID =  #{clashOrderId} 		
+		</if>	
+	</where>
+	order by k.id desc
+	</select>
+	
+	<!-- 查询延长服务申请排期 -->	
+	<select id="queryDelayLined"  parameterType="com.emotte.order.order.model.ScheduleCheck" 
+	        resultType="com.emotte.order.order.model.ScheduleCheck">
+	    select 
+	         to_char(ed.start_time,'yyyy-mm-dd') as startTime ,
+	         to_char(ed.end_time,'yyyy-mm-dd') as endTime ,
+	         tes.id as "id",
+	         tes.check_status as checkStatus,
+             decode(tes.check_status,1,'审核中',2,'通过',3,'不通过',4,'取消') checkStatusText
+        from T_EMP_SCHEDULE_CHECK tes, T_EMP_SCHEDULE_CHECK_DETAIL ed
+         <where>
+             1=1
+              <if test="orderId!=null and orderId!='' ">           
+			      and tes.order_id =  #{orderId} 		
+		      </if>
+		        and tes.create_time = (select max(t.create_time) from T_EMP_SCHEDULE_CHECK t where t.valid=1 and t.order_id = tes.order_id)
+                and tes.check_id = ed.id
+                and tes.valid = 1
+                and ed.valid = 1
+                and tes.check_status = 1
+        </where>      
+	</select>
+	<!--  查询延长服务申请状态 -->	
+	<select id="queryDelayLinedType"  parameterType="com.emotte.order.order.model.ScheduleCheck" 
+	        resultType="com.emotte.order.order.model.ScheduleCheck">
+	    select 
+	    	tes.id as id,
+             tes.check_status as checkStatus
+        from T_EMP_SCHEDULE_CHECK tes
+         <where>
+             1=1 and tes.valid = 1 and tes.check_status = 1
+              <if test="orderId!=null and orderId!='' ">           
+			      and tes.order_id =  #{orderId} 		
+		      </if>
+              
+        </where>      
+	</select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrDictionaryMapper">
+
+	<insert id="insertDictionary" parameterType="com.emotte.order.order.model.Dictionary">
+		insert into t_order_dictionary ( 
+			id ,			
+			pid ,			
+			types ,			
+			dkey ,			
+			dvalue ,			
+			valid ,			
+			create_name ,			
+			create_date ,			
+			remarks 			
+		) values (
+			#{id} ,				
+			#{pid} ,				
+			#{types} ,				
+			#{dkey} ,				
+			#{dvalue} ,				
+			#{valid} ,				
+			#{createName} ,				
+			#{createDate} ,				
+			#{remarks} 				
+		)
+	</insert>
+
+	<update id="updateDictionary" parameterType="com.emotte.order.order.model.Dictionary">
+		update t_order_dictionary	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="pid != null and pid != ''"> 
+				,pid = #{pid} 
+			</if>
+			
+	 <if test="types != null and types != ''"> 
+				,types = #{types} 
+			</if>
+			
+	 <if test="dkey != null and dkey != ''"> 
+				,dkey = #{dkey:NUMERIC} 
+			</if>
+			
+	 <if test="dvalue != null and dvalue != ''"> 
+				,dvalue = #{dvalue} 
+			</if>
+			
+	 <if test="valid != null and valid != ''"> 
+				,valid = #{valid:NUMERIC} 
+			</if>
+			
+	 <if test="createName != null and createName != ''"> 
+				,create_name = #{createName} 
+			</if>
+			
+	 <if test="createDate != null and createDate != ''"> 
+				,create_date = #{createDate:DATE} 
+			</if>
+			
+	 <if test="remarks != null and remarks != ''"> 
+				,remarks = #{remarks} 
+			</if>
+			
+       </set>
+		where
+			id=#{id}   and VERSION = #{version}
+				
+	</update>
+	
+</mapper>

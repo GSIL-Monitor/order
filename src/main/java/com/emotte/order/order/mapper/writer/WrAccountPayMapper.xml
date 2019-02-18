@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAccountPayMapper">
+	 <insert id="insertAccountPay" parameterType="com.emotte.order.order.model.AccountPay" >
+		insert into t_account_pay(
+			is_back_type,
+			start_time,
+			end_time,
+			valid,
+			remark,
+			back_from_accoun_id,
+			id,
+			order_id,
+			account_amount,
+			create_time,
+			create_by,
+			update_by,
+			update_time,
+			version,
+			pay_status,
+			pay_type,
+			pay_kind,
+			buss_status,
+			is_manual
+		)values(
+			#{isBackType},
+			to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') ,				
+			to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ,
+			#{valid},
+			#{remark},
+			#{backFromAccounId},
+			#{id},
+			#{orderId},
+			#{accountAmount},
+			#{createTime},
+			#{createBy},
+			#{updateBy},
+			#{updateTime},
+			#{version},
+			#{payStatus},
+			#{payType},
+			#{payKind},
+			#{bussStatus},
+			#{isManual}
+		)
+	</insert>
+	 <update id="updateAccountPay" parameterType="com.emotte.order.order.model.AccountPay" >
+		update t_account_pay t 
+		<set>
+			t.id = #{id}
+			<if test="isBackType != null and isBackType != ''">
+				,t.is_back_type = #{isBackType}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				,t.start_time = #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				,t.end_time = #{endTime}
+			</if>
+			<if test="valid != null and valid != ''">
+				,t.valid = #{valid}
+			</if>
+			<if test="remark != null and remark != ''">
+				,t.remark = #{remark}
+			</if>
+			<if test="backFromAccounId != null and backFromAccounId != ''">
+				,t.back_from_accoun_id = #{backFromAccounId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				,t.order_id = #{orderId}
+			</if>
+			<if test="accountAmount != null and accountAmount != ''">
+				,t.account_amount = #{accountAmount}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,t.update_by = #{updateBy}
+			</if>
+			,t.update_time = sysdate
+			<if test="version != null and version != ''">
+				,t.version = #{version}
+			</if>
+			<if test="payStatus != null and payStatus != ''">
+				,t.pay_status = #{payStatus}
+			</if>
+			<if test="payType != null and payType != ''">
+				,t.pay_type = #{payType}
+			</if>
+			<if test="payKind != null and payKind != ''">
+				,t.pay_kind = #{payKind}
+			</if>
+			<if test="bussStatus != null and bussStatus != ''">
+				,t.buss_status = #{bussStatus}
+			</if>
+		</set>
+		where id = #{id}  
+	</update>
+	<update id="updateAccountList" parameterType="java.util.List"> 
+	    <foreach collection="list" item="accountPay" index="index" open="begin" close=";end;" separator=";" >  
+	    	update emerp.t_account_pay t
+	    	set	t.buss_status=2,t.update_time=sysdate
+	     	<!-- <if test="accountPay.orderId != null and accountPay.orderId != ''">
+	    	,t.order_id=#{accountPay.orderId}
+	    	</if> -->
+	    	where t.id=#{accountPay.id}
+	    </foreach>  
+	</update>
+
+	<!--根据回访结果修改退款结算单审核状态-->
+	<update id="updateAuditFlagByCallBackStatus">
+		UPDATE T_ACCOUNT_PAY SET PAY_STATUS = #{auditFlag},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{accountId}
+	</update>
+
+	<!--删除结算单-->
+	<update id="deleteAccountPayById" parameterType="com.emotte.order.order.model.AccountPay">
+		UPDATE T_ACCOUNT_PAY SET VALID = #{valid},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{accountId}
+	</update>
+</mapper>

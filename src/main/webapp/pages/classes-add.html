@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增课程记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="info clearfix">
+                    <form class="form-inline">
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>创建时间：</p>
+                                    <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                    &nbsp;至&nbsp;
+                                    <input id="d4312" class="Wdate form-control" class="" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>课程名称：</p>
+                                    <select class="form-control">
+                                        <option></option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>培训师：</p>
+                                    <select class="form-control">
+                                        <option></option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <label>
+                                    <p>助理：</p>
+                                    <select class="form-control">
+                                        <option></option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">新增</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

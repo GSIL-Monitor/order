@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">添加/编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row paper-add-head">
+                    <div class="paper-add-item col-xs-12">生成新卡券</div>
+                </div>
+                <div class="paper-add-content">
+                    <div class="paper-add-main paper-add-selected bor-all bggray">
+                            <form class="form-inline">
+                                <h4>卡券信息</h4>
+                                <ul>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>选择卡券类别：</p>
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" checked="checked" name="sex" value="实体券"> 实体券
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sex" value="虚拟券"> 虚拟券
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>代金券标题：</p>
+                                            <input type="text" class="form-control" style="width:100px">
+                                        </label>
+                                        <span>限制9个数字</span>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>试用品类范围：</p>
+                                            <select class="form-control">
+                                                <option value="全场通用">全场通用</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>试用地区范围：</p>
+                                            <select class="form-control">
+                                                <option value="全部">全部</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>试用地区范围：</p>
+                                            <select class="form-control">
+                                                <option value="无限制">无限制</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>代金券面额：</p>
+                                            <input type="text" class="form-control" style="width:100px">&nbsp;元
+                                        </label>
+                                        <span>减免金额只能是整数字</span>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>生成数量：</p>
+                                            <input type="text" class="form-control" style="width:100px">&nbsp;张
+                                        </label>
+                                        <span>1-1000范围内</span>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="form-group">
+                                        <label>
+                                            <p>有效期：</p>
+                                            <input id="d4321" class="Wdate form-control" type="text" style="width:180px;" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                            &nbsp;至&nbsp;
+                                            <input id="d4322" class="Wdate form-control" class="" type="text" style="width:180px;" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                        </label>
+                                        <input type="hidden" id="dtp_input2" value="" /><br/>
+                                    </div>
+                                    <p class="pl40 blue">查看卷号范围：<span class="red">dj100001-dj100010</span></p>
+                                </li>
+                                </ul>
+                                <h4>生成人员</h4>
+                                <ul>
+                                    <li>
+                                        <div class="form-group">
+                                            <label>
+                                                <p>申请部门：</p>
+                                                <select class="form-control">
+                                                    <option value="管家一部">管家一部</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-group">
+                                            <label>
+                                                <p>申请人员：</p>
+                                                <input type="text" class="form-control" style="width:100px">
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-group">
+                                            <label for="">
+                                                <span>操作员：</span><span>bjadmin</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-group">
+                                            <label>
+                                                <p>备注：</p>
+                                                <textarea class="form-control form-textarea"></textarea>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script>
+    $(function(){
+        $(".paper-add-item").click(function(){
+            $(this).addClass("paper-add-active").siblings().removeClass("paper-add-active");
+            var index = $(this).index();
+            $(".paper-add-main")
+                    .eq(index)
+                    .addClass("paper-add-selected")
+                    .siblings(".paper-add-main")
+                    .removeClass("paper-add-selected");
+        });
+    })
+</script>-->
+</body>
+</html>
+

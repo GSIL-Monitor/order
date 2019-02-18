@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog modal-pay" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">员工缴费</h4>
+            </div>
+            <div class="modal-body modal-body-pay">
+                <ul class="pay-add">
+                    <li>
+                        <h4>员工姓名</h4>
+                        <p>李四</p>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>住宿管理费</h4>
+                            <input type="text" style="width:60px;" value="20"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>培训费</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>洗澡费</h4>
+                            <input type="text" style="width:60px;" value="20"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>工服收入</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>设备收入</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>证书收入</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>罚款</h4>
+                            <input type="text" style="width:60px;" value="20"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>其他</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>押金</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <h4>总收入</h4>
+                            <input type="text" style="width:60px;"/><br/>
+                            <input type="checkbox"/>是否对账
+                        </label>
+                    </li>
+                </ul>
+                <ul class="pay-add-center">
+                    <li >
+                        <label>是否开发票：
+                            <input type="radio" checked="checked" name="yes"/>是
+                            &nbsp;
+                            <input type="radio" name="no" value="女" />否
+                        </label>
+                    </li>
+                    <li>
+                        <label>缴费方式：
+                            <select>
+                                <option value="现金">现金</option>
+                                <option>POS机</option>
+                                <option>银行转账</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li>
+                        <label>缴费时间：
+                            <input type="text"/>
+                        </label>
+                    </li>
+                    <li>
+                        <label>缴费时段：
+                            <input type="text"/>&nbsp;至&nbsp;
+                            <input type="text"/>
+                        </label>
+                    </li>
+                </ul>
+                <ul class="pay-add-footer">
+                    <label>
+                        <span>备注：</span>
+                        <textarea cols="60" rows="3"></textarea>
+                    </label>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

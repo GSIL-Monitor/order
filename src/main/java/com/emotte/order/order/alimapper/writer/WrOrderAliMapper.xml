@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.alimapper.writer.WrOrderAliMapper">
+	<insert id="insertOrderCustomerAnalysis" parameterType="com.emotte.order.order.model.OrderUser">
+		insert into
+		customer_analysis (
+		id ,
+		custom_id ,
+		version ,
+		valid ,
+		name ,
+		sex ,
+		card_id ,
+		mobile ,
+		dept_develop ,
+		per_develop ,
+		create_time ,
+		province ,
+		city ,
+		town ,
+		address ,
+		origin,
+		co_ordinates,
+		channel
+		) values (
+		#{userId} ,
+		#{id} ,
+		1 ,
+		1 ,
+		#{realName} ,
+		decode(#{userSex},1,'男',2,'女','') ,
+		#{cardNum} ,
+		#{userMobile} ,
+		#{loginDeptName} ,
+		#{loginName},
+		sysdate,
+		#{userProvince} ,
+		#{userCity} ,
+		#{userCountry},
+		#{userAddress},
+		#{origin},
+		#{longitude}||','||#{latitude},
+		#{channel}
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderBaseMapper">
+
+	<insert id="insertOrderUser" parameterType="com.emotte.order.order.model.OrderUser">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+	</selectKey>
+		insert into
+		t_customer (
+		id ,
+		login_name,
+		login_pwd ,
+		real_name ,
+		mobile ,
+		card_num ,
+		card_type ,
+		sex ,
+		province,
+		city ,
+		district ,
+		addr ,
+		longitude ,
+		latitude ,
+		create_by ,
+		create_time,
+		update_by,
+		update_time,
+		version,
+		valid,
+		citycode,
+		is_commit,
+		channel_by,
+		channel_dept_id,
+		ousekeeper_or_channe,
+		channel_id,
+		channel,
+		source
+
+		) values (
+		#{id} ,
+		#{userMobile} ,
+		#{loginPwd} ,
+		#{realName} ,
+		#{userMobile} ,
+		#{cardNum} ,
+		#{cardType} ,
+		#{userSex} ,
+		#{userProvince} ,
+		#{userCity} ,
+		#{userCountry},
+		#{userAddress},
+		#{longitude},
+		#{latitude},
+		#{createBy} ,
+		sysdate,
+		#{updateBy},
+		sysdate,
+		0,
+		1,
+		#{cityCode},
+		1,
+		#{createBy},
+		#{deptId},
+		#{ousekeeperOrChanne},
+		#{channelId},
+		#{channel},
+		#{origin }
+		)
+	</insert>
+	<insert id="insertOrderCustomerAnalysis" parameterType="com.emotte.order.order.model.OrderUser">
+		insert into
+		customer_analysis (
+		id ,
+		custom_id ,
+		version ,
+		valid ,
+		name ,
+		sex ,
+		card_id ,
+		mobile ,
+		dept_develop ,
+		per_develop ,
+		create_time ,
+		province ,
+		city ,
+		town ,
+		address ,
+		co_ordinates,
+		origin,
+		channel
+		
+		) values (
+		#{userId} ,
+		#{id} ,
+		1 ,
+		1 ,
+		#{realName} ,
+		decode(#{userSex},1,'男',2,'女','') ,
+		#{cardNum} ,
+		#{userMobile} ,
+		#{loginDeptName} ,
+		#{loginName},
+		sysdate,
+		#{userProvince} ,
+		#{userCity} ,
+		#{userCountry},
+		#{userAddress},
+		#{longitude}||','||#{latitude},
+		#{origin},
+		#{channel}
+		)
+	</insert>
+	<insert id="insertOrderUserAccount" parameterType="com.emotte.order.order.model.OrderUser">
+		insert into
+		emotte.t_user_account (
+		id,pay_pwd,balance,e_currency,profit,create_by,create_time,update_by,update_time,
+		version ,
+		valid ,
+		cust_id
+		) values (
+		getseq(),null,0,0,0,0,sysdate,null,sysdate,0,1,#{id} )
+	</insert>
+	<update id="updateOrderUser" parameterType="com.emotte.order.order.model.OrderUser">
+		update t_customer
+		<set>
+			<if test="id != null and id != '' ">
+				id = #{id}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,update_by = #{updateBy}
+			</if>
+				,update_time = sysdate
+				,version = version+1
+			<if test="isVip != null and isVip != ''">
+				,is_vip = #{isVip}
+			</if>
+			<if test="vipStartTime != null and vipStartTime != ''">
+				,vip_startime =  to_date(substr(#{vipStartTime},0,19),'yyyy-MM-dd hh24:mi:ss') 
+			</if>
+			<if test="vipEndTime != null and vipEndTime != ''">
+				,vip_endtime = to_date(substr(#{vipEndTime},0,19),'yyyy-MM-dd hh24:mi:ss') 
+			</if>
+			<if test="valid != null and valid != ''">
+				,valid = #{valid}
+			</if>
+			<if test="loginPwd != null and loginPwd != ''">
+				,login_pwd = #{loginPwd}
+			</if>
+			<if test="realName != null and realName != ''">
+				,real_name = #{realName}
+			</if>
+			<if test="userMobile != null and userMobile != ''">
+				,mobile = #{userMobile}
+				,login_name = #{userMobile}
+			</if>
+			<if test="cardNum != null and cardNum != ''">
+				,card_num = #{cardNum}
+			</if>
+			<if test="cardType != null and cardType != ''">
+				,card_type = #{cardType}
+			</if>
+			<if test="userSex != null and userSex != ''">
+				,sex = #{userSex}
+			</if>
+			<if test="userProvince != null and userProvince != ''">
+				,province = #{userProvince}
+			</if>
+			<if test="userCity != null and userCity != ''">
+				,city = #{userCity}
+			</if>
+			<if test="userCountry != null and userCountry != ''">
+				,district = #{userCountry}
+			</if>
+			<if test="userAddress != null and userAddress != ''">
+				,addr = #{userAddress}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,longitude = #{longitude}
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,latitude = #{latitude}
+			</if>
+			<if test="cityCode != null and cityCode != ''">
+				,citycode = #{cityCode}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				,devided_dept_id = #{deptId}
+			</if>
+			<if test="marketBy != null and marketBy != ''">
+				,market_by = #{marketBy}
+			</if>
+			<if test="isCommit != null and isCommit != ''">
+				,is_commit = #{isCommit}
+			</if>
+			<if test="channelId != null and channelId != ''">
+				,channel_id = #{channelId}
+			</if>
+			<if test="channel != null and channel != ''">
+				,channel = #{channel}
+			</if>
+		</set>
+		where
+		id=#{id}
+
+	</update>
+	<insert id="insertOrderUserAddress" parameterType="com.emotte.order.order.model.OrderUser">
+		insert into
+		emotte.t_user_address (
+		id ,
+		cust_id,
+		create_by ,
+		create_time ,
+		update_by ,
+		update_time ,
+		version ,
+		valid ,
+		province,
+		city ,
+		country ,
+		choose_address ,
+		address_detail ,
+		longitude ,
+		latitude ,
+		is_default ,
+		contact_phone,
+		contact_name,
+		citycode
+
+		) values (
+		getseq() ,
+		#{userId} ,
+		#{createBy} ,
+		sysdate ,
+		#{updateBy} ,
+		sysdate ,
+		0 ,
+		1 ,
+		#{province},
+		#{city} ,
+		#{country} ,
+		#{addressChoose} ,
+		#{addressDetail} ,
+		#{longitude} ,
+		#{latitude} ,
+		#{isDefault} ,
+		#{contactPhone} ,
+		#{contactName} ,
+		#{cityCode}
+		)
+	</insert>
+
+	<update id="updateOrderUserAddress" parameterType="com.emotte.order.order.model.OrderUser">
+		update emotte.t_user_address
+		<set>
+			<if test="id != null and id != '' ">
+				id = #{id}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,update_by = #{updateBy}
+			</if>
+				,update_time = sysdate
+			<if test="version != null and version != ''">
+				,version = #{version}+1
+			</if>
+
+			<if test="valid != null and valid != ''">
+				,valid = #{valid}
+			</if>
+
+			<if test="province != null and province != ''">
+				,province = #{province}
+			</if>
+
+			<if test="city != null and city != ''">
+				,city = #{city}
+			</if>
+
+			<if test="country != null and country != ''">
+				,country = #{country}
+			</if>
+			<if test="addressChoose != null and addressChoose != ''">
+				,choose_address = #{addressChoose}
+			</if>
+			<if test="addressDetail != null and addressDetail != ''">
+				,address_detail = #{addressDetail}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,longitude = #{longitude}
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,latitude = #{latitude}
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				,is_default = #{isDefault}
+			</if>
+			<if test="contactPhone != null and contactPhone != ''">
+				,contact_phone = #{contactPhone}
+			</if> 
+			<if test="contactName != null and contactName != ''">
+				,contact_name = #{contactName}
+			</if>
+			<if test="cityCode != null and cityCode != ''">
+				,citycode = #{cityCode}
+			</if>
+		</set>
+		where
+		id=#{id}
+
+	</update>
+
+</mapper>

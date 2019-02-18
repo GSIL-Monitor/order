@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog order-add-content" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">新增方案订单</h4>
+            </div>
+            <div class="modal-body modal-order">
+                <div class="order-add-client">
+                    <h3>客户信息</h3>
+                    <ul>
+                        <li>
+                            <label for="">联系方式：
+                                <input type="text"/>
+                            </label>
+                            <label for="">客户姓名：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                        <li>
+                            <label for="">收货/服务信息：
+                                <input type="text" style="width:220px"/>&nbsp;要维修一套的信息，收货人，电话，地址
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order-add-client">
+                    <h3>需求信息</h3>
+                    <ul>
+                        <li>
+                            <label for="">方案类型：
+                                <select name="" id="">
+                                    <option value="智能方案">智能方案</option>
+                                    <option value="">推荐方案</option>
+                                    <option value="">定制方案</option>
+                                </select>
+                            </label>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-order-2">查询</button>
+                            <label for="">请输入产品名称：
+                                <input type="text" style="width:220px"/>
+                            </label>
+                        </li>
+                    </ul>
+                    <div>推荐方案列表</div>
+                    <table class="table focus-table">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox">序号</th>
+                            <th>方案名称</th>
+                            <th>类型</th>
+                            <th>包含内容</th>
+                            <th>首次服务时间</th>
+                            <th>周期</th>
+                            <th>每次数量</th>
+                            <th>市场价总价</th>
+                            <th>方案总价</th>
+                            <th>祝福语</th>
+                            <th>备注</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3"><input type="checkbox">1</td>
+                                <td rowspan="3">推荐无忧方案A</td>
+                                <td rowspan="3">推荐方案</td>
+                                <td rowspan="3" class="prder-content-td">
+                                    <table class="order-content-table">
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>有机纯牛奶</td>
+                                            <td>52箱</td>
+                                            <td>每周一次</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>有机纯牛奶</td>
+                                            <td>52箱</td>
+                                            <td>每周一次</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>有机纯牛奶</td>
+                                            <td>52箱</td>
+                                            <td>每周一次</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>2016-06-19</td>
+                                <td>
+                                    <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                </td>
+                                <td>334</td>
+                                <td>520</td>
+                                <td>420</td>
+                                <td>祝福语</td>
+                                <td>备注</td>
+                            </tr>
+                            <tr>
+                                <td>2016-06-19</td>
+                                <td>
+                                    <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                </td>
+                                <td>334</td>
+                                <td>520</td>
+                                <td>420</td>
+                                <td>祝福语</td>
+                                <td>备注</td>
+                            </tr>
+                            <tr>
+                                <td>2016-06-19</td>
+                                <td>
+                                    <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                </td>
+                                <td>334</td>
+                                <td>520</td>
+                                <td>420</td>
+                                <td>祝福语</td>
+                                <td>备注</td>
+                            </tr>
+                            <tr></tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td rowspan="3"><input type="checkbox">1</td>
+                            <td rowspan="3">推荐无忧方案A</td>
+                            <td rowspan="3">推荐方案</td>
+                            <td rowspan="3" class="prder-content-td">
+                                <table class="order-content-table">
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>有机纯牛奶</td>
+                                        <td>52箱</td>
+                                        <td>每周一次</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>有机纯牛奶</td>
+                                        <td>52箱</td>
+                                        <td>每周一次</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>有机纯牛奶</td>
+                                        <td>52箱</td>
+                                        <td>每周一次</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>2016-06-19</td>
+                            <td>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </td>
+                            <td>334</td>
+                            <td>520</td>
+                            <td>420</td>
+                            <td>祝福语</td>
+                            <td>备注</td>
+                        </tr>
+                        <tr>
+                            <td>2016-06-19</td>
+                            <td>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </td>
+                            <td>334</td>
+                            <td>520</td>
+                            <td>420</td>
+                            <td>祝福语</td>
+                            <td>备注</td>
+                        </tr>
+                        <tr>
+                            <td>2016-06-19</td>
+                            <td>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </td>
+                            <td>334</td>
+                            <td>520</td>
+                            <td>420</td>
+                            <td>祝福语</td>
+                            <td>备注</td>
+                        </tr>
+                        <tr></tr>
+                        </tbody>
+
+                    </table>
+                    <ul>
+                        <li>
+                            <label for="">开始时间：
+                                <input type="text"/>
+                            </label>
+                            <label for="">结束时间：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                        <li>
+                            <label for="">创建时间：
+                                <input type="text"/>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            <div class="order-sum">
+                订单金额:120元
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

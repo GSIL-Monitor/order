@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReBathMapper"> 
+	<!-- 通过城市商品code和价格体系 来获取商品详情 -->
+	<select id="getDetail" resultType="java.util.Map">
+		select pro.product_code,
+       pro.name,
+       pri.price,
+       pro.product_img_main,
+       pro.city_code,
+       (select tt.alias_name
+          from t_product_type tt
+         where tt.id = pro.type_id
+           and rownum = 1) || ':' || pro.spec_value product_spec,
+       pro.category_code,
+       pri.dict_code,
+       pro.detail,
+       pro.least_unit,
+       bas.dict_name
+  from v_product pro, t_city_product_dict_price pri, t_base_dictionary bas
+ where pro.product_code = pri.product_code
+   and pri.dict_code = bas.dict_code
+   and pro.valid = 1
+   and pri.valid = 1
+   and bas.valid = 1
+   and pro.product_code = #{0}
+   and pri.dict_code = #{1}
+   and rownum = 1
+	</select>
+	
+	<select id="queryIsSingleBatch" resultType="java.lang.String">
+		SELECT pb.is_prod_serve as fa from emerp.t_product_base pb LEFT JOIN emerp.t_product p ON p.base_id=pb.id
+	    LEFT JOIN emerp.t_product_city pc ON pc.product_id=p.id
+	    WHERE pc.product_code=#{0}
+	</select>
+	
+	<!-- 通过客户电话和客户地址获取信息 -->
+	<select id="getUseDetail" resultType="java.util.Map">
+	select cus.id,cus.real_name,ad.longitude,ad.latitude from t_customer cus 
+	left join  emotte.t_user_address ad on cus.id = ad.cust_id  and ad.longitude is not null and ad.latitude is not null <!--  and ad.address_detail=#{1} -->
+	where  cus.mobile=#{0} and  rownum=1 
+	</select>
+
+	<!-- 通过客户电话和客户地址获取信息 -->
+	<select id="getUseDetailNew" resultType="java.util.Map">
+	select cus.id,cus.real_name,ad.longitude,ad.latitude from t_customer cus 
+	left join  emotte.t_user_address ad on cus.id = ad.cust_id  and ad.longitude is not null and ad.latitude is not null <!--  and ad.address_detail=#{1} -->
+	where  cus.mobile=#{0} and  rownum=1 
+	</select>
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrPersonnelScheduleMapper">
+	 <update id="updatePersonnelSchedule" parameterType="com.emotte.order.order.model.PersonnelSchedule" >
+		UPDATE t_emp_personnel_schedule t
+		  <set> 
+		  	   t.start_date = #{startDate},
+		       t.end_date   = #{endDate},
+		       t.start_time = #{startTime},
+		       t.end_time   = #{endTime},
+		       t.updatetime = sysdate
+		   </set>
+		 where t.emp_id = #{empId}
+		   and t.order_id = #{orderId}
+		   and t.id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReOrderTurnLogMapper">
+
+	<select id="queryOrderTurnLog" parameterType="com.emotte.order.order.model.OrderTurnLog"
+		resultType="com.emotte.order.order.model.OrderTurnLog">
+		SELECT t.id AS id,
+		t.order_id AS orderId,
+		t.turn_by AS turnBy,
+		t.turn_dept AS turnDept,
+		t.recharge_by AS rechargeBy,
+		t.recharge_dept AS rechargeDept,
+		t.create_by AS createBy,
+		t.create_dept AS createDept,
+		to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime ,
+		t.valid AS valid,
+		t.version AS version,
+		t.log AS log,
+		t.remark AS remark,
+		ot.name AS turnDeptText,
+		mt.real_name AS turnByText,
+		aor.name AS rechargeDeptText,
+		mr.real_name AS rechargeByText,
+		aoc.name AS createDeptText,
+   		mc.real_name AS createByText
+		FROM T_ORDER_TURN_LOG t
+		LEFT JOIN t_auth_manager mt
+		ON mt.id=t.turn_by AND mt.valid=1
+		LEFT JOIN t_auth_org ot
+		ON ot.id=t.turn_dept AND ot.valid=1
+		LEFT JOIN t_auth_manager mr
+		ON mr.id=t.recharge_by AND mr.valid=1
+		LEFT JOIN t_auth_org aor
+		ON aor.id=t.recharge_dept AND aor.valid=1
+		LEFT JOIN t_auth_manager mc
+	    ON mc.id=t.create_by AND mc.valid=1
+	    LEFT JOIN t_auth_org aoc
+	    ON aoc.id=t.create_dept AND aoc.valid=1
+		<where>
+			t.valid = 1
+			<if test="id != null and id !='' ">
+				and id=#{id}
+			</if>
+			<if test="orderId != null and orderId !='' ">
+				and order_id=#{orderId}
+			</if>
+			<if test="turnBy != null and turnBy !='' ">
+				and turn_by=#{turnBy}
+			</if>
+			<if test="turnDept != null and turnDept !='' ">
+				and turn_dept=#{turnDept}
+			</if>
+			<if test="rechargeBy != null and rechargeBy !='' ">
+				and recharge_by=#{rechargeBy}
+			</if>
+			<if test="rechargeDept != null and rechargeDept !='' ">
+				and recharge_dept=#{rechargeDept}
+			</if>
+			<if test="createBy != null and createBy !='' ">
+				and create_by=#{createBy}
+			</if>
+			<if test="createTime != null and createTime !='' ">
+				and create_time=to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+		  ORDER BY t.create_time DESC
+	</select>
+	<select id="selectPrincipal" parameterType="java.lang.Long" 
+		resultType="com.emotte.order.order.model.Order">
+		select t.id id,t.recharge_by rechargeBy,to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') createTime from t_order t where  t.recharge_dept='12619003' and t.id=#{orderId}
+	</select>
+	<select id="selectPrincipalTwo" parameterType="java.lang.Long" 
+		resultType="com.emotte.order.order.model.Order">
+		select t.id id,t.recharge_by rechargeBy,to_char(t.create_time,'yyyy-mm-dd hh24:mi:ss') createTime from t_order t where t.id=#{orderId}
+	</select>
+	<select id="selectPosition" parameterType="java.lang.Long" 
+		resultType="java.lang.Integer">
+		  SELECT count(*)
+		  FROM t_auth_org t
+		  JOIN t_auth_manager m
+		    ON m.dept_id = t.id
+		  JOIN t_base_dictionary d
+		    ON d.dict_code = m.post
+		 WHERE t.valid = 1
+		   AND m.valid = 1
+		   AND d.valid = 1
+		   AND t.code LIKE '100100470008%'
+		   <!-- AND m.post IN (20140005,20140006) -->
+		   AND m.id = #{loginId}
+	</select>
+</mapper>

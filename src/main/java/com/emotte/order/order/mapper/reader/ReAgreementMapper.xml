@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReAgreementMapper">
+	<select id="loadAgreement" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+	select
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			AGREEMENT_TITLE as agreementTitle ,		
+			PARTY_A as partyA ,		
+			PARTY_B as partyB ,		
+			CREATE_BY as createBy ,		
+			to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+			to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+			UPDATE_BY as updateBy ,		
+			VERSION as version ,		
+			PERSON_ID as personId ,		
+			to_char(EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+			to_char(FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+			AGREEMENT_TYPE as agreementType ,		
+			REMIND_DAY as remindDay ,		
+			to_char(AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+			AGREEMENT_CODE as agreementCode ,		
+			AGREEMENT_STATE as agreementState ,		
+			EMPLOY_MONEY as employMoney ,		
+			to_char(SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,	
+			PAY_TYPE as payType ,		
+			SERVICE_CODE as serviceCode ,		
+			ONEDAY_WAGES as onedayWages ,		
+			FIRST_SERVICE_MONEY as firstServiceMoney ,		
+			FIRST_MANAGE_MONEY as firstManageMoney ,		
+			PERSON_MANAGE_MONEY as personManageMoney ,
+			SERVICE_ADDRESS as serviceAddress ,		
+			CUSTOMER_MANAGE_MONEY as customerManageMoney ,		
+			CARD_TYPE as cardType ,		
+			CARD_NUM as cardNum ,		
+			MOBILE as mobile ,		
+			PARTY_C as partyC ,		
+			CUSTOMER_ADDRESS as customerAddress ,		
+			PLATFORM_ADDRESS as platformAddress ,		
+			SERVICE_GARAGE as serviceGarage ,		
+			SERVICE_MONEY as serviceMoney ,		
+			CHARGE_TIMES as chargeTimes ,		
+			PAYMENT as payment ,		
+			ADVANCE_PERIOD as advancePeriod ,		
+			OTHER_METHODS as otherMethods ,		
+			OTHER_MATTERS as otherMatters 	,
+			card_type_c as cardTypeC,
+			card_num_c as cardNumC,
+			mobile_c as mobileC,
+			is_collection as isCollection,
+			waiter_address as waiterAddress,
+			remark_zdg as remarkZdg,
+			linkman_name as linkManName,
+			linkman_mobile as linkManMobile,
+			zhifu_remark as zhifuRemark,
+			VALID as valid,
+			to_char(NVL(CONTRACT_DATE,EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate	
+	from  T_ORDER_AGREEMENT
+	where
+		ORDER_ID =  #{orderId} and valid = 1
+	</select>
+	
+	<select id="queryAgreement"  parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+	select
+			oa.ID as id ,
+			o.order_code as orderCode,	
+			oa.reason as reason,	
+			oa.ORDER_ID as orderId ,		
+			oa.AGREEMENT_TITLE as agreementTitle ,		
+			oa.PARTY_A as partyA ,		
+			oa.PARTY_B as partyB ,		
+			oa.CREATE_BY as createBy ,		
+			to_char(oa.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+			to_char(oa.UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+			oa.UPDATE_BY as updateBy ,		
+			oa.VERSION as version ,		
+			oa.PERSON_ID as personId ,		
+			to_char(oa.EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+			to_char(oa.FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+			oa.AGREEMENT_TYPE as agreementType ,		
+			oa.REMIND_DAY as remindDay ,		
+			to_char(oa.AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+			oa.AGREEMENT_CODE as agreementCode ,		
+			oa.AGREEMENT_STATE as agreementState ,		
+			oa.EMPLOY_MONEY as employMoney ,		
+			to_char(oa.SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,	
+			oa.PAY_TYPE as payType ,		
+			oa.SERVICE_CODE as serviceCode ,		
+			oa.ONEDAY_WAGES as onedayWages ,		
+			oa.FIRST_SERVICE_MONEY as firstServiceMoney ,		
+			oa.FIRST_MANAGE_MONEY as firstManageMoney ,		
+			oa.PERSON_MANAGE_MONEY as personManageMoney ,
+			oa.SERVICE_ADDRESS as serviceAddress ,		
+			oa.CUSTOMER_MANAGE_MONEY as customerManageMoney ,		
+			oa.CARD_TYPE as cardType ,		
+			oa.CARD_NUM as cardNum ,		
+			oa.MOBILE as mobile ,		
+			oa.PARTY_C as partyC ,		
+			oa.CUSTOMER_ADDRESS as customerAddress ,		
+			oa.PLATFORM_ADDRESS as platformAddress ,		
+			oa.SERVICE_GARAGE as serviceGarage ,		
+			oa.SERVICE_MONEY as serviceMoney ,		
+			oa.CHARGE_TIMES as chargeTimes ,		
+			oa.PAYMENT as payment ,		
+			oa.ADVANCE_PERIOD as advancePeriod ,		
+			oa.OTHER_METHODS as otherMethods ,		
+			oa.OTHER_MATTERS as otherMatters 	,
+			oa.card_type_c as cardTypeC,
+			oa.card_num_c as cardNumC,
+			oa.mobile_c as mobileC,
+			oa.is_collection as isCollection,
+			oa.waiter_address as waiterAddress,
+			(select od.order_status  from t_order od where oa.order_id = od.id and od.order_status = 7) orderStatus,
+      		(select od.pay_status  from t_order od where oa.order_id = od.id ) payStatus,
+      		oa.remark_zdg as remarkZdg,
+      		oa.linkman_name as linkManName,
+			oa.linkman_mobile as linkManMobile,
+			oa.zhifu_remark as zhifuRemark,
+			oa.VALID as valid,
+			NVL(oa.check_status, 1) AS checkStatus,
+            DECODE(nvl(oa.check_status,1),1,'未处理',2,'审核通过',3,'驳回') AS checkStatusText,
+            oa.check_instructions AS checkInstructions,
+            oa.service_garage_id AS serviceGarageId,
+            to_char(oa.confirmation_date,'yyyy-mm-dd hh24:mi:ss') AS confirmationDate,
+            oa.service_address_echo AS serviceAddressEcho,
+            oa.customer_address_echo AS customerAddressEcho	,
+            oa.all_pay as allPay,
+            oa.other_way as otherWay,
+            oa.prepaid_months AS prepaidMonths,
+            oa.prepaid_money AS prepaidMoney,
+            oa.inst_prepaid_months AS instPrepaidMonths,
+            oa.inst_prepaid_money AS instPrepaidMoney,
+            oa.limit_days AS limitDays,
+            oa.account_name AS accountName,
+            oa.account_bank AS accountBank,
+            oa.account_num AS accountNum,
+            oa.ACCOUNT_MOBILE as accountMobile,
+            oa.ELEC_CLIENT_STATE AS elecClientState,
+            oa.ELEC_SERVE_STATE AS elecServeState,
+            oa.ELEC_OTHER_STATE  AS elecOtherState,
+            oa.INSURANCE_ENTRUST  AS insuranceEntrust,
+            
+            oa.PREVIEW_CONTACT_FILE  AS  previewContactFile,
+            oa.NORMAL_CONTACT_FILE  AS  normalContactFile,
+            oa.HASH_APPLY_NO  AS  hashApplyNo,
+            to_char(NVL(oa.CONTRACT_DATE,oa.EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate,
+            <!-- (SELECT m.real_name FROM t_auth_manager m WHERE m.valid=1 AND m.id=oa.create_by) AS legalRepresentative, -->
+            (SELECT m.real_name FROM t_order o JOIN t_auth_manager m ON m.id=o.recharge_by WHERE o.valid=1 AND m.valid=1 AND o.id=oa.order_id) AS legalRepresentative,
+            oa.AGREEMENT_BUSINESS_TYPE AS agreementBusinessType,
+            oast.customer_service_address as customerserviceAddress,
+            oast.hospitalization_num as hospitalizationNum,
+            oast.departments as departments,
+            oast.room_number as roomNumber,
+            oast.bed_number_a as bedNumber_a,
+            oast.bed_number_b as bedNumber_b,
+            oast.consumers_state as consumerstate,
+            oast.consumers_name as consumersName,
+            oast.consumers_card as consumersCard,
+            oast.cust_consumer_relation as custconsumerRelation,
+            oast.birth_period as  birthPeriod,
+            oast.special_considerations as specialConsiderations,
+            oast.service_items as serviceItems,
+            oast.service_starttime as serviceStarttime,
+            oast.hostsit_day as hostsitDay,
+            oast.service_format as serviceFormat,
+            oast.delivery_mode as deliveryMode,
+            oast.replace_number as replaceNumber,
+            oast.relation_relatives as relation_relatives,
+            oast.relation_entrust as relation_entrust,
+            oa.service_project_standard as serviceprojectStandard,
+            oa.party_b_accountname as partyBaccountName,
+            oa.party_b_accountnum as partyBaccountNum,
+            oa.party_b_accountbank as partyBaccountBank,
+            nvl(oa.is_pecontract, 2) AS isPeContract,
+		    oa.pecontract_basic AS peContractBasic,
+		    oa.pecontract_performance AS peContractPerformance,
+            oa.mobile_b as mobileB,
+             case
+		         when oa.agreement_model is null  then
+		          '20520002'
+		          else oa.agreement_model
+		       end  as agreementModel, 
+            
+		       case
+		         when oa.agreement_model is null  then
+		          '普通合同'
+		          else d.dict_name
+		       end  as agreementModelName
+            
+	from  T_ORDER_AGREEMENT oa left join t_base_dictionary d on d.dict_code = oa.agreement_model
+	      left join t_order_agreement_assistant oast  on oa.id=oast.agreement_id  left join emerp.t_order o on o.id = oa.order_id
+                          and o.valid = 1 and oa.valid =1
+	<where> 
+	 1 = 1
+		<if test="id!=null and id!='' ">           
+			and	oa.ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	oa.ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="agreementTitle!=null and agreementTitle!='' ">           
+			and	oa.AGREEMENT_TITLE =  #{agreementTitle} 		
+		</if>	
+		<if test="partyA!=null and partyA!='' ">           
+			and	oa.PARTY_A =  #{partyA} 		
+		</if>	
+		<if test="partyB!=null and partyB!='' ">           
+			and	oa.PARTY_B =  #{partyB} 		
+		</if>		
+		<if test="createBy!=null and createBy!='' ">           
+			and	oa.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and to_char(oa.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')	
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	oa.VERSION =  #{version} 		
+		</if>	
+		<if test="personId!=null and personId!='' ">           
+			and	oa.PERSON_ID =  #{personId} 		
+		</if>	
+		<if test="effectDate!=null and effectDate!='' ">           
+			and	to_char(oa.EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss') 
+		</if>	
+		<if test="finishDate!=null and finishDate!='' ">           
+			and	to_char(oa.FINISH_DATE,'yyyy-mm-dd hh24:mi:ss') 		
+		</if>	
+		<if test="agreementType!=null and agreementType!='' ">           
+			and	oa.AGREEMENT_TYPE =  #{agreementType} 		
+		</if>	
+		<if test="remindDay!=null and remindDay!='' ">           
+			and	oa.REMIND_DAY =  #{remindDay} 		
+		</if>	
+		<if test="agreementPayDate!=null and agreementPayDate!='' ">           
+			and	to_char(oa.AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')
+		</if>	
+		<if test="agreementCode!=null and agreementCode!='' ">           
+			and	oa.AGREEMENT_CODE =  #{agreementCode} 		
+		</if>	
+		<if test="agreementState!=null and agreementState!='' ">           
+			and	oa.AGREEMENT_STATE =  #{agreementState} 		
+		</if>		
+		<if test="agreementStateEffect!=null and agreementStateEffect!=''and agreementStateEffect==1 ">           
+			and	oa.AGREEMENT_STATE in  (1,2,4)		
+		</if>		
+		<if test="agreementStateEffect!=null and agreementStateEffect!='' and agreementStateEffect==2">           
+			and	oa.AGREEMENT_STATE in  (1,2)		
+		</if>		
+		<if test="employMoney!=null and employMoney!='' ">           
+			and	oa.EMPLOY_MONEY =  #{employMoney} 		
+		</if>		
+		<if test="salaryDate!=null and salaryDate!='' ">           
+			and	to_char(oa.SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')
+		</if>	
+		<if test="payType!=null and payType!='' ">           
+			and	oa.PAY_TYPE =  #{payType} 		
+		</if>	
+		<if test="serviceCode!=null and serviceCode!='' ">           
+			and	oa.SERVICE_CODE =  #{serviceCode} 		
+		</if>		
+		<if test="onedayWages!=null and onedayWages!='' ">           
+			and	oa.ONEDAY_WAGES =  #{onedayWages} 		
+		</if>	
+		<if test="firstServiceMoney!=null and firstServiceMoney!='' ">           
+			and	oa.FIRST_SERVICE_MONEY =  #{firstServiceMoney} 		
+		</if>	
+		<if test="firstManageMoney!=null and firstManageMoney!='' ">           
+			and	oa.FIRST_MANAGE_MONEY =  #{firstManageMoney} 		
+		</if>	
+		<if test="personManageMoney!=null and personManageMoney!='' ">           
+			and	oa.PERSON_MANAGE_MONEY =  #{personManageMoney} 		
+		</if>	
+		<if test="serviceAddress!=null and serviceAddress!='' ">           
+			and	oa.SERVICE_ADDRESS =  #{serviceAddress} 		
+		</if>	
+		<if test="customerManageMoney!=null and customerManageMoney!='' ">           
+			and	oa.CUSTOMER_MANAGE_MONEY =  #{customerManageMoney} 		
+		</if>	
+		<if test="cardType!=null and cardType!='' ">           
+			and	oa.CARD_TYPE =  #{cardType} 		
+		</if>	
+		<if test="cardNum!=null and cardNum!='' ">           
+			and	oa.CARD_NUM =  #{cardNum} 		
+		</if>	
+		<if test="mobile!=null and mobile!='' ">           
+			and	oa.MOBILE =  #{mobile} 		
+		</if>	
+		<if test="partyC!=null and partyC!='' ">           
+			and	oa.PARTY_C =  #{partyC} 		
+		</if>	
+		<if test="customerAddress!=null and customerAddress!='' ">           
+			and	oa.CUSTOMER_ADDRESS =  #{customerAddress} 		
+		</if>	
+		<if test="platformAddress!=null and platformAddress!='' ">           
+			and	oa.PLATFORM_ADDRESS =  #{platformAddress} 		
+		</if>	
+		<if test="serviceGarage!=null and serviceGarage!='' ">           
+			and	oa.SERVICE_GARAGE =  #{serviceGarage} 		
+		</if>	
+		<if test="serviceMoney!=null and serviceMoney!='' ">           
+			and	oa.SERVICE_MONEY =  #{serviceMoney} 		
+		</if>	
+		<if test="chargeTimes!=null and chargeTimes!='' ">           
+			and	oa.CHARGE_TIMES =  #{chargeTimes} 		
+		</if>	
+		<if test="payment!=null and payment!='' ">           
+			and	oa.PAYMENT =  #{payment} 		
+		</if>	
+		<if test="advancePeriod!=null and advancePeriod!='' ">           
+			and	oa.ADVANCE_PERIOD =  #{advancePeriod} 		
+		</if>	
+		<if test="otherMethods!=null and otherMethods!='' ">           
+			and	oa.OTHER_METHODS =  #{otherMethods} 		
+		</if>	
+		<if test="otherMatters!=null and otherMatters!='' ">           
+			and	oa.OTHER_MATTERS =  #{otherMatters} 		
+		</if>	
+		<if test="cardTypeC!=null and cardTypeC!='' ">           
+			and	oa.card_type_c =  #{cardTypeC} 		
+		</if>	
+		<if test="cardNumC!=null and cardNumC!='' ">           
+			and	oa.card_num_c =  #{cardNumC} 		
+		</if>	
+		<if test="mobileC!=null and mobileC!='' ">           
+			and	oa.mobile_c =  #{mobileC} 		
+		</if>	
+		<if test="isCollection!=null and isCollection!='' ">           
+			and	oa.is_collection =  #{isCollection} 		
+		</if>	
+		<if test="waiterAddress!=null and waiterAddress!='' ">           
+			and	oa.waiter_address =  #{waiterAddress} 		
+		</if>	
+		<if test="linkManName!=null and linkManName!='' ">           
+			and	oa.linkman_name =  #{linkManName} 
+		</if>	
+		<if test="linkManMobile!=null and linkManMobile!='' ">   
+			and	oa.linkman_mobile =  #{linkManMobile}         
+		</if>	
+		<if test="zhifuRemark!=null and zhifuRemark!='' ">   
+			and	oa.zhifu_remark =  #{zhifuRemark}         
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	oa.VALID 	=  #{valid} 		
+		</if>	
+		<if test="hashApplyNo!=null and hashApplyNo!='' ">           
+			and	oa.HASH_APPLY_NO	=  #{hashApplyNo} 		
+		</if>
+	</where>
+	order by oa.CREATE_TIME desc
+	</select>
+	
+	
+	<select id="countAgreement"  parameterType="com.emotte.order.order.model.Agreement" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM T_ORDER_AGREEMENT
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderId!=null and orderId!='' ">           
+			and	ORDER_ID =  #{orderId} 		
+		</if>	
+		<if test="agreementTitle!=null and agreementTitle!='' ">           
+			and	AGREEMENT_TITLE =  #{agreementTitle} 		
+		</if>	
+		<if test="partyA!=null and partyA!='' ">           
+			and	PARTY_A =  #{partyA} 		
+		</if>	
+		<if test="partyB!=null and partyB!='' ">           
+			and	PARTY_B =  #{partyB} 		
+		</if>		
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')	
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')	
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="personId!=null and personId!='' ">           
+			and	PERSON_ID =  #{personId} 		
+		</if>	
+		<if test="effectDate!=null and effectDate!='' ">           
+			and	to_char(EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss') 
+		</if>	
+		<if test="finishDate!=null and finishDate!='' ">           
+			and	to_char(FINISH_DATE,'yyyy-mm-dd hh24:mi:ss') 		
+		</if>	
+		<if test="agreementType!=null and agreementType!='' ">           
+			and	AGREEMENT_TYPE =  #{agreementType} 		
+		</if>	
+		<if test="remindDay!=null and remindDay!='' ">           
+			and	REMIND_DAY =  #{remindDay} 		
+		</if>	
+		<if test="agreementPayDate!=null and agreementPayDate!='' ">           
+			and	to_char(AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')
+		</if>	
+		<if test="agreementCode!=null and agreementCode!='' ">           
+			and	AGREEMENT_CODE =  #{agreementCode} 		
+		</if>	
+		<if test="agreementState!=null and agreementState!='' ">           
+			and	AGREEMENT_STATE =  #{agreementState} 		
+		</if>		
+		<if test="employMoney!=null and employMoney!='' ">           
+			and	EMPLOY_MONEY =  #{employMoney} 		
+		</if>		
+		<if test="salaryDate!=null and salaryDate!='' ">           
+			and	to_char(SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')
+		</if>	
+		<if test="payType!=null and payType!='' ">           
+			and	PAY_TYPE =  #{payType} 		
+		</if>	
+		<if test="serviceCode!=null and serviceCode!='' ">           
+			and	SERVICE_CODE =  #{serviceCode} 		
+		</if>		
+		<if test="onedayWages!=null and onedayWages!='' ">           
+			and	ONEDAY_WAGES =  #{onedayWages} 		
+		</if>	
+		<if test="firstServiceMoney!=null and firstServiceMoney!='' ">           
+			and	FIRST_SERVICE_MONEY =  #{firstServiceMoney} 		
+		</if>	
+		<if test="firstManageMoney!=null and firstManageMoney!='' ">           
+			and	FIRST_MANAGE_MONEY =  #{firstManageMoney} 		
+		</if>	
+		<if test="personManageMoney!=null and personManageMoney!='' ">           
+			and	PERSON_MANAGE_MONEY =  #{personManageMoney} 		
+		</if>	
+		<if test="serviceAddress!=null and serviceAddress!='' ">           
+			and	SERVICE_ADDRESS =  #{serviceAddress} 		
+		</if>	
+		<if test="customerManageMoney!=null and customerManageMoney!='' ">           
+			and	CUSTOMER_MANAGE_MONEY =  #{customerManageMoney} 		
+		</if>	
+		<if test="cardType!=null and cardType!='' ">           
+			and	CARD_TYPE =  #{cardType} 		
+		</if>	
+		<if test="cardNum!=null and cardNum!='' ">           
+			and	CARD_NUM =  #{cardNum} 		
+		</if>	
+		<if test="mobile!=null and mobile!='' ">           
+			and	MOBILE =  #{mobile} 		
+		</if>	
+		<if test="partyC!=null and partyC!='' ">           
+			and	PARTY_C =  #{partyC} 		
+		</if>	
+		<if test="customerAddress!=null and customerAddress!='' ">           
+			and	CUSTOMER_ADDRESS =  #{customerAddress} 		
+		</if>	
+		<if test="platformAddress!=null and platformAddress!='' ">           
+			and	PLATFORM_ADDRESS =  #{platformAddress} 		
+		</if>	
+		<if test="serviceGarage!=null and serviceGarage!='' ">           
+			and	SERVICE_GARAGE =  #{serviceGarage} 		
+		</if>	
+		<if test="serviceMoney!=null and serviceMoney!='' ">           
+			and	SERVICE_MONEY =  #{serviceMoney} 		
+		</if>	
+		<if test="chargeTimes!=null and chargeTimes!='' ">           
+			and	CHARGE_TIMES =  #{chargeTimes} 		
+		</if>	
+		<if test="payment!=null and payment!='' ">           
+			and	PAYMENT =  #{payment} 		
+		</if>	
+		<if test="advancePeriod!=null and advancePeriod!='' ">           
+			and	ADVANCE_PERIOD =  #{advancePeriod} 		
+		</if>	
+		<if test="otherMethods!=null and otherMethods!='' ">           
+			and	OTHER_METHODS =  #{otherMethods} 		
+		</if>	
+		<if test="otherMatters!=null and otherMatters!='' ">           
+			and	OTHER_MATTERS =  #{otherMatters} 		
+		</if>	
+		<if test="cardTypeC!=null and cardTypeC!='' ">           
+			and	card_type_c =  #{cardTypeC} 		
+		</if>	
+		<if test="cardNumC!=null and cardNumC!='' ">           
+			and	card_num_c =  #{cardNumC} 		
+		</if>	
+		<if test="mobileC!=null and mobileC!='' ">           
+			and	mobile_c =  #{mobileC} 		
+		</if>	
+		<if test="isCollection!=null and isCollection!='' ">           
+			and	is_collection =  #{isCollection} 		
+		</if>	
+		<if test="waiterAddress!=null and waiterAddress!='' ">           
+			and	waiter_address =  #{waiterAddress} 		
+		</if>
+		<if test="linkManName!=null and linkManName!='' ">           
+			and	linkman_name =  #{linkManName} 
+		</if>	
+		<if test="linkManMobile!=null and linkManMobile!='' ">   
+			and linkman_mobile =  #{linkManMobile}         
+		</if>
+		<if test="zhifuRemark!=null and zhifuRemark!='' ">   
+			and	zhifu_remark =  #{zhifuRemark}         
+		</if>
+		<if test="valid!=null and valid!='' ">           
+			and	VALID 	=  #{valid} 		
+		</if>	
+			</where>
+	</select>
+	
+	
+		<select id="queryAgreementById"  parameterType="java.lang.Long" resultType="java.util.HashMap">
+	select
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			AGREEMENT_TITLE as agreementTitle ,		
+			PARTY_A as partyA ,		
+			PARTY_B as partyB ,		
+			CREATE_BY as createBy ,		
+			to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+			to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+			UPDATE_BY as updateBy ,		
+			VERSION as version ,		
+			PERSON_ID as personId ,		
+			to_char(EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+			to_char(FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+			AGREEMENT_TYPE as agreementType ,		
+			REMIND_DAY as remindDay ,		
+			to_char(AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+			AGREEMENT_CODE as agreementCode ,		
+			AGREEMENT_STATE as agreementState ,		
+			EMPLOY_MONEY as employMoney ,		
+			to_char(SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,	
+			PAY_TYPE as payType ,		
+			SERVICE_CODE as serviceCode ,		
+			ONEDAY_WAGES as onedayWages ,		
+			FIRST_SERVICE_MONEY as firstServiceMoney ,		
+			FIRST_MANAGE_MONEY as firstManageMoney ,		
+			PERSON_MANAGE_MONEY as personManageMoney ,
+			SERVICE_ADDRESS as serviceAddress ,		
+			CUSTOMER_MANAGE_MONEY as customerManageMoney ,		
+			CARD_TYPE as cardType ,		
+			CARD_NUM as cardNum ,		
+			MOBILE as mobile ,		
+			PARTY_C as partyC ,		
+			CUSTOMER_ADDRESS as customerAddress ,		
+			PLATFORM_ADDRESS as platformAddress ,		
+			SERVICE_GARAGE as serviceGarage ,		
+			SERVICE_MONEY as serviceMoney ,		
+			CHARGE_TIMES as chargeTimes ,		
+			PAYMENT as payment ,		
+			ADVANCE_PERIOD as advancePeriod ,		
+			OTHER_METHODS as otherMethods ,		
+			OTHER_MATTERS as otherMatters 	,
+			card_type_c as cardTypeC,
+			card_num_c as cardNumC,
+			mobile_c as mobileC,
+			is_collection as isCollection,
+			waiter_address as waiterAddress,
+			remark_zdg as remarkZdg,
+			linkman_name as linkManName,
+			linkman_mobile as linkManMobile,
+			zhifu_remark as zhifuRemark,
+			PREVIEW_CONTACT_FILE AS PREVIEWCONTACTFILE,
+			NORMAL_CONTACT_FILE AS NORMALCONTACTFILE,
+			VALID as valid	,
+			
+			INSURANCE_ENTRUST as insuranceEntrust,
+			to_char(NVL(CONTRACT_DATE,EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate
+	from  T_ORDER_AGREEMENT
+	where
+		ID =  #{id} 	
+	</select>
+	
+	<select id="queryCheckAgreement_listPage" parameterType="com.emotte.order.order.model.Agreement" 
+									resultType="java.util.HashMap">
+					SELECT o.id AS order_id,
+			               o.order_code,
+			               a.id AS agreement_id,
+			               a.agreement_code,
+			               a.agreement_state,
+			               a.elec_other_state,
+			               a.party_a,
+			               a.party_b,
+			               a.version,
+			               a.check_by,
+			               NVL(a.check_status, 1) AS check_status,
+			               a.check_instructions,
+			               TO_CHAR(a.check_date,'yyyy-mm-dd hh24:mi:ss') AS check_date,
+			               TO_CHAR(a.create_time,'yyyy-mm-dd hh24:mi:ss') AS create_time,
+			               TO_CHAR(a.effect_date,'yyyy-mm-dd hh24:mi:ss') AS effect_date,
+			               TO_CHAR(a.finish_date,'yyyy-mm-dd hh24:mi:ss') AS finish_date,
+			               am.real_name,
+			               c.real_name AS userName,
+                           c.mobile AS userMobile,
+			               o.recharge_by,
+			               o.recharge_dept,
+			               o.order_type,
+			               ao.name AS recharge_dept_name,
+			               am.real_name AS recharge_by_name,
+				      DECODE(a.agreement_state,1,'新建',2,'已确认',3,'已终止',4,'已完成',5,'已删除',6,'签约中') AS agreement_state_text,
+				      DECODE(nvl(a.check_status,1),1,'未处理',2,'审核通过',3,'驳回') AS check_status_text,
+				      DECODE(a.elec_other_state,1,'合同待签约',2,'已推送',3,'三方已签约',4,'已电子签章认证',5,'签章已驳回') AS elec_other_state_text,
+				      to_char(NVL(a.CONTRACT_DATE,a.EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate,
+				      a.NORMAL_CONTACT_FILE AS normalContactFile,
+					  a.AGREEMENT_MODEL as AGREEMENT_MODEL,
+				               case
+		                          when a.agreement_model is null  then
+		                         '20520002'
+		                       else a.agreement_model
+		                       end  as agreementModel,
+		TO_CHAR((CASE WHEN a.ELEC_OTHER_STATE IN (3,4) THEN d.createTime ELSE NULL END),'yyyy-mm-dd hh24:mi:ss') as createTime
+				  FROM t_order_agreement a
+				  JOIN t_order o
+				    ON o.id = a.order_id
+				  LEFT JOIN t_auth_org ao
+				    ON ao.id = o.recharge_dept
+				   AND ao.valid = 1
+				  LEFT JOIN t_auth_manager am
+				    ON am.id = o.recharge_by
+				   AND am.valid = 1
+				  LEFT JOIN t_customer c
+		           ON c.id=o.user_id
+		           AND c.valid=1
+		LEFT JOIN (SELECT a.CONTACTID,MAX(a.CREATE_TIME) createTime FROM T_ORDER_AGREEMENT_GS a GROUP BY CONTACTID) d ON d.CONTACTID = a.ID
+				 WHERE a.valid = 1
+				   AND o.valid = 1
+				   AND o.create_time &lt; SYSDATE
+				   AND (a.advance_period != 5 OR (a.advance_period = 5 AND a.check_status = 2))
+				    <if test="orderCode != null and orderCode != '' ">
+				  	  AND o.order_code LIKE  '%'||#{orderCode}||'%'
+				   </if> 
+				   <if test="userName != null and userName != '' ">
+			           AND c.real_name LIKE '%'||#{userName}||'%'
+				   </if> 
+			       <if test="userMobile != null and userMobile != '' ">
+			           AND c.mobile LIKE '%'||#{userMobile}||'%'
+				   </if> 
+			       <if test="agreementState != null and agreementState != '' ">
+			           AND a.agreement_state = #{agreementState}
+				   </if> 
+				   <if test="elecOtherState != null and elecOtherState != '' ">
+			           AND a.elec_other_state = #{elecOtherState}
+				   </if>
+				   <choose>
+					    <when test="checkStatus == 1">
+					       AND (a.check_status = 1 OR a.check_status IS NULL)
+					    </when>
+					    <when test="checkStatus != null and checkStatus != '' ">
+					       AND a.check_status = #{checkStatus}
+					    </when>
+				   </choose> 
+			       <if test="rechargeBy != null and rechargeBy != '' ">
+			           AND o.recharge_by = #{rechargeBy}
+				   </if> 
+			       <if test="rechargeDept != null and rechargeDept != '' ">
+			           AND o.recharge_dept = #{rechargeDept}
+				   </if>
+				   <if test="creStart!=null and creStart !=''">
+					   AND to_char(a.effect_date,'yyyy-mm-dd') &gt;= #{creStart} 	
+				   </if>
+		   		   <if test="creEnd!=null and creEnd !=''">
+		  			   AND to_char(a.effect_date,'yyyy-mm-dd') &lt;= #{creEnd} 	
+		   		   </if>
+				   order by a.create_time DESC,a.id
+	</select>
+	
+	<select id="queryServiceStation" parameterType="com.emotte.order.order.model.Agreement" 
+									resultType="java.util.HashMap">
+						SELECT ao.id AS deptId,
+						ao.name AS deptName,
+						ao.addr AS deptAddr
+						<if test="orderId != null and orderId != '' ">
+						,DECODE((SELECT o.recharge_dept FROM t_order o WHERE o.valid = 1 AND o.id = #{orderId}), ao.id, 'true', 'false') AS rechargeDeptSelected
+						</if>
+						FROM t_auth_org ao
+						WHERE ao.type IN ('5','7','11')
+						AND ao.valid = 1
+						AND ao.status = 1
+						ORDER BY ao.name DESC
+	</select>
+	
+	<select id="queryPersonnel"  parameterType="java.lang.Long"  resultType="java.util.HashMap">
+						SELECT p.id,
+					       p.name,
+					       p.mobile,
+					       p.id_card_num,
+					       p.current_address,
+					       p.home_address,
+					       1 AS id_card_type,
+					       '身份证' AS id_card_type_name,
+					       TO_CHAR(i.star_time,'yyyy-mm-dd hh24:mi:ss') AS star_time,
+					       TO_CHAR(i.end_time,'yyyy-mm-dd hh24:mi:ss') AS end_time
+					  FROM t_order_item_interview i
+					  JOIN t_emp_personnel p
+					    ON p.id = i.person_id
+					 WHERE i.valid = 1
+					   AND p.valid = 1
+					   AND i.interview_type in (6,8,11,12)
+					   AND i.order_id = #{orderId}
+	</select>
+	
+	<select id="queryCitys"   parameterType="com.emotte.order.order.model.BaseCity"  resultType="com.emotte.order.order.model.BaseCity">
+					SELECT bc.id AS id,
+				       bc.pid AS pid,
+				       bc.code AS code,
+				       bc.org_code AS orgCode,
+				       bc.name AS name,
+				       bc.short_name AS shortName,
+				       bc.levels AS levels,
+				       DECODE(bc.id,#{id},'true','false') AS checked
+				  FROM t_base_city bc
+				 WHERE bc.valid = 1
+				 <if test="code != null and code != '' ">
+					 AND bc.code LIKE #{code}||'%'
+				 </if>
+				 <if test="levels != null and levels != '' ">
+					 AND bc.levels = #{levels}
+				 </if>
+				 ORDER BY bc.code
+	</select>
+	
+	<select id="queryCanCopyAgreement"  parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+	SELECT t.* FROM (
+	  SELECT
+			oa.ID as id ,		
+			oa.ORDER_ID as orderId ,		
+			oa.AGREEMENT_TITLE as agreementTitle ,		
+			oa.PARTY_A as partyA ,		
+			oa.PARTY_B as partyB ,		
+			oa.CREATE_BY as createBy ,		
+			to_char(oa.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+			to_char(oa.UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+			oa.UPDATE_BY as updateBy ,		
+			oa.VERSION as version ,		
+			oa.PERSON_ID as personId ,		
+			to_char(oa.EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+			to_char(oa.FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+			oa.AGREEMENT_TYPE as agreementType ,		
+			oa.REMIND_DAY as remindDay ,		
+			to_char(oa.AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+			oa.AGREEMENT_CODE as agreementCode ,		
+			oa.AGREEMENT_STATE as agreementState ,		
+			oa.EMPLOY_MONEY as employMoney ,		
+			to_char(oa.SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,	
+			oa.PAY_TYPE as payType ,		
+			oa.SERVICE_CODE as serviceCode ,		
+			oa.ONEDAY_WAGES as onedayWages ,		
+			oa.FIRST_SERVICE_MONEY as firstServiceMoney ,		
+			oa.FIRST_MANAGE_MONEY as firstManageMoney ,		
+			oa.PERSON_MANAGE_MONEY as personManageMoney ,
+			oa.SERVICE_ADDRESS as serviceAddress ,		
+			oa.CUSTOMER_MANAGE_MONEY as customerManageMoney ,		
+			oa.CARD_TYPE as cardType ,		
+			oa.CARD_NUM as cardNum ,		
+			oa.MOBILE as mobile ,		
+			oa.PARTY_C as partyC ,		
+			oa.CUSTOMER_ADDRESS as customerAddress ,		
+			oa.PLATFORM_ADDRESS as platformAddress ,		
+			oa.SERVICE_GARAGE as serviceGarage ,		
+			oa.SERVICE_MONEY as serviceMoney ,		
+			oa.CHARGE_TIMES as chargeTimes ,		
+			oa.PAYMENT as payment ,		
+			oa.ADVANCE_PERIOD as advancePeriod ,		
+			oa.OTHER_METHODS as otherMethods ,		
+			oa.OTHER_MATTERS as otherMatters 	,
+			oa.card_type_c as cardTypeC,
+			oa.card_num_c as cardNumC,
+			oa.mobile_c as mobileC,
+			oa.is_collection as isCollection,
+			oa.waiter_address as waiterAddress,
+			(select od.order_status  from t_order od where oa.order_id = od.id and od.order_status = 7) orderStatus,
+      		(select od.pay_status  from t_order od where oa.order_id = od.id ) payStatus,
+      		oa.remark_zdg as remarkZdg,
+      		oa.linkman_name as linkManName,
+			oa.linkman_mobile as linkManMobile,
+			oa.zhifu_remark as zhifuRemark,
+			oa.VALID as valid,
+			NVL(oa.check_status, 1) AS checkStatus,
+            DECODE(nvl(oa.check_status,1),1,'未处理',2,'审核通过',3,'驳回') AS checkStatusText,
+            oa.check_instructions AS checkInstructions,
+            oa.service_garage_id AS serviceGarageId,
+            to_char(oa.confirmation_date,'yyyy-mm-dd hh24:mi:ss') AS confirmationDate,
+            oa.service_address_echo AS serviceAddressEcho,
+            oa.customer_address_echo AS customerAddressEcho	,
+            oa.prepaid_months AS prepaidMonths,
+            oa.prepaid_money AS prepaidMoney,
+            oa.inst_prepaid_months AS instPrepaidMonths,
+            oa.inst_prepaid_money AS instPrepaidMoney,
+            oa.limit_days AS limitDays,
+            oa.account_name AS accountName,
+            oa.account_bank AS accountBank,
+            oa.account_num AS accountNum,
+            to_char(NVL(oa.contract_date,oa.EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate
+	    FROM T_ORDER_AGREEMENT oa
+	<where> 
+			oa.valid = 1 AND oa.agreement_state IN (2,3) AND oa.order_id = #{orderId} 		
+	</where>
+ 		ORDER BY oa.agreement_type ASC, oa.update_time DESC
+ 		 ) t WHERE ROWNUM = 1
+	</select>
+	
+	<select id="queryAgreementHeader" parameterType="Long" resultType="Map">
+						WITH org AS
+						 (SELECT t.id,
+						         t.fid,
+						         t.type,
+						         t.type2,
+						         t.name,
+						         t.contract_header,
+						         t.code,
+						         t.addr
+						    FROM t_auth_org t
+						    WHERE t.valid=1
+						   START WITH t.id = #{deptId}
+						  CONNECT BY PRIOR t.fid = t.id)
+						SELECT ao.id,
+						       ao.fid,
+						       ao.type,
+						       ao.type2,
+						       ao.name,
+						       ao.contract_header,
+						       ao.code,
+						       (SELECT o.addr
+						          FROM org o
+						         WHERE o.type = 88
+						           AND ROWNUM = 1)contractHeaderAddr
+						  FROM t_auth_org ao
+						 WHERE ao.valid = 1
+						   AND ao.id = #{deptId}
+	</select>
+	<!-- 审核成功的合同 -->
+	<select id="queryExportCpeList" parameterType="com.emotte.order.order.model.Agreement" resultType="java.util.Map">
+		select 
+		(select bc.NAME from t_base_city bc where bc.code = od.city and bc.valid = 1) as 城市,
+	    (select orgr.NAME from t_auth_org orgr where od.recharge_dept = orgr.id ) as 负责部门,
+	    (select rech.REAL_NAME from t_auth_manager rech where od.recharge_by = rech.id) as 负责人,          
+	    oa.PARTY_B as 乙方名称,
+	    oa.SERVICE_GARAGE as 门店名称,
+	    od.ORDER_CODE as 订单编号,
+	    oa.AGREEMENT_CODE as 合同编号,
+	    od.USER_NAME as 客户姓名,
+	    od.USER_MOBILE as 客户电话,
+	    to_char(oa.EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss') as 签订日期,
+        to_char(oa.EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss') as 开始日期,
+        to_char(oa.FINISH_DATE,'yyyy-mm-dd hh24:mi:ss') as 结束日期, 
+	    oa.PARTY_C as 服务员,
+	    (select emp.ID_CARD_NUM from t_emp_personnel emp where emp.id = oa.person_id and emp.valid = 1 ) as 服务员身份证号,
+	    oa.CUSTOMER_MANAGE_MONEY as 会员费, 
+	    oa.PERSON_MANAGE_MONEY as 员工管理费,
+	    oa.SERVICE_MONEY as 服务人员服务费,
+	    decode(oa.SERVICE_CODE,1,'一般家务',2,'月嫂',3,'育儿嫂',4,'老人/病人护理',5,'单位用工',6,'管家',7,'钟点工',8,'其它','未填写') as 服务类别,
+	    decode(oa.AGREEMENT_STATE,1,'新建',2,'已确认',3,'已终止',4,'已完成',5,'已删除','未填写') as  合同状态,
+	    decode(oa.CHECK_STATUS,1,'未处理',2,'审核通过',3,'驳回','未填写') as  审核状态 
+		from T_ORDER_AGREEMENT oa 
+		left join t_order od
+		on od.id = oa.order_id
+		<where>
+			1 = 1 and od.VALID = 1           <!--  and oa.CHECK_STATUS = 2  -->
+			<choose>
+				<when test="ids_!=null and ids_!=''">
+			 		and	oa.ID in 
+			 		<foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">  
+		      			#{id_, jdbcType=NUMERIC}
+		    		</foreach>
+			 	</when>
+				<otherwise>
+					<if test="orderCode != null and orderCode != '' ">
+				  	  AND od.ORDER_CODE LIKE  '%'||#{orderCode}||'%'
+				   </if> 
+				   <if test="userName != null and userName != '' ">
+			           AND od.user_name LIKE '%'||#{userName}||'%'
+				   </if> 
+			       <if test="userMobile != null and userMobile != '' ">
+			           AND od.user_mobile LIKE '%'||#{userMobile}||'%'
+				   </if> 
+			       <if test="agreementState != null and agreementState != '' ">
+			           AND oa.agreement_state = #{agreementState}
+				   </if> 
+			       <if test="rechargeBy != null and rechargeBy != '' ">
+			           AND od.recharge_by = #{rechargeBy}
+				   </if> 
+			       <if test="rechargeDept != null and rechargeDept != '' ">
+			           AND od.recharge_dept = #{rechargeDept}
+				   </if>
+			       <if test="checkStatus != null and checkStatus != '' ">
+			           AND oa.CHECK_STATUS = #{checkStatus}
+				   </if>
+				   <if test="creStart!=null and creStart !=''">
+					   AND to_char(oa.effect_date,'yyyy-mm-dd') &gt;= #{creStart} 	
+				   </if>
+		   		   <if test="creEnd!=null and creEnd !=''">
+		  			   AND to_char(oa.effect_date,'yyyy-mm-dd') &lt;= #{creEnd} 	
+		   		   </if>
+				</otherwise>
+			</choose> 
+		</where>
+		order by oa.CHECK_DATE desc
+	</select>
+	
+	
+	<select id="checkCardName" parameterType="Long" resultType="String">
+	SELECT t.party_a as cardName FROM t_order_agreement t WHERE t.agreement_state=2 and t.valid=1 and t.order_id=#{orderId}
+	</select>
+	
+	<select id="showCustomerManager" parameterType="Long" resultType="Map">
+	SELECT t.real_name realName ,t.mobile  mobile ,t.card_type cardType, t.card_num cardNum ,ca.relat_information  relatInformation
+		  FROM t_customer t
+		  join customer_analysis ca
+		    on t.id = ca.custom_id
+		    and ca.valid=1
+ 	where t.valid=1 and t.id = #{userId} order by ca.create_time desc
+	</select>
+	
+	<select id="getDictionaryInfo" parameterType="com.emotte.order.order.model.DataDictionaryModel" resultType="com.emotte.order.order.model.DataDictionaryModel">
+		select t.ID as id, 
+	       t.FID as fid, 
+	       t.DICT_NAME as dictName , 
+	       t.REMARK as remark, 
+	       t.DICT_CODE as dictCode, 
+	       t.ORG_CODE as orgCode, 
+	       t.PRIORITY as priority, 
+	       t.ICON as icon, 
+	       t.CREATE_BY as createBy, 
+	       t.UPDATE_BY as updateBy, 
+	       t.CREATE_TIME as createTime, 
+	       t.UPDATE_TIME as updateTime, 
+	       t.VALID as valid, 
+	       t.VERSION as version, 
+	       t.IS_OLD_DATA as isOldData
+	  from t_base_dictionary t 
+	<where> 
+	 1 = 1
+		<if test="dictCode !=null and dictCode !='' "> and  t.FID = (select id  from t_base_dictionary where dict_code = #{dictCode}) </if>
+	</where>
+	order by t.priority	
+	</select>
+	
+	
+	
+	
+	<select id="queryAgreementcreatime" parameterType="java.lang.String" resultType="com.emotte.order.order.model.Agreement">
+	select
+			ID as "id" ,		
+			ORDER_ID as "orderId" ,			
+			to_char(SIGN_TIME,'yyyy-mm-dd') as "createtimeinfo"
+	from  TEMP2_HJBL_CUSTOMER_INFO
+	where  CONTRACT_CODE=#{id}
+	</select>
+	
+	
+	
+	<select id="queryAgreementcreatime1" parameterType="java.lang.String" resultType="com.emotte.order.order.model.Agreement">
+	select
+      ID as "id" ,  
+      to_char(CREATE_TIME,'yyyy-mm-dd') as "createtimeinfo"
+      from  T_HJBL_CUSTOMER_INFO
+      where  CONTRACT_CODE=#{id}
+	</select>
+	
+	
+	
+	
+	
+	<select id="loadAgreementcreatime" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+	select
+			ID as id ,		
+			ORDER_ID as orderId ,		
+			AGREEMENT_TITLE as agreementTitle ,		
+			PARTY_A as partyA ,		
+			PARTY_B as partyB ,		
+			CREATE_BY as createBy ,		
+			to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+			to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+			UPDATE_BY as updateBy ,		
+			VERSION as version ,		
+			PERSON_ID as personId ,		
+			to_char(EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+			to_char(FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+			AGREEMENT_TYPE as agreementType ,		
+			REMIND_DAY as remindDay ,		
+			to_char(AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+			AGREEMENT_CODE as agreementCode ,		
+			AGREEMENT_STATE as agreementState ,		
+			EMPLOY_MONEY as employMoney ,		
+			to_char(SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,	
+			PAY_TYPE as payType ,		
+			SERVICE_CODE as serviceCode ,		
+			ONEDAY_WAGES as onedayWages ,		
+			FIRST_SERVICE_MONEY as firstServiceMoney ,		
+			FIRST_MANAGE_MONEY as firstManageMoney ,		
+			PERSON_MANAGE_MONEY as personManageMoney ,
+			SERVICE_ADDRESS as serviceAddress ,		
+			CUSTOMER_MANAGE_MONEY as customerManageMoney ,		
+			CARD_TYPE as cardType ,		
+			CARD_NUM as cardNum ,		
+			MOBILE as mobile ,		
+			PARTY_C as partyC ,		
+			CUSTOMER_ADDRESS as customerAddress ,		
+			PLATFORM_ADDRESS as platformAddress ,		
+			SERVICE_GARAGE as serviceGarage ,		
+			SERVICE_MONEY as serviceMoney ,		
+			CHARGE_TIMES as chargeTimes ,		
+			PAYMENT as payment ,		
+			ADVANCE_PERIOD as advancePeriod ,		
+			OTHER_METHODS as otherMethods ,		
+			OTHER_MATTERS as otherMatters 	,
+			card_type_c as cardTypeC,
+			card_num_c as cardNumC,
+			mobile_c as mobileC,
+			is_collection as isCollection,
+			waiter_address as waiterAddress,
+			remark_zdg as remarkZdg,
+			linkman_name as linkManName,
+			linkman_mobile as linkManMobile,
+			zhifu_remark as zhifuRemark,
+			VALID as valid,
+			to_char(NVL(CONTRACT_DATE,EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate	
+	from  T_ORDER_AGREEMENT
+	where
+		ID =  #{id} and valid = 1
+	</select>
+
+	<!--根据合同ID查询合同信息-->
+	<select id="findContractById" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM T_ORDER_AGREEMENT
+		WHERE ID = #{contractId}
+		AND CHECK_STATUS = 2
+		AND ELEC_OTHER_STATE = 3
+		AND SYSDATE - UPDATE_TIME &lt;= 14
+	</select>
+
+	<!--根据合同ID查询合同编号-->
+	<select id="findAgreementCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT AGREEMENT_CODE FROM T_ORDER_AGREEMENT WHERE ID = #{contractId}
+	</select>
+	
+	<select id="queryLegalRepresentative" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT m.real_name FROM t_order o JOIN t_auth_manager m ON m.id=o.recharge_by WHERE o.valid=1 AND m.valid=1 AND o.id=#{orderId}
+	</select>
+
+	
+	<select id="getDeptId" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT t.dept_id FROM t_auth_manager t  where t.id= #{createBy} and t.valid=1
+	</select>
+	<select id="getOrderCode" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT t.order_code FROM t_order t  where t.id= #{orderId} and t.valid=1
+	</select>
+
+	
+	<select id="selectAgreement" parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+	 SELECT A.MOBILE AS mobile,A.MOBILE_C AS mobileC,A.ID AS id,A.ELEC_CLIENT_STATE AS elecClientState,A.ELEC_SERVE_STATE AS elecServeState,
+	 A.ELEC_OTHER_STATE AS elecOtherState FROM EMERP.T_ORDER_AGREEMENT A WHERE A.AGREEMENT_CODE = #{agreementCode}
+	</select>
+
+	<!--根据ID查询合同对象-->
+	<select id="findOne" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+		ID as id ,
+		ORDER_ID as orderId ,
+		AGREEMENT_TITLE as agreementTitle ,
+		PARTY_A as partyA ,
+		PARTY_B as partyB ,
+		CREATE_BY as createBy ,
+		to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "createTime" ,
+		to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as "updateTime" ,
+		UPDATE_BY as updateBy ,
+		VERSION as version ,
+		PERSON_ID as personId ,
+		to_char(EFFECT_DATE,'yyyy-mm-dd hh24:mi:ss')  as "effectDate" ,
+		to_char(FINISH_DATE,'yyyy-mm-dd hh24:mi:ss')  as "finishDate" ,
+		AGREEMENT_TYPE as agreementType ,
+		REMIND_DAY as remindDay ,
+		to_char(AGREEMENT_PAY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "agreementPayDate" ,
+		AGREEMENT_CODE as agreementCode ,
+		AGREEMENT_STATE as agreementState ,
+		EMPLOY_MONEY as employMoney ,
+		to_char(SALARY_DATE,'yyyy-mm-dd hh24:mi:ss')  as "salaryDate" ,
+		PAY_TYPE as payType ,
+		SERVICE_CODE as serviceCode ,
+		ONEDAY_WAGES as onedayWages ,
+		FIRST_SERVICE_MONEY as firstServiceMoney ,
+		FIRST_MANAGE_MONEY as firstManageMoney ,
+		PERSON_MANAGE_MONEY as personManageMoney ,
+		SERVICE_ADDRESS as serviceAddress ,
+		CUSTOMER_MANAGE_MONEY as customerManageMoney ,
+		CARD_TYPE as cardType ,
+		CARD_NUM as cardNum ,
+		MOBILE as mobile ,
+		PARTY_C as partyC ,
+		CUSTOMER_ADDRESS as customerAddress ,
+		PLATFORM_ADDRESS as platformAddress ,
+		SERVICE_GARAGE as serviceGarage ,
+		SERVICE_MONEY as serviceMoney ,
+		CHARGE_TIMES as chargeTimes ,
+		PAYMENT as payment ,
+		ADVANCE_PERIOD as advancePeriod ,
+		OTHER_METHODS as otherMethods ,
+		OTHER_MATTERS as otherMatters 	,
+		card_type_c as cardTypeC,
+		card_num_c as cardNumC,
+		mobile_c as mobileC,
+		is_collection as isCollection,
+		waiter_address as waiterAddress,
+		remark_zdg as remarkZdg,
+		linkman_name as linkManName,
+		linkman_mobile as linkManMobile,
+		zhifu_remark as zhifuRemark,
+		VALID as valid,
+		to_char(NVL(CONTRACT_DATE,EFFECT_DATE),'yyyy-mm-dd hh24:mi:ss') as contractDate,
+		account_name AS accountName,
+		account_bank AS accountBank,
+		account_num AS accountNum,
+		ACCOUNT_MOBILE as accountMobile
+		FROM  T_ORDER_AGREEMENT
+		WHERE
+		ID =  #{orderId}
+	</select>
+
+	<!--根据订单ID或者合同ID查询合同是否存在-->
+	<select id="findAgreementByOrderIdOrAgreementId" resultType="com.emotte.order.order.model.Agreement">
+		SELECT ID id,AGREEMENT_STATE agreementState FROM T_ORDER_AGREEMENT WHERE AGREEMENT_STATE NOT IN (3,5) AND VALID = 1 AND ${culomnName} = #{id}
+	</select>
+	
+	<!-- 查询合同是否是海金合同 -->
+	<select id="findAgreementByOrderIdGold" resultType="int" parameterType="java.lang.Long">
+		SELECT COUNT(*) FROM T_ORDER_AGREEMENT T WHERE T.IS_COLLECTION=7 AND  T.ADVANCE_PERIOD=5 AND T.ID=#{id}
+	</select>
+
+	<!--根据订单ID查询合同结束时间-->
+	<select id="findEndTimeByOrderId" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+			to_char(a.FINISH_DATE,'yyyy-mm-dd hh24:mi:ss') effectDate
+		FROM T_ORDER_AGREEMENT a
+		INNER JOIN (
+			SELECT MAX(CREATE_TIME) createTime FROM T_ORDER_AGREEMENT WHERE AGREEMENT_STATE != 5 AND ORDER_ID = #{orderId}
+		) b ON a.CREATE_TIME = b.CREATETIME
+		WHERE a.AGREEMENT_STATE != 5 AND a.ORDER_ID = #{orderId}
+	</select>
+
+	<!--根据订单ID查询合同列表-->
+	<select id="findAgreementListByOrderId" parameterType="com.emotte.order.order.model.Agreement" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+			ID id,
+			AGREEMENT_STATE agreementState,
+			ADVANCE_PERIOD advancePeriod
+		FROM T_ORDER_AGREEMENT
+		WHERE 1=1
+		AND VALID = 1
+		AND AGREEMENT_STATE != 5
+		AND ORDER_ID = #{orderId}
+		<if test="agreementCode != null and agreementCode != ''">
+			AND AGREEMENT_CODE != #{agreementCode}
+		</if>
+	</select>
+
+	<!--单次服务订单查询三方协议详情-->
+	<select id="queryAgreementServerOneDetail" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+			a.ID id,
+			a.PARTY_A partyA,
+			a.CARD_NUM cardNum,
+			a.AGREEMENT_CODE agreementCode,
+			a.DING_TALK_AUDIT_CODE dingTalkAuditCode,
+			a.ALL_PAY allPay,
+			TO_CHAR(a.EFFECT_DATE,'YYYY-MM-DD') effectDate,
+			TO_CHAR(a.FINISH_DATE,'YYYY-MM-DD') finishDate,
+			b.URL havePDF,
+			a.CHECK_STATUS checkStatus,
+			a.REASON reason
+		FROM T_ORDER_AGREEMENT a
+		LEFT JOIN T_ORDER_AGREEMENT_FILE b ON a.ID = b.AGREEMENT_ID AND b.VALID = 1
+		WHERE 1=1
+		AND a.VALID = 1
+		AND a.ORDER_ID = #{orderId}
+	</select>
+
+	<!--根据合同ID查询对象信息-->
+	<select id="findAgreementById" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+		SELECT
+			a.ID id,
+			a.PARTY_A partyA,
+			a.CARD_NUM cardNum,
+			a.AGREEMENT_CODE agreementCode,
+			a.DING_TALK_AUDIT_CODE dingTalkAuditCode,
+			a.ALL_PAY allPay,
+			TO_CHAR(a.EFFECT_DATE,'YYYY-MM-DD') effectDate,
+			TO_CHAR(a.FINISH_DATE,'YYYY-MM-DD') finishDate,
+			a.ORDER_ID orderId,
+			a.REASON reason
+		FROM T_ORDER_AGREEMENT a
+		WHERE 1=1
+		AND a.VALID = 1
+		AND a.ID = #{id}
+	</select>
+	
+	<select id="queryIsPeContract" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Agreement">
+				SELECT nvl(t.is_pecontract, 2) AS isPeContract,
+			       t.pecontract_basic AS peContractBasic,
+			       t.pecontract_performance AS peContractPerformance
+			  FROM t_order_agreement t
+			 WHERE t.valid = 1
+			   AND t.id = #{id}
+	</select>
+	
+	<select id="loadOrder" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Order">
+					SELECT od.id AS id,
+				       od.order_code AS orderCode,
+				       od.parent_id AS parentId,
+				       od.user_id AS userId,
+				       od.user_name AS userName,
+				       od.user_province AS userProvince,
+				       od.user_city AS userCity,
+				       od.user_area AS userArea,
+				       od.user_address AS userAddress,
+				       od.user_mobile AS userMobile,
+				       od.user_email AS userEmail,
+				       od.receiver_name AS receiverName,
+				       od.receiver_province AS receiverProvince,
+				       od.receiver_city AS receiverCity,
+				       od.receiver_area AS receiverArea,
+				       od.receiver_zipcode AS receiverZipcode,
+				       od.receiver_address AS receiverAddress,
+				       od.longitude AS longitude,
+				       od.latitude AS latitude,
+				       od.receiver_mobile AS receiverMobile,
+				       od.receiver_email AS receiverEmail,
+				       od.order_type AS orderType,
+				       od.order_channel AS orderChannel,
+				       od.order_source_id AS orderSourceId,
+				       od.order_status AS orderStatus,
+				       od.auth_manager_id AS authManagerId,
+				       od.create_by AS createBy,
+				       to_char(od.create_time, 'yyyy-MM-dd hh24:mi:ss') AS createTime,
+				       od.update_by AS updateBy,
+				       to_char(od.update_time, 'yyyy-MM-dd hh24:mi:ss') AS updateTime,
+				       od.version AS version,
+				       od.critical AS critical,
+				       od.remark AS remark,
+				       od.sendtime_type AS sendtimeType,
+				       od.is_invoice AS isInvoice,
+				       od.vendor_id AS vendorId,
+				       od.invoice_type AS invoiceType,
+				       od.invoice_memo AS invoiceMemo,
+				       od.pay_status AS payStatus,
+				       decode(od.pay_status,
+				              '20110001',
+				              '未支付',
+				              '20110002',
+				              '部分支付',
+				              '20110003',
+				              '支付完成',
+				              '20130003',
+				              '确认有效',
+				              '20130002',
+				              '确认无效',
+				              '20130008',
+				              '退款成功',
+				              '未知') AS payText,
+				       od.deliver_pay AS deliverPay,
+				       od.ip AS ip,
+				       od.price_type AS "priceType",
+				       od.invite_code AS inviteCode,
+				       od.user_level AS userLevel,
+				       od.order_groupid AS orderGroupid,
+				       od.three_order_code AS threeOrderCode,
+				       od.user_sex AS userSex,
+				       od.user_birth AS userBirth,
+				       od.cate_type AS cateType,
+				       od.total_pay AS totalPay,
+				       od.recharge_by AS rechargeBy,
+				       od.recharge_dept AS rechargeDept,
+				       od.city
+				  FROM t_order od
+				  WHERE od.id=#{id}
+	</select>
+	
+	<select id="queryAgreementPerformance" parameterType="String" resultType="com.emotte.order.order.model.AgreementPerformance">
+			SELECT  t.id AS id,
+					t.city_code AS cityCode,
+					to_char(t.start_time,'yyyy-mm-dd hh24:mi') AS startTime,
+					to_char(t.end_time,'yyyy-mm-dd hh24:mi') AS endTime,
+					t.pe_contract_basic AS peContractBasic,
+					t.pe_contract_performance AS peContractPerformance
+				FROM t_order_agreement_performance t
+				WHERE t.valid = 1
+				AND SYSDATE &gt;= t.start_time
+				AND SYSDATE &lt;= t.end_time
+				AND t.city_code = SUBSTR(#{city},1,9)
+	</select>
+</mapper>

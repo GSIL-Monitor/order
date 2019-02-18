@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <ol class="page-header breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">内容运营管理</a></li>
+            <li class="active">资讯管理</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <!-- /.col-lg-12 -->
+    <div class="col-lg-12">
+        <button onclick="openModule('news-add.html')" type="button" class="sort-btn">新增</button>
+        <div class="panel panel-default panel-body">
+            <!-- Table列表 -->
+            <table class="table focus-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox"/>ID</th>
+                    <th>排序</th>
+                    <th>资讯名称</th>
+                    <th>显示首页</th>
+                    <th>
+                        <label>
+                            <select>
+                                <option>头条</option>
+                                <option value="全部分类">全部分类</option>
+                                <option>常见问题</option>
+                            </select>
+                        </label>
+                    </th>
+                    <th>显示城市</th>
+                    <th>显示终端</th>
+                    <th>点击次数</th>
+                    <th>收藏数量</th>
+                    <th>时间</th>
+                    <th>管理</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="checkbox"/>1</td>
+                    <td>1</td>
+                    <td>管家帮年货大慧购</td>
+                    <td>√</td>
+                    <td>公告</td>
+                    <td>
+                        <select>
+                            <option value="北京">北京</option>
+                        </select>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>50</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        添加时间：7-8&nbsp;15:23<br/>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>编辑</td>
+                            </tr>
+                            <tr>
+                                <td>下线</td>
+                            </tr>
+                            <tr>
+                                <td>彻底删除</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"/>1</td>
+                    <td>1</td>
+                    <td>管家帮年货大慧购</td>
+                    <td>√</td>
+                    <td>公告</td>
+                    <td>
+                        <select>
+                            <option value="北京">北京</option>
+                        </select>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                            <tr>
+                                <td>网站&nbsp;√</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>50</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        添加时间：7-8&nbsp;15:23<br/>
+                    </td>
+                    <td class="focus-manage">
+                        <table>
+                            <tr>
+                                <td>编辑</td>
+                            </tr>
+                            <tr>
+                                <td>下线</td>
+                            </tr>
+                            <tr>
+                                <td>彻底删除</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr></tr>
+                </tbody>
+            </table>
+            <div class="focus-batch">
+                <label>
+                    <select>
+                        <option value="批量操作">批量操作</option>
+                        <option>删除</option>
+                        <option>下线</option>
+                        <option>设置上线</option>
+                    </select>
+                </label>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+

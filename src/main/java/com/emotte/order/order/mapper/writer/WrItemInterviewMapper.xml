@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrItemInterviewMapper">
+
+	<insert id="insertItemInterview" parameterType="com.emotte.order.order.model.ItemInterview">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as ID from DUAL  
+   </selectKey> 
+		insert into t_order_item_interview ( 
+			id ,			
+			order_item_id ,	
+			order_id,		
+			server_type ,			
+			person_id ,			
+			star_time ,			
+			end_time ,			
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version ,			
+			interview_type ,			
+			remarks ,			
+			interview_time ,
+			valid ,
+			MATCH_METHOD			
+		) values (
+			#{id} ,				
+			#{orderItemId} ,
+			#{orderId} ,				
+			#{serverType} ,				
+			#{personId} ,				
+			to_date(#{starTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			#{createBy} ,				
+			sysdate ,				
+			#{updateBy} ,				
+			sysdate ,				
+			0 ,				
+			#{interviewType} ,				
+			#{remarks} ,	
+			to_date(#{interviewTime},'yyyy-mm-dd hh24:mi:ss') ,			
+			1 	,
+			NVL(#{matchMethod},1)			
+		)
+	</insert>
+
+	<update id="updateItemInterview" parameterType="com.emotte.order.order.model.ItemInterview">
+		update t_order_item_interview	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderItemId != null and orderItemId != ''"> 
+				,order_item_id = #{orderItemId} 
+			</if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>		
+	 <if test="serverType != null and serverType != ''"> 
+				,server_type = #{serverType} 
+			</if>
+			
+	 <if test="personId != null and personId != ''"> 
+				,person_id = #{personId} 
+			</if>
+			
+	 <if test="starTime != null and starTime != ''"> 
+				,star_time = to_date( #{starTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="endTime != null and endTime != ''"> 
+				,end_time = to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = sysdate 
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version} 
+			</if>
+			
+	 <if test="interviewType != null and interviewType != ''"> 
+				,interview_type = #{interviewType} 
+			</if>		
+	 <if test="remarks != null and remarks != ''"> 
+				,remarks = #{remarks} 
+			</if>
+			
+	 <if test="interviewTime != null and interviewTime != ''"> 
+				,interview_time = to_date( #{interviewTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>		
+       </set>
+		where
+			id=#{id}
+	</update>
+	
+	<update id="updateItemInterviewByOrderId" parameterType="com.emotte.order.order.model.ItemInterview">
+		update t_order_item_interview	
+		 <set>  
+	 <if test="orderId != null and orderId != ''"> 
+				order_id = #{orderId} 
+			</if>	
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+				,update_time = sysdate
+			</if>
+	 <if test="interviewType != null and interviewType ==2 "> 
+				,interview_type = #{interviewType} 
+			</if>
+	<if test="interviewType != null and interviewType ==7 "> 
+				,interview_type = #{interviewType} 
+			</if>
+	<if test="interviewType != null and interviewType ==10 "> 
+				,interview_type = #{interviewType} 
+			</if>
+	<if test="starTime != null and starTime != ''"> 
+				,star_time = to_date( #{starTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	 <if test="endTime != null and endTime != ''"> 
+				,end_time = to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+       </set>
+		<where>
+			order_id=#{orderId} 
+	<if test="type != null and type == 7"> 
+			and person_id = #{personId} 
+			</if>
+	<if test="type != null and type == 2"> 
+			and interview_type = 1 
+			</if>
+	<if test="type != null and type == 6"> 
+			and interview_type in(1,2,4)
+			</if>
+	<if test="type != null and type == 12"> 
+			and interview_type in(4)
+			</if>
+			and valid=1
+		</where>
+	</update>
+	<update id="updatePersonStartOneByOrderId" parameterType="com.emotte.order.order.model.ItemInterview">
+		update t_order_item_interview	
+		 <set>  
+	 <if test="orderId != null and orderId != ''"> 
+				order_id = #{orderId} 
+			</if>	
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+				,update_time = sysdate
+			</if>
+	 <if test="interviewType != null and interviewType ==8 "> 
+				,interview_type = #{interviewType} 
+			</if>
+	<if test="interviewType != null and interviewType ==9 "> 
+				,interview_type = #{interviewType} 
+			</if>
+	<if test="starTime != null and starTime != ''"> 
+				,star_time = to_date( #{starTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	 <if test="endTime != null and endTime != ''"> 
+				,end_time = to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+       </set>
+		<where>
+			order_id=#{orderId} 
+	<if test="interviewType != null and interviewType == 8"> 
+			and interview_type = 4
+			</if>
+	<if test="interviewType != null and interviewType == 9"> 
+			and interview_type =8
+			</if>
+			and valid=1
+		</where>
+	</update>
+	<insert id="insertOrderLineRecord" parameterType="com.emotte.order.order.model.ServerLinedRecord">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+         SELECT getseq() as ID from DUAL  
+        </selectKey>
+		insert into t_order_server_lined_record ( 
+			ID ,		
+			ORDER_ID ,		
+			START_TIME ,		
+			END_TIME ,		
+			CREATE_BY ,		
+			CREATE_TIME ,		
+			LOG 		
+		) values (
+			#{id} ,		
+			#{orderId} ,
+			to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') ,
+			to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ,		
+			#{createBy} ,		
+			to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') ,			
+			#{log} 		
+		)
+	</insert>
+</mapper>

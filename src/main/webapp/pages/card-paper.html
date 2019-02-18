@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <ol class="page-header breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">卡券管理系统</a></li>
+            <li class="active">券管理</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <!-- /.col-lg-8 -->
+    <div class="col-lg-11">
+        <div class="sort-head">
+            <p>筛选条件</p>
+            <div class="info">
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-xs-4">
+                            <label>
+                                <p>批次号：</p>
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label>
+                                <p>卷标题：</p>
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label>
+                                <p>卷号码：</p>
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-4">
+                            <label>
+                                <p>使用地区范围：</p>
+                                <select class="form-control">
+                                    <option value="全部">全部</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-8">
+                            <label>
+                                <p>使用服务范围：</p>
+                                <select class="form-control">
+                                    <option value="全场通用">全场通用</option>
+                                </select>
+                                <select class="form-control">
+                                    <option value="全部">全部</option>
+                                </select>
+                                <select class="form-control">
+                                    <option value="全部">全部</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-11">
+                            <label>
+                                <p>时间：</p>
+                                <select class="form-control">
+                                    <option value="">生成时间</option>
+                                    <option value="">有效时间</option>
+                                </select>
+                                <input id="d4311" class="Wdate form-control" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                                <p>结束时间：</p>
+                                <input id="d4312" class="Wdate form-control" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <button type="button" class="btn btn-default fr mr20">查询</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button onclick="openModule('paper-add.html')" type="button" class="serve-add-btn sort-btn" id="serve_add_btn">+生成新卷</button>
+        <div class="panel panel-default">
+            <!-- Table列表 -->
+            <table class="table focus-table">
+                <thead>
+                <tr>
+                    <th>券类型</th>
+                    <th>券类别</th>
+                    <th colspan="2">使用规则</th>
+                    <th>生成数量/已使用</th>
+                    <th>卷号范围</th>
+                    <th>生成人员</th>
+                    <th>状态</th>
+                    <th>管理</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="paper-remark">
+                        <td colspan="9" class="fcb text-l">
+                            <span>批次号：dj1001</span>
+                            <span>卷标题：20元面额带金劵</span>
+                            <span>生成时间：2016-03-03&nbsp;15:20</span>
+                            <a href="#" class="blue">查看备注</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>代金券</td>
+                        <td>实物券</td>
+                        <td class="paper-table-use row" colspan="2">
+                       <div class="use-price fr blue">&yen;20</div>
+                       <div class="use-scope">
+                           <div>品类范围：月嫂</div>
+                           <div>品类范围：月嫂</div>
+                           <div>品类范围：月嫂</div>
+                           <div>品类范围：月嫂</div>
+                       </div>
+                        </td>
+                        <td><span class="blue font20" onclick="openModule('card-paper-number.html')">100</span>/50</td>
+                        <td>12</td>
+                        <td>
+                            <div>申请部门：管家部</div>
+                            <div>申请人员：陈真</div>
+                            <div>操作员号：ihdofyof</div>
+                        </td>
+                        <td>1次</td>
+                        <td><a href="#" onclick="openModule('card-paper-download.html')">下载</a></td>
+                    </tr>
+                    <tr class="paper-remark">
+                        <td colspan="9" class="fcb text-l">
+                            <span>批次号：dj1001</span>
+                            <span>卷标题：20元面额带金劵</span>
+                            <span>生成时间：2016-03-03&nbsp;15:20</span>
+                            <a href="#" class="blue">查看备注</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>代金券</td>
+                        <td>实物券</td>
+                        <td class="paper-table-use" colspan="2">
+                            <div class="use-price fr blue">&yen;20</div>
+                            <div class="use-scope">
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                            </div>
+                        </td>
+                        <td><span class="blue font20">100</span>/50</td>
+                        <td>12</td>
+                        <td>
+                            <div>申请部门：管家部</div>
+                            <div>申请人员：陈真</div>
+                            <div>操作员号：ihdofyof</div>
+                        </td>
+                        <td>1次</td>
+                        <td><a href="#">下载</a></td>
+                    </tr>
+                    <tr class="paper-remark">
+                        <td colspan="9" class="fcb text-l">
+                            <span>批次号：dj1001</span>
+                            <span>卷标题：20元面额带金劵</span>
+                            <span>生成时间：2016-03-03&nbsp;15:20</span>
+                            <a href="#" class="blue">查看备注</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>代金券</td>
+                        <td>实物券</td>
+                        <td class="paper-table-use" colspan="2">
+                            <div class="use-price fr blue">&yen;20</div>
+                            <div class="use-scope">
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                            </div>
+                        </td>
+                        <td><span class="blue font20">100</span>/50</td>
+                        <td>12</td>
+                        <td>
+                            <div>申请部门：管家部</div>
+                            <div>申请人员：陈真</div>
+                            <div>操作员号：ihdofyof</div>
+                        </td>
+                        <td>1次</td>
+                        <td><a href="#">下载</a></td>
+                    </tr>
+                    <tr class="paper-remark">
+                        <td colspan="9" class="fcb text-l">
+                            <span>批次号：dj1001</span>
+                            <span>卷标题：20元面额带金劵</span>
+                            <span>生成时间：2016-03-03&nbsp;15:20</span>
+                            <a href="#" class="blue">查看备注</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>代金券</td>
+                        <td>实物券</td>
+                        <td class="paper-table-use" colspan="2">
+                            <div class="use-price fr blue">&yen;20</div>
+                            <div class="use-scope">
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                                <div>品类范围：月嫂</div>
+                            </div>
+                        </td>
+                        <td><span class="blue font20">100</span>/50</td>
+                        <td>12</td>
+                        <td>
+                            <div>申请部门：管家部</div>
+                            <div>申请人员：陈真</div>
+                            <div>操作员号：ihdofyof</div>
+                        </td>
+                        <td>1次</td>
+                        <td><a href="#">下载</a></td>
+                    </tr>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+</body>
+
+</html>
+

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderAfterSalesMapper">
+	 <insert id="insertOrderAfterSales" parameterType="com.emotte.order.order.model.OrderAfterSales" >
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq()	FROM dual
+		</selectKey>
+		insert into t_order_after_sales(
+			id,
+			order_id,
+			order_type,
+			create_by,
+			update_by,
+			update_time,
+			version,
+			after_sales_kind,
+			cust_mobile,
+			cust_name,
+			audit_flag,
+			reason,
+			after_sales_imgs,
+			refund_total,
+			bank_card,
+			bank_name,
+			bank_user_name,
+			bank_support_id,
+			bank_city_code,
+			bank_main_name,
+			remark,
+			account_pay_id,
+			create_time,
+			server_time,
+			approve_by,
+			approve_dept,
+			create_dept,
+			refund_membership_fee,
+			refund_salary_fee,
+			is_at,
+			vph_account_id,
+			vph_fee,
+			vph_cancle_status,
+			vph_back_status,
+			move_to_order_id,
+			move_order_bus_flag,
+			is_stop,
+			refund_object,
+			reason_flag,
+			valid,
+			FEE_ACCOUNT_ID,
+		 	PAYFEE_ID,
+		 	SALARY_ID,
+		 	AGREEMENT_CODE,
+		 	VPH_ORDER_ID,
+		 	BILL_BACK_ID,
+		 	PERSONNEL_STATUS,
+		 	IS_APP
+		)values(
+			#{id},
+			#{orderId},
+			#{orderType},
+			#{createBy},
+			#{updateBy},
+			to_date(#{updateTime},'YYYY-MM-DD HH24:MI:SS'),  
+			1,
+			#{afterSalesKind},
+			#{custMobile},
+			#{custName},
+			#{auditFlag},
+			#{reason},
+			#{afterSalesImgs},
+			#{refundTotal} ,
+			#{bankCard} ,
+			#{bankName} ,
+			#{bankUserName} ,
+			#{bankSupportId} ,
+			#{bankCityCode} ,
+			#{bankMainName} ,
+			#{remark} ,
+			#{accountPayId} ,
+			sysdate	,	
+			sysdate	,
+			#{approveBy} ,
+			#{approveDept} ,
+			#{createDept} ,
+			#{refundMembershipFee} ,
+			#{refundSalaryFee} ,
+			#{isAT} ,
+			#{vphAccountId} ,
+			#{vphFee} ,
+			#{vphCancleStatus} ,
+			#{vphBackStatus} ,
+			#{moveToOrderId} ,
+			1,
+			#{isStop} ,
+			#{refundObject} ,
+			#{reasonFlag},
+			1,
+			#{feeAcountId}	,
+		 	#{payFeeId},
+		 	#{salaryId},
+		 	#{agreementCode},
+		 	#{vphOrderId},
+		 	#{billBackId},
+		 	#{personnelStatus},
+		 	#{isApp}
+		)
+	</insert>
+	 <update id="updateOrderAfterSales" parameterType="com.emotte.order.order.model.OrderAfterSales" >
+		update t_order_after_sales t 
+		<set>
+			<if test="id != null and id != ''">
+				t.id = #{id},
+			</if>
+			<if test="orderId != null and orderId != ''">
+				t.order_id = #{orderId},
+			</if>
+			<if test="orderType != null and orderType != ''">
+				t.order_type = #{orderType},
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				t.update_by = #{updateBy},
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				t.update_time = to_date(#{updateTime},'YYYY-MM-DD HH24:MI:SS'),
+			</if>
+			<if test="afterSalesKind != null and afterSalesKind != ''">
+				t.after_sales_kind = #{afterSalesKind},
+			</if>
+			<if test="custMobile != null and custMobile != ''">
+				t.cust_mobile = #{custMobile},
+			</if>
+			<if test="custName != null and custName != ''">
+				t.cust_name = #{custName},
+			</if>
+			<if test="auditFlag != null and auditFlag != ''">
+				t.audit_flag = #{auditFlag},
+			</if>
+			<if test="reason != null and reason != ''">
+				t.reason = #{reason},
+			</if>
+			<if test="afterSalesImgs != null and afterSalesImgs != ''">
+				t.after_sales_imgs = #{afterSalesImgs},
+			</if>
+			<if test="refundTotal != null and refundTotal != '' or refundTotal == 0 or refundTotal == 0.00">
+				t.refund_total = #{refundTotal},
+			</if>
+			<if test="bankCard != null and bankCard != ''">
+				 t.bank_card = #{bankCard} ,
+			</if>
+			<if test="bankName != null and bankName != ''">
+				t.bank_name = #{bankName} ,
+			</if>
+			<if test="bankUserName != null and bankUserName != ''">
+				t.bank_user_name = #{bankUserName} ,
+			</if>
+			<if test="bankSupportId != null and bankSupportId != ''">
+				t.bank_support_id = #{bankSupportId} ,
+			</if>
+			<if test="bankCityCode != null and bankCityCode != ''">
+				t.bank_city_code = #{bankCityCode} ,
+			</if>
+			<if test="bankMainName != null and bankMainName != ''">
+				t.bank_main_name = #{bankMainName} ,
+			</if>
+			<if test="remark != null and remark != ''">
+				t.remark = #{remark} ,
+			</if>
+			<if test="serverTime != null and serverTime != ''">
+				t.server_time = to_date(#{serverTime},'YYYY-MM-DD HH24:MI:SS'),
+			</if>
+			<if test="approveBy != null and approveBy != ''">
+				t.approve_by = #{approveBy} ,
+			</if>
+			<if test="approveDept != null and approveDept != ''">
+				t.approve_dept = #{approveDept} ,
+			</if>
+			<if test="createDept != null and createDept != ''">
+				t.create_dept = #{createDept} ,
+			</if>
+			<if test="refundMembershipFee != null and refundMembershipFee != '' or refundMembershipFee == 0 or refundMembershipFee == 0.00">
+				t.refund_membership_fee = #{refundMembershipFee} ,
+			</if>
+			<if test="refundSalaryFee != null and refundSalaryFee != '' or refundSalaryFee == 0 or refundSalaryFee == 0.00 ">
+				t.refund_salary_fee = #{refundSalaryFee} ,
+			</if>
+			<if test="vphAccountId != null and vphAccountId != ''">
+				t.vph_account_id = #{vphAccountId} ,
+			</if>
+			<if test="vphFee != null and vphFee != ''">
+				t.vph_fee = #{vphFee} ,
+			</if>
+			<if test="vphCancleStatus != null and vphCancleStatus != ''">
+				t.vph_cancle_status = #{vphCancleStatus} ,
+			</if>
+			<if test="vphBackStatus != null and vphBackStatus != ''">
+				t.vph_back_status = #{vphBackStatus} ,
+			</if>
+			<if test="moveToOrderId != null and moveToOrderId != ''">
+				t.move_to_order_id = #{moveToOrderId} ,
+			</if>
+			<if test="moveOrderBusFlag != null and moveOrderBusFlag != ''">
+				t.move_order_bus_flag = #{moveOrderBusFlag} ,
+			</if>
+			<if test="refundObject != null and refundObject != ''">
+				t.refund_object = #{refundObject} ,
+			</if>
+			<if test="isStop != null and isStop != ''">
+				t.is_stop = #{isStop} ,
+			</if>
+			<if test="reasonFlag != null and reasonFlag != ''">
+				t.reason_flag = #{reasonFlag} ,
+			</if>
+			<if test="valid != null and valid != ''">
+				t.valid = #{valid}	,
+			</if>
+			<if test="accountPayId != null and accountPayId != ''">
+				t.account_pay_id = #{accountPayId}	,
+			</if>
+			t.VERSION = t.VERSION + 1
+		</set>
+		where t.id = #{id}  
+	</update>
+	
+	
+	
+	<update id="updateOrderRemark" parameterType="com.emotte.order.order.model.Order">
+		update t_order	
+		 <set>  
+		 <if test="id != null and id != '' ">  
+				id = #{id} 
+	     </if>
+		 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+		 </if>			
+		 <if test="remark != null and remark != ''"> 
+				,remark = remark || '|' || #{remark} 
+		 </if>
+				,update_time = sysdate
+				,version = version +1
+       </set>
+				
+		where id=#{id}
+				
+	</update>
+
+	<update id="changeAfterSalesValid">
+		UPDATE T_ORDER_AFTER_SALES SET VALID = #{valid} WHERE ID = #{id}
+	</update>
+
+	<!--根据回访结果修改售后单审核状态-->
+	<update id="updateAuditFlagByCallBackStatus">
+		UPDATE T_ORDER_AFTER_SALES SET AUDIT_FLAG = #{auditFlag},UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ID = #{afterSalesId}
+	</update>
+	
+	<update id="updateOrderTotalPay">
+	UPDATE t_order o SET o.total_pay=nvl(o.total_pay,0)+nvl(#{difference},0),o.update_by=#{updateBy},o.update_time=SYSDATE,
+						 o.log=o.log||to_char(SYSDATE,'yyyymmddhh24mi')||'售后更新订单余额,原余额'||nvl(o.total_pay,0)||',增减量'||nvl(#{difference},0)||';'
+				     WHERE o.valid=1 AND o.id=#{orderId}
+	</update>
+</mapper>

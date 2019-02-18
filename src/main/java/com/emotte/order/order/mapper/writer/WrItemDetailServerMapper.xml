@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrItemDetailServerMapper">
+
+	<insert id="insertItemDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as ID from DUAL  
+   </selectKey> 
+		insert into t_order_item_detail_server ( 
+			id ,			
+			item_id ,			
+			order_id ,			
+			education ,			
+			person_level ,				
+			remark ,			
+			min_age ,			
+			max_age ,
+			origin ,			
+			address ,
+			start_time ,			
+			end_time ,
+			interview_time ,
+			valid,	
+			home_forests,
+			familys ,
+			person_number,
+			interview_address ,
+			server_type	,
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version ,
+			sex	,
+			birth_time,
+			service_hours,
+			time_slot,
+			forestsServer,
+			IS_INSURE,
+			INSURE_AMOUNT
+		) values (
+			#{id} ,				
+			#{itemId} ,				
+			#{orderId} ,		
+			#{education} ,				
+			#{personLevel} ,						
+			#{remark} ,				
+			#{minAge} ,				
+			#{maxAge} ,
+			#{origin} ,				
+			#{address} ,
+			to_date( #{startTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss') ,	
+			to_date( #{interviewTime},'yyyy-mm-dd hh24:mi:ss') ,				
+			#{valid},
+			#{homeForests},
+			#{familys} ,
+			#{personNumber} ,
+			#{interviewAddress} ,
+			#{serverType} ,
+			#{createBy} ,			
+			sysdate ,			
+			#{updateBy} ,			
+			sysdate ,			
+			#{version} ,
+			#{sex}	,
+			to_date( #{birthDate},'yyyy-mm-dd hh24:mi:ss') ,
+			#{serviceHours},
+	        #{timeSlot},
+	        #{forestsServer},
+			#{insure},
+			#{insureAmount}
+		)
+	</insert>
+
+	<update id="updateItemDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer">
+		update t_order_item_detail_server	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="itemId != null and itemId != ''"> 
+				,item_id = #{itemId} 
+			</if>
+			
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+
+	<if test="education != null and education != ''"> 
+				,education = #{education} 
+			</if>
+	<if test="personLevel != null and personLevel != ''"> 
+				,person_level = #{personLevel} 
+			</if>
+	<if test="remark != null">
+				,remark = #{remark} 
+			</if>
+	<if test="minAge != null and minAge != ''"> 
+				,min_age = #{minAge} 
+			</if>
+	<if test="maxAge != null and maxAge != ''"> 
+				,max_age = #{maxAge} 
+			</if>
+	<if test="origin != null and origin != ''"> 
+				,origin = #{origin} 
+			</if>
+	<if test="address != null and address != ''"> 
+				,address = #{address} 
+			</if>
+	<if test="sex != null and sex != ''"> 
+				,sex = #{sex} 
+			</if>
+	<if test="startTime != null and startTime != ''"> 
+				,start_time = to_date( #{startTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="endTime != null and endTime != ''"> 
+				,end_time = to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="interviewTime != null and interviewTime != ''"> 
+				,interview_time = to_date( #{interviewTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+	<if test="homeForests != null and homeForests != ''"> 
+				,home_forests = #{homeForests} 
+			</if>
+	<if test="familys != null and familys != ''"> 
+				,familys = #{familys} 
+			</if>
+	<if test="personNumber != null and personNumber != ''"> 
+				,person_number = #{personNumber} 
+			</if>
+	<if test="interviewAddress != null and interviewAddress != ''"> 
+				,interview_address = #{interviewAddress} 
+			</if>
+	<if test="serverType != null and serverType != ''"> 
+				,server_type = #{serverType} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+				,update_time = sysdate
+	 <if test="version != null and version != ''"> 
+				,version = version+1 
+			</if>
+	<if test="serviceHours != null and serviceHours != ''"> 
+				,service_hours = #{serviceHours} 
+			</if>
+	<if test="timeSlot != null and timeSlot != ''"> 
+				,time_slot = #{timeSlot} 
+			</if>				
+	<if test="forestsServer != null and forestsServer != ''"> 
+				,FORESTSSERVER = #{forestsServer}
+			</if>
+	 <if test="insure != null and insure != ''">
+		 ,IS_INSURE = #{insure}
+	 </if>
+			 <if test="insureAmount != null">
+				 ,INSURE_AMOUNT = #{insureAmount}
+			 </if>
+       </set>
+		where
+			id=#{id} 
+				
+	</update>
+	
+	<update id="updateItemDetailServerLine" parameterType="com.emotte.order.order.model.ItemDetailServer">
+		update t_order_item_detail_server	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="itemId != null and itemId != ''"> 
+				,item_id = #{itemId} 
+			</if>
+			
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+
+	<if test="education != null and education != ''"> 
+				,education = #{education} 
+			</if>
+	<if test="personLevel != null and personLevel != ''"> 
+				,person_level = #{personLevel} 
+			</if>
+	<if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+	<if test="minAge != null and minAge != ''"> 
+				,min_age = #{minAge} 
+			</if>
+	<if test="maxAge != null and maxAge != ''"> 
+				,max_age = #{maxAge} 
+			</if>
+	<if test="origin != null and origin != ''"> 
+				,origin = #{origin} 
+			</if>
+	<if test="address != null and address != ''"> 
+				,address = #{address} 
+			</if>
+	<if test="startTime != null and startTime != ''"> 
+				,start_time = to_date( #{startTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="endTime != null and endTime != ''"> 
+				,end_time = to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="interviewTime != null and interviewTime != ''"> 
+				,interview_time = to_date( #{interviewTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+	<if test="homeForests != null and homeForests != ''"> 
+				,home_forests = #{homeForests} 
+			</if>
+	<if test="familys != null and familys != ''"> 
+				,familys = #{familys} 
+			</if>
+	<if test="personNumber != null and personNumber != ''"> 
+				,person_number = #{personNumber} 
+			</if>
+	<if test="interviewAddress != null and interviewAddress != ''"> 
+				,interview_address = #{interviewAddress} 
+			</if>
+	<if test="serverType != null and serverType != ''"> 
+				,server_type = #{serverType} 
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+				,update_time = sysdate
+	 <if test="version != null and version != ''"> 
+				,version = version+1 
+			</if>
+	<if test="serviceHours != null and serviceHours != ''"> 
+				,service_hours = #{serviceHours} 
+			</if>
+	<if test="timeSlot != null and timeSlot != ''"> 
+				,time_slot = #{timeSlot} 
+			</if>				
+	<if test="forestsServer != null and forestsServer != ''"> 
+				,FORESTSSERVER = #{forestsServer}
+			</if>					
+       </set>
+		where
+			order_id = #{orderId} 
+	</update>
+	
+	
+	
+	
+	<!-- 排期功能 -->
+	<insert id="insertOrderServerLined" parameterType="com.emotte.order.order.model.ItemDetailServer">
+		insert into t_order_server_lined ( 
+			id ,				
+			order_id ,
+			start_time,
+			end_time,
+			lined_type,
+			weeks,
+			days,		
+			hours,			
+			remark ,		
+			create_by ,			
+			create_time ,			
+			update_by ,			
+			update_time ,			
+			version	
+		) values (
+			getseq() ,		
+			#{orderId} ,
+			to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss'),	
+			to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss'),	
+			#{linedType},		
+			#{weeks} ,				
+			#{days} ,	
+			#{hours},
+			1,
+			#{createBy} ,			
+			sysdate ,			
+			#{updateBy} ,			
+			sysdate ,			
+			#{version}
+		)
+	</insert>
+	<update id="updateOrderServerLined" parameterType="com.emotte.order.order.model.ItemDetailServer">
+		update t_order_server_lined	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+	 <if test="startTime != null and startTime != ''"> 
+				,start_time = to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+	 <if test="endTime != null and endTime != ''"> 
+				,end_time = to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+	<if test="linedType != null and linedType != ''"> 
+				,lined_type = #{linedType} 
+			</if>
+	<if test="weeks != null and weeks != ''"> 
+				,weeks = #{weeks} 
+			</if>
+	<if test="days != null and days != ''"> 
+				,days = #{days} 
+			</if>
+	<if test="hours != null and hours != ''"> 
+				,hours = #{hours}
+			</if>
+	<if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = sysdate
+			</if>
+			,version = version + 1 	
+       </set>
+		where
+			id=#{id} 
+	</update>
+	<update id="updateOrderServerLinedNew"  parameterType="com.emotte.order.order.model.ItemDetailServer">
+		update t_order_server_lined	
+		 <set>  
+				remark = #{valid} 
+       </set>
+		where
+			order_id=#{orderId} 
+	</update>
+	<update id="insertUpdateOrderDetailServer" parameterType="com.emotte.order.order.model.ItemDetailServer">
+		update t_order_item_detail_server	
+		 <set>
+		 	<if test="orderId != null and orderId != ''"> 
+				order_id = #{orderId} 
+			</if>  
+			<if test="startTime != null and startTime != ''"> 
+				,start_time = to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+	 		<if test="endTime != null and endTime != ''"> 
+				,end_time = to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+       </set>
+		where
+			order_id=#{orderId} 
+	</update>
+	
+	<!--删除订单排期-->
+	<delete id="deleteSchedule" parameterType="Long">
+		delete from t_order_server_lined where order_id=#{orId}
+	</delete>
+</mapper>

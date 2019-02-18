@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrSerialMapper">
+
+	<insert id="insertSerial" parameterType="com.emotte.order.order.model.Serial">
+		insert into t_order_serial ( 
+			id ,			
+			order_id ,			
+			order_id_front ,			
+			order_id_after ,			
+			create_time ,
+			update_time ,
+			version 			
+		) values (
+			#{id} ,				
+			#{orderId} ,				
+			#{orderIdFront} ,				
+			#{orderIdAfter} ,				
+			sysdate ,
+			to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') ,
+			#{version} 				
+		)
+	</insert>
+
+	<update id="updateSerial" parameterType="com.emotte.order.order.model.Serial">
+		update t_order_serial	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="orderIdFront != null and orderIdFront != ''"> 
+				,order_id_front = #{orderIdFront} 
+			</if>
+			
+	 <if test="orderIdAfter != null and orderIdAfter != ''"> 
+				,order_id_after = #{orderIdAfter} 
+			</if>
+			
+	 <if test="createTime != null and createTime != ''"> 
+				,create_time = #{createTime:DATE} 
+			</if>
+	<if test="updateTime != null and updateTime != ''"> 
+				,update_time = #{updateTime:DATE} 
+			</if>
+			
+	 <if test="version != null and version != ''"> 
+				,version = #{version}+1 
+			</if>
+			
+       </set>
+		where
+			id=#{id}  and VERSION = #{version} 
+				
+	</update>
+	<update id="updateSerialVersion" parameterType="com.emotte.order.order.model.Serial">
+		update t_order_serial	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id}
+	         </if>
+			<if test="updateTime != null and updateTime != ''"> 
+				,update_time = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="version != null and version != ''"> 
+				,version = #{version}
+			</if>
+       </set>
+		where
+			id=#{id} and VERSION = 0 
+	</update>
+	<insert id="insertSerialList" parameterType="java.util.List"> 
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id" >
+       		SELECT emerp.t_order_serial_sequence.nextval as ID from DUAL
+		</selectKey>
+	    insert into emerp.t_order_serial ( id, order_id, order_id_front,  
+	    order_id_after, create_time, update_time, version)  
+	    select emerp.t_order_serial_sequence.nextval, a.* from (
+	    <foreach collection="list" item="serial" index="index"  
+	        separator="union all" >  
+	      select  #{serial.orderId} as orderId, #{serial.orderIdFront} as orderIdFront,  
+	       #{serial.orderIdAfter} as orderIdAfter, sysdate as createTime, sysdate as updateTime,
+	       #{serial.version} as version from dual 
+	    </foreach>  
+	    ) a
+	</insert>
+	<!-- 生成新的随机数时，清除无用数 -->
+	<update id="deleteSerialVersion" parameterType="java.lang.Long">
+		delete from t_order_serial where VERSION = #{version}
+	</update>
+	
+</mapper>

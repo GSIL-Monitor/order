@@ -1,0 +1,1620 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.reader.ReOrderBaseMapper">
+	<select id="queryBaseDictionary" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+			id as "id" ,
+			fid as "pid" ,
+			dict_code as "dkey" ,
+			dict_name as "dvalue"
+		from t_base_dictionary
+		<where>
+			1 = 1
+			and dict_code like '${types}%'
+			and length(dict_code)=#{length}
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+		</where>
+		order by dict_code
+	</select>
+	<select id="queryServerChannel" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "dkey" ,
+		name as "dvalue" ,
+		is_collection as "isCollection",
+		housekeeper_available as "housekeeperAvailable"
+		 from t_custom_channel
+		<where>
+			1 = 1 and valid = 1
+			<if test="id!=null and id!='' ">
+				and id =#{id}
+			</if>
+			<if test="dkey !=null and dkey !='' ">
+				and id =#{dkey}
+			</if>
+
+		</where>
+	</select>
+	<!-- add by weixd 20180627 订单渠道查询New -->
+	<select id="queryServerChannelNew" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "dkey" ,
+		name as "dvalue" ,
+		is_collection as "isCollection",
+		housekeeper_available as "housekeeperAvailable"
+		 from t_custom_channel
+		<where>
+			1 = 1 and valid = 1 and CUR_LEVELS !=20370002
+			<if test="id!=null and id!='' ">
+				and id =#{id}
+			</if>
+			<if test="dkey !=null and dkey !='' ">
+				and id =#{dkey}
+			</if>
+			<if test="housekeeperAvailable !=null and housekeeperAvailable !='' ">
+				and HOUSEKEEPER_AVAILABLE = #{housekeeperAvailable}
+			</if>
+
+		</where>
+		<!-- select
+		t.id as "dkey" ,
+		t.name as "dvalue" ,
+		t.is_collection as "isCollection",
+		t.housekeeper_available as "housekeeperAvailable"
+		 from t_custom_channel t join t_base_dictionary b on b.dict_code=t.cur_levels
+		<where>
+			1 = 1 and t.valid = 1 and b.valid=1 and b.dict_code != '20370002'招工
+			<if test="id!=null and id!='' ">
+				and t.id =#{id}
+			</if>
+			<if test="dkey !=null and dkey !='' ">
+				and t.id =#{dkey}
+			</if>
+
+		</where> -->
+	</select>
+	<select id="querydeptname" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "dkey" ,
+		ao.name as "dvalue"
+		 from t_auth_org   ao
+		<where>
+			 ao.type in('5','7','11')   and ao.valid=1 and   ao.status=1
+		</where>
+	</select>
+	<select id="querydeptnameWithDept" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "dkey" ,
+		ao.name as "dvalue"
+		 from t_auth_org   ao
+		<where>
+			 ao.type in('4','5','7')   and ao.valid=1 and   ao.status=1
+		</where>
+	</select>
+	<select id="queryguanjia" parameterType="com.emotte.order.order.model.Managers"
+		resultType="com.emotte.order.order.model.Managers">
+		select
+		m.id as "id" ,
+		m.user_name as "userName" ,
+		m.real_name as "realName" ,
+		m.phone as "phone",
+		 ao.type2 as "type2"
+		 from t_auth_manager m
+		 left join t_auth_org ao
+		 on ao.id = m.dept_id
+		<where>
+			1=1 and m.valid = 1
+				and m.state = 1
+			<if test="deptId!=null and deptId!='' ">
+				and m.dept_id =#{deptId}
+			</if>
+			<if test="id !=null and id !='' ">
+				and m.id =#{id}
+			</if>
+			<if test="permissionLevel !=null and permissionLevel !='' ">
+				and m.permission_level =#{permissionLevel}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryServerType" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+			id as "id" ,
+			fid as "pid" ,
+			code||'-'||cate_type as "dkey" ,
+			cname as "dvalue"
+		from t_product_category t
+		<where>
+			1 = 1
+			<!--  and t.code like '${types}%'-->
+			and substr(t.code,0,4) in ('1001','1002')
+			and length(t.code)=#{length}
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+		</where>
+		order by code
+	</select>
+		<select id="queryCategoryType" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+			id as "id" ,
+			fid as "pid" ,
+			code||'-'||cate_type as "dkey" ,
+			cname as "dvalue"
+		from t_product_category t
+		<where>
+			1 = 1 and t.code=#{dvalue}
+		</where>
+	</select>
+
+	<select id="queryDictionaryMapper" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select
+		id as "id" ,
+		pid as "pid" ,
+		types as "types" ,
+		dkey as "dkey" ,
+		dvalue as "dvalue" ,
+		valid as "valid" ,
+		create_by as "createBy" ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		remarks as "remarks"
+		from t_order_dictionary
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="pid!=null and pid!='' ">
+				and pid = #{pid}
+			</if>
+			<if test="types!=null and types!='' ">
+				and types = #{types}
+			</if>
+			<if test="dkey!=null and dkey!='' ">
+				and dkey = #{dkey}
+			</if>
+			<if test="dvalue!=null and dvalue!='' ">
+				and dvalue = #{dvalue}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="remarks!=null and remarks!='' ">
+				and remarks = #{remarks}
+			</if>
+		</where>
+		order by dkey
+	</select>
+	<select id="queryOriginDictionary" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+		select t.code as dkey,
+			replace(replace(sys_connect_by_path(t.name, ','), ',', ''),'中国','') as dvalue
+	  	from t_base_city t
+		<where>
+			length(t.code) = 9
+			<if test="dkey !=null and dkey !='' ">
+				and t.code = #{dkey}
+			</if>
+		</where>
+		connect by prior t.code = substr(t.code, 0, length(t.code) - 3)
+	 		start with t.code = '101'
+	</select>
+	<select id="queryUserMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select * from (select rownum rn,t.* from (
+		select
+		id as "id" ,
+		real_name as "realName" ,
+		sex as "userSex" ,
+		mobile as "userMobile" ,
+		create_by as "createBy" ,
+		to_char(create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		card_type as "cardType" ,
+		card_num as "cardNum" ,
+		birthday as "userBirth" ,
+		substr(citycode,0,6) as "userProvince" ,
+		substr(citycode,0,9) as "userCity" ,
+		substr(citycode,0,12) as "userCountry" ,
+		citycode as cityCode,
+		city as userCityText,
+		tc.addr as userAddress,
+		valid as "valid" ,
+		version as "version" ,
+		longitude as longitude ,
+		latitude as latitude ,
+		decode(tc.is_vip,1,20000006,decode(tc.is_big_cust,1,20000003,20000002)) as "priceType" ,
+		tc.channel_id as "channelId",
+		tc.channel as "channel"
+		from emerp.t_customer tc
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<!-- 判断已经提交的不能查询 -->
+			<if test="adValid !=null and adValid ==2">
+				and (tc.market_by = #{loginBy} or (tc.create_by=#{loginBy} and (tc.is_commit=1 or tc.is_commit is null)))
+			</if>
+		</where>
+		order by create_time desc ) t
+		<if test="flagPage!=1">
+			where rownum&lt;=(#{pageSize}+#{beginRow})) where rn&gt;=#{beginRow}+1
+		</if>
+		<if test="flagPage==1">
+			)
+		</if>
+	</select>
+	<select id="countUserMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="java.lang.Integer">
+		select count(1)
+		from emerp.t_customer
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and mobile = #{userMobile}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+			<if test="adValid !=null and adValid ==2">
+				and (market_by = #{loginBy} or (create_by=#{loginBy} and (is_commit=1 or is_commit is null)))
+			</if>
+		</where>
+	</select>
+	<select id="queryUserAddressMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		id as "id" ,
+		contact_phone as "contactPhone" ,
+		contact_name as "contactName" ,
+		choose_address as "addressChoose" ,
+		address_detail as "addressDetail" ,
+		province as "province" ,
+		city as "city" ,
+		country as "country" ,
+		valid as "valid" ,
+		version as "version",
+		citycode as cityCode,
+		longitude      as longitude,
+		latitude       as latitude
+		from emotte.t_user_address
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and cust_id = #{userId}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and contact_phone = #{contactPhone}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and contact_name = #{contactName}
+			</if>
+			<if test="addressDetail!=null and addressDetail!='' ">
+				and address_detail = #{addressDetail}
+			</if>
+			<if test="city!=null and city!='' ">
+				and city = #{city}
+			</if>
+			<if test="country!=null and country!='' ">
+				and country = #{country}
+			</if>
+			<if test="valid!=null and valid!='' ">
+				and valid = #{valid}
+			</if>
+			<if test="version!=null and version!='' ">
+				and version = #{version}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and citycode like '${cityCode}%'
+			</if>
+		</where>
+		order by update_time desc
+	</select>
+	<select id="queryUserAddressOrder" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		receiver_name as "contactName" ,
+		receiver_province as "province" ,
+		receiver_city as "city" ,
+		receiver_area as "country" ,
+		receiver_address as "addressDetail" ,
+		receiver_mobile as "contactPhone" ,
+		receiver_city_code as "cityCode" ,
+		longitude as longitude,
+		latitude as latitude
+		from t_order od
+		<where>
+			1 = 1 and od.create_time &lt;=sysdate and od.valid = 1
+			<if test="orderId!=null and orderId!='' ">
+				and id = #{orderId}
+			</if>
+			<if test="orderId==null or orderId=='' ">
+				and rownum=1
+			</if>
+		</where>
+	</select>
+
+	<select id="queryUserAddressByMobile" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		ads.id as "id" ,
+		tus.unicode as "unicode",
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.head_photo as "userAddress" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		tus.channel_id as "channelId" ,
+		tus.channel as "channel" ,
+		to_char(tus.birthday,'yyyy-mm-dd hh24:mi:ss') as userBirth,
+		ads.contact_phone as "contactPhone" ,
+		ads.contact_name as "contactName" ,
+		ads.address_detail as "addressDetail" ,
+		ads.province as "province" ,
+		ads.city as "city" ,
+		ads.country as "country" ,
+		ads.valid as "valid" ,
+		ads.version as "version"
+		from t_customer tus LEFT JOIN emotte.t_user_address ads ON
+		tus.unicode=ads.unicode
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and tus.mobile = #{contactPhone}
+			</if>
+			<if test="realName !=null and realName !='' ">
+				and tus.real_name = #{realName}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and ads.contact_name = #{contactName}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+			<if test="adValid!=null and adValid !='' ">
+				and ads.valid = #{adValid}
+			</if>
+		</where>
+		order by ads.id desc
+	</select>
+	<select id="queryBaseCity" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		select
+		id as "id" ,
+		pid as "pid" ,
+		code as "code" ,
+		name as "name" ,
+		short_name as "shortName"
+		from emerp.t_base_city
+		<where>
+			1 = 1
+			and code like '${address}%'
+			and length(code)=#{critical}
+			and valid=1
+		</where>
+		order by code
+	</select>
+	<select id="queryOrderBasicServer" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+	SELECT DISTINCT
+		od.id as "id",
+		od.parent_id as "order.parentId" ,
+		od.order_code as "orderCode",
+		it.id as code,
+		it.version as version,
+	   decode(od.cate_type,3,'商品',
+	 	1,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	4,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	2,(SELECT pc.cname FROM t_product_category pc WHERE pc.code = od.order_type AND pc.valid = 1),
+	 	5,'预存卡',6,'礼品卡',7,'账户充值',8,'解决方案订单','其他') AS typeText,
+		to_char(it.start_time,'yyyy-mm-dd hh24:mi:ss') as startTime,
+		to_char(it.end_time,'yyyy-mm-dd hh24:mi:ss') as endTime,
+		to_char(it.interview_time,'yyyy-mm-dd hh24:mi:ss') as interviewTime,
+		to_char(od.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		od.critical as critical,
+		decode(od.critical,1,'紧急','不紧急') AS "criticalText",
+		od.salary_status as "order.salaryStatus",
+		decode(od.salary_status,'1','提前发放','默认') as "order.salaryStatusText",
+		od.order_status as orderStatus ,
+		decode (od.order_status,'1','新建','2','已受理','3','匹配中','4','已匹配','5','待面试','6','面试成功','7','已签约','8','已上户','9','已完成','10','已取消','11','已下户','12','已终止','13','捡货中','14','配送中','15','三方订单匹配失败','18','待受理','') AS "statusText",
+		od.order_source_id as orderSourceId,
+		(
+			SELECT
+			t.dict_name
+			FROM
+			t_base_dictionary t
+			WHERE
+			t.dict_code = od.order_source_id
+			AND t.dict_code like '2018%'
+			and length(t.dict_code)=8
+			AND t.valid = 1
+		) AS "sourceText",
+		it.address as "address",
+		it.interview_address as "interviewAddress",
+		NVL(od.remark,NVL(item.remark,it.remark)) as "remark",
+		it.min_age as "minAge",
+		it.max_age as "maxAge",
+		it.origin as "origin",
+		og.dvalue as originText,
+		it.home_forests as homeForests,
+		it.familys as familys,
+		it.person_level as personLevel,
+		it.person_number as personNumber,
+		bw.pelev AS "personLevelText",
+		it.education as education,
+		it.sex as xqSex,
+		decode(it.education,1,'无学历',2,'小学',3,'初中',4,'高中/中专',5,'本科/大专',6,'研究生','') AS "educationText",
+		(
+			SELECT
+			ch.name
+			FROM
+			t_custom_channel ch
+			WHERE  od.order_channel=to_char(ch.id)
+			AND ch.valid = 1
+		) AS "channelText",
+		nvl(it.person_number,1) as "personNumber",
+		od.user_name  as "order.userName" ,
+		od.user_mobile  as "order.userMobile" ,
+		od.user_city_code as "order.userCityCode",
+		od.user_birth as "birth",
+		od.user_sex as "sex" ,
+		od.user_address as "userAddress" ,
+		od.receiver_city_code as "order.receiverCityCode" ,
+		od.receiver_name as "order.receiverName",
+		od.receiver_address as "order.receiverAddress",
+		od.receiver_mobile as "order.receiverMobile",
+		od.order_type  as "order.orderType" ,
+		od.order_channel  as "order.orderChannel" ,
+		od.order_source_id  as "order.orderSourceId" ,
+		od.pay_status  as "order.payStatus" ,
+		decode(od.pay_status,'20110001','未支付','20110002','部分支付','20110003','支付完成','20130003','确认有效','20130002','确认无效','20130008','退款成功','未知') as payText,
+		od.order_status as "order.orderStatus" ,
+		od.remark  as "order.remark" ,
+		od.three_order_code as "order.threeOrderCode",
+		nvl(od.total_pay,0) as "order.totalPay"  ,
+		od.deliver_pay as "order.deliverPay"  ,
+		p.name as  "order.person",
+		p.mobile as "order.personmobile",
+		item.product_name as "productName",
+		item.now_price as "nowPrice",
+		item.quantity as "quantity",
+		item.product_code as "productCode",
+		item.product_price_type as "productPriceType",
+		tbda.dict_name as "productPriceTypeText",
+		item.product_unit as "productUnit",
+		tbdb.dict_name as "productUnitText",
+		item.product_spec as "productSpec",
+		od.price_type AS "order.priceType",
+		(SELECT pc.cname FROM t_product_category pc WHERE pc.code=item.category_code) AS "productCategoryName",
+        item.category_code AS "productCategoryCode",
+        od.city AS "city",
+        (select bc.name from t_base_city bc where bc.code=od.city and bc.valid=1) as "order.receiverCity",
+        (select bcc.name from t_base_city bcc where bcc.code=substr(od.city,0,6) and bcc.valid=1) as "order.receiverProvince",
+        (SELECT t.solution_code FROM t_solution_cust_solution t WHERE t.id=od.parent_id) solutionCode,
+        nvl(oat.customer_manage_money,0) as "order.customerManageMoney",
+        nvl(w.oiwid,0) as "ids",
+        to_char(it.birth_time,'yyyy-mm-dd') as birthTimeOrder,
+        it.service_hours as servicehours,
+        it.time_slot as timeslot,
+        it.FORESTSSERVER as forestsserver,
+        it.sex AS xqSex,
+		it.IS_INSURE as insure,
+		it.INSURE_AMOUNT as insureAmount
+	FROM t_order od
+	left join t_emp_personnel p on od.emp_id=p.id
+    left join t_order_item item on (od.id = item.order_id and item.valid=1)
+    left join t_base_dictionary tbda on (item.product_price_type=tbda.dict_code and tbda.valid=1)
+	left join t_base_dictionary tbdb on (item.product_unit=tbdb.dict_code and tbdb.valid=1)
+    left join t_order_item_detail_server it on (od.id = it.order_id and it.valid=1)
+    left join (select id,"level" as pelev from t_base_work_type_level) bw on it.person_level = bw.id
+    left join t_order_agreement oat on (od.id= oat.order_id and oat.agreement_state=2 and oat.valid=1)
+    left join (select count(oiw.id) as oiwid,oiw.order_id from t_order_item_interview oiw
+			where oiw.interview_type=9 and oiw.valid=1 group by oiw.order_id) w on od.id=w.order_id
+    left join (select replace(replace(sys_connect_by_path(t.name, ','), ',', ''), '中国','') dvalue,t.code
+			  from t_base_city t
+			 where length(t.code) = 9
+			connect by prior t.code = substr(t.code, 0, length(t.code) - 3)
+			 start with t.code = '101') og on it.origin = og.code
+		<where>
+			1 = 1  and od.id = #{id}  and od.create_time &lt;=sysdate and od.valid = 1
+		</where>
+		order by it.id desc
+	</select>
+
+	<select id="queryOrderNeedServerByPersonId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		SELECT
+			person.id as id,
+			person.name as name,
+			person.sex,
+			person.age,
+			person.education,
+			decode(person.education,1,'无学历',2,'小学',3,'初中',4,'高中/中专',5,'本科/大专',6,'研究生','') AS "educationText",
+			(
+				select replace(replace(sys_connect_by_path(t.name, ','), ',', ''),'中国','') dvalue
+				from t_base_city t
+				where t.code=person.origin
+					connect by prior t.code = substr(t.code, 0, length(t.code) - 3)
+				 start with t.code = '101'
+			) as origin,
+			person.nation,
+			person.zodiac,
+			decode(person.is_marry,1,'未婚','已婚') as isMarry,
+			person.current_address AS userAddress,
+			person.home_address AS address,
+			person.id_card_num AS idCardNum,
+			person.working_life AS workingLife,
+			person.salary_expectation AS salary,
+			person.job_expectation_content AS jobContent,
+			person.specialty,
+			person.fear_pet AS fearPet,
+			person.mobile as mobile,
+			decode(person.staff_type,1,'员工制','非员工制') as staffType,
+			am.real_name as realName,
+			am.phone as  phone,
+			(select org.name from emerp.t_auth_org org where person.base_id=org.id) as shortName,
+			ewt.emp_work_type_id as workType,
+			ewt.emp_work_type_name as workTypeText,
+			ewt.work_type_level_id as workLevel,
+			ewt.work_type_level_name as workLevelText,
+			(select emppic.original_address from emerp.t_emp_pic_video emppic
+				where person.id=emppic.emp_id and emppic.valid=1 and emppic.is_show=1 and emppic.album_type_id=9 and rownum=1) as "originalAddress"
+		FROM
+			(select * from emerp.t_emp_personnel order by createtime desc) person
+			inner join (select emp_id,wm_concat(distinct emp_work_type_name) as emp_work_type_name,wm_concat(work_type_level_name) as work_type_level_name,
+            	wm_concat(distinct emp_work_type_id) as emp_work_type_id,wm_concat(work_type_level_id) as work_type_level_id
+            	from emerp.t_emp_work_type where valid=1 group by emp_id) ewt on ewt.emp_id=person.id
+			left join emerp.t_auth_manager am on person.productid=am.id
+		<where>
+			person.id=#{id}
+		</where>
+	</select>
+	<select id="matchingPersonnel" parameterType="com.emotte.order.order.model.OrderBaseModel" resultType="com.emotte.order.order.model.OrderBaseModel">
+		select
+		<if test="orderId !=null and orderId != '' and  pid != null and  pid != '' ">
+					(SELECT tt.interview_type||'-'||
+					decode(tt.interview_type,1,'未处理',2,'已推送',3,'已拒绝 ',4,'已匹配',5,'已调换',6,'面试成功',7,'面试失败',8,'上户 ',9,'下户',10,'已取消',11,'顶岗预备',12,'顶岗上户',13,'调岗下户','') as typeText
+					 FROM (
+					SELECT oiew.id,oiew.interview_type
+					  FROM emerp.t_order_item_interview oiew
+					 WHERE oiew.person_id = #{pid}
+					   AND oiew.interview_type NOT IN (7, 9, 10)
+					  AND oiew.order_id = #{orderId}
+					   ORDER BY  oiew.update_time DESC
+					   ) tt WHERE ROWNUM =1) interviewTypeText,
+		  </if>
+	    <if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' ">
+		 	(select '管家姓名【' || m.real_name || '】,订单编号【 ' || o.order_code || '】,占用服务人员排期为'||eps.start_date||'--'||eps.end_date
+	          from emerp.t_emp_personnel_schedule eps
+	          inner join t_order o on o.id = eps.order_id
+	          left join t_auth_manager m on m.id = o.recharge_by
+	         where eps.emp_id = t.id and eps.is_enable=2
+        		 	AND (#{startTime} &lt;=  EPS.END_DATE AND EPS.START_DATE &lt;= #{endTime})
+		          and eps.status != 1 and rownum = 1
+		    <if test="startTimeSolt ==null or startTimeSolt =='' or endTimeSolt ==null or endTimeSolt =='' ">
+				) isSchedule ,
+			</if>
+		</if>
+		<if test="startTimeSolt !=null and startTimeSolt !='' and endTimeSolt !=null and endTimeSolt !='' ">
+			<if test="week !=null and week !='' ">
+				and eps.weekday in (${week})
+			</if>
+          	AND (#{startTimeSolt} &lt;= EPS.END_TIME AND EPS.START_TIME &lt;= #{endTimeSolt})  ) isSchedule,
+		</if>
+		<!-- <if test="grade !=null and grade != '' and orderType != null  and orderType !='' "> -->
+		<if test="orderType != null  and orderType !='' ">
+	           (SELECT count(1)
+		   FROM t_emp_work_type wt
+		   JOIN t_base_work_type_level wtl
+		     ON wtl.id = wt.work_type_level_id
+		  WHERE wt.valid = 1
+		     <!-- AND wtl.grade &gt; = #{grade} -->
+		    AND wtl.work_type_id = #{orderType}
+		    AND wt.emp_id = t.id) isWorkLevel,
+		</if>
+		#{pid} pid,
+		t.name name
+		  FROM t_emp_personnel t
+		 WHERE  t.valid = 1
+		     AND t.id=#{pid}
+	</select>
+
+	<!--推送按钮查询服务人员列表-->
+	<select id="queryOrderNeedServer" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		select * from (select rownum rn,t.* from (
+		SELECT
+			person.id as id,
+			person.name as name,
+			person.sex,
+			person.age,
+			person.education,
+			decode(person.education,1,'无学历',2,'小学',3,'初中',4,'高中/中专',5,'本科/大专',6,'研究生','') AS "educationText",
+			(
+				select replace(replace(sys_connect_by_path(t.name, ','), ',', ''),'中国','') dvalue
+				from t_base_city t
+				where t.code=person.origin
+					connect by prior t.code = substr(t.code, 0, length(t.code) - 3)
+				 start with t.code = '101'
+			) as origin,
+			person.constellation,
+			person.nation,
+			person.zodiac,
+			decode(person.is_marry,1,'未婚','已婚') as isMarry,
+			person.current_address AS userAddress,
+			person.home_address AS address,
+			person.id_card_num AS idCardNum,
+			person.working_life AS workingLife,
+			person.salary_expectation AS salary,
+			person.job_expectation_content AS jobContent,
+			person.specialty,
+			person.fear_pet AS fearPet,
+			person.mobile as mobile,
+			decode(person.staff_type,1,'员工制','非员工制') as staffType,
+			(select am.real_name from emerp.t_auth_manager am where person.productid = am.id ) as realName,
+            (select am.phone from emerp.t_auth_manager am where person.productid = am.id ) as phone,
+			(select org.name from emerp.t_auth_org org where person.base_id=org.id) as shortName,
+			(select emppic.original_address from emerp.t_emp_pic_video emppic
+				where person.id=emppic.emp_id and emppic.valid=1 and emppic.is_show=1 and emppic.album_type_id=9 and rownum=1) as "originalAddress",
+			(select bc.name from t_base_city bc where bc.valid=1 and bc.code=trim(person.in_city)) city
+
+		FROM
+			(select * from emerp.t_emp_personnel order by createtime desc) person
+
+		<where>
+			1=1
+			and person.conrator_status=1 and person.is_black=2 and person.valid=1 and person.productid is not null
+			<if test="id !=null and id !='' ">
+				and person.id = #{id}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and trim(person.in_city) like ('${cityCode}' || '%' )
+			</if>
+			<if test="name !=null and name !='' ">
+				and person.name = #{name}
+			</if>
+			<if test="mobile !=null and mobile !='' ">
+				and person.mobile = #{mobile}
+			</if>
+			<if test="education !=null and education !='' ">
+				and person.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and person.nation like '%${nation}%'
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and person.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and person.age &lt;= #{maxAge}
+			</if>
+			<if test="minWorkAge !=null and minWorkAge !='' ">
+				and person.working_life &gt;= #{minWorkAge}
+			</if>
+			<if test="maxWorkAge !=null and maxWorkAge !='' ">
+				and person.working_life &lt;= #{maxWorkAge}
+			</if>
+			<if test="zodiac != null and zodiac !='' ">
+				and decode(mod((decode(length(person.id_card_num),15,'19'||substr(person.id_card_num,7,2),18,substr(person.id_card_num,7,4))), 12),0,'猴',1,'鸡',2,'狗',3,'猪',4,'鼠',5,'牛',6,'虎',7,'兔',8,'龙',9,'蛇',10,'马',11,'羊') = #{zodiac}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and SUBSTR(person.origin,1,6) IN (${origin})
+			</if>
+
+			<if test="levelId !=null and levelId !='' ">
+				 AND EXISTS (select 1 from T_EMP_WORK_TYPE w where w.valid=1 and w.emp_id=person.id and w.work_type_level_id=#{levelId})
+			</if>
+			<choose>
+			    <when test="constellation == 1">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0120
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0218)
+			    </when>
+			    <when test="constellation == 2">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0219
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0320)
+			    </when>
+			  <when test="constellation == 3">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0321
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0419)
+			    </when>
+			    <when test="constellation == 4">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0420
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0520)
+			    </when>
+			  <when test="constellation == 5">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0521
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0621)
+			    </when>
+			    <when test="constellation == 6">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0622
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0722)
+			    </when>
+			  <when test="constellation == 7">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0723
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0822)
+			    </when>
+			    <when test="constellation == 8">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0823
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0922)
+			    </when>
+			  <when test="constellation == 9">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0923
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1023)
+			    </when>
+			    <when test="constellation == 10">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1024
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1122)
+			    </when>
+			  <when test="constellation == 11">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1123
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1221)
+			    </when>
+			    <when test="constellation == 12">
+			      and ((decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1222
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1231)
+			   	  or (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0101
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0119))
+			    </when>
+			 </choose>
+			<if test="sex !=null and sex !='' ">
+				and person.sex = #{sex}
+			</if>
+            <if test="condition == 1">
+                and person.management_status in (1,4,9,10,17)<!--精确匹配查询所有管理状态人员-->
+            </if>
+			<if test="condition == 2">
+                and person.management_status in (${managerMentStatus})<!--模糊匹配查询“可匹配”管理状态人员-->
+				<if test="pid !=null and pid !='' ">
+					and not exists (select 1
+						from emerp.t_order_item_interview oiew
+						where oiew.person_id=person.id
+						and oiew.interview_type not in (7,9,10)
+						and oiew.order_id=#{pid})
+				</if>
+				<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' ">
+					 and not exists
+					(select 1
+					  from emerp.t_emp_personnel_schedule eps
+					 where eps.emp_id = person.id
+						AND (#{startTime} &lt;  EPS.END_DATE AND EPS.START_DATE &lt;= #{endTime})
+						  and eps.status != 1
+					  <if test="startTimeSolt ==null or startTimeSolt =='' or endTimeSolt ==null or endTimeSolt =='' ">
+						)
+					</if>
+				</if>
+				<if test="startTimeSolt !=null and startTimeSolt !='' and endTimeSolt !=null and endTimeSolt !='' ">
+					<if test="week !=null and week !='' ">
+						and eps.weekday in (${week})
+					</if>
+					AND (#{startTimeSolt} &lt; EPS.END_TIME AND EPS.START_TIME &lt;= #{endTimeSolt})  )
+				</if>
+				<if test="orderId !=null and orderId !=''">
+					<!-- and exists (select 1
+					  from t_emp_work_type ew
+					 where ew.emp_id = person.id and ew.valid=1
+					   and ew.emp_work_type_id = #{workLevel}) -->
+					   and exists (
+						   SELECT 1
+				   FROM t_emp_work_type wt
+				   JOIN t_base_work_type_level wtl
+					 ON wtl.id = wt.work_type_level_id
+				  WHERE wt.valid = 1
+					<!-- AND wtl.grade &gt; = #{grade} -->
+					AND wtl.work_type_id = #{orderType}
+					AND wt.emp_id = person.id)
+				</if>
+			</if>
+		</where>
+		 ) t where rownum &lt;= (#{pageSize}+#{beginRow}))
+		<if test="flagPage!=1">
+			where rn &gt;= #{beginRow}+1 </if>
+		<if test="flagPage==1">
+			) </if>
+	</select>
+
+
+
+
+
+
+	<select id="countOrderNeedServer" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="java.lang.Integer">
+		SELECT count(0)
+		FROM
+			(select * from emerp.t_emp_personnel order by createtime desc) person
+		<where>
+			1=1
+			and person.conrator_status=1 and person.is_black=2 and person.valid=1 and person.productid is not null
+			and person.management_status in (1,4,9,10,17)
+			<if test="id !=null and id !='' ">
+				and person.id = #{id}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and trim(person.in_city) like ('${cityCode}' || '%' )
+			</if>
+			<if test="name !=null and name !='' ">
+				and person.name = #{name}
+			</if>
+			<if test="mobile !=null and mobile !='' ">
+				and person.mobile = #{mobile}
+			</if>
+			<if test="education !=null and education !='' ">
+				and person.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and person.nation like '%${nation}%'
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and person.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and person.age &lt;= #{maxAge}
+			</if>
+			<if test="minWorkAge !=null and minWorkAge !='' ">
+				and person.working_life &gt;= #{minWorkAge}
+			</if>
+			<if test="maxWorkAge !=null and maxWorkAge !='' ">
+				and person.working_life &lt;= #{maxWorkAge}
+			</if>
+			<if test="zodiac != null and zodiac !='' ">
+				and decode(mod((decode(length(person.id_card_num),15,'19'||substr(person.id_card_num,7,2),18,substr(person.id_card_num,7,4))), 12),0,'猴',1,'鸡',2,'狗',3,'猪',4,'鼠',5,'牛',6,'虎',7,'兔',8,'龙',9,'蛇',10,'马',11,'羊') = #{zodiac}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and SUBSTR(person.origin,1,6) IN (${origin})
+			</if>
+			<if test="levelId !=null and levelId !='' ">
+				 AND EXISTS (select 1 from T_EMP_WORK_TYPE w where w.valid=1 and w.emp_id=person.id and w.work_type_level_id=#{levelId})
+			</if>
+			<choose>
+			    <when test="constellation == 1">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0120
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0218)
+			    </when>
+			    <when test="constellation == 2">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0219
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0320)
+			    </when>
+			  <when test="constellation == 3">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0321
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0419)
+			    </when>
+			    <when test="constellation == 4">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0420
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0520)
+			    </when>
+			  <when test="constellation == 5">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0521
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0621)
+			    </when>
+			    <when test="constellation == 6">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0622
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0722)
+			    </when>
+			  <when test="constellation == 7">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0723
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0822)
+			    </when>
+			    <when test="constellation == 8">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0823
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0922)
+			    </when>
+			  <when test="constellation == 9">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0923
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1023)
+			    </when>
+			    <when test="constellation == 10">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1024
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1122)
+			    </when>
+			  <when test="constellation == 11">
+			      and (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1123
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1221)
+			    </when>
+			    <when test="constellation == 12">
+			      and ((decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 1222
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 1231)
+			   	  or (decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &gt;= 0101
+  			 	  and decode(length(person.id_card_num),15,substr(person.id_card_num,9,4),18,substr(person.id_card_num,11,4)) &lt;= 0119))
+			    </when>
+			 </choose>
+			<if test="sex !=null and sex !='' ">
+				and person.sex = #{sex}
+			</if>
+			<if test="condition == 1">
+				and person.management_status in (1,4,9,10,17)<!--精确匹配查询所有管理状态人员-->
+			</if>
+			<if test="condition == 2">
+				and person.management_status in (${managerMentStatus})<!--模糊匹配查询“可匹配”管理状态人员-->
+			<if test="pid !=null and pid !='' ">
+				and not exists (select 1
+					from emerp.t_order_item_interview oiew
+					where oiew.person_id=person.id
+					and oiew.interview_type not in (7,9,10)
+					and oiew.order_id=#{pid})
+			</if>
+			<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' ">
+				 and not exists
+			 	(select 1
+		          from emerp.t_emp_personnel_schedule eps
+		         where eps.emp_id = person.id
+         		 	AND (#{startTime} &lt;  EPS.END_DATE AND EPS.START_DATE &lt;= #{endTime})
+			          and eps.status != 1
+			      <if test="startTimeSolt ==null or startTimeSolt =='' or endTimeSolt ==null or endTimeSolt =='' ">
+					)
+				</if>
+			</if>
+			<if test="startTimeSolt !=null and startTimeSolt !='' and endTimeSolt !=null and endTimeSolt !='' ">
+				<if test="week !=null and week !='' ">
+					and eps.weekday in (${week})
+				</if>
+	          	AND (#{startTimeSolt} &lt; EPS.END_TIME AND EPS.START_TIME &lt;= #{endTimeSolt})  )
+			</if>
+			<if test="orderId !=null and orderId !=''">
+				<!-- and exists (select 1
+		          from t_emp_work_type ew
+		         where ew.emp_id = person.id and ew.valid=1
+		           and ew.emp_work_type_id = #{workLevel}) -->
+		           and exists (
+			           SELECT 1
+			   FROM t_emp_work_type wt
+			   JOIN t_base_work_type_level wtl
+			     ON wtl.id = wt.work_type_level_id
+			  WHERE wt.valid = 1
+			    <!-- AND wtl.grade &gt; = #{grade} -->
+			    AND wtl.work_type_id = #{orderType}
+			    AND wt.emp_id = person.id)
+			</if>
+		</if>
+		</where>
+	</select>
+	<select id="queryOrdertypeLevelWorkTypeId" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		SELECT t.* FROM (
+		select bw.work_type_id as orderType,bw.grade
+            from t_product                    pt,
+                 t_product_city               pc,
+                 t_order                      od,
+                 t_order_item                 oit,
+                 t_product_worktype_level_ref pw,
+                 t_base_work_type_level       bw
+           where pt.id = pc.product_id
+             and od.id = oit.order_id
+             and oit.product_code = pc.product_code
+             and pt.base_id = pw.product_base_id
+             and pw.work_type_level_id = bw.id
+             and od.id = #{orderId}
+             and pt.valid=1 and pc.valid=1 and pw.valid=1
+             and od.valid = 1
+              ORDER BY bw.grade ASC) t
+    		 WHERE rownum = 1
+	</select>
+	<!-- 查询服务人员上户状态 -->
+	<select id="queryOrderNeeds" parameterType="com.emotte.order.order.model.OrderBaseModel"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		SELECT
+			ep.id,
+			ep.name,
+			ep.sex,
+			ep.age,
+			ep.education,
+			decode(ep.education,1,'无学历',2,'小学',3,'初中',4,'高中/中专',5,'本科/大专',6,'研究生','') AS "educationText",
+			ep.origin,
+			ep.zodiac,
+			decode(ep.is_marry,1,'未婚','已婚') as isMarry,
+			ep.current_address AS userAddress,
+			ep.home_address AS address,
+			ep.id_card_num AS idCardNum,
+			ep.working_life AS workingLife,
+			ep.salary_expectation AS salary,
+			ep.job_expectation_content AS jobContent,
+			ep.specialty,
+			ep.fear_pet AS fearPet,
+			ep.mobile as mobile,
+	       	tam.real_name as realName,
+	       	tam.phone as phone,
+			decode(ep.staff_type,1,'员工制','非员工制') as staffType,
+			intv.id as userId,
+			intv.interview_type as interviewType,
+			intv.star_time as startTime,
+			intv.end_time as endTime,
+			decode(intv.match_method,'1','营销管家推送','2','家政家园抢单','3','产品管家调换','4','对人下单','--') as matchMethod,
+			decode(intv.interview_type,1,'未处理',2,'已推送',3,'已拒绝 ',4,'已匹配',5,'已调换',6,'面试成功',7,'面试失败',8,'上户 ',9,'下户',10,'已取消',11,'顶岗预备',12,'顶岗上户',13,'调岗下户','') as typeText,
+			(select emppic.original_address from emerp.t_emp_pic_video emppic
+				where ep.id=emppic.emp_id and emppic.valid=1 and emppic.is_show=1 and emppic.album_type_id=9 and rownum=1) as "originalAddress"
+		from emerp.t_emp_personnel ep
+			left join emerp.t_auth_manager tam on (ep.productid=tam.id and tam.valid=1)
+			left join emerp.t_order_item_interview intv on (intv.valid = 1 AND ep.id=intv.person_id and intv.order_id=#{orderId})
+		<where>
+				ep.valid = 1
+			<if test="pid !=null and pid !='' ">
+				and ep.id not in (select person_id from emerp.t_order_item_interview
+				where order_id=#{pid} and interview_type not in (7,9) )
+			</if>
+			<if test="id !=null and id !='' ">
+				and ep.id = #{id}
+			</if>
+			<if test="interviewType !=null and interviewType !='' ">
+				and intv.interview_type = #{interviewType}
+			</if>
+			<if test="origin !=null and origin !='' ">
+				and ep.origin = #{origin}
+			</if>
+			<if test="education !=null and education !='' ">
+				and ep.education = #{education}
+			</if>
+			<if test="nation !=null and nation !='' ">
+				and ep.nation = #{nation}
+			</if>
+			<if test="minAge !=null and minAge !='' ">
+				and ep.age &gt;= #{minAge}
+			</if>
+			<if test="maxAge !=null and maxAge !='' ">
+				and ep.age &lt;= #{maxAge}
+			</if>
+			<if test="sex !=null and sex !='' ">
+				and ep.sex = #{sex}
+			</if>
+			<if test="ids !=null and ids !='' ">
+				and ep.id in
+				<foreach item="item" index="index" collection="idsAry"
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+			</if>
+			<if test="type !=null and type ==5 ">
+				and intv.interview_type in(1,2,4,6,8,11,12)
+				order by intv.create_time desc
+			</if>
+			<if test="type !=null and type ==15 ">
+				and intv.interview_type in(3,9,7,13)
+				order by intv.create_time desc
+			</if>
+			<if test="type !=null and type ==8 ">
+				and (intv.interview_type = 6 or intv.interview_type = 8 or intv.interview_type = 9)
+				order by intv.create_time desc
+			</if>
+			<if test="type !=null and type ==11 ">
+				and intv.interview_type in(1,2,4,8)
+				order by intv.create_time desc
+			</if>
+			<if test="type !=null and type ==12 ">
+				order by ep.id desc
+			</if>
+			<if test="type !=null and type==13">
+			    and intv.interview_type =8
+			    order by intv.create_time desc
+			</if>
+		</where>
+	</select>
+
+
+	<select id="querLoadUser" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.district as "userCountry" ,
+		tus.addr as "userAddress" ,
+		tus.citycode as "userCityCode" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		tus.market_by as marketBy ,
+		tus.devided_dept_id as deptId,
+		to_char(tus.birthday,'yyyy-MM-dd') as userBirth,
+		ads.id as id,
+	    ads.contact_phone as contactPhone,
+	    ads.contact_name as contactName,
+	    ads.choose_address as addressChoose,
+	    ads.address_detail as addressDetail,
+	    ads.province as province,
+	    ads.city as city,
+	    ads.country as country ,
+	    ads.citycode as "cityCode",
+	    ads.longitude as "longitude",
+	    ads.latitude  as "latitude"
+	    from emerp.t_customer tus
+         left join emotte.t_user_address ads on tus.id=ads.cust_id
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="userId!=null and userId!='' ">
+				and tus.id = #{userId}
+			</if>
+		</where>
+		and rownum=1
+	</select>
+
+	<select id="queryUserAdressMapper" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		ads.id as "id" ,
+		tus.id as "userId" ,
+		tus.real_name as "realName" ,
+		tus.province as "userProvince" ,
+		tus.city as "userCity" ,
+		tus.head_photo as "userAddress" ,
+		tus.mobile as "userMobile" ,
+		tus.email as "userEmail" ,
+		tus.sex as "userSex" ,
+		to_char(tus.birthday,'yyyy-MM-dd') as userBirth,
+		ads.contact_phone as "contactPhone" ,
+		ads.contact_name as "contactName" ,
+		ads.address_detail as "addressDetail" ,
+		ads.choose_address as "addressChoose" ,
+		ads.province as "province" ,
+		ads.city as "city" ,
+		ads.country as "country" ,
+		ads.valid as "valid" ,
+		ads.version as "version"
+		from emerp.t_customer tus LEFT JOIN emotte.t_user_address ads ON
+		tus.unicode=ads.unicode
+		<where>
+			1 = 1
+			<if test="id !=null and id !='' ">
+				and ads.id = #{id}
+			</if>
+			<if test="contactPhone!=null and contactPhone!='' ">
+				and tus.mobile = #{contactPhone}
+			</if>
+			<if test="realName !=null and realName !='' ">
+				and tus.real_name = #{realName}
+			</if>
+			<if test="contactName!=null and contactName!='' ">
+				and ads.contact_name = #{contactName}
+			</if>
+			<if test="usValid!=null and usValid!='' ">
+				and tus.valid = #{usValid}
+			</if>
+			<if test="adValid!=null and adValid !='' ">
+				and ads.valid = #{adValid}
+			</if>
+		</where>
+		order by ads.id desc
+	</select>
+	<select id="queryOrderUserFollow" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select rg.id, rg.type, rg.city_code as cityCode, rg.longitude, rg.latitude,er.phone as phones
+		  from t_auth_org rg, t_auth_manager er
+		<where>
+			rg.id = er.dept_id(+)
+			   and (rg.type = 5 or rg.type = 7)
+			   and rg.valid = 1
+			   and rg.longitude is not null and rg.latitude is not null
+			<if test="type !=null and type !='' ">
+				and rg.type = #{type}
+			</if>
+			<if test="cityCode !=null and cityCode !='' ">
+				and rg.city_code like '${cityCode}%'
+			</if>
+			<if test="createBy !=null and createBy !='' ">
+				and er.id = #{createBy} and er.valid = 1
+			</if>
+		</where>
+	</select>
+	<select id="queryOrderUserFollowByOrg" parameterType="com.emotte.order.order.model.Order"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select id,longitude,latitude,
+		(select wm_concat(am.phone) from t_auth_manager am
+		where am.dept_id=f.id and am.valid=1 and am.state=1 and am.post in ('20140005','20140006')) phones
+		from (select id,longitude,latitude,minorg from (
+		select t.id,t.longitude,t.latitude,
+		power(round(t.longitude,6)-round(#{longitude},6),2)+power(round(t.latitude,6)-round(#{latitude},6),2) as minorg
+		  from t_auth_org t
+		<where>
+			t.type in (5,7) and t.city_code like '${city}%' and t.valid=1
+			and t.longitude is not null and t.latitude is not null
+			<if test="cateType!=8">
+				and exists (select 1 from t_auth_org_product aop where t.id=aop.org_id and aop.product_code=#{productCode} and aop.valid=1)
+			</if>
+		 	)order by minorg ) f where rownum=1
+		</where>
+	</select>
+	<select id="queryOrderUserManagerById" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select t.id as id,t.dept_id as deptId,t.phone as phones 
+		from t_auth_manager t
+		where t.id = #{id} and t.valid=1
+			and t.post in ('20140004','20140005','20140006','20140007')
+	</select>
+
+	<select id="queryOrderBasicServerType" parameterType="java.lang.Long"
+		resultType="com.emotte.order.order.model.OrderBaseModel">
+		 select o.user_name  as name,
+		 	o.order_status  as orderStatus,
+		 	(select catp.code   from  t_product_category catp where catp.code=substr(o.order_type,0,8) )as  code,
+           (select catp.cname   from  t_product_category catp where catp.code=substr(o.order_type,0,8) )as  interviewAddress,
+           (select catp.cname   from  t_product_category catp where catp.code=o.order_type) productName,
+           it.category_code AS productCategoryCode,
+            it.product_code as productCode,
+            it.quantity as quantity,
+            o.city as city
+            from t_order o
+            left join t_order_item   it on  (o.id = it.order_id and it.valid=1)
+            <where>
+            	o.id=#{id} and o.valid = 1
+            </where>
+
+	</select>
+		<select id="queryUserByMobile" parameterType="com.emotte.order.order.model.OrderUser"
+		resultType="com.emotte.order.order.model.OrderUser">
+		select
+		tc.id as "id" ,
+		tc.real_name as "realName" ,
+		tc.sex as "userSex" ,
+		tc.mobile as "userMobile" ,
+		tc.create_by as "createBy" ,
+		to_char(tc.create_time,'yyyy-mm-dd hh24:mi:ss') as createTime,
+		tc.card_type as "cardType" ,
+		tc.card_num as "cardNum" ,
+		tc.birthday as "userBirth" ,
+		tc.province as "userProvince" ,
+		tc.city "userCity" ,
+		tc.district as "userCountry" ,
+		tc.citycode as cityCode,
+		tc.addr as userAddress,
+		tc.valid as "valid" ,
+		tc.version as "version" ,
+		tc.longitude as longitude ,
+		tc.latitude as latitude ,
+		decode(tc.is_vip,1,20000006,decode(tc.is_big_cust,1,20000003,20000002)) as "priceType" ,
+		tc.channel_id as "channelId",
+		tc.channel as "channel"
+		from t_customer tc
+		<where>
+			1 = 1
+			<if test="id!=null and id!='' ">
+				and tc.id = #{id}
+			</if>
+			<if test="realName!=null and realName!='' ">
+				and tc.real_name = #{realName}
+			</if>
+			<if test="userMobile !=null and userMobile !='' ">
+				and tc.mobile = #{userMobile}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryCityCodeByArea" parameterType="com.emotte.order.order.model.OrderUser" resultType="java.lang.String">
+		select t.code as cityCode from t_base_city t
+		<where>
+			1=1
+			<if test="userCountry !=null and userCountry !='' and userCountry !=null and userCountry !='' ">
+				and t.name like '${userCountry}%' and exists (select 1  from t_base_city td WHERE  td.id = t.pid and td.valid = 1 and td.name like '${userAddress}%' )
+			</if>
+			 and t.valid = 1
+		</where>
+	</select>
+
+	<select id="queryUserWithVip" resultType="com.emotte.order.order.model.OrderUser">
+		select
+		tc.id as "id" ,
+		tc.real_name as "realName" ,
+		tc.mobile as "userMobile" ,
+		tc.valid as "valid" ,
+		tc.version as "version" ,
+		tc.is_vip as isVip,
+		to_char(tc.vip_startime,'yyyy-mm-dd hh24:mi:ss') as vipStartTime,
+		to_char(tc.vip_endtime,'yyyy-mm-dd hh24:mi:ss') as vipEndTime,
+		decode(tc.is_vip,1,20000006,decode(tc.is_big_cust,1,20000003,20000002)) as "priceType" 
+		from t_customer tc
+		where 1 = 1 and tc.valid = 1 
+	</select>
+
+	<select id="queryOrderChannel" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="com.emotte.order.order.model.Dictionary">
+			SELECT
+				c.id dkey,
+				c.name dvalue,
+				c.is_collection isCollection,
+				c.housekeeper_available housekeeperAvailable,
+				c.manager_id managerId
+			FROM t_custom_channel c
+		<where>
+				c.valid = 1 AND c.housekeeper_available = 1 AND c.cur_levels IN (20370001, 20370003)
+			<if test="managerId != null and managerId != '' ">
+				AND c.manager_id = #{managerId}
+			</if>
+			<if test="partnerManagerId !=null and partnerManagerId !=''">
+	 			AND c.partner_manager_id = #{partnerManagerId}
+	 		</if>
+		</where>
+	</select>
+
+	<select id="selectStock" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="java.lang.Integer">
+			SELECT
+				count(1) as  "count"
+			FROM t_emp_service_inventory tsi
+		<where>
+				valid = 1
+			<if test="dkey != null and dkey != '' ">
+				AND tsi.city_code = #{dkey}
+			</if>
+			<if test="dvalue !=null and dvalue !=''">
+	 			AND tsi.cate_code = #{dvalue}
+	 		</if>
+		</where>
+	</select>
+	<!-- 查询服务人员库存数量 -->
+	<select id="checkNumStock" parameterType="com.emotte.order.order.model.Dictionary"
+		resultType="java.lang.Integer">
+			select
+                   (nvl(sum(tsi.stock),0)+nvl(sum(tsi.add_stock),0))  as "count"
+            from   t_emp_service_inventory_detail tsi ,t_emp_service_inventory ti
+			<where>
+				 tsi.valid=1 and ti.valid=1 and  ti.id=tsi.inventory_id
+				 <if test="dkey != null and dkey != '' ">
+					AND ti.city_code = #{dkey}
+				 </if>
+				 <if test="dvalue !=null and dvalue !=''">
+		 			AND ti.cate_code = #{dvalue}
+		 		 </if>
+		 		 <if test="remarks != null and remarks != '' ">
+					 and to_char(tsi.selection_time,'yyyy-MM-dd') = #{remarks}
+				 </if>
+				 <if test="level !=null and level !=''">
+		 			AND tsi.start_time = #{level}
+		 		 </if>
+		 		 <if test="types !=null and types !=''">
+		 			AND tsi.end_time = #{types}
+		 		 </if>
+			</where>
+	</select>
+	<select id="queryOrderItemInterview" parameterType="com.emotte.order.order.model.ItemInterview" resultType="com.emotte.order.order.model.ItemInterview">
+			select t.endTime from (
+			SELECT
+				 to_char(c.end_time,'yyyy-mm-dd') as endTime
+			FROM T_ORDER_ITEM_INTERVIEW c
+		<where>
+			c.interview_type = 9 and c.valid = 1
+			<if test="orderId != null and orderId != '' ">
+				AND c.order_id = #{orderId}
+			</if>
+		</where>
+		order by c.end_time desc)t
+		<where>  rownum = 1 </where>
+	</select>
+
+
+		<select id="queryCategoryCity" parameterType="com.emotte.order.order.model.Category"
+		resultType="com.emotte.order.order.model.Category">
+		SELECT
+		pc.id as "id",
+		pc.fid as "fid",
+		pc.code as "code",
+		pc.org_code as "orgCode",
+		pc.cname as "cname",
+		pcc.city_code as "cityCode"
+		FROM
+		t_product_category pc ,
+		t_product_category_city pcc
+		<where>
+			1 = 1 and pc.valid=1 and pcc.valid=1 and pc.code=pcc.category_code
+			<if test="level!=null and level!='' ">
+				and length(org_code) - LENGTH(replace(org_code,'-','')) =#{level}
+			</if>
+			 <if test="fid!=null and fid!='' ">
+				and pc.fid = #{fid}
+			</if>
+			<if test="id!=null and id!='' ">
+				and pcc.id = #{id}
+			</if>
+			<if test="cityCode!=null and cityCode!='' ">
+				and pcc.city_code = #{cityCode}
+			</if>
+		</where>
+		order by pcc.id desc
+	</select>
+
+	<select id="queryDeptIdById" parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		select
+			ao.dept_id as "deptId"
+		 from t_auth_manager   ao
+		<where>1=1 and ao.valid = 1 and ao.state = 1  and ao.id = #{id}
+		</where>
+	</select>
+
+	<select id="queryChannels" parameterType="com.emotte.order.order.model.Dictionary" resultType="com.emotte.order.order.model.Dictionary">
+		    SELECT c.id                    AS dkey,
+		           c.name                  AS dvalue,
+		           c.is_collection         AS isCollection,
+		           c.housekeeper_available AS housekeeperAvailable
+		      FROM t_custom_channel c
+	        <where>
+		        c.housekeeper_available = 1 AND c.cur_levels IN (20370001, 20370003)
+				<if test="dkey !=null and dkey !='' ">
+					AND id =#{dkey}
+				</if>
+				<if test="valid !=null and valid !='' ">
+					AND valid =#{valid}
+				</if>
+			</where>
+	</select>
+
+	<!--根据ids查询服务人员信息-->
+	<select id="checkPersonnelText" parameterType="java.util.ArrayList" resultType="com.emotte.order.order.model.Personnel">
+		SELECT
+			a.NAME name,
+			b.NAME inCity,
+			a.MOBILE mobile,
+			a.ID_CARD_NUM idCardNum
+		FROM T_EMP_PERSONNEL a
+		LEFT JOIN T_BASE_CITY b ON a.IN_CITY = b.CODE
+		WHERE a.ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!--根据服务人员ID查询管理状态-->
+	<select id="checkOrderTrue" parameterType="com.emotte.order.order.model.OrderBaseModel" resultType="com.emotte.order.order.model.Personnel">
+		SELECT ID id,NAME name,MANAGEMENT_STATUS manageMentStatus FROM T_EMP_PERSONNEL WHERE ID IN (${ids})
+	</select>
+
+	<select id="queryShowMsg" parameterType="com.emotte.order.order.model.PersonnelSchedule" resultType="java.util.HashMap">
+		SELECT distinct t.order_code as orderCode, tp.name as personName
+		  FROM t_order t
+		  left join t_order_item_interview ti
+		    on t.id = ti.order_id
+		    and ti.valid=1
+		    and ti.interview_type=4
+		 inner join t_emp_personnel tp
+		    on tp.id = ti.person_id
+		    and tp.valid=1
+		 where t.valid=1
+		   and t.id = #{orderId}
+		   and tp.id = #{empId}
+	</select>
+
+	<!--推送页面查询服务人员信息卡方法-->
+	<select id="findPersonnelDetailCard" resultType="com.emotte.order.order.model.Personnel">
+		SELECT
+			a.NAME,
+			b.NAME origin,
+			a.AGE age,
+			c.EMP_WORK_TYPE_NAME workType,
+			a.WORKING_LIFE workingLife,
+			a.EDUCATION education,
+			a.ZODIAC zodiac,
+			a.CONSTELLATION constellation,
+			a.BLOOD blood,
+			a.HOME_ADDRESS homeAddress,
+			d.DICT_NAME skill,
+			a.SPECIALTY specialty,
+			a.IS_MARRY isMarry,
+			NVL(a.CHILDREN_NUM,0) childrenNum,
+			a.CHILD_IN_CITY childrenInCity,
+			a.CHILD_HAS_JOB childrenHasJob,
+			a.COUPLE_HERE coupleHere,
+			a.COUPLE_PROFESSION coupleProfession,
+			a.PARENTS_ALIVE parentsAlive,
+			a.PARENTS_HERE parentsHere,
+			j.GRADE_CONTENT remark,
+			e.SKILL_ADDRESS skillAddress,
+			a.SALARY_EXPECTATION salaryExpectation,
+			f.REAL_NAME managerName,
+			(
+				SELECT
+					a."level"
+				FROM T_BASE_WORK_TYPE_LEVEL a
+				INNER JOIN (
+					SELECT
+						f.WORK_TYPE_ID WORK_TYPE_ID,
+						MAX(f.GRADE) GRADE
+					FROM T_ORDER a
+					LEFT JOIN T_ORDER_ITEM b ON a.ID = b.ORDER_ID AND b.VALID = 1
+					LEFT JOIN T_PRODUCT_CITY c ON b.PRODUCT_CODE = c.PRODUCT_CODE AND c.VALID = 1
+					LEFT JOIN T_PRODUCT d ON c.PRODUCT_ID = d.ID AND d.VALID = 1
+					LEFT JOIN T_PRODUCT_WORKTYPE_LEVEL_REF e ON d.BASE_ID = e.PRODUCT_BASE_ID
+					LEFT JOIN T_BASE_WORK_TYPE_LEVEL f ON e.WORK_TYPE_LEVEL_ID = f.ID
+					INNER JOIN T_EMP_WORK_TYPE g ON f.ID = g.WORK_TYPE_LEVEL_ID AND g.VALID = 1 AND g.IS_SHOW = 1
+					WHERE a.ID = #{orderId}
+					AND g.EMP_ID = #{personnelId} GROUP BY f.WORK_TYPE_ID
+				)b ON a.WORK_TYPE_ID = b.WORK_TYPE_ID AND a.GRADE = b.GRADE
+			) gradeText,
+			h.ORIGINAL_ADDRESS head,
+			i.ORIGINAL_ADDRESS orginalAddress
+		FROM T_EMP_PERSONNEL a
+		LEFT JOIN T_BASE_CITY b ON SUBSTR(a.ORIGIN,0,6) = b.CODE AND b.VALID = 1
+		LEFT JOIN (
+			SELECT
+				EMP_ID,
+				WM_CONCAT(DISTINCT EMP_WORK_TYPE_NAME) EMP_WORK_TYPE_NAME
+			FROM T_EMP_WORK_TYPE
+			WHERE VALID = 1 AND IS_SHOW = 1 GROUP BY EMP_ID
+		) c ON c.EMP_ID = a.ID
+		LEFT JOIN (
+			SELECT
+				a.EMP_ID,
+				WM_CONCAT(DISTINCT b.DICT_NAME) DICT_NAME
+			FROM T_EMP_PIC_PROVE a
+			LEFT JOIN T_BASE_DICTIONARY b ON a.PROVE_JOB_LEVEL = b.DICT_CODE
+			WHERE 1=1
+			AND a.PROVE_FLAG = 20330014
+			AND a.VALID = 1
+			AND a.IS_SHOW = 1
+			AND a.STATE_EXAMINE = 2
+			GROUP BY a.EMP_ID
+		) d ON a.ID = d.EMP_ID
+		LEFT JOIN (
+			SELECT
+				EMP_ID,
+				WM_CONCAT(DISTINCT PROVE_IMG) SKILL_ADDRESS
+			FROM (
+				SELECT
+					EMP_ID,
+					PROVE_IMG
+				FROM T_EMP_PIC_PROVE
+				WHERE VALID = 1
+				AND IS_SHOW = 1
+				AND STATE_EXAMINE = 2
+				AND PROVE_FLAG = 20330014
+				ORDER BY CREATE_TIME DESC
+			) GROUP BY EMP_ID
+		) e ON a.ID = e.EMP_ID
+		LEFT JOIN T_AUTH_MANAGER f ON a.PRODUCTID = f.ID
+		LEFT JOIN T_EMP_PIC_VIDEO h ON a.ID = h.EMP_ID AND h.IS_SHOW = 1 AND h.ALBUM_TYPE_ID = 9 AND h.VALID = 1 AND ROWNUM = 1
+		LEFT JOIN (
+			SELECT
+				EMP_ID,
+				WM_CONCAT(DISTINCT ORIGINAL_ADDRESS) ORIGINAL_ADDRESS
+			FROM (
+				SELECT
+					EMP_ID,
+					ORIGINAL_ADDRESS
+				FROM T_EMP_PIC_VIDEO
+				WHERE IS_SHOW = 1
+				AND VALID = 1
+				AND ALBUM_TYPE_ID = 5
+				ORDER BY CREATETIME DESC
+			) GROUP BY EMP_ID
+		) i ON a.ID = i.EMP_ID
+		LEFT JOIN T_LEVEL_GRADE j ON a.ID = j.EMP_ID AND j.VAILD = 1
+		WHERE 1=1 AND a.ID = #{personnelId}
+	</select>
+</mapper>

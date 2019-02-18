@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.RePersonnelMapper">
+	<select id="loadPersonnel" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Personnel">
+		select 
+			ID as id ,		
+			NAME as name ,		
+			SEX as sex ,		
+			AGE as age ,		
+			ORIGIN as origin ,		
+			ZODIAC as zodiac ,		
+			ID_CARD_NUM as idCardNum ,		
+			MANDARIN as mandarin ,		
+			NATION as nation ,		
+			MOBILE as mobile ,		
+			IS_MARRY as isMarry ,		
+			USUAL_LNG as usualLng ,		
+			USUAL_LAT as usualLat ,		
+			CURRENT_ADDRESS as currentAddress ,		
+			HOME_ADDRESS as homeAddress ,		
+			EDUCATION as education ,		
+			EMERGENCY_CONTACT_PHONE as emergencyContactPhone ,		
+			IS_HOME as isHome ,		
+			WORKING_LIFE as workingLife ,		
+			HEALTH_CERTIFICATE as healthCertificate ,		
+			FEAR_PET as fearPet ,		
+			SALARY_EXPECTATION as salaryExpectation ,		
+			JOB_EXPECTATION_CONTENT as jobExpectationContent ,		
+			SPECIALTY as specialty ,		
+			VALID as valid ,		
+			IS_INSCHOOL as isInschool ,		
+			APPOINTMENT_SCHOOL_TIME as appointmentSchoolTime ,		
+			L1_CHANNEL as l1Channel ,		
+			L2_CHANNEL as l2Channel ,		
+			L3_CHANNEL as l3Channel ,		
+			CREATE_BY as createBy ,		
+			UPDATE_BY as updateBy ,		
+			CREATETIME as createtime ,		
+			UPDATETIME as updatetime ,		
+			PRODUCTID as productid ,		
+			BASE_ID as baseId ,		
+			STAFF_TYPE as staffType ,		
+			IS_BLACK as isBlack ,		
+			BLACK_SO as blackSo ,		
+			HOPE_WORK_TYPE as hopeWorkType ,		
+			IS_PASS as isPass ,		
+			RECOMMEND_NAME as recommendName ,		
+			RECOMMEND_PHONE as recommendPhone ,		
+			VERSION as version ,		
+			IN_CITY as inCity 		
+		from T_EMP_PERSONNEL
+		where
+			ID=#{id} 	
+	</select>
+	
+	<select id="queryPersonnel"  parameterType="com.emotte.order.order.model.Personnel" resultType="com.emotte.order.order.model.Personnel">
+	select
+			ID as id ,		
+			NAME as name ,		
+			SEX as sex ,		
+			AGE as age ,		
+			ORIGIN as origin ,		
+			ZODIAC as zodiac ,		
+			ID_CARD_NUM as idCardNum ,		
+			MANDARIN as mandarin ,		
+			NATION as nation ,		
+			MOBILE as mobile ,		
+			IS_MARRY as isMarry ,		
+			USUAL_LNG as usualLng ,		
+			USUAL_LAT as usualLat ,		
+			CURRENT_ADDRESS as currentAddress ,		
+			HOME_ADDRESS as homeAddress ,		
+			EDUCATION as education ,		
+			EMERGENCY_CONTACT_PHONE as emergencyContactPhone ,		
+			IS_HOME as isHome ,		
+			WORKING_LIFE as workingLife ,		
+			HEALTH_CERTIFICATE as healthCertificate ,		
+			FEAR_PET as fearPet ,		
+			SALARY_EXPECTATION as salaryExpectation ,		
+			JOB_EXPECTATION_CONTENT as jobExpectationContent ,		
+			SPECIALTY as specialty ,		
+			VALID as valid ,		
+			IS_INSCHOOL as isInschool ,		
+			APPOINTMENT_SCHOOL_TIME as appointmentSchoolTime ,		
+			L1_CHANNEL as l1Channel ,		
+			L2_CHANNEL as l2Channel ,		
+			L3_CHANNEL as l3Channel ,		
+			CREATE_BY as createBy ,		
+			UPDATE_BY as updateBy ,		
+			CREATETIME as createtime ,		
+			UPDATETIME as updatetime ,		
+			PRODUCTID as productid ,		
+			BASE_ID as baseId ,		
+			STAFF_TYPE as staffType ,		
+			IS_BLACK as isBlack ,		
+			BLACK_SO as blackSo ,		
+			HOPE_WORK_TYPE as hopeWorkType ,		
+			IS_PASS as isPass ,		
+			RECOMMEND_NAME as recommendName ,		
+			RECOMMEND_PHONE as recommendPhone ,		
+			VERSION as version ,		
+			IN_CITY as inCity 		
+	from  T_EMP_PERSONNEL
+	<where> 
+	 1 = 1 and management_status in (1,4,9,10,17)
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="name!=null and name!='' ">           
+			and	NAME =  #{name} 		
+		</if>	
+		<if test="sex!=null and sex!='' ">           
+			and	SEX =  #{sex} 		
+		</if>	
+		<if test="age!=null and age!='' ">           
+			and	AGE =  #{age} 		
+		</if>	
+		<if test="origin!=null and origin!='' ">           
+			and	ORIGIN =  #{origin} 		
+		</if>	
+		<if test="zodiac!=null and zodiac!='' ">           
+			and	ZODIAC =  #{zodiac} 		
+		</if>	
+		<if test="idCardNum!=null and idCardNum!='' ">           
+			and	ID_CARD_NUM =  #{idCardNum} 		
+		</if>	
+		<if test="mandarin!=null and mandarin!='' ">           
+			and	MANDARIN =  #{mandarin} 		
+		</if>	
+		<if test="nation!=null and nation!='' ">           
+			and	NATION =  #{nation} 		
+		</if>	
+		<if test="mobile!=null and mobile!='' ">           
+			and	MOBILE =  #{mobile} 		
+		</if>	
+		<if test="isMarry!=null and isMarry!='' ">           
+			and	IS_MARRY =  #{isMarry} 		
+		</if>	
+		<if test="usualLng!=null and usualLng!='' ">           
+			and	USUAL_LNG =  #{usualLng} 		
+		</if>	
+		<if test="usualLat!=null and usualLat!='' ">           
+			and	USUAL_LAT =  #{usualLat} 		
+		</if>	
+		<if test="currentAddress!=null and currentAddress!='' ">           
+			and	CURRENT_ADDRESS =  #{currentAddress} 		
+		</if>	
+		<if test="homeAddress!=null and homeAddress!='' ">           
+			and	HOME_ADDRESS =  #{homeAddress} 		
+		</if>	
+		<if test="education!=null and education!='' ">           
+			and	EDUCATION =  #{education} 		
+		</if>	
+		<if test="emergencyContactPhone!=null and emergencyContactPhone!='' ">           
+			and	EMERGENCY_CONTACT_PHONE =  #{emergencyContactPhone} 		
+		</if>	
+		<if test="isHome!=null and isHome!='' ">           
+			and	IS_HOME =  #{isHome} 		
+		</if>	
+		<if test="workingLife!=null and workingLife!='' ">           
+			and	WORKING_LIFE =  #{workingLife} 		
+		</if>	
+		<if test="healthCertificate!=null and healthCertificate!='' ">           
+			and	HEALTH_CERTIFICATE =  #{healthCertificate} 		
+		</if>	
+		<if test="fearPet!=null and fearPet!='' ">           
+			and	FEAR_PET =  #{fearPet} 		
+		</if>	
+		<if test="salaryExpectation!=null and salaryExpectation!='' ">           
+			and	SALARY_EXPECTATION =  #{salaryExpectation} 		
+		</if>	
+		<if test="jobExpectationContent!=null and jobExpectationContent!='' ">           
+			and	JOB_EXPECTATION_CONTENT =  #{jobExpectationContent} 		
+		</if>	
+		<if test="specialty!=null and specialty!='' ">           
+			and	SPECIALTY =  #{specialty} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="isInschool!=null and isInschool!='' ">           
+			and	IS_INSCHOOL =  #{isInschool} 		
+		</if>	
+		<if test="appointmentSchoolTime!=null and appointmentSchoolTime!='' ">           
+			and	APPOINTMENT_SCHOOL_TIME =  #{appointmentSchoolTime} 		
+		</if>	
+		<if test="l1Channel!=null and l1Channel!='' ">           
+			and	L1_CHANNEL =  #{l1Channel} 		
+		</if>	
+		<if test="l2Channel!=null and l2Channel!='' ">           
+			and	L2_CHANNEL =  #{l2Channel} 		
+		</if>	
+		<if test="l3Channel!=null and l3Channel!='' ">           
+			and	L3_CHANNEL =  #{l3Channel} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="createtime!=null and createtime!='' ">           
+			and	CREATETIME =  #{createtime} 		
+		</if>	
+		<if test="updatetime!=null and updatetime!='' ">           
+			and	UPDATETIME =  #{updatetime} 		
+		</if>	
+		<if test="productid!=null and productid!='' ">           
+			and	PRODUCTID =  #{productid} 		
+		</if>	
+		<if test="baseId!=null and baseId!='' ">           
+			and	BASE_ID =  #{baseId} 		
+		</if>	
+		<if test="staffType!=null and staffType!='' ">           
+			and	STAFF_TYPE =  #{staffType} 		
+		</if>	
+		<if test="isBlack!=null and isBlack!='' ">           
+			and	IS_BLACK =  #{isBlack} 		
+		</if>	
+		<if test="blackSo!=null and blackSo!='' ">           
+			and	BLACK_SO =  #{blackSo} 		
+		</if>	
+		<if test="hopeWorkType!=null and hopeWorkType!='' ">           
+			and	HOPE_WORK_TYPE =  #{hopeWorkType} 		
+		</if>	
+		<if test="isPass!=null and isPass!='' ">           
+			and	IS_PASS =  #{isPass} 		
+		</if>	
+		<if test="recommendName!=null and recommendName!='' ">           
+			and	RECOMMEND_NAME =  #{recommendName} 		
+		</if>	
+		<if test="recommendPhone!=null and recommendPhone!='' ">           
+			and	RECOMMEND_PHONE =  #{recommendPhone} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="inCity!=null and inCity!='' ">           
+			and	IN_CITY =  #{inCity} 		
+		</if>	
+	</where>
+	order by ID desc
+	</select>
+	
+	
+	<select id="countPersonnel"  parameterType="com.emotte.order.order.model.Personnel" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM T_EMP_PERSONNEL
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="name!=null and name!='' ">           
+			and	NAME =  #{name} 		
+		</if>	
+		<if test="sex!=null and sex!='' ">           
+			and	SEX =  #{sex} 		
+		</if>	
+		<if test="age!=null and age!='' ">           
+			and	AGE =  #{age} 		
+		</if>	
+		<if test="origin!=null and origin!='' ">           
+			and	ORIGIN =  #{origin} 		
+		</if>	
+		<if test="zodiac!=null and zodiac!='' ">           
+			and	ZODIAC =  #{zodiac} 		
+		</if>	
+		<if test="idCardNum!=null and idCardNum!='' ">           
+			and	ID_CARD_NUM =  #{idCardNum} 		
+		</if>	
+		<if test="mandarin!=null and mandarin!='' ">           
+			and	MANDARIN =  #{mandarin} 		
+		</if>	
+		<if test="nation!=null and nation!='' ">           
+			and	NATION =  #{nation} 		
+		</if>	
+		<if test="mobile!=null and mobile!='' ">           
+			and	MOBILE =  #{mobile} 		
+		</if>	
+		<if test="isMarry!=null and isMarry!='' ">           
+			and	IS_MARRY =  #{isMarry} 		
+		</if>	
+		<if test="usualLng!=null and usualLng!='' ">           
+			and	USUAL_LNG =  #{usualLng} 		
+		</if>	
+		<if test="usualLat!=null and usualLat!='' ">           
+			and	USUAL_LAT =  #{usualLat} 		
+		</if>	
+		<if test="currentAddress!=null and currentAddress!='' ">           
+			and	CURRENT_ADDRESS =  #{currentAddress} 		
+		</if>	
+		<if test="homeAddress!=null and homeAddress!='' ">           
+			and	HOME_ADDRESS =  #{homeAddress} 		
+		</if>	
+		<if test="education!=null and education!='' ">           
+			and	EDUCATION =  #{education} 		
+		</if>	
+		<if test="emergencyContactPhone!=null and emergencyContactPhone!='' ">           
+			and	EMERGENCY_CONTACT_PHONE =  #{emergencyContactPhone} 		
+		</if>	
+		<if test="isHome!=null and isHome!='' ">           
+			and	IS_HOME =  #{isHome} 		
+		</if>	
+		<if test="workingLife!=null and workingLife!='' ">           
+			and	WORKING_LIFE =  #{workingLife} 		
+		</if>	
+		<if test="healthCertificate!=null and healthCertificate!='' ">           
+			and	HEALTH_CERTIFICATE =  #{healthCertificate} 		
+		</if>	
+		<if test="fearPet!=null and fearPet!='' ">           
+			and	FEAR_PET =  #{fearPet} 		
+		</if>	
+		<if test="salaryExpectation!=null and salaryExpectation!='' ">           
+			and	SALARY_EXPECTATION =  #{salaryExpectation} 		
+		</if>	
+		<if test="jobExpectationContent!=null and jobExpectationContent!='' ">           
+			and	JOB_EXPECTATION_CONTENT =  #{jobExpectationContent} 		
+		</if>	
+		<if test="specialty!=null and specialty!='' ">           
+			and	SPECIALTY =  #{specialty} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="isInschool!=null and isInschool!='' ">           
+			and	IS_INSCHOOL =  #{isInschool} 		
+		</if>	
+		<if test="appointmentSchoolTime!=null and appointmentSchoolTime!='' ">           
+			and	APPOINTMENT_SCHOOL_TIME =  #{appointmentSchoolTime} 		
+		</if>	
+		<if test="l1Channel!=null and l1Channel!='' ">           
+			and	L1_CHANNEL =  #{l1Channel} 		
+		</if>	
+		<if test="l2Channel!=null and l2Channel!='' ">           
+			and	L2_CHANNEL =  #{l2Channel} 		
+		</if>	
+		<if test="l3Channel!=null and l3Channel!='' ">           
+			and	L3_CHANNEL =  #{l3Channel} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="createtime!=null and createtime!='' ">           
+			and	CREATETIME =  #{createtime} 		
+		</if>	
+		<if test="updatetime!=null and updatetime!='' ">           
+			and	UPDATETIME =  #{updatetime} 		
+		</if>	
+		<if test="productid!=null and productid!='' ">           
+			and	PRODUCTID =  #{productid} 		
+		</if>	
+		<if test="baseId!=null and baseId!='' ">           
+			and	BASE_ID =  #{baseId} 		
+		</if>	
+		<if test="staffType!=null and staffType!='' ">           
+			and	STAFF_TYPE =  #{staffType} 		
+		</if>	
+		<if test="isBlack!=null and isBlack!='' ">           
+			and	IS_BLACK =  #{isBlack} 		
+		</if>	
+		<if test="blackSo!=null and blackSo!='' ">           
+			and	BLACK_SO =  #{blackSo} 		
+		</if>	
+		<if test="hopeWorkType!=null and hopeWorkType!='' ">           
+			and	HOPE_WORK_TYPE =  #{hopeWorkType} 		
+		</if>	
+		<if test="isPass!=null and isPass!='' ">           
+			and	IS_PASS =  #{isPass} 		
+		</if>	
+		<if test="recommendName!=null and recommendName!='' ">           
+			and	RECOMMEND_NAME =  #{recommendName} 		
+		</if>	
+		<if test="recommendPhone!=null and recommendPhone!='' ">           
+			and	RECOMMEND_PHONE =  #{recommendPhone} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="inCity!=null and inCity!='' ">           
+			and	IN_CITY =  #{inCity} 		
+		</if>	
+			</where>
+	</select>
+	
+	<select id="querypersonInfo" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Personnel">
+	select person.staff_type as staffType
+	from t_emp_personnel person
+	<where>
+		  person.id=#{id}
+	</where>
+	</select>
+	
+	<select id="queryPersonnelByOrderId" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.Personnel">
+	 select  oii.person_id as "id"
+       from t_order od
+       left join t_order_item_interview oii on od.id = oii.order_id
+       left join t_emp_personnel ep  on ep.id = oii.person_id
+       <where>
+          1 = 1 and od.valid = 1
+                  and oii.valid = 1
+                  and oii.interview_type in (8,9)
+                  and ep.valid = 1
+			      and od.id=#{id}
+       </where>
+	</select>
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrRecorderMapper">
+
+	<insert id="insertRecorder" parameterType="com.emotte.order.order.model.Recorder">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+   		</selectKey>
+		insert into T_ORDER_RECORDER ( 
+			ID ,		
+			ORDER_ID ,		
+			RECORDER ,		
+			CREATE_TIME ,		
+			SATISFY ,		
+			MEANING ,		
+			NEXT_TIME ,		
+			REMARK ,		
+			CLASSFY_CODE ,		
+			ISREAD,
+			ORDER_PROGRESS,
+			ORDER_PROGRESS_INFO	,
+			SOURCES,
+			CUSTOM_ID,
+			UNINTENTIONAL_REASON,
+			VALID,
+			VERSION
+		) values (
+			#{id} ,		
+			#{orderId} ,		
+			#{recorder} ,
+			sysdate,
+			#{satisfy} ,		
+			#{meaning} ,
+			to_date(#{nextTime},'yyyy-mm-dd hh24:mi:ss'),			
+			#{remark} ,		
+			#{classfyCode} ,		
+			1,
+			#{orderProgress},
+			#{orderProgressInfo},
+			#{sources},
+			#{customId},
+			#{unintentionalReason},
+			1,
+			1
+		)
+	</insert>
+
+	<update id="updateRecorder" parameterType="com.emotte.order.order.model.Recorder">
+		update T_order_recorder	
+		 <set>  
+		 	VERSION = VERSION + 1,UPDATE_TIME=SYSDATE
+			<if test="satisfy!=null and satisfy!='' "> 
+				,SATISFY =  #{satisfy} 
+			</if>		
+			<if test="meaning!=null and meaning!='' "> 
+				,MEANING =  #{meaning} 
+				<choose>
+				    <when test="meaning == 4 or meaning == '4' ">
+				     	<if test="unintentionalReason != null and unintentionalReason != '' "> 
+						,UNINTENTIONAL_REASON = #{unintentionalReason}
+						</if>
+				    </when>
+				    <otherwise>
+				    ,UNINTENTIONAL_REASON = NULL
+				    </otherwise>
+			   </choose>
+			</if>		
+			<if test="nextTime!=null and nextTime!='' "> 
+				,NEXT_TIME =  to_date(#{nextTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>		
+			<if test="remark!=null and remark!='' "> 
+				,REMARK =  #{remark} 
+			</if>		
+			<if test="classfyCode!=null and classfyCode!='' "> 
+				,CLASSFY_CODE =  #{classfyCode} 
+			</if>		
+			<if test="isread!=null and isread!='' "> 
+				,ISREAD =  #{isread} 
+			</if>
+			<if test="orderProgress != null and orderProgress != '' "> 
+				,ORDER_PROGRESS =  #{orderProgress} 
+				<choose>
+				    <when test="orderProgress == 19 or orderProgress == '19' ">
+				     	<if test="orderProgressInfo != null and orderProgressInfo != '' "> 
+						,ORDER_PROGRESS_INFO = #{orderProgressInfo}
+						</if>
+				    </when>
+				    <otherwise>
+				    	,ORDER_PROGRESS_INFO = NULL
+				    </otherwise>
+			  </choose>	
+			</if>
+			<if test="customId != null and customId != '' ">
+				,CUSTOM_ID = #{customId}
+			</if>
+			<if test="updateBy != null and updateBy != '' ">
+				,UPDATE_BY = #{updateBy}
+			</if>
+       </set>
+		WHERE ID =  #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.emotte.order.order.mapper.writer.WrOrderItemSalaryMapper">
+	 <insert id="insertOrderItemSalary" parameterType="com.emotte.order.order.model.OrderItemSalary" >
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq()	FROM dual
+		</selectKey>
+		insert into t_order_item_salary(
+			id,
+			order_id,
+			person_id,
+			account_id,
+			valid,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			version
+		)values(
+			#{id},
+			#{orderId},
+			#{personId},
+			#{accountId},
+			#{valid},
+			sysdate ,
+			#{createBy},
+			#{updateTime},
+			#{updateBy},
+			#{version}
+		)
+	</insert>
+	 <update id="updateOrderItemSalary" parameterType="com.emotte.order.order.model.OrderItemSalary" >
+		update t_order_item_salary t 
+		<set>
+			<if test="id != null and id != ''">
+				t.id = #{id},
+			</if>
+			<if test="orderId != null and orderId != ''">
+				t.order_id = #{orderId},
+			</if>
+			<if test="personId != null and personId != ''">
+				t.person_id = #{personId},
+			</if>
+			<if test="accountId != null and accountId != ''">
+				t.account_id = #{accountId},
+			</if>
+			<if test="valid != null and valid != ''">
+				t.valid = #{valid},
+			</if>
+			<if test="createBy!=null and createBy!='' ">           
+				t.create_by =  #{createBy} ,		</if>
+			<if test="createTime!=null and createTime!='' ">           
+				to_char(t.create_time,'yyyy-mm-dd') = #{createTime} ,		
+			</if>
+			 <if test="updateBy!=null and updateBy!='' ">           
+				t.update_by =  #{updateBy} 	,	</if>
+			 <if test="updateTime!=null and updateTime!='' ">           
+				to_char(t.update_time,'yyyy-MM-dd') = #{updateTime} ,		
+			 </if>
+				t.version = t.version + 1
+		</set>
+		where t.id = #{id}  
+	</update>
+</mapper>

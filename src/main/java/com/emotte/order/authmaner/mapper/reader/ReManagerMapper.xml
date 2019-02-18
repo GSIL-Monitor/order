@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.authmaner.mapper.reader.ReManagerMapper">
+	<sql id="columns">
+		ID as id ,
+		USER_NAME as userName ,
+		PASSWORD as password ,
+		REAL_NAME as realName ,
+		LOGIN_COUNT as loginCount ,
+		LAST_LOGIN_TIME as lastLoginTime ,
+		LAST_LOGIN_IP as lastLoginIp ,
+		STATE as state ,
+		DEPT_ID as deptId ,
+		PHONE as phone ,
+		MANAGER_TYPE as managerType ,
+		STYLE_COLOR as styleColor ,
+		REMARK as remark ,
+		CREATE_BY as createBy ,
+		CREATE_TIME as createTime ,
+		PERMISSION_LEVEL as permissionLevel ,
+		UPDATE_TIME as updateTime ,
+		UPDATE_BY as updateBy ,
+		VERSION as version ,
+		VALID as valid ,
+		POST as post ,
+		WITH_USER as withUser ,
+		JOB_NUMBER as jobNumber ,
+		IS_OLD_DATA as isOldData ,
+		LOG as log 
+	</sql>
+	<!-- 加载 -->
+	<select id="load" parameterType="java.lang.Long" resultType="com.emotte.order.authmaner.model.Manager">
+		select 
+			<include refid="columns"/>
+		from t_auth_manager
+		where
+			ID = #{id} 
+	</select>
+	<!-- 查询 -->
+	<select id="query" parameterType="com.emotte.order.authmaner.model.Manager" resultType="com.emotte.order.authmaner.model.Manager">
+		select
+			<include refid="columns"/> 		
+		from t_auth_manager
+		<where> 
+			1 = 1
+			<if test="id != null and id != ''">
+				and	ID = #{id}
+			</if>
+			<if test="userName != null and userName != ''">
+				and	USER_NAME = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				and	PASSWORD = #{password}
+			</if>
+			<if test="realName != null and realName != ''">
+				and	REAL_NAME = #{realName}
+			</if>
+			<if test="loginCount != null and loginCount != ''">
+				and	LOGIN_COUNT = #{loginCount}
+			</if>
+			<if test="lastLoginTime != null and lastLoginTime != ''">
+				and	LAST_LOGIN_TIME = #{lastLoginTime}
+			</if>
+			<if test="lastLoginIp != null and lastLoginIp != ''">
+				and	LAST_LOGIN_IP = #{lastLoginIp}
+			</if>
+			<if test="state != null and state != ''">
+				and	STATE = #{state}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and	DEPT_ID = #{deptId}
+			</if>
+			<if test="phone != null and phone != ''">
+				and	PHONE = #{phone}
+			</if>
+			<if test="managerType != null and managerType != ''">
+				and	MANAGER_TYPE = #{managerType}
+			</if>
+			<if test="styleColor != null and styleColor != ''">
+				and	STYLE_COLOR = #{styleColor}
+			</if>
+			<if test="remark != null and remark != ''">
+				and	REMARK = #{remark}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and	CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and	CREATE_TIME = #{createTime}
+			</if>
+			<if test="permissionLevel != null and permissionLevel != ''">
+				and	PERMISSION_LEVEL = #{permissionLevel}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and	UPDATE_TIME = #{updateTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and	UPDATE_BY = #{updateBy}
+			</if>
+			<if test="version != null and version != ''">
+				and	VERSION = #{version}
+			</if>
+			<if test="valid != null and valid != ''">
+				and	VALID = #{valid}
+			</if>
+			<if test="post != null and post != ''">
+				and	POST = #{post}
+			</if>
+			<if test="withUser != null and withUser != ''">
+				and	WITH_USER = #{withUser}
+			</if>
+			<if test="jobNumber != null and jobNumber != ''">
+				and	JOB_NUMBER = #{jobNumber}
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				and	IS_OLD_DATA = #{isOldData}
+			</if>
+			<if test="log != null and log != ''">
+				and	LOG = #{log}
+			</if>
+		</where>
+		order by ID desc
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryByPage" parameterType="com.emotte.order.authmaner.model.Manager" resultType="com.emotte.order.authmaner.model.Manager">
+		select
+			<include refid="columns"/>
+		from t_auth_manager
+		<where> 
+			1 = 1
+			<if test="id != null and id != ''">
+				and	ID = #{id}
+			</if>
+			<if test="userName != null and userName != ''">
+				and	USER_NAME = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				and	PASSWORD = #{password}
+			</if>
+			<if test="realName != null and realName != ''">
+				and	REAL_NAME = #{realName}
+			</if>
+			<if test="loginCount != null and loginCount != ''">
+				and	LOGIN_COUNT = #{loginCount}
+			</if>
+			<if test="lastLoginTime != null and lastLoginTime != ''">
+				and	LAST_LOGIN_TIME = #{lastLoginTime}
+			</if>
+			<if test="lastLoginIp != null and lastLoginIp != ''">
+				and	LAST_LOGIN_IP = #{lastLoginIp}
+			</if>
+			<if test="state != null and state != ''">
+				and	STATE = #{state}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and	DEPT_ID = #{deptId}
+			</if>
+			<if test="phone != null and phone != ''">
+				and	PHONE = #{phone}
+			</if>
+			<if test="managerType != null and managerType != ''">
+				and	MANAGER_TYPE = #{managerType}
+			</if>
+			<if test="styleColor != null and styleColor != ''">
+				and	STYLE_COLOR = #{styleColor}
+			</if>
+			<if test="remark != null and remark != ''">
+				and	REMARK = #{remark}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and	CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and	CREATE_TIME = #{createTime}
+			</if>
+			<if test="permissionLevel != null and permissionLevel != ''">
+				and	PERMISSION_LEVEL = #{permissionLevel}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and	UPDATE_TIME = #{updateTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and	UPDATE_BY = #{updateBy}
+			</if>
+			<if test="version != null and version != ''">
+				and	VERSION = #{version}
+			</if>
+			<if test="valid != null and valid != ''">
+				and	VALID = #{valid}
+			</if>
+			<if test="post != null and post != ''">
+				and	POST = #{post}
+			</if>
+			<if test="withUser != null and withUser != ''">
+				and	WITH_USER = #{withUser}
+			</if>
+			<if test="jobNumber != null and jobNumber != ''">
+				and	JOB_NUMBER = #{jobNumber}
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				and	IS_OLD_DATA = #{isOldData}
+			</if>
+			<if test="log != null and log != ''">
+				and	LOG = #{log}
+			</if>
+		</where>
+		order by ID desc
+	</select>
+	<!-- 查询导出数据 -->
+	<select id="queryExport" resultType="java.util.Map">
+		select
+			<include refid="columns"/>
+		from t_auth_manager
+		<where> 
+	 		1 = 1
+	 		<choose>
+	 			<when test="ids != null and ids != ''">
+	 				and id in 
+	 				<foreach collection="ids" item="id" open="(" close=")" separator=",">
+	 					#{id:NUMERIC}
+	 				</foreach>
+	 			</when>
+	 			<otherwise>
+					<if test="id != null and id != ''">
+						and	ID = #{id}
+					</if>
+					<if test="userName != null and userName != ''">
+						and	USER_NAME = #{userName}
+					</if>
+					<if test="password != null and password != ''">
+						and	PASSWORD = #{password}
+					</if>
+					<if test="realName != null and realName != ''">
+						and	REAL_NAME = #{realName}
+					</if>
+					<if test="loginCount != null and loginCount != ''">
+						and	LOGIN_COUNT = #{loginCount}
+					</if>
+					<if test="lastLoginTime != null and lastLoginTime != ''">
+						and	LAST_LOGIN_TIME = #{lastLoginTime}
+					</if>
+					<if test="lastLoginIp != null and lastLoginIp != ''">
+						and	LAST_LOGIN_IP = #{lastLoginIp}
+					</if>
+					<if test="state != null and state != ''">
+						and	STATE = #{state}
+					</if>
+					<if test="deptId != null and deptId != ''">
+						and	DEPT_ID = #{deptId}
+					</if>
+					<if test="phone != null and phone != ''">
+						and	PHONE = #{phone}
+					</if>
+					<if test="managerType != null and managerType != ''">
+						and	MANAGER_TYPE = #{managerType}
+					</if>
+					<if test="styleColor != null and styleColor != ''">
+						and	STYLE_COLOR = #{styleColor}
+					</if>
+					<if test="remark != null and remark != ''">
+						and	REMARK = #{remark}
+					</if>
+					<if test="createBy != null and createBy != ''">
+						and	CREATE_BY = #{createBy}
+					</if>
+					<if test="createTime != null and createTime != ''">
+						and	CREATE_TIME = #{createTime}
+					</if>
+					<if test="permissionLevel != null and permissionLevel != ''">
+						and	PERMISSION_LEVEL = #{permissionLevel}
+					</if>
+					<if test="updateTime != null and updateTime != ''">
+						and	UPDATE_TIME = #{updateTime}
+					</if>
+					<if test="updateBy != null and updateBy != ''">
+						and	UPDATE_BY = #{updateBy}
+					</if>
+					<if test="version != null and version != ''">
+						and	VERSION = #{version}
+					</if>
+					<if test="valid != null and valid != ''">
+						and	VALID = #{valid}
+					</if>
+					<if test="post != null and post != ''">
+						and	POST = #{post}
+					</if>
+					<if test="withUser != null and withUser != ''">
+						and	WITH_USER = #{withUser}
+					</if>
+					<if test="jobNumber != null and jobNumber != ''">
+						and	JOB_NUMBER = #{jobNumber}
+					</if>
+					<if test="isOldData != null and isOldData != ''">
+						and	IS_OLD_DATA = #{isOldData}
+					</if>
+					<if test="log != null and log != ''">
+						and	LOG = #{log}
+					</if>
+	 			</otherwise>
+	 		</choose>
+		</where>
+		order by ID desc
+	</select>
+	<!-- 加载管理员信息 -->
+	<select id="loadManagerInfo" resultType="java.util.Map">
+		SELECT 
+			m.id "userId", 
+			m.user_name "userName", 
+			m.real_name "realName", 
+			m.post "post", 
+			m.dept_id "orgId", 
+			org.name "orgName", 
+			org.type "orgType"
+		FROM 
+			t_auth_manager m 
+			LEFT JOIN t_auth_org org ON m.dept_id = org.id AND org.valid = 1 AND org.status = 1 
+		WHERE 
+			m.valid = 1 AND m.id = #{0}
+	</select>
+	
+	<!-- 加载所有管理员信息 -->
+	<select id="loadAllAuthManager" resultType="java.util.HashMap">
+		SELECT 
+			m.id manager_id, 
+			m.user_name manager_name, 
+			m.real_name real_name, 
+			m.post post, 
+			m.dept_id org_id 
+		FROM 
+			t_auth_manager m 
+		WHERE 
+			m.valid = 1 and m.state=1
+	</select>
+</mapper>

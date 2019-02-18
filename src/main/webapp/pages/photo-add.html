@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="false">
+    <div class="modal-dialog" style="width:45%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">相册</h4>
+            </div>
+            <div class="modal-body">
+                <!--图库弹出层 开始-->
+                <div class="mskelayBox">
+                    <div class="mske_html">
+                    </div>
+                    <img class="mskeClaose" src="../images/mke_close.png" width="27" height="27" />
+                </div>
+                <!--图库弹出层 结束-->
+                <div class="msKeimgBox">
+                    <ul>
+                        <li>
+                            <img class="small-img" src="../images/skeImg.jpg" width="185" height="93" />
+                            <div class="photo-add-checkbox"><input type="checkbox"/></div>
+                            <span class="hidden">
+                            <img src="../images/bkeImg.jpg" width="974" height="488" />
+                            </span>
+                        </li>
+                        <li>
+                            <img class="small-img" src="../images/skeImg1.jpg" width="185" height="93" />
+                            <div class="photo-add-checkbox"><input type="checkbox"/></div>
+                            <span class="hidden">
+                            <img src="../images/bkeImg1.jpg" width="974" height="488" />
+                            </span>
+                        </li>
+                        <li>
+                            <img class="small-img" src="../images/skeImg2.jpg" width="185" height="93" />                            <div class="photo-add-checkbox"><input type="checkbox"/></div>
+                            <span class="hidden">
+                            <img src="../images/bkeImg2.jpg" width="974" height="488" />
+                            </span>
+                        </li>
+                        <li>
+                            <img class="small-img" src="../images/skeImg.jpg" width="185" height="93" />
+                            <div class="photo-add-checkbox"><input type="checkbox"/></div>
+                            <span class="hidden">
+                            <img src="../images/bkeImg.jpg" width="974" height="488" />
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="closeModule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function(){
+//选项卡滑动切换通用
+        jQuery(function(){jQuery(".hoverTag .chgBtn").hover(function(){jQuery(this).parent().find(".chgBtn").removeClass("chgCutBtn");jQuery(this).addClass("chgCutBtn");var cutNum=jQuery(this).parent().find(".chgBtn").index(this);jQuery(this).parents(".hoverTag").find(".chgCon").hide();jQuery(this).parents(".hoverTag").find(".chgCon").eq(cutNum).show();})})
+
+//选项卡点击切换通用
+        jQuery(function(){jQuery(".clickTag .chgBtn").click(function(){jQuery(this).parent().find(".chgBtn").removeClass("chgCutBtn");jQuery(this).addClass("chgCutBtn");var cutNum=jQuery(this).parent().find(".chgBtn").index(this);jQuery(this).parents(".clickTag").find(".chgCon").hide();jQuery(this).parents(".clickTag").find(".chgCon").eq(cutNum).show();})})
+
+//图库弹出层
+        $(".mskeClaose").click(function(){$(".mskeLayBg,.mskelayBox").hide()});
+        $(".msKeimgBox li .small-img").click(function(){$(".mske_html").html($(this).parent().find(".hidden").html());$(".mskeLayBg").show();$(".mskelayBox").fadeIn(300)});
+        $(".mskeTogBtn").click(function(){$(".msKeimgBox").toggleClass("msKeimgBox2");$(this).toggleClass("mskeTogBtn2")});
+
+    })
+    //屏蔽页面错误
+    jQuery(window).error(function(){
+        return true;
+    });
+    jQuery("img").error(function(){
+        $(this).hide();
+    });
+</script>
+</body>
+</html>
+

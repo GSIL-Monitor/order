@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.reader.ReUploadLogMapper">
+	<select id="loadUploadLog" parameterType="java.lang.Long" resultType="com.emotte.order.warehouse.model.UploadLog">
+		select 
+			ID as id ,		
+			PACKAGE_ID as packageId ,		
+			STATE as state ,		
+			REASON as reason ,		
+			CREATE_BY as createBy ,		
+			CREATE_TIME as createTime ,		
+			IS_OLD_DATA as isOldData ,		
+			LOG as log 		
+		from t_warehouse_upload_log
+		where
+	</select>
+	
+	<select id="queryUploadLoglistPage"  parameterType="com.emotte.order.warehouse.model.UploadLog" resultType="com.emotte.order.warehouse.model.UploadLog">
+	select
+			l.ID as id ,		
+			l.PACKAGE_ID as packageId ,    
+      		l.CREATE_BY as "createBy",
+       to_char(l.CREATE_TIME, 'yyyy-mm-dd hh24:mi:ss') as "createTime", 
+      		l.STATE as state ,    
+     		l.REASON as reason     ,
+     		p.dictary_code as "parcel.dictaryCode",
+     		p.logistics_number as "parcel.logisticsNumber",
+      		p.package_number as "parcel.packageNumber",
+      		d.dict_name as "dictionary.dictName"
+  		from  T_WAREHOUSE_UPLOAD_LOG l
+ 	 LEFT JOIN t_warehouse_parcel p 
+    	ON p.id = l.package_id 
+ 	 LEFT JOIN t_base_dictionary d
+    	ON d.dict_code = p.dictary_code
+   	 left join t_auth_manager m
+      on m.id = l.create_by
+  	left join t_auth_org cc
+      on cc.id = m.DEPT_ID
+	<where> 
+	 1 = 1 and l.type = 2
+	 	<if test="Citycode!=null and Citycode!='' ">           
+			and cc.code like '${Citycode}'||'%' 
+		</if>
+		<if test="id!=null and id!='' ">           
+			and	l.ID =  #{id} 		
+		</if>	
+		<if test="packageId!=null and packageId!='' ">           
+			and	l.PACKAGE_ID =  #{packageId} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	l.CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">        
+			and	l.CREATE_TIME = to_char(#{createTime},'yyyy-mm-dd hh24:mi:ss') 		</if>   
+		<if test="state!=null and state!='' ">           
+			and	l.STATE =  #{state} 		
+		</if>	
+		<if test="reason!=null and reason!='' ">           
+			and	l.REASON =  #{reason} 		
+		</if>
+		<if test="parcel.dictaryCode!=null and parcel.dictaryCode!='' ">           
+			and	p.dictary_code =  #{parcel.dictaryCode} 		
+		</if>
+		<if test="parcel.logisticsNumber!=null and parcel.logisticsNumber!='' ">           
+			and	p.logistics_number =  #{parcel.logisticsNumber} 		
+		</if>
+		<if test="parcel.packageNumber!=null and parcel.packageNumber!='' ">           
+			and	p.package_number =  #{parcel.packageNumber} 		
+		</if>
+		<if test="dictionary.dictName!=null and dictionary.dictName!='' ">           
+			and	d.dict_name =  #{dictionary.dictName} 		
+		</if>	
+	</where>
+	order by l.CREATE_TIME desc ,l.id desc
+	</select>
+	
+	
+	<select id="countUploadLog"  parameterType="com.emotte.order.warehouse.model.UploadLog" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM t_warehouse_upload_log
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="packageId!=null and packageId!='' ">           
+			and	PACKAGE_ID =  #{packageId} 		
+		</if>	
+		<if test="state!=null and state!='' ">           
+			and	STATE =  #{state} 		
+		</if>	
+		<if test="reason!=null and reason!='' ">           
+			and	REASON =  #{reason} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+			</where>
+	</select>
+	
+</mapper>

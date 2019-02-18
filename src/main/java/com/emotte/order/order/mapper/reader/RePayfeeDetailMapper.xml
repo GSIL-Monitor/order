@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.reader.RePayfeeDetailMapper">
+	<sql id="columns">
+		ID as id ,
+		CREATE_BY as createBy ,
+		CREATE_TIME as createTime ,
+		UPDATE_BY as updateBy ,
+		UPDATE_TIME as updateTime ,
+		VALID as valid ,
+		VERSION as version ,
+		PAYFEE_ID as payfeeId ,
+		RELATION_ID as relationId ,
+		INCOME_ID as incomeId ,
+		DTYPE as dtype ,
+		MONEY as money ,
+		BTYPE as btype ,
+		ATYPE as atype ,
+		ATYPE2 as atype2 ,
+		BAK_ID as bakId 
+	</sql>
+	<select id="loadPayfeeDetail" parameterType="java.lang.Long" resultType="com.emotte.order.order.model.PayfeeDetail">
+		select 
+			<include refid="columns"/>
+		from T_PAYFEE_DETAIL
+		where
+			id=#{id} 	</select>
+	
+	<select id="queryPayfeeDetail"  parameterType="com.emotte.order.order.model.PayfeeDetail" resultType="com.emotte.order.order.model.PayfeeDetail">
+	select
+			<include refid="columns"/> 		
+		from T_PAYFEE_DETAIL
+		<where> 
+			1 = 1
+			<if test="id != null and id != ''">
+				and	ID = #{id}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and	CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and	CREATE_TIME = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') 	
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and	UPDATE_BY = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and	UPDATE_TIME = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') 	
+			</if>
+			<if test="valid != null and valid != ''">
+				and	VALID = #{valid}
+			</if>
+			<if test="version != null and version != ''">
+				and	VERSION = #{version}
+			</if>
+			<if test="payfeeId != null and payfeeId != ''">
+				and	PAYFEE_ID = #{payfeeId}
+			</if>
+			<if test="relationId != null and relationId != ''">
+				and	RELATION_ID = #{relationId}
+			</if>
+			<if test="incomeId != null and incomeId != ''">
+				and	INCOME_ID = #{incomeId}
+			</if>
+			<if test="dtype != null and dtype != ''">
+				and	DTYPE = #{dtype}
+			</if>
+			<if test="money != null and money != ''">
+				and	MONEY = #{money}
+			</if>
+			<if test="btype != null and btype != ''">
+				and	BTYPE = #{btype}
+			</if>
+			<if test="atype != null and atype != ''">
+				and	ATYPE = #{atype}
+			</if>
+			<if test="atype2 != null and atype2 != ''">
+				and	ATYPE2 = #{atype2}
+			</if>
+			<if test="bakId != null and bakId != ''">
+				and	BAK_ID = #{bakId}
+			</if>
+		</where>
+		order by CREATE_TIME desc
+	</select>
+	<select id="queryPayfeeDetaillistPage"  parameterType="com.emotte.order.order.model.PayfeeDetail" resultType="java.lang.Integer">
+		select
+			<include refid="columns"/>
+		from T_PAYFEE_DETAIL
+		<where> 
+			1 = 1
+			<if test="id != null and id != ''">
+				and	ID = #{id}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and	CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and	CREATE_TIME = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss') 	
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and	UPDATE_BY = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and	UPDATE_TIME = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss') 	
+			</if>
+			<if test="valid != null and valid != ''">
+				and	VALID = #{valid}
+			</if>
+			<if test="payfeeId != null and payfeeId != ''">
+				and	PAYFEE_ID = #{payfeeId}
+			</if>
+			<if test="relationId != null and relationId != ''">
+				and	RELATION_ID = #{relationId}
+			</if>
+			<if test="incomeId != null and incomeId != ''">
+				and	INCOME_ID = #{incomeId}
+			</if>
+			<if test="dtype != null and dtype != ''">
+				and	DTYPE = #{dtype}
+			</if>
+			<if test="money != null and money != ''">
+				and	MONEY = #{money}
+			</if>
+			<if test="btype != null and btype != ''">
+				and	BTYPE = #{btype}
+			</if>
+			<if test="atype != null and atype != ''">
+				and	ATYPE = #{atype}
+			</if>
+			<if test="atype2 != null and atype2 != ''">
+				and	ATYPE2 = #{atype2}
+			</if>
+			<if test="bakId != null and bakId != ''">
+				and	BAK_ID = #{bakId}
+			</if>
+		</where>
+		order by CREATE_TIME desc
+	</select>		
+	
+</mapper>

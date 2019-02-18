@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.emotte.order.gentlemanSignature.mapper.writer.WrOrderAgreementGsMapper">
+	<insert id="insertOrderAgreementGs"
+		parameterType="com.emotte.order.gentlemanSignature.model.AgreementGs">
+		<selectKey resultType="java.lang.Long" order="BEFORE"
+			keyProperty="id">
+			SELECT getseq() as ID from DUAL
+		</selectKey>
+		insert into T_ORDER_AGREEMENT_GS (
+		id ,
+		ROLE ,
+		CONTACTID ,
+		BASE64IMAGE ,
+		FILEID ,
+		FILEPATH ,
+		CREATE_TIME ,
+		UPDATE_TIME ,
+		CREATE_BY ,
+		UPDATE_BY ,
+		VALID ,
+		VERSION
+		) values (
+		#{id} ,
+		#{role} ,
+		#{contactId} ,
+		#{base64image} ,
+		#{fileId} ,
+		#{filePath} ,
+		to_date( #{createTime},'yyyy-mm-dd hh24:mi:ss'),
+		to_date( #{updateTime},'yyyy-mm-dd hh24:mi:ss'),
+		#{createBy},
+		#{updateBy},
+		1 ,
+		#{version}
+		)
+	</insert>
+
+	<update id="updateOrderAgreementGs"
+		parameterType="com.emotte.order.gentlemanSignature.model.AgreementGs">
+		update T_ORDER_AGREEMENT_GS
+		<set>
+			<if test="contactId != null and contactId != ''">
+				CONTACTID = #{contactId}
+			</if>
+			<if test="role != null and role != ''">
+				,ROLE = #{role}
+			</if>
+			<if test="base64image != null and base64image != ''">
+				,BASE64IMAGE = #{base64image}
+			</if>
+			<if test="fileId != null and fileId != ''">
+				,FILEID = #{fileId}
+			</if>
+			<if test="filePath != null and filePath != ''">
+				,FILEPATH = #{filePath}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				,CREATE_TIME = to_date( #{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				,UPDATE_TIME = to_date( #{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="createBy != null and createBy != ''">
+				,CREATE_BY = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,UPDATE_BY = #{updateBy}
+			</if>
+			<if test="valid != null and valid != ''">
+				,VALID = #{valid}
+			</if>
+			<if test="version != null and version != ''">
+				,VERSION = #{version}
+			</if>
+		</set>
+		where
+		<if test="contactId != null and contactId != ''">
+			CONTACTID = #{contactId}
+		</if>
+		<if test="role != null and role != ''">
+			AND ROLE = #{role}
+		</if>
+	</update>
+
+</mapper>

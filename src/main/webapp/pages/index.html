@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>招工管理</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!--日历插件-->
+    <link rel="stylesheet" href="../css/calendar.css"/>
+    <!-- MetisMenu CSS -->
+    <link href="../css/metisMenu.min.css" rel="stylesheet">
+    <!--表单验证 CSS-->
+    <link href="../css/form-test/jquery.idealforms.min.css" rel="stylesheet" media="screen"/>
+    <!--表单下拉选择-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.searchableSelect.css">
+    <script src="../js/jquery/jquery.min.js"></script>
+    <script src="../js/jquery.searchableSelect.js"></script>
+
+    <!--表单日期插件-->
+    <!-- Custom CSS -->
+    <link id="css" href="../css/sb-admin-2.css" rel="stylesheet" type="text/css" title="gray">
+    <!-- Custom Fonts -->
+    <link href="../css/awesome/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="logo">
+                <a href="#"><img src="../images/logo.png" alt=""/></a>
+            </div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-h">
+                    <div class="dropdown navbar-brand active">
+                        <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button">
+                            系统模块1
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu child-menu" aria-labelledby="dLabel">
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown navbar-brand">
+                        <a id="dLabe2" data-target="#" href="#" data-toggle="dropdown" role="button">
+                            系统模块2
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu child-menu" aria-labelledby="dLabe2">
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown navbar-brand">
+                        <a id="dLabe3" data-target="#" href="#" data-toggle="dropdown" role="button">
+                            系统模块1
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu child-menu" aria-labelledby="dLabe3">
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown navbar-brand">
+                        <a id="dLabe4" data-target="#" href="#" data-toggle="dropdown" role="button">
+                            系统模块2
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu child-menu" aria-labelledby="dLabe4">
+                            <li><a href="#">二级菜单1</a></li>
+                            <li><a href="#">二级菜单1</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">40% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">20% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#"><i class="icon-key"></i>换肤</a>
+                            <ul class="inline" id="inline">
+                                <li onclick="changeCss('black')" class="color-black" data-style="gray"></li>
+                                <li onclick="changeCss('gray')" class="color-gray current color-default" data-style="default"></li>
+                                <li onclick="changeCss('yellow')" class="color-yellow" data-style="purple"></li>
+                                <li onclick="changeCss('green')" class="color-green" data-style="green"></li>
+                                <li onclick="changeCss('blue')" class="color-blue" data-style="blue"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            <div class="sidebar navbar-sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="javascript:void(0);" onclick="loadHtml('recruits.html',this);"><i class="fa fa-dashboard fa-fw"></i>菜单</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>生产管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('produce-recruits.html',this);">招工管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('produce-trains.html',this);">培训管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('produce-course.html',this);">课程管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('produce-classes.html',this);">班次管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('produce-rate.html',this);">评级管理</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i>上户管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('register-once.html',this);">一次性</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('register-continue.html',this);">延续性</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('register-hours.html',this);">需求库</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" onclick="loadHtml('everyday.html',this);"><i class="fa fa-edit fa-fw"></i>日常管理</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><i class="fa fa-bar-chart-o fa-fw"></i>品类管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('category-sort.html',this);">分类管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('category-serve.html',this);">服务管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('category-goods.html',this);">商品管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('category-brand.html',this);">品牌管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('category-city.html',this);">城市配置</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="openModule('module.html')">模态框</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>解决方案管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('project.html',this);">方案套餐管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('project-recommend.html',this);">推荐方案管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('project-order.html',this);">解决方案订单管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('project-date.html',this);">排期订单管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>订单管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('order.html',this);">订单管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>内容运营管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-focus.html',this);">焦点图管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-modules.html',this);">首页模块管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-news.html',this);">资讯管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-page.html',this);">单页管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-sort.html',this);">分类管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('content-tickling.html',this);">问题反馈</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>活动运营管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('active-promote.html',this);">钱包管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('active-freight.html',this);">合伙人管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>卡卷管理系统<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('card-paper.html',this);">卷管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('card.html',this);">卡管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('card-sell.html',this);">卡销售管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>数据运营管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('data-wallet.html',this);">钱包管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('data-partner.html',this);">合伙人管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('data-favorite.html',this);">收藏夹管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('data-address.html',this);">地址管理</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('data-safety.html',this);">账号安全管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>客服中心管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-advisory.html',this);">A1咨询与下单</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-complain.html',this);">服务投诉</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-deduct.html',this);">卡券扣费</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-sort.html',this);">A1页面分类</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-advisory-record.html',this);">A1咨询记录</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-submit-record.html',this);">A1提交订单记录</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-origin.html',this);">订单来源统计</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-KPI.html',this);">客服人员KPI</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-complain-record.html',this);">服务投诉记录</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-compalin-sort.html',this);">服务投诉分类</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('client-sum.html',this);">投诉数量统计</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>模板汇总<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0);" onclick="loadHtml('module-all.html',this);">模板</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+            <i class="glyphicon glyphicon-align-justify" id="open-button"></i>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../js/metisMenu.min.js"></script>
+    <!--编辑器插件 JS-->
+    <!--表单验证框架-->
+    <script src="../js/jquery.idealforms.js"></script>
+    <!--fullcalendar JavaScript-->
+    <script src="../js/calendar.js"></script>
+    <!--表单日期插件-->
+    <script src="../js/My97DatePicker/WdatePicker.js"></script>
+    <!--分页-->
+    <script src="../js/creat_page.js"></script>
+    <!--表单下拉选择-->
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/sb-admin-2.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

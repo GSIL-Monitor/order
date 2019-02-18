@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrAgreementMapper">
+
+    <insert id="insertAgreement" parameterType="com.emotte.order.order.model.Agreement">
+        <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT getSeq() FROM dual
+        </selectKey>
+        insert into T_ORDER_AGREEMENT (
+        ID,
+        ORDER_ID ,
+        AGREEMENT_TITLE ,
+        PARTY_A ,
+        PARTY_B ,
+        CREATE_BY ,
+        CREATE_TIME ,
+        UPDATE_TIME ,
+        UPDATE_BY ,
+        VERSION ,
+        PERSON_ID ,
+        EFFECT_DATE ,
+        FINISH_DATE ,
+        AGREEMENT_TYPE ,
+        REMIND_DAY ,
+        AGREEMENT_PAY_DATE ,
+        AGREEMENT_CODE ,
+        AGREEMENT_STATE ,
+        EMPLOY_MONEY ,
+        SALARY_DATE ,
+        PAY_TYPE ,
+        SERVICE_CODE ,
+        ONEDAY_WAGES ,
+        FIRST_SERVICE_MONEY ,
+        FIRST_MANAGE_MONEY ,
+        PERSON_MANAGE_MONEY ,
+        SERVICE_ADDRESS ,
+        CUSTOMER_MANAGE_MONEY ,
+        CARD_TYPE ,
+        CARD_NUM ,
+        MOBILE ,
+        PARTY_C ,
+        CUSTOMER_ADDRESS ,
+        PLATFORM_ADDRESS ,
+        SERVICE_GARAGE ,
+        SERVICE_MONEY ,
+        CHARGE_TIMES ,
+        PAYMENT ,
+        ADVANCE_PERIOD ,
+        OTHER_METHODS ,
+        OTHER_MATTERS ,
+        card_type_c,
+        card_num_c ,
+        mobile_c ,
+        is_collection ,
+        waiter_address ,
+        remark_zdg,
+        linkman_name,
+        linkman_mobile,
+        zhifu_remark,
+        VALID,
+        SERVICE_GARAGE_ID,
+        SERVICE_ADDRESS_ECHO,
+        CUSTOMER_ADDRESS_ECHO,
+        CHECK_STATUS,
+        ALL_PAY,
+        OTHER_WAY,
+        PREPAID_MONTHS,
+        PREPAID_MONEY,
+        INST_PREPAID_MONTHS,
+        INST_PREPAID_MONEY,
+        LIMIT_DAYS,
+        ACCOUNT_NAME,
+        ACCOUNT_BANK,
+        AGREEMENT_MODEL,
+        ACCOUNT_NUM,
+        ELEC_CLIENT_STATE,
+        ELEC_SERVE_STATE,
+        ELEC_OTHER_STATE,
+        PREVIEW_CONTACT_FILE,
+        NORMAL_CONTACT_FILE,
+        HASH_APPLY_NO,
+        IS_PECONTRACT,
+        PECONTRACT_BASIC,
+        PECONTRACT_PERFORMANCE,
+        CONTRACT_DATE
+        <if test="agreementBusinessType != null and agreementBusinessType != '' ">
+            ,AGREEMENT_BUSINESS_TYPE
+        </if>
+        <if test="serviceprojectStandard != null and serviceprojectStandard != '' ">
+            ,SERVICE_PROJECT_STANDARD
+        </if>
+        <if test="partyBaccountName != null and partyBaccountName != '' ">
+            ,PARTY_B_ACCOUNTNAME
+        </if>
+        <if test="partyBaccountNum != null and partyBaccountNum != '' ">
+            ,PARTY_B_ACCOUNTNUM
+        </if>
+        <if test="partyBaccountBank != null and partyBaccountBank != '' ">
+            ,PARTY_B_ACCOUNTBANK
+        </if>
+        <if test="mobileB != null and mobileB != '' and mobileB!=',' ">
+            ,MOBILE_B
+        </if>
+        <if test="accountMobile != null and accountMobile != '' and accountMobile !=',' ">
+            ,ACCOUNT_MOBILE
+        </if>
+        <if test="dingTalkAuditCode != null and dingTalkAuditCode != '' ">
+            ,DING_TALK_AUDIT_CODE
+        </if>
+        ) values (
+        #{id},
+        #{orderId} ,
+        #{agreementTitle} ,
+        #{partyA} ,
+        #{partyB} ,
+        #{createBy} ,
+        to_date(#{createTime},'YYYY-MM-DD HH24:MI:SS'),
+        to_date(#{updateTime},'YYYY-MM-DD HH24:MI:SS'),
+        #{updateBy} ,
+        #{version} ,
+        #{personId} ,
+        to_date(#{effectDate},'YYYY-MM-DD HH24:MI:SS'),
+        to_date(#{finishDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{agreementType} ,
+        #{remindDay} ,
+        to_date(#{agreementPayDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{agreementCode} ,
+        #{agreementState} ,
+        #{employMoney} ,
+        to_date(#{salaryDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{payType} ,
+        #{serviceCode} ,
+        #{onedayWages} ,
+        #{firstServiceMoney} ,
+        #{firstManageMoney} ,
+        #{personManageMoney} ,
+        #{serviceAddress} ,
+        #{customerManageMoney} ,
+        #{cardType} ,
+        #{cardNum} ,
+        #{mobile} ,
+        #{partyC} ,
+        #{customerAddress} ,
+        #{platformAddress} ,
+        #{serviceGarage} ,
+        #{serviceMoney} ,
+        #{chargeTimes} ,
+        #{payment} ,
+        #{advancePeriod} ,
+        #{otherMethods} ,
+        #{otherMatters} ,
+        #{cardTypeC} ,
+        #{cardNumC} ,
+        #{mobileC} ,
+        #{isCollection} ,
+        #{waiterAddress} ,
+        #{remarkZdg},
+        #{linkManName},
+        #{linkManMobile},
+        #{zhifuRemark},
+        #{valid},
+        #{serviceGarageId},
+        #{serviceAddressEcho},
+        #{customerAddressEcho},
+        1 ,
+        #{allPay},
+        #{otherWay},
+        #{prepaidMonths},
+        #{prepaidMoney},
+        #{instPrepaidMonths},
+        #{instPrepaidMoney},
+        #{limitDays},
+        #{accountName},
+        #{accountBank},
+        #{agreementModel},
+        #{accountNum},
+        #{elecClientState},
+        #{elecServeState},
+        #{elecOtherState},
+        #{previewContactFile},
+        #{normalContactFile},
+        #{hashApplyNo},
+        #{isPeContract},
+        #{peContractBasic},
+        #{peContractPerformance},
+        to_date(#{contractDate},'yyyy-mm-dd hh24:mi:ss')
+        <if test="agreementBusinessType != null and agreementBusinessType != '' ">
+            ,#{agreementBusinessType}
+        </if>
+        <if test="serviceprojectStandard != null and serviceprojectStandard != '' ">
+            ,#{serviceprojectStandard}
+        </if>
+        <if test="partyBaccountName != null and partyBaccountName != '' ">
+            ,#{partyBaccountName}
+        </if>
+        <if test="partyBaccountNum != null and partyBaccountNum != '' ">
+            ,#{partyBaccountNum}
+        </if>
+        <if test="partyBaccountBank != null and partyBaccountBank != '' ">
+            ,#{partyBaccountBank}
+        </if>
+        <if test="mobileB != null and mobileB != '' ">
+            ,#{mobileB}
+        </if>
+        <if test="accountMobile != null and accountMobile != '' ">
+            ,#{accountMobile}
+        </if>
+        <if test="dingTalkAuditCode != null and dingTalkAuditCode != '' ">
+            ,#{dingTalkAuditCode}
+        </if>
+        )
+    </insert>
+
+    <update id="updateAgreement" parameterType="com.emotte.order.order.model.Agreement">
+        update T_ORDER_AGREEMENT
+        <set>
+            <if test="id!=null and id!='' ">
+                ID = #{id}
+            </if>
+            <if test="contractDate != null and contractDate != '' ">
+                ,CONTRACT_DATE = to_date(#{contractDate},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="orderId!=null and orderId!='' ">
+                , ORDER_ID = #{orderId}
+            </if>
+            <if test="agreementTitle!=null and agreementTitle!='' ">
+                , AGREEMENT_TITLE = #{agreementTitle}
+            </if>
+            <if test="partyA!=null and partyA!='' ">
+                , PARTY_A = #{partyA}
+            </if>
+            <if test="partyB!=null and partyB!='' ">
+                , PARTY_B = #{partyB}
+            </if>
+            <if test="createBy!=null and createBy!='' ">
+                , CREATE_BY = #{createBy}
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                , UPDATE_BY = #{updateBy}
+            </if>
+            <if test="personId!=null and personId!='' ">
+                , PERSON_ID = #{personId}
+            </if>
+            <if test="effectDate!=null and effectDate!='' ">
+                , EFFECT_DATE = to_date(#{effectDate},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="finishDate!=null and finishDate!='' ">
+                , FINISH_DATE = to_date(#{finishDate},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="agreementType!=null and agreementType!='' ">
+                , AGREEMENT_TYPE = #{agreementType}
+            </if>
+            <if test="advancePeriod!=null">
+                , REMIND_DAY = #{remindDay}
+            </if>
+            <if test="advancePeriod!=null">
+                , AGREEMENT_PAY_DATE = to_date(#{agreementPayDate},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="agreementCode!=null and agreementCode!='' ">
+                , AGREEMENT_CODE = #{agreementCode}
+            </if>
+            <if test="agreementState!=null and agreementState!='' ">
+                , AGREEMENT_STATE = #{agreementState}
+            </if>
+            <if test="agreementState == 2">
+                , CONFIRMATION_DATE = SYSDATE
+            </if>
+            <if test="employMoney!=null and employMoney!='' ">
+                , EMPLOY_MONEY = #{employMoney}
+            </if>
+            <if test="salaryDate!=null and salaryDate!='' ">
+                , SALARY_DATE = to_date(#{salaryDate},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="payType!=null and payType!='' ">
+                , PAY_TYPE = #{payType}
+            </if>
+            <if test="serviceCode!=null and serviceCode!='' ">
+                , SERVICE_CODE = #{serviceCode}
+            </if>
+            <if test="onedayWages!=null and onedayWages!='' ">
+                , ONEDAY_WAGES = #{onedayWages}
+            </if>
+            <if test="firstServiceMoney!=null and firstServiceMoney!='' ">
+                , FIRST_SERVICE_MONEY = #{firstServiceMoney}
+            </if>
+            <if test="firstManageMoney!=null and firstManageMoney!='' ">
+                , FIRST_MANAGE_MONEY = #{firstManageMoney}
+            </if>
+            <if test="personManageMoney!=null">
+                , PERSON_MANAGE_MONEY = #{personManageMoney}
+            </if>
+            <if test="serviceAddress!=null and serviceAddress!='' ">
+                , SERVICE_ADDRESS = #{serviceAddress}
+            </if>
+            <if test="customerManageMoney!=null">
+                , CUSTOMER_MANAGE_MONEY = #{customerManageMoney}
+            </if>
+            <if test="cardType!=null and cardType!='' ">
+                , CARD_TYPE = #{cardType}
+            </if>
+            <if test="cardNum!=null and cardNum!='' ">
+                , CARD_NUM = #{cardNum}
+            </if>
+            <if test="mobile!=null and mobile!='' ">
+                , MOBILE = #{mobile}
+            </if>
+            <if test="partyC!=null and partyC!='' ">
+                , PARTY_C = #{partyC}
+            </if>
+            <if test="customerAddress!=null and customerAddress!='' ">
+                , CUSTOMER_ADDRESS = #{customerAddress}
+            </if>
+            <if test="platformAddress!=null and platformAddress!='' ">
+                , PLATFORM_ADDRESS = #{platformAddress}
+            </if>
+            <if test="serviceGarage!=null and serviceGarage!='' ">
+                , SERVICE_GARAGE = #{serviceGarage}
+            </if>
+            <if test="serviceMoney!=null and serviceMoney!='' ">
+                , SERVICE_MONEY = #{serviceMoney}
+            </if>
+            <if test="chargeTimes!=null and chargeTimes!='' ">
+                , CHARGE_TIMES = #{chargeTimes}
+            </if>
+            <if test="payment!=null">
+                , PAYMENT = #{payment}
+            </if>
+            <if test="agreementModel!=null and  agreementModel !='' ">
+                , AGREEMENT_MODEL = #{agreementModel}
+            </if>
+
+            <if test="advancePeriod!=null and advancePeriod!='' ">
+                , ADVANCE_PERIOD = #{advancePeriod}
+                <choose>
+                    <when test="advancePeriod == 5 or advancePeriod == '5' ">
+                        <if test="prepaidMonths != null">
+                            ,PREPAID_MONTHS = #{prepaidMonths}
+                        </if>
+                        <if test="prepaidMoney != null">
+                            ,PREPAID_MONEY = #{prepaidMoney}
+                        </if>
+                        <if test="instPrepaidMonths != null">
+                            ,INST_PREPAID_MONTHS = #{instPrepaidMonths}
+                        </if>
+                        <if test="instPrepaidMoney != null">
+                            ,INST_PREPAID_MONEY = #{instPrepaidMoney}
+                        </if>
+                        <if test="limitDays != null">
+                            ,LIMIT_DAYS = #{limitDays}
+                        </if>
+                        <if test="accountName != null and accountName != '' ">
+                            ,ACCOUNT_NAME = #{accountName}
+                        </if>
+                        <if test="accountBank != null and accountBank != '' ">
+                            ,ACCOUNT_BANK = #{accountBank}
+                        </if>
+                        <if test="accountNum != null and accountNum != '' ">
+                            ,ACCOUNT_NUM = #{accountNum}
+                        </if>
+                        <if test="accountMobile != null and accountMobile != '' ">
+                            ,ACCOUNT_MOBILE = #{accountMobile}
+                        </if>
+                    </when>
+                    <otherwise>
+                        ,PREPAID_MONTHS = null
+                        ,PREPAID_MONEY = null
+                        ,INST_PREPAID_MONTHS = null
+                        ,INST_PREPAID_MONEY = null
+                        ,LIMIT_DAYS = null
+                        ,ACCOUNT_NAME = null
+                        ,ACCOUNT_BANK = null
+                        ,ACCOUNT_NUM = null
+                        ,ACCOUNT_MOBILE = null
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="otherMethods!=null and otherMethods!='' ">
+                , OTHER_METHODS = #{otherMethods}
+            </if>
+            <if test="otherMatters!=null and otherMatters!='' ">
+                , OTHER_MATTERS = #{otherMatters}
+            </if>
+            <if test="cardTypeC!=null and cardTypeC!='' ">
+                , card_type_c = #{cardTypeC}
+            </if>
+            <if test="cardNumC!=null and cardNumC!='' ">
+                , card_num_c = #{cardNumC}
+            </if>
+            <if test="mobileC!=null and mobileC!='' ">
+                , mobile_c = #{mobileC}
+            </if>
+            <if test="isCollection!=null and isCollection!='' ">
+                , is_collection = #{isCollection}
+            </if>
+            <if test="waiterAddress!=null and waiterAddress!='' ">
+                , waiter_address = #{waiterAddress}
+            </if>
+            <if test="valid!=null and valid!='' ">
+                , VALID = #{valid}
+            </if>
+            <if test="remarkZdg!=null and remarkZdg!='' ">
+                , remark_zdg = #{remarkZdg}
+            </if>
+            <if test="linkManName!=null and linkManName!='' ">
+                , linkman_name = #{linkManName}
+            </if>
+            <if test="linkManMobile!=null and linkManMobile!='' ">
+                , linkman_mobile = #{linkManMobile}
+            </if>
+            <if test="serviceGarageId !=null and serviceGarageId !='' ">
+                ,service_garage_id = #{serviceGarageId}
+            </if>
+            <if test="advancePeriod!=null">
+                , zhifu_remark = #{zhifuRemark}
+            </if>
+            <if test="serviceAddressEcho != null and serviceAddressEcho != '' ">
+                ,SERVICE_ADDRESS_ECHO = #{serviceAddressEcho}
+            </if>
+            <if test="customerAddressEcho != null and customerAddressEcho != '' ">
+                ,CUSTOMER_ADDRESS_ECHO = #{customerAddressEcho}
+            </if>
+            <if test="allPay != null and allPay != '' ">
+                ,all_pay = #{allPay}
+            </if>
+            <if test="otherWay != null and otherWay != '' ">
+                ,other_way = #{otherWay}
+            </if>
+            <if test="elecClientState != null and elecClientState != '' ">
+                ,ELEC_CLIENT_STATE = #{elecClientState}
+            </if>
+            <if test="elecServeState != null and elecServeState != '' ">
+                ,ELEC_SERVE_STATE = #{elecServeState}
+            </if>
+            <if test="elecOtherState != null and elecOtherState != '' ">
+                ,ELEC_OTHER_STATE = #{elecOtherState}
+            </if>
+
+            <if test="insuranceEntrust != null and insuranceEntrust != '' ">
+                ,INSURANCE_ENTRUST = #{insuranceEntrust}
+            </if>
+
+            <if test="previewContactFile != null and previewContactFile != '' ">
+                ,PREVIEW_CONTACT_FILE = #{previewContactFile}
+            </if>
+            <if test="normalContactFile != null and normalContactFile != '' ">
+                ,NORMAL_CONTACT_FILE = #{normalContactFile}
+            </if>
+            <if test="hashApplyNo != null and hashApplyNo != '' ">
+                ,HASH_APPLY_NO = #{hashApplyNo}
+            </if>
+            <if test="reason!=null">
+                , reason = #{reason}
+            </if>
+            <if test="mobileB!=null and mobileB!='' ">
+                , MOBILE_B = #{mobileB}
+            </if>
+            <if test="agreementBusinessType!=null and agreementBusinessType!='' ">
+                , AGREEMENT_BUSINESS_TYPE = #{agreementBusinessType}
+            </if>
+            <if test="serviceprojectStandard!=null and serviceprojectStandard!='' ">
+                , SERVICE_PROJECT_STANDARD = #{serviceprojectStandard}
+            </if>
+            <if test="partyBaccountName!=null and partyBaccountName!='' ">
+                , PARTY_B_ACCOUNTNAME = #{partyBaccountName}
+            </if>
+            <if test="partyBaccountNum!=null and partyBaccountNum!='' ">
+                , PARTY_B_ACCOUNTNUM = #{partyBaccountNum}
+            </if>
+            <if test="partyBaccountBank!=null and partyBaccountBank!='' ">
+                , PARTY_B_ACCOUNTBANK = #{partyBaccountBank}
+            </if>
+            <if test="dingTalkAuditCode != null and dingTalkAuditCode != '' ">
+                ,DING_TALK_AUDIT_CODE = #{dingTalkAuditCode}
+            </if>
+            , UPDATE_TIME = sysdate
+            ,VERSION = VERSION +1
+        </set>
+        where
+        id = #{id}   <!-- and VERSION = #{version} -->
+    </update>
+
+    <update id="checkAgreement" parameterType="com.emotte.order.order.model.Agreement">
+        UPDATE t_order_agreement a
+        set
+        a.update_time = SYSDATE,
+        a.check_date = SYSDATE,
+        a.version = a.version+1,
+        a.update_by = #{updateBy},
+        a.check_by = #{checkBy},
+        a.check_status = #{checkStatus}
+        <if test="elecClientState !=null and elecClientState != ''">
+            ,a.ELEC_CLIENT_STATE = #{elecClientState}
+        </if>
+        <if test="elecServeState !=null and elecServeState != ''">
+            ,a.ELEC_SERVE_STATE = #{elecServeState}
+        </if>
+        <if test="elecOtherState !=null and elecOtherState != ''">
+            ,a.ELEC_OTHER_STATE = #{elecOtherState}
+        </if>
+        <if test="agreementState !=null and agreementState != ''">
+            ,a.AGREEMENT_STATE = #{agreementState}
+        </if>
+        <if test="checkInstructions != null and checkInstructions != ''">
+            ,a.check_instructions = #{checkInstructions}
+        </if>
+        WHERE a.valid = 1
+        AND a.id =#{id}
+    </update>
+
+
+    <!-- <update id="updateAgreementTime" parameterType="com.emotte.order.order.model.Agreement">
+        update TEMP2_HJBL_CUSTOMER_INFO
+         <set>
+          UPDATE_TIME = sysdate
+          ,VERSION =  VERSION +1
+        <if test="createtimeinfo!=null and createtimeinfo!='' ">
+            ,SIGN_TIME = to_date(#{createtimeinfo},'yyyy-mm-dd hh24:mi:ss')
+
+        </if>
+        <if test="log!=null and log!='' ">
+                ,LOG=#{log}
+        </if>
+        <if test="updateBy!=null and updateBy!='' ">
+                ,UPDATE_BY=#{updateBy}
+        </if>
+       </set>
+        where
+              id = #{id}   and VERSION = #{version}
+    </update> -->
+    <update id="updateAgreementTime" parameterType="com.emotte.order.order.model.Agreement">
+        update t_order_agreement
+        <set>
+            UPDATE_TIME = sysdate
+            ,VERSION = VERSION +1
+            <if test="createtimeinfo!=null and createtimeinfo!='' ">
+                ,CONTRACT_DATE = to_date(#{createtimeinfo},'yyyy-mm-dd hh24:mi:ss')
+
+            </if>
+            <if test="log!=null and log!='' ">
+                ,LOG=#{log}
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                ,UPDATE_BY=#{updateBy}
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+
+    <update id="updateAgreementTimeNew" parameterType="com.emotte.order.order.model.Agreement">
+        update T_HJBL_CUSTOMER_INFO
+        <set>
+            UPDATE_TIME = sysdate
+            ,VERSION = VERSION +1
+            <if test="createtimeinfo!=null and createtimeinfo!='' ">
+                ,CREATE_TIME =to_date(#{createtimeinfo},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="log!=null and log!='' ">
+                ,LOG=#{log}
+            </if>
+            <if test="updateBy!=null and updateBy!='' ">
+                ,UPDATE_BY=#{updateBy}
+            </if>
+
+        </set>
+        where
+        id = #{id}   <!-- and VERSION = #{version} -->
+    </update>
+
+
+    <insert id="insertAgreementAssistant" parameterType="com.emotte.order.order.model.AgreementAssistant">
+        <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT getSeq() FROM dual
+        </selectKey>
+        insert into T_ORDER_AGREEMENT_ASSISTANT(
+        ID,
+        ORDER_ID,
+        AGREEMENT_ID ,
+        CUSTOMER_SERVICE_ADDRESS ,
+        HOSPITALIZATION_NUM ,
+        DEPARTMENTS ,
+        ROOM_NUMBER ,
+        BED_NUMBER_A,
+        BED_NUMBER_B,
+        CONSUMERS_STATE,
+        CONSUMERS_NAME,
+        CONSUMERS_CARD,
+        CUST_CONSUMER_RELATION,
+        BIRTH_PERIOD,
+        SPECIAL_CONSIDERATIONS,
+        SERVICE_ITEMS,
+        SERVICE_STARTTIME,
+        HOSTSIT_DAY,
+        SERVICE_FORMAT,
+        DELIVERY_MODE,
+        REPLACE_NUMBER,
+        RELATION_RELATIVES,
+        RELATION_ENTRUST,
+        CREATE_TIME
+        <!-- UPDATEBY,
+        LOG,
+        VERSION -->
+        ) values (
+        #{id},
+        #{orderId},
+        #{agreementId},
+        #{customerserviceAddress},
+        #{hospitalizationNum},
+        #{departments},
+        #{roomNumber},
+        #{bedNumber_a},
+        #{bedNumber_b},
+        #{consumerstate},
+        #{consumersName},
+        #{consumersCard},
+        #{custconsumerRelation},
+        to_date(#{birthPeriod},'YYYY-MM-DD HH24:MI:SS'),
+        #{specialConsiderations},
+        #{serviceItems},
+        to_date(#{serviceStarttime},'YYYY-MM-DD HH24:MI:SS'),
+        #{hostsitDay},
+        #{serviceFormat},
+        #{deliveryMode},
+        #{replaceNumber},
+        #{relation_relatives},
+        #{relation_entrust},
+        sysdate
+        )
+    </insert>
+
+
+    <update id="updateAgreementAssistant" parameterType="com.emotte.order.order.model.AgreementAssistant">
+        update T_ORDER_AGREEMENT_ASSISTANT
+        <set>
+            <if test="orderId!=null ">
+                ORDER_ID = #{orderId}
+            </if>
+            <if test="customerserviceAddress != null and customerserviceAddress != '' ">
+                ,CUSTOMER_SERVICE_ADDRESS =#{customerserviceAddress}
+            </if>
+            <if test="hospitalizationNum!=null and hospitalizationNum!='' ">
+                , HOSPITALIZATION_NUM = #{hospitalizationNum}
+            </if>
+            <if test="departments!=null and departments!='' ">
+                , DEPARTMENTS = #{departments}
+            </if>
+            <if test="roomNumber!=null and roomNumber!='' ">
+                , ROOM_NUMBER = #{roomNumber}
+            </if>
+            <if test="bedNumber_a!=null and bedNumber_a!='' ">
+                , BED_NUMBER_A = #{bedNumber_a}
+            </if>
+            <if test="bedNumber_b!=null and bedNumber_b!='' ">
+                , BED_NUMBER_B = #{bedNumber_b}
+            </if>
+            <if test="consumerstate!=null and consumerstate!='' ">
+                , CONSUMERS_STATE = #{consumerstate}
+            </if>
+            <if test="consumersName!=null and consumersName!='' ">
+                , CONSUMERS_NAME = #{consumersName}
+            </if>
+            <if test="consumersCard!=null and consumersCard!='' ">
+                , CONSUMERS_CARD = #{consumersCard}
+            </if>
+            <if test="custconsumerRelation!=null ">
+                , CUST_CONSUMER_RELATION = #{custconsumerRelation}
+            </if>
+            <if test="birthPeriod!=null and birthPeriod!=''">
+                , BIRTH_PERIOD = to_date(#{birthPeriod},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+
+            <if test="specialConsiderations!=null ">
+                , SPECIAL_CONSIDERATIONS = #{specialConsiderations}
+            </if>
+            <if test="serviceItems!=null">
+                , SERVICE_ITEMS = #{serviceItems}
+            </if>
+            <if test="serviceStarttime!=null and serviceStarttime!='' ">
+                , SERVICE_STARTTIME = to_date(#{serviceStarttime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+
+            <if test="hostsitDay!=null and hostsitDay!='' ">
+                , HOSTSIT_DAY = #{hostsitDay}
+            </if>
+            <if test="serviceFormat!=null ">
+                , SERVICE_FORMAT = #{serviceFormat}
+            </if>
+            <if test="deliveryMode!=null">
+                , DELIVERY_MODE = #{deliveryMode}
+            </if>
+            <if test="replaceNumber!=null and replaceNumber!='' ">
+                , REPLACE_NUMBER = #{replaceNumber}
+            </if>
+            <if test="relation_relatives!=null and relation_relatives!='' ">
+                , RELATION_RELATIVES = #{relation_relatives}
+            </if>
+            <if test="relation_entrust!=null and relation_entrust!='' ">
+                , RELATION_ENTRUST = #{relation_entrust}
+            </if>
+            ,UPDATE_TIME = sysdate
+        </set>
+        where
+        AGREEMENT_ID = #{agreementId}
+    </update>
+
+    <update id="updateAgreementState" parameterType="com.emotte.order.order.model.Agreement">
+        update T_ORDER_AGREEMENT t
+        <set>
+            t.check_status = #{checkStatus},
+            t.update_by = #{updateBy},
+            t.update_time = sysdate,
+            t.version = t.version + 1
+            <if test="checkStatus == 3 ">
+                , t.AGREEMENT_STATE = 1,
+                t.ELEC_CLIENT_STATE = 1,
+                t.ELEC_SERVE_STATE = 1,
+                t.ELEC_OTHER_STATE = 1,
+                t.CHECK_INSTRUCTIONS=#{reason}
+            </if>
+        </set>
+        where t.agreement_code = #{agreementCode}
+    </update>
+
+
+    <update id="updateAgreementType" parameterType="com.emotte.order.order.model.Agreement">
+        update T_ORDER_AGREEMENT t
+        <set>
+            t.check_status = #{checkStatus},
+            t.update_by = #{updateBy},
+            t.update_time = sysdate,
+            t.version = t.version + 1,
+        </set>
+        where t.id = #{id}
+    </update>
+
+    <!--根据订单ID，修改单次合同审核状态-->
+    <update id="changeOnceAgreementAuditStatus" parameterType="com.emotte.order.order.model.Agreement">
+        UPDATE T_ORDER_AGREEMENT SET
+        CHECK_STATUS = #{checkStatus},
+        UPDATE_BY = #{updateBy},
+        UPDATE_TIME = SYSDATE,
+        REASON = #{reason}
+        <where>
+            1=1
+            <if test="orderId != null and orderId != '' ">
+               AND ORDER_ID = #{orderId}
+            </if>
+            <if test="id != null and id != '' ">
+                AND ID = #{id}
+            </if>
+            AND VALID = 1
+        </where>
+    </update>
+
+    <insert id="insertOnceAgreement" parameterType="com.emotte.order.order.model.Agreement">
+        <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT getSeq() FROM dual
+        </selectKey>
+        insert into T_ORDER_AGREEMENT (
+        ID,
+        ORDER_ID ,
+        AGREEMENT_TITLE ,
+        PARTY_A ,
+        PARTY_B ,
+        CREATE_BY ,
+        CREATE_TIME ,
+        UPDATE_TIME ,
+        UPDATE_BY ,
+        VERSION ,
+        PERSON_ID ,
+        EFFECT_DATE ,
+        FINISH_DATE ,
+        AGREEMENT_TYPE ,
+        REMIND_DAY ,
+        AGREEMENT_PAY_DATE ,
+        AGREEMENT_CODE ,
+        AGREEMENT_STATE ,
+        EMPLOY_MONEY ,
+        SALARY_DATE ,
+        PAY_TYPE ,
+        SERVICE_CODE ,
+        ONEDAY_WAGES ,
+        FIRST_SERVICE_MONEY ,
+        FIRST_MANAGE_MONEY ,
+        PERSON_MANAGE_MONEY ,
+        SERVICE_ADDRESS ,
+        CUSTOMER_MANAGE_MONEY ,
+        CARD_TYPE ,
+        CARD_NUM ,
+        MOBILE ,
+        PARTY_C ,
+        CUSTOMER_ADDRESS ,
+        PLATFORM_ADDRESS ,
+        SERVICE_GARAGE ,
+        SERVICE_MONEY ,
+        CHARGE_TIMES ,
+        PAYMENT ,
+        ADVANCE_PERIOD ,
+        OTHER_METHODS ,
+        OTHER_MATTERS ,
+        card_type_c,
+        card_num_c ,
+        mobile_c ,
+        is_collection ,
+        waiter_address ,
+        remark_zdg,
+        linkman_name,
+        linkman_mobile,
+        zhifu_remark,
+        VALID,
+        SERVICE_GARAGE_ID,
+        SERVICE_ADDRESS_ECHO,
+        CUSTOMER_ADDRESS_ECHO,
+        CHECK_STATUS,
+        ALL_PAY,
+        OTHER_WAY,
+        PREPAID_MONTHS,
+        PREPAID_MONEY,
+        INST_PREPAID_MONTHS,
+        INST_PREPAID_MONEY,
+        LIMIT_DAYS,
+        ACCOUNT_NAME,
+        ACCOUNT_BANK,
+        AGREEMENT_MODEL,
+        ACCOUNT_NUM,
+        ELEC_CLIENT_STATE,
+        ELEC_SERVE_STATE,
+        ELEC_OTHER_STATE,
+        PREVIEW_CONTACT_FILE,
+        NORMAL_CONTACT_FILE,
+        HASH_APPLY_NO,
+        IS_PECONTRACT,
+        PECONTRACT_BASIC,
+        PECONTRACT_PERFORMANCE,
+        CONTRACT_DATE
+        <if test="agreementBusinessType != null and agreementBusinessType != '' ">
+            ,AGREEMENT_BUSINESS_TYPE
+        </if>
+        <if test="serviceprojectStandard != null and serviceprojectStandard != '' ">
+            ,SERVICE_PROJECT_STANDARD
+        </if>
+        <if test="partyBaccountName != null and partyBaccountName != '' ">
+            ,PARTY_B_ACCOUNTNAME
+        </if>
+        <if test="partyBaccountNum != null and partyBaccountNum != '' ">
+            ,PARTY_B_ACCOUNTNUM
+        </if>
+        <if test="partyBaccountBank != null and partyBaccountBank != '' ">
+            ,PARTY_B_ACCOUNTBANK
+        </if>
+        <if test="mobileB != null and mobileB != '' and mobileB!=',' ">
+            ,MOBILE_B
+        </if>
+        <if test="accountMobile != null and accountMobile != '' and accountMobile !=',' ">
+            ,ACCOUNT_MOBILE
+        </if>
+        <if test="dingTalkAuditCode != null and dingTalkAuditCode != '' ">
+            ,DING_TALK_AUDIT_CODE
+        </if>
+        ) values (
+        #{id},
+        #{orderId} ,
+        #{agreementTitle} ,
+        #{partyA} ,
+        #{partyB} ,
+        #{createBy} ,
+        to_date(#{createTime},'YYYY-MM-DD HH24:MI:SS'),
+        to_date(#{updateTime},'YYYY-MM-DD HH24:MI:SS'),
+        #{updateBy} ,
+        #{version} ,
+        #{personId} ,
+        to_date(#{effectDate},'YYYY-MM-DD HH24:MI:SS'),
+        to_date(#{finishDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{agreementType} ,
+        #{remindDay} ,
+        to_date(#{agreementPayDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{agreementCode} ,
+        #{agreementState} ,
+        #{employMoney} ,
+        to_date(#{salaryDate},'YYYY-MM-DD HH24:MI:SS'),
+        #{payType} ,
+        #{serviceCode} ,
+        #{onedayWages} ,
+        #{firstServiceMoney} ,
+        #{firstManageMoney} ,
+        #{personManageMoney} ,
+        #{serviceAddress} ,
+        #{customerManageMoney} ,
+        #{cardType} ,
+        #{cardNum} ,
+        #{mobile} ,
+        #{partyC} ,
+        #{customerAddress} ,
+        #{platformAddress} ,
+        #{serviceGarage} ,
+        #{serviceMoney} ,
+        #{chargeTimes} ,
+        #{payment} ,
+        #{advancePeriod} ,
+        #{otherMethods} ,
+        #{otherMatters} ,
+        #{cardTypeC} ,
+        #{cardNumC} ,
+        #{mobileC} ,
+        #{isCollection} ,
+        #{waiterAddress} ,
+        #{remarkZdg},
+        #{linkManName},
+        #{linkManMobile},
+        #{zhifuRemark},
+        #{valid},
+        #{serviceGarageId},
+        #{serviceAddressEcho},
+        #{customerAddressEcho},
+        #{checkStatus} ,
+        #{allPay},
+        #{otherWay},
+        #{prepaidMonths},
+        #{prepaidMoney},
+        #{instPrepaidMonths},
+        #{instPrepaidMoney},
+        #{limitDays},
+        #{accountName},
+        #{accountBank},
+        #{agreementModel},
+        #{accountNum},
+        #{elecClientState},
+        #{elecServeState},
+        #{elecOtherState},
+        #{previewContactFile},
+        #{normalContactFile},
+        #{hashApplyNo},
+        #{isPeContract},
+        #{peContractBasic},
+        #{peContractPerformance},
+        to_date(#{contractDate},'yyyy-mm-dd hh24:mi:ss')
+        <if test="agreementBusinessType != null and agreementBusinessType != '' ">
+            ,#{agreementBusinessType}
+        </if>
+        <if test="serviceprojectStandard != null and serviceprojectStandard != '' ">
+            ,#{serviceprojectStandard}
+        </if>
+        <if test="partyBaccountName != null and partyBaccountName != '' ">
+            ,#{partyBaccountName}
+        </if>
+        <if test="partyBaccountNum != null and partyBaccountNum != '' ">
+            ,#{partyBaccountNum}
+        </if>
+        <if test="partyBaccountBank != null and partyBaccountBank != '' ">
+            ,#{partyBaccountBank}
+        </if>
+        <if test="mobileB != null and mobileB != '' ">
+            ,#{mobileB}
+        </if>
+        <if test="accountMobile != null and accountMobile != '' ">
+            ,#{accountMobile}
+        </if>
+        <if test="dingTalkAuditCode != null and dingTalkAuditCode != '' ">
+            ,#{dingTalkAuditCode}
+        </if>
+        )
+    </insert>
+</mapper>

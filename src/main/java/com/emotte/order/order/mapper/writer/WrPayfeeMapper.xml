@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.order.mapper.writer.WrPayfeeMapper">
+
+	<insert id="insertPayfee" parameterType="com.emotte.order.order.model.Payfee">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+   </selectKey>
+		insert into t_order_payfee ( 
+			id ,			
+			order_id ,			
+			fee_post ,			
+			fee_type ,			
+			post_num ,			
+			cards_num ,			
+			is_back_type ,			
+			fee_statrt_period ,			
+			fee_end_period ,			
+			fee_to_date ,			
+			fee_sum ,			
+			account_status ,			
+			create_time ,			
+			create_by ,			
+			update_time ,			
+			update_by ,			
+			version ,	
+			valid ,		
+			agent_user ,
+			pay_status ,
+			post_bank ,
+			post_user ,
+			bank_flow_num ,
+			split_status ,
+			post_terminal_no,
+			collection_entity,
+			platform_fee ,
+			collection_channel ,
+			platform_order_id   ,
+			pos_img_url,
+			pos_type,
+			pos_check_by,
+			pos_check_dept,
+			pos_check_date,
+			pos_fail_reason,
+			pos_check_status,
+			vipshop_name,
+			wph_name,
+			is_manual,
+			hjbl_name,
+	        hjbl_bank,
+	        hjbl_card,
+	        hjbl_card_bank
+		) values (
+			#{id} ,				
+			#{orderId} ,				
+			#{feePost} ,				
+			#{feeType} ,				
+			#{postNum} ,				
+			#{cardsNum} ,				
+			#{isBackType} ,				
+			to_date(#{feeStatrtPeriod},'yyyy-mm-dd hh24:mi:ss'),				
+			to_date(#{feeEndPeriod},'yyyy-mm-dd hh24:mi:ss'),				
+			to_date(#{feeToDate},'yyyy-mm-dd hh24:mi:ss') ,				
+			#{feeSum} ,				
+			#{accountStatus} ,				
+			NVL(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),sysdate),				
+			#{createBy} ,
+			NVL(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),sysdate),				
+			#{updateBy} ,				
+			1 ,	
+			1 ,			
+			#{agentUser} ,
+			#{payStatus},			
+			#{postBank} ,
+			#{postUser}	,
+			#{bankFlowNum},
+			2,
+			#{postTerminalNo},
+			#{collectionEntity}	,
+			#{platformFee}	,		
+			#{collectionChannel},		
+			#{platformOrderId}	,
+			#{posImgUrl},
+			#{posType},
+			#{posCheckBy},
+			#{posCheckDept},
+			#{posCheckDate},
+			#{posFailReason},
+			#{posCheckStatus},
+			#{vipShopName},
+			#{wphName},
+			#{isManualFee},
+			#{hjblName},
+            #{hjblBank},
+            #{hjblCard},
+            #{hjblCardBank}
+		)
+	</insert>
+
+	<update id="updatePayfee" parameterType="com.emotte.order.order.model.Payfee">
+		update t_order_payfee	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="feePost != null and feePost != ''"> 
+				,fee_post = #{feePost} 
+			</if>
+			
+	 <if test="feeType != null and feeType != ''"> 
+				,fee_type = #{feeType} 
+			</if>
+			
+	 <if test="postNum != null and postNum != ''"> 
+				,post_num = #{postNum} 
+			</if>
+			
+	 <if test="cardsNum != null and cardsNum != ''"> 
+				,cards_num = #{cardsNum} 
+			</if>
+			
+	 <if test="isBackType != null and isBackType != ''"> 
+				,is_back_type = #{isBackType} 
+			</if>
+			
+	 <if test="feeStatrtPeriod != null and feeStatrtPeriod != ''"> 
+				,fee_statrt_period = to_date(#{feeStatrtPeriod},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="feeEndPeriod != null and feeEndPeriod != ''"> 
+				,fee_end_period = to_date(#{feeEndPeriod},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="feeToDate != null and feeToDate != ''"> 
+				,fee_to_date = to_date(#{feeToDate},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+			
+	 <if test="feeSum != null and feeSum != ''"> 
+				,fee_sum = #{feeSum} 
+			</if>
+			
+	 <if test="accountStatus != null and accountStatus != ''"> 
+				,account_status = #{accountStatus} 
+			</if>
+			
+	<if test="createTime != null and createTime != ''"> 
+				,create_time = NVL(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),sysdate)
+			</if>
+			
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = NVL(to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss'),sysdate)
+			</if>
+			
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+			
+		,version = version+1 
+			
+	 <if test="agentUser != null and agentUser != ''"> 
+				,agent_user = #{agentUser} 
+			</if>
+	<if test="postBank != null and postBank != ''"> 
+				,post_bank = #{postBank} 
+			</if>
+	<if test="postUser != null and postUser != ''"> 
+				,post_user = #{postUser} 
+			</if>
+	<if test="bankFlowNum != null and bankFlowNum != ''"> 
+				,bank_flow_num = #{bankFlowNum} 
+			</if>
+	<if test="splitStatus != null and splitStatus != ''"> 
+				,split_status = #{splitStatus} 
+			</if>
+	<if test="platformFee != null and platformFee != ''"> 
+				,platform_fee = #{platformFee} 
+			</if>
+	<if test="collectionChannel != null and collectionChannel != ''"> 
+				,collection_channel = #{collectionChannel} 
+			</if>
+	<if test="platformOrderId != null and platformOrderId != ''"> 
+				,platform_order_id = #{platformOrderId} 
+			</if>
+	<if test="postTerminalNo != null and postTerminalNo != ''"> 
+				,post_terminal_no = #{postTerminalNo} 
+			</if>
+	<if test="posImgUrl != null and posImgUrl != ''"> 
+				,pos_img_url = #{posImgUrl} 
+			</if>
+	<if test="posCheckBy != null and posCheckBy != ''"> 
+				,pos_check_by = #{posCheckBy} 
+			</if>
+	<if test="posCheckDept != null and posCheckDept != ''"> 
+				,pos_check_dept = #{posCheckDept} 
+			</if>
+	<if test="posCheckDate != null and posCheckDate != ''"> 
+				,pos_check_date = sysdate
+			</if>
+	<if test="posFailReason != null and posFailReason != ''"> 
+				,pos_fail_reason = #{posFailReason} 
+			</if>
+	<if test="posCheckStatus != null and posCheckStatus != ''"> 
+				,pos_check_status = #{posCheckStatus} 
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+	<if test="wphName != null and wphName != ''"> 
+				,wph_name = #{wphName} 
+			</if>
+       </set>
+		where
+			id=#{id}
+				
+	</update>
+	
+	
+	<insert id="insertAccount" parameterType="com.emotte.order.order.model.Payfee">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+   </selectKey>
+		insert into t_account_pay ( 
+			id ,			
+			order_id ,			
+			account_amount ,			
+			pay_type ,			
+			pay_status ,			
+			is_back_type ,			
+			start_time ,			
+			end_time ,					
+			create_time ,			
+			create_by ,			
+			update_time ,			
+			update_by ,			
+			version ,			
+			valid ,
+			buss_status,
+			remark,
+			pay_kind,
+			is_manual,
+			customer_fee,
+			personal_fee,
+			platform_all_fee ,
+			vph_status   ,
+			vph_back_status ,
+			refund_object,
+			CREATE_TYPE,
+			MARKET_PRICE
+		) values (
+			#{id} ,				
+			#{orderId} ,				
+			#{accountAmount} ,				
+			#{payType} ,				
+			#{payStatus} ,				
+			#{isBackType} ,				
+			to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') ,				
+			to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ,				
+			sysdate ,								
+			#{createBy} ,				
+			sysdate ,				
+			#{updateBy} ,				
+			1 ,				
+			1 ,				
+			#{bussStatus} ,				
+			#{remark} ,
+			#{payKind},	
+			#{isManual}	,
+			#{customerFee},
+			#{personalFee},
+			#{platformAllFee},
+			#{vphStatus}	,
+			#{vphBackStatus}	,
+			#{refundObject}	,
+			#{createType},
+			#{marketPrice}
+		)
+	</insert>
+
+	<update id="updateAccount" parameterType="com.emotte.order.order.model.Payfee">
+		update t_account_pay	
+		 <set>  
+			<if test="id != null and id != '' ">  
+				id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="accountAmount != null and accountAmount != ''"> 
+				,account_amount = #{accountAmount} 
+			</if>
+			
+	 <if test="payType != null and payType != ''"> 
+				,pay_type = #{payType} 
+			</if>
+			
+	 <if test="payStatus != null and payStatus != ''"> 
+				,pay_status = #{payStatus} 
+			</if>
+			
+	 <if test="isBackType != null and isBackType != ''"> 
+				,is_back_type = #{isBackType} 
+			</if>
+			
+	 <if test="startTime != null and startTime != ''"> 
+				,start_time = to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+			
+	 <if test="endTime != null and endTime != ''"> 
+				,end_time = to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+				,update_time = sysdate 
+				
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+				,version = version+1
+	 <if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+	<if test="bussStatus != null and bussStatus != ''"> 
+				,buss_status = #{bussStatus} 
+			</if>
+	<if test="remark != null and remark != ''"> 
+				,remark = #{remark} 
+			</if>
+	<if test="payKind != null and payKind != ''"> 
+				,pay_kind = #{payKind} 
+			</if>
+	<if test="customerFee != null and customerFee != '' or customerFee == 0"> 
+				,customer_fee = #{customerFee} 
+			</if>
+	<if test="platformAllFee != null and platformAllFee != ''"> 
+				,platform_all_fee = #{platformAllFee} 
+			</if>
+	<if test="personalFee != null and personalFee != '' or personalFee == 0"> 
+				,personal_fee = #{personalFee} 
+			</if>
+	<if test="vphStatus != null and vphStatus != ''"> 
+				,vph_status = #{vphStatus} 
+			</if>
+	<if test="vphBackStatus != null and vphBackStatus != ''"> 
+				,vph_back_status = #{vphBackStatus} 
+			</if>
+	<if test="refundObject != null and refundObject != ''">
+				,refund_object = #{refundObject}
+			</if>
+			 <if test="marketPrice != null and marketPrice != ''">
+				 ,MARKET_PRICE = #{marketPrice}
+			 </if>
+       </set>
+		where
+			id=#{id} 
+				
+	</update>
+	<update id="updatePayfeeByAccountId" parameterType="java.lang.Long">
+		update t_order_payfee 
+		set valid = 2, update_time=sysdate
+		where order_id=#{accountId}
+	</update>
+	<update id="updateAccountById" parameterType="java.lang.Long">
+		update t_account_pay 
+		set valid = 2, update_time=sysdate
+		where id=#{accountId}
+	</update>
+	<update id="updateAccountByOrderId" parameterType="java.lang.Long">
+		update t_account_pay 
+		set valid = 2, update_time=sysdate
+		where order_id=#{orderId} and pay_status=20110001 and valid=1 and (is_manual=2 or is_manual is null)
+	</update>
+		
+	<update id="updatePayfeeOther" parameterType="com.emotte.order.order.model.Payfee">
+		update t_order_payfee	
+		 <set>  
+			 version = version+1 
+			<if test="id != null and id != '' ">  
+				,id = #{id} 
+	         </if>
+	 <if test="orderId != null and orderId != ''"> 
+				,order_id = #{orderId} 
+			</if>
+			
+	 <if test="feePost != null and feePost != ''"> 
+				,fee_post = #{feePost} 
+			</if>
+			
+	 <if test="feeType != null and feeType != ''"> 
+				,fee_type = #{feeType} 
+			</if>
+			
+	 <if test="postNum != null and postNum != ''"> 
+				,post_num = #{postNum} 
+			</if>
+			
+	 <if test="cardsNum != null and cardsNum != ''"> 
+				,cards_num = #{cardsNum} 
+			</if>
+			
+	 <if test="isBackType != null and isBackType != ''"> 
+				,is_back_type = #{isBackType} 
+			</if>
+			
+	 <if test="feeStatrtPeriod != null and feeStatrtPeriod != ''"> 
+				,fee_statrt_period = to_date(#{feeStatrtPeriod},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="feeEndPeriod != null and feeEndPeriod != ''"> 
+				,fee_end_period = to_date(#{feeEndPeriod},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			
+	 <if test="feeToDate != null and feeToDate != ''"> 
+				,fee_to_date = to_date(#{feeToDate},'yyyy-mm-dd hh24:mi:ss') 
+			</if>
+			
+	 <if test="feeSum != null and feeSum != ''"> 
+				,fee_sum = #{feeSum} 
+			</if>
+			
+	 <if test="accountStatus != null and accountStatus != ''"> 
+				,account_status = #{accountStatus} 
+			</if>
+	 <if test="updateTime != null and updateTime != ''"> 
+				,update_time = sysdate
+			</if>
+	 <if test="updateBy != null and updateBy != ''"> 
+				,update_by = #{updateBy} 
+			</if>
+	 <if test="agentUser != null and agentUser != ''"> 
+				,agent_user = #{agentUser} 
+			</if>
+	<if test="postBank != null and postBank != ''"> 
+				,post_bank = #{postBank} 
+			</if>
+	<if test="postUser != null and postUser != ''"> 
+				,post_user = #{postUser} 
+			</if>
+	<if test="bankFlowNum != null and bankFlowNum != ''"> 
+				,bank_flow_num = #{bankFlowNum} 
+			</if>
+	<if test="splitStatus != null and splitStatus != ''"> 
+				,split_status = #{splitStatus} 
+			</if>
+	<if test="platformFee != null and platformFee != ''"> 
+				,platform_fee = #{platformFee} 
+			</if>
+	<if test="collectionChannel != null and collectionChannel != ''"> 
+				,collection_channel = #{collectionChannel} 
+			</if>
+	<if test="platformOrderId != null and platformOrderId != ''"> 
+				,platform_order_id = #{platformOrderId} 
+			</if>
+	<if test="postTerminalNo != null and postTerminalNo != ''"> 
+				,post_terminal_no = #{postTerminalNo} 
+			</if>
+	<if test="posCheckBy != null and posCheckBy != ''"> 
+				,pos_check_by = #{posCheckBy} 
+			</if>
+	<if test="posCheckDept != null and posCheckDept != ''"> 
+				,pos_check_dept = #{posCheckDept} 
+			</if>
+	<if test="posCheckDate != null and posCheckDate != ''"> 
+				,pos_check_date = #{posCheckDate} 
+			</if>
+	<if test="posFailReason != null and posFailReason != ''"> 
+				,pos_fail_reason = #{posFailReason} 
+			</if>
+	<if test="posCheckStatus != null and posCheckStatus != ''"> 
+				,pos_check_status = #{posCheckStatus} 
+			</if>
+	<if test="vipShopName != null and vipShopName != ''"> 
+				,vipshop_name = #{vipShopName} 
+			</if>
+	<if test="valid != null and valid != ''"> 
+				,valid = #{valid} 
+			</if>
+       </set>
+		<where> 1 = 1 and id in
+			<foreach item="id_" collection="ids_" separator="," open="(" close=")" index="">  
+		      			#{id_, jdbcType=NUMERIC}
+		    </foreach>
+		</where>
+	</update>
+	<!-- 更新其他缴费详情-->
+	<update id="updateOtherDeal" parameterType="com.emotte.order.order.model.Payfee">
+		update finance.t_fin_other_deal_detail odd
+		 <set>  
+	  <if test="id != null and id != '' ">  
+				odd.id = #{id} 
+	         </if>
+	 <if test="posImgUrl != null and posImgUrl != ''"> 
+				,pos_img_url = #{posImgUrl} 
+			</if>
+	<if test="posCheckBy != null and posCheckBy != ''"> 
+				,odd.pos_check_by = #{posCheckBy} 
+			</if>
+	<if test="posCheckDept != null and posCheckDept != ''"> 
+				,odd.pos_check_dept = #{posCheckDept} 
+			</if>
+	<if test="posCheckDate != null and posCheckDate != ''"> 
+				,odd.pos_check_date = sysdate
+			</if>
+	<if test="posFailReason != null and posFailReason != ''"> 
+				,odd.pos_fail_reason = #{posFailReason} 
+			</if>
+	<if test="posCheckStatus != null and posCheckStatus != ''"> 
+				,odd.pos_check_status = #{posCheckStatus} 
+			</if>
+       </set>
+        where odd.id =  #{id} 
+	</update>
+	<!-- 更新其他缴费 -->
+	<update id="updateOtherRevenue" parameterType="com.emotte.order.order.model.Payfee">
+		update  finance.t_fin_other_revenue rev 
+		 <set>  
+			 rev.version = rev.version+1 
+			,rev.update_time = sysdate
+       </set>
+       where rev.id =  (select odd.other_revenue_id from finance.t_fin_other_deal_detail odd where  odd.id = #{id} )
+	</update>
+	<insert id="insertAccountActivity" parameterType="com.emotte.order.order.model.AccountActivity">
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT getseq() as id from DUAL  
+   </selectKey>
+		insert into t_order_activity_account ( 
+			ID ,			
+			TYPE ,			
+			ACCOUNT_ID ,			
+			FK_ID ,			
+			STATUS ,			
+			CREATE_TIME ,			
+			VALID ,			
+			VERSION ,			
+			REMARK ,			
+			LOG ,			
+			ORDER_ID 
+		) values (
+			#{id} ,				
+			#{type} ,				
+			#{accountId} ,				
+			#{activityId} ,				
+			#{status} ,							
+			NVL(to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss'),sysdate),
+			1,				
+			1,				
+			#{remake} ,				
+			#{log} ,
+			#{orderId} 
+		)
+	</insert>
+	
+	<update id="updateAccountType" parameterType="java.lang.Long">
+		UPDATE T_ACCOUNT_PAY 
+		SET  PAY_STATUS=20110003, UPDATE_TIME=sysdate
+		WHERE ID=#{accountId}
+	</update>
+
+	<!--根据结算单ID删除缴费单信息-->
+	<update id="deletePayfeeByAccountId" parameterType="com.emotte.order.order.model.AccountPay">
+		UPDATE T_ORDER_PAYFEE SET VALID = 2,UPDATE_BY = #{updateBy},UPDATE_TIME = SYSDATE WHERE ORDER_ID = #{accountId}
+	</update>
+</mapper>

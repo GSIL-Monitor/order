@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.warehouse.mapper.reader.RePackageItemRefMapper">
+	<select id="loadPackageItemRef" parameterType="java.lang.Long" resultType="com.emotte.order.warehouse.model.PackageItemRef">
+		select 
+			ID as id ,		
+			ORDER_ITEM_ID as orderItemId ,		
+			PACKAGE_ID as packageId ,		
+			CREATE_BY as createBy ,		
+			CREATE_TIME as createTime ,		
+			UPDATE_BY as updateBy ,		
+			UPDATE_TIME as updateTime ,		
+			VERSION as version ,		
+			VALID as valid ,		
+			IS_OLD_DATA as isOldData ,		
+			LOG as log 		
+		from T_WAREHOUSE_PACKAGE_ITEM_REF
+		where
+	</select>
+	
+	<select id="queryPackageItemRef"  parameterType="com.emotte.order.warehouse.model.PackageItemRef" resultType="com.emotte.order.warehouse.model.PackageItemRef">
+	select
+			ID as id ,		
+			ORDER_ITEM_ID as orderItemId ,		
+			PACKAGE_ID as packageId ,		
+			CREATE_BY as createBy ,		
+			CREATE_TIME as createTime ,		
+			UPDATE_BY as updateBy ,		
+			UPDATE_TIME as updateTime ,		
+			VERSION as version ,		
+			VALID as valid ,		
+			IS_OLD_DATA as isOldData ,		
+			LOG as log 		
+	from  T_WAREHOUSE_PACKAGE_ITEM_REF
+	<where> 
+	 1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderItemId!=null and orderItemId!='' ">           
+			and	ORDER_ITEM_ID =  #{orderItemId} 		
+		</if>	
+		<if test="packageId!=null and packageId!='' ">           
+			and	PACKAGE_ID =  #{packageId} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+	</where>
+	order by id desc
+	</select>
+	
+	
+	<select id="countPackageItemRef"  parameterType="com.emotte.order.warehouse.model.PackageItemRef" resultType="java.lang.Integer">
+		SELECT count(0) 
+		FROM T_WAREHOUSE_PACKAGE_ITEM_REF
+		<where> 
+	         1 = 1
+		<if test="id!=null and id!='' ">           
+			and	ID =  #{id} 		
+		</if>	
+		<if test="orderItemId!=null and orderItemId!='' ">           
+			and	ORDER_ITEM_ID =  #{orderItemId} 		
+		</if>	
+		<if test="packageId!=null and packageId!='' ">           
+			and	PACKAGE_ID =  #{packageId} 		
+		</if>	
+		<if test="createBy!=null and createBy!='' ">           
+			and	CREATE_BY =  #{createBy} 		
+		</if>	
+		<if test="createTime!=null and createTime!='' ">           
+			and	CREATE_TIME =  #{createTime} 		
+		</if>	
+		<if test="updateBy!=null and updateBy!='' ">           
+			and	UPDATE_BY =  #{updateBy} 		
+		</if>	
+		<if test="updateTime!=null and updateTime!='' ">           
+			and	UPDATE_TIME =  #{updateTime} 		
+		</if>	
+		<if test="version!=null and version!='' ">           
+			and	VERSION =  #{version} 		
+		</if>	
+		<if test="valid!=null and valid!='' ">           
+			and	VALID =  #{valid} 		
+		</if>	
+		<if test="isOldData!=null and isOldData!='' ">           
+			and	IS_OLD_DATA =  #{isOldData} 		
+		</if>	
+		<if test="log!=null and log!='' ">           
+			and	LOG =  #{log} 		
+		</if>	
+			</where>
+	</select>
+	
+</mapper>

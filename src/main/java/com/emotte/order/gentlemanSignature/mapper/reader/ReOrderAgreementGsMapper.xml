@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.gentlemanSignature.mapper.reader.ReOrderAgreementGsMapper"> 
+   <select id="queryOrderAgreementGs" parameterType="com.emotte.order.gentlemanSignature.model.AgreementGs" 
+   resultType="com.emotte.order.gentlemanSignature.model.AgreementGs">
+      
+      select
+		ID as id ,
+		ROLE as role ,
+		CONTACTID as contactId ,
+		BASE64IMAGE as base64image ,
+		FILEID as fileId ,
+		FILEPATH as filePath ,
+		to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as createTime,
+		to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss')  as updateTime,
+		CREATE_BY as createBy ,
+		UPDATE_BY as updateBy ,
+		VALID as valid ,
+		VERSION as version
+		from T_ORDER_AGREEMENT_GS
+		<where>
+				1 = 1 and  VALID = 1   
+			<if test="id!=null and id!='' ">
+				and ID = #{id}
+			</if>
+			<if test="role!=null and role!='' ">
+				and ROLE = #{role}
+			</if>
+			<if test="contactId!=null and contactId!='' ">
+				and CONTACTID = #{contactId}
+			</if>
+			<if test="base64image!=null and base64image!='' ">
+				and BASE64IMAGE = #{base64image}
+			</if>
+			<if test="fileId!=null and fileId!='' ">
+				and FILEID = #{fileId}
+			</if>
+			<if test="filePath!=null and filePath!='' ">
+				and FILEPATH = #{filePath}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+				and CREATE_TIME = to_date(#{createTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+				and UPDATE_TIME = to_date(#{updateTime},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="createBy!=null and createBy!='' ">
+				and CREATE_BY = #{createBy}
+			</if>
+			<if test="updateBy!=null and updateBy!='' ">
+				and UPDATE_BY = #{updateBy}
+			</if>
+			<if test="version!=null and version!='' ">
+				and VERSION = #{version}
+			</if>
+		</where>
+
+    </select>
+</mapper>

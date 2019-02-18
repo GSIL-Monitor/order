@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.emotte.order.authorg.mapper.reader.ReOrgMapper">
+    <sql id="columns">
+		ID as id ,
+		NAME as name ,
+		FID as fid ,
+		CODE as code ,
+		TYPE as type ,
+		STATUS as status ,
+		FAX as fax ,
+		MANAGER as manager ,
+		CREATE_BY as createBy ,
+		CREATE_TIME as createTime ,
+		UPDATE_BY as updateBy ,
+		UPDATE_TIME as updateTime ,
+		VERSION as version ,
+		VALID as valid ,
+		POSITION as position ,
+		TELEPHONE as telephone ,
+		CITY_CODE as cityCode ,
+		LONGITUDE as longitude ,
+		LATITUDE as latitude ,
+		ADDR as addr ,
+		IS_ALL_CATEGORY as isAllCategory ,
+		CATEGORY_CODE as categoryCode ,
+		IS_OLD_DATA as isOldData ,
+		ORG_ABSTRACT as orgAbstract ,
+		CONTRACT_HEADER as contractHeader ,
+		LOG as log ,
+		SIGNATURE_PICTURE as signaturePicture,
+		ORGANIZATION_NUMBER as organizationNumber,
+		email as email
+	</sql>
+
+    <!-- 加载 -->
+    <select id="load" parameterType="java.lang.Long" resultType="com.emotte.order.authorg.model.Org">
+        select
+        <include refid="columns"/>
+        from t_auth_org
+        where
+        ID = #{id}
+    </select>
+
+    <!-- 查询 -->
+    <select id="query" parameterType="com.emotte.order.authorg.model.Org"
+            resultType="com.emotte.order.authorg.model.Org">
+        select
+        <include refid="columns"/>
+        from t_auth_org
+        <where>
+            1 = 1
+            <if test="id != null and id != ''">
+                and ID = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and NAME = #{name}
+            </if>
+            <if test="fid != null and fid != ''">
+                and FID = #{fid}
+            </if>
+            <if test="code != null and code != ''">
+                and CODE = #{code}
+            </if>
+            <if test="type != null and type != ''">
+                and TYPE = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                and STATUS = #{status}
+            </if>
+            <if test="fax != null and fax != ''">
+                and FAX = #{fax}
+            </if>
+            <if test="manager != null and manager != ''">
+                and MANAGER = #{manager}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and CREATE_BY = #{createBy}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and CREATE_TIME = #{createTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and UPDATE_BY = #{updateBy}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and UPDATE_TIME = #{updateTime}
+            </if>
+            <if test="version != null and version != ''">
+                and VERSION = #{version}
+            </if>
+            <if test="valid != null and valid != ''">
+                and VALID = #{valid}
+            </if>
+            <if test="position != null and position != ''">
+                and POSITION = #{position}
+            </if>
+            <if test="telephone != null and telephone != ''">
+                and TELEPHONE = #{telephone}
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                and CITY_CODE = #{cityCode}
+            </if>
+            <if test="longitude != null and longitude != ''">
+                and LONGITUDE = #{longitude}
+            </if>
+            <if test="latitude != null and latitude != ''">
+                and LATITUDE = #{latitude}
+            </if>
+            <if test="addr != null and addr != ''">
+                and ADDR = #{addr}
+            </if>
+            <if test="isAllCategory != null and isAllCategory != ''">
+                and IS_ALL_CATEGORY = #{isAllCategory}
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                and CATEGORY_CODE = #{categoryCode}
+            </if>
+            <if test="isOldData != null and isOldData != ''">
+                and IS_OLD_DATA = #{isOldData}
+            </if>
+            <if test="orgAbstract != null and orgAbstract != ''">
+                and ORG_ABSTRACT = #{orgAbstract}
+            </if>
+            <if test="contractHeader != null and contractHeader != ''">
+                and CONTRACT_HEADER = #{contractHeader}
+            </if>
+            <if test="log != null and log != ''">
+                and LOG = #{log}
+            </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="queryByPage" parameterType="com.emotte.order.authorg.model.Org"
+            resultType="com.emotte.order.authorg.model.Org">
+        select
+        <include refid="columns"/>
+        from t_auth_org
+        <where>
+            1 = 1
+            <if test="id != null and id != ''">
+                and ID = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and NAME = #{name}
+            </if>
+            <if test="fid != null and fid != ''">
+                and FID = #{fid}
+            </if>
+            <if test="code != null and code != ''">
+                and CODE = #{code}
+            </if>
+            <if test="type != null and type != ''">
+                and TYPE = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                and STATUS = #{status}
+            </if>
+            <if test="fax != null and fax != ''">
+                and FAX = #{fax}
+            </if>
+            <if test="manager != null and manager != ''">
+                and MANAGER = #{manager}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and CREATE_BY = #{createBy}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and CREATE_TIME = #{createTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and UPDATE_BY = #{updateBy}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and UPDATE_TIME = #{updateTime}
+            </if>
+            <if test="version != null and version != ''">
+                and VERSION = #{version}
+            </if>
+            <if test="valid != null and valid != ''">
+                and VALID = #{valid}
+            </if>
+            <if test="position != null and position != ''">
+                and POSITION = #{position}
+            </if>
+            <if test="telephone != null and telephone != ''">
+                and TELEPHONE = #{telephone}
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                and CITY_CODE = #{cityCode}
+            </if>
+            <if test="longitude != null and longitude != ''">
+                and LONGITUDE = #{longitude}
+            </if>
+            <if test="latitude != null and latitude != ''">
+                and LATITUDE = #{latitude}
+            </if>
+            <if test="addr != null and addr != ''">
+                and ADDR = #{addr}
+            </if>
+            <if test="isAllCategory != null and isAllCategory != ''">
+                and IS_ALL_CATEGORY = #{isAllCategory}
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                and CATEGORY_CODE = #{categoryCode}
+            </if>
+            <if test="isOldData != null and isOldData != ''">
+                and IS_OLD_DATA = #{isOldData}
+            </if>
+            <if test="orgAbstract != null and orgAbstract != ''">
+                and ORG_ABSTRACT = #{orgAbstract}
+            </if>
+            <if test="contractHeader != null and contractHeader != ''">
+                and CONTRACT_HEADER = #{contractHeader}
+            </if>
+            <if test="log != null and log != ''">
+                and LOG = #{log}
+            </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <!-- 查询导出数据 -->
+    <select id="queryExport" resultType="java.util.Map">
+        select
+        <include refid="columns"/>
+        from t_auth_org
+        <where>
+            1 = 1
+            <choose>
+                <when test="ids != null and ids != ''">
+                    and id in
+                    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                        #{id:NUMERIC}
+                    </foreach>
+                </when>
+                <otherwise>
+                    <if test="id != null and id != ''">
+                        and ID = #{id}
+                    </if>
+                    <if test="name != null and name != ''">
+                        and NAME = #{name}
+                    </if>
+                    <if test="fid != null and fid != ''">
+                        and FID = #{fid}
+                    </if>
+                    <if test="code != null and code != ''">
+                        and CODE = #{code}
+                    </if>
+                    <if test="type != null and type != ''">
+                        and TYPE = #{type}
+                    </if>
+                    <if test="status != null and status != ''">
+                        and STATUS = #{status}
+                    </if>
+                    <if test="fax != null and fax != ''">
+                        and FAX = #{fax}
+                    </if>
+                    <if test="manager != null and manager != ''">
+                        and MANAGER = #{manager}
+                    </if>
+                    <if test="createBy != null and createBy != ''">
+                        and CREATE_BY = #{createBy}
+                    </if>
+                    <if test="createTime != null and createTime != ''">
+                        and CREATE_TIME = #{createTime}
+                    </if>
+                    <if test="updateBy != null and updateBy != ''">
+                        and UPDATE_BY = #{updateBy}
+                    </if>
+                    <if test="updateTime != null and updateTime != ''">
+                        and UPDATE_TIME = #{updateTime}
+                    </if>
+                    <if test="version != null and version != ''">
+                        and VERSION = #{version}
+                    </if>
+                    <if test="valid != null and valid != ''">
+                        and VALID = #{valid}
+                    </if>
+                    <if test="position != null and position != ''">
+                        and POSITION = #{position}
+                    </if>
+                    <if test="telephone != null and telephone != ''">
+                        and TELEPHONE = #{telephone}
+                    </if>
+                    <if test="cityCode != null and cityCode != ''">
+                        and CITY_CODE = #{cityCode}
+                    </if>
+                    <if test="longitude != null and longitude != ''">
+                        and LONGITUDE = #{longitude}
+                    </if>
+                    <if test="latitude != null and latitude != ''">
+                        and LATITUDE = #{latitude}
+                    </if>
+                    <if test="addr != null and addr != ''">
+                        and ADDR = #{addr}
+                    </if>
+                    <if test="isAllCategory != null and isAllCategory != ''">
+                        and IS_ALL_CATEGORY = #{isAllCategory}
+                    </if>
+                    <if test="categoryCode != null and categoryCode != ''">
+                        and CATEGORY_CODE = #{categoryCode}
+                    </if>
+                    <if test="isOldData != null and isOldData != ''">
+                        and IS_OLD_DATA = #{isOldData}
+                    </if>
+                    <if test="orgAbstract != null and orgAbstract != ''">
+                        and ORG_ABSTRACT = #{orgAbstract}
+                    </if>
+                    <if test="contractHeader != null and contractHeader != ''">
+                        and CONTRACT_HEADER = #{contractHeader}
+                    </if>
+                    <if test="log != null and log != ''">
+                        and LOG = #{log}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        order by ID desc
+    </select>
+
+    <!-- 查询渠道所属部门 -->
+    <select id="queryByChannel" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        org.id,
+        org.name
+        FROM
+        t_auth_org org
+        WHERE
+        EXISTS (SELECT 1 FROM t_auth_channel c WHERE c.org_id = org.id AND c.valid = 1 AND c.channel_id = #{channelId})
+        AND org.city_code LIKE #{cityCode}||'%'
+        AND org.type IN (5,7)
+        AND org.valid = 1
+        AND org.STATUS = 1
+        <if test="orgList.size() > 0">
+            AND org.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询商品所属部门 -->
+    <select id="queryByProduct" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        org.id,
+        org.name
+        FROM
+        t_auth_org org
+        WHERE
+        EXISTS (SELECT 1 FROM t_auth_org_product p WHERE p.org_id = org.id AND p.valid = 1 AND p.product_code =
+        #{productCode})
+        AND org.city_code LIKE #{cityCode}||'%'
+        AND org.type IN (5,7)
+        AND org.valid = 1
+        AND org.STATUS = 1
+        <if test="orgList.size() > 0">
+            AND org.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询距离最近的门店，基地 -->
+    <select id="queryByDistance" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        ID,
+        NAME
+        FROM (
+        SELECT
+        ID, NAME, MINORG
+        FROM (
+        SELECT
+        T.ID,
+        T.NAME,
+        POWER(ROUND(T.LONGITUDE, 6) - ROUND(#{longitude}, 6), 2) + POWER(ROUND(T.LATITUDE, 6) - ROUND(#{latitude}, 6),
+        2) AS MINORG
+        FROM
+        T_AUTH_ORG T
+        WHERE
+        T.TYPE IN(5,7)
+        AND T.CITY_CODE LIKE #{cityCode}||'%'
+        AND T.VALID = 1
+        AND T.LONGITUDE IS NOT NULL
+        AND T.LATITUDE IS NOT NULL
+        <if test="orgList.size() > 0">
+            AND t.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+        )
+        ORDER BY MINORG) F
+        WHERE ROWNUM = 1
+    </select>
+
+    <!-- 查寻呼叫中心 -->
+    <select id="queryCallCenter" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        g.id,
+        g.name
+        FROM
+        t_auth_org g
+        WHERE
+        g.id = '12619003'
+        <!-- AND g.type = 5
+        AND g.valid = 1 -->
+        AND ROWNUM = 1
+    </select>
+
+    <!-- 根据城市，渠道，商品过滤部门 -->
+    <select id="queryByChannelAndProduct" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        org.id as id,
+        org.name as name,
+        org.accept_type as acceptType,
+        org.accept_range as acceptRange
+        FROM
+        t_auth_org org
+        WHERE
+        EXISTS (SELECT 1 FROM t_auth_channel_product p INNER JOIN t_auth_channel c ON p.AUTH_CHANNEL_ID = c.id AND
+        c.valid = 1 WHERE p.valid = 1 AND c.org_id = org.id AND p.product_code = #{productCode} AND c.channel_id =
+        #{channelId})
+        AND org.city_code LIKE #{cityCode}||'%'
+        AND org.type IN (5,7)
+        AND org.valid = 1
+        AND org.STATUS = 1
+        <if test="orgList.size() > 0">
+            AND org.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询商品表ID -->
+    <select id="queryProduct" parameterType="java.lang.String" resultType="java.lang.Long">
+		select p.id
+		  from t_product p
+		  left join t_product_base ps
+		    on ps.id = p.base_id
+		  left join t_product_city pc
+		    on pc.product_id = p.id
+		 where pc.product_code = #{productCode}
+           and pc.valid = 1 and p.valid = 1 and ps.valid = 1
+	</select>
+
+    <!-- 查询距离最近的所有门店，基地 -->
+    <select id="queryAllOrgByDistance" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        ID, NAME, MINORG,TYPE2,ACCEPTTYPE,ACCEPTRANGE,managerId
+        FROM (
+        SELECT
+        T.ID,
+        T.NAME,
+        T.type2 as type2,
+        T.accept_type as acceptType,
+        T.accept_range as acceptRange,
+        T.MANAGER_ID as managerId,
+        POWER(ROUND(T.LONGITUDE, 6) - ROUND(#{longitude}, 6), 2) + POWER(ROUND(T.LATITUDE, 6) - ROUND(#{latitude}, 6),
+        2) AS MINORG
+        FROM
+        T_AUTH_ORG T
+        WHERE
+        T.TYPE IN(5,7)
+        AND T.CITY_CODE LIKE #{cityCode}||'%'
+        AND T.VALID = 1
+        AND T.LONGITUDE IS NOT NULL
+        AND T.LATITUDE IS NOT NULL
+        AND T.TYPE2 IS NOT NULL
+        <if test="orgList.size() > 0">
+            AND T.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+        )
+        ORDER BY MINORG
+    </select>
+
+    <!-- 判断加盟商接单范围是否符合 -->
+    <!-- 地球平均半径 6370.856 -->
+    <select id="queryByAcceptRange" resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        ID,
+        NAME,
+        managerId
+        FROM (
+        SELECT
+        ID, NAME,managerId, MINORG
+        FROM (
+        SELECT
+        T.ID,
+        T.NAME,
+        T.MANAGER_ID as managerId,
+        (6370.856 * 2 *
+        ASIN(
+        SQRT(
+        POWER(SIN(((T.LATITUDE * 3.141592625) / 180 - (${latitude} * 3.141592625) / 180) / 2), 2)
+        + COS((${latitude} * 3.141592625) / 180) * COS((T.LATITUDE * 3.141592625) / 180) * POWER(SIN(((T.LONGITUDE *
+        3.141592625) / 180 - (${longitude} * 3.141592625) / 180) / 2), 2)
+        )
+        )
+        ) AS MINORG
+        FROM
+        T_AUTH_ORG T
+        WHERE
+        T.TYPE IN(5,7)
+        AND T.CITY_CODE LIKE ${cityCode}||'%'
+        AND T.VALID = 1
+        AND T.LONGITUDE IS NOT NULL
+        AND T.LATITUDE IS NOT NULL
+        <if test="orgList.size() > 0">
+            AND T.id IN
+            <foreach collection="orgList" item="org" open="(" close=")" separator=",">
+                #{org.id}
+            </foreach>
+        </if>
+        )
+        ORDER BY MINORG) F
+        where 1=1 and ROWNUM = 1
+        <if test="acceptRange !=null and acceptRange !='' ">
+            and F.MINORG &lt;= ${acceptRange}
+        </if>
+    </select>
+
+
+    <!-- 北京自动分发新流程 -->
+    <select id="distributeInPeking" resultType="com.emotte.order.authorg.model.Org">
+        select manager.dept_id as id,poll.responsible_id as manager
+        from t_order_poll_manager poll
+        left join t_auth_manager manager
+        on manager.id = poll.responsible_id
+        <where>1=1
+            and poll.id =
+            (
+            select
+            <!-- 判断下一条管家的id是不是最后一条 -->
+            (case b.cp
+            when 0 then (select min(n.id) from t_order_poll_manager n where n.valid = 1 )
+            else b.cp
+            end) as managerId
+            from
+            <!--查询管家id的下一条id-->
+            (select nvl(c.p,0) as cp from (select a.id as id,lead(id,1,0) over (order by id) as p from
+            t_order_poll_manager a where a.valid = 1) c where c.id in
+            (
+            <!--查询记录中管家id对应管家记录表的id数据-->
+            select max(pm.id)
+            from t_order_poll_manager pm
+            where pm.responsible_id in
+            <!--查询最近时间的记录-->
+            (select pr.responsibleId
+            from (select opr.responsible_id as responsibleId from t_order_poll_record opr where opr.responsible_id != 0
+            order by opr.create_time desc) pr
+            where rownum = 1
+            )
+            and valid = 1
+            )
+            )b
+            )
+        </where>
+    </select>
+
+    <!-- 查询客户最后一次下单的管家 -->
+    <select id="queryLastRechargeUser" parameterType="com.emotte.order.order.model.Order"
+            resultType="com.emotte.order.order.model.Order">
+        SELECT s.recharge_by rechargeBy ,s.recharge_dept  rechargeDept ,
+            (select ao.name from t_auth_org ao where ao.id = s.recharge_dept)  rechargeDeptText
+        FROM emerp.t_order s
+        where s.valid=1 and s.user_mobile = #{userMobile}
+        and s.cate_type=2 and s.valid=1 and s.city = #{city}
+        and s.create_time &gt;= sysdate - 365 and s.order_status != 10
+        and exists (select 1 from emerp.t_auth_manager t where t.id = s.recharge_by and t.ALTERNATE_TYPE in (1,2) and t.state=1 and t.valid=1)
+        and exists (select 1 from emerp.t_auth_org f where f.id= (select t.dept_id from emerp.t_auth_manager t where t.id = s.recharge_by) and f.valid=1 and f.status=1)
+        and s.recharge_by is not null
+        and rownum = 1
+        order by s.create_time desc
+	</select>
+
+    <select id="wheelList" parameterType="com.emotte.order.authorg.model.Org" resultType="java.lang.Long">
+	SELECT id FROM emerp.t_auth_manager where dept_id=#{deptId} and alternate_type in(1,#{cateType})
+	</select>
+
+    <select id="queryAllOrgByDistance3" parameterType="com.emotte.order.order.model.Order"
+            resultType="com.emotte.order.authorg.model.Org">
+        SELECT
+        ID, NAME, MINORG,TYPE2,ACCEPTTYPE,ACCEPTRANGE,managerId
+        FROM (
+        SELECT
+        T.ID,
+        T.NAME,
+        T.type2 as type2,
+        T.accept_type as acceptType,
+        T.accept_range as acceptRange,
+        T.MANAGER_ID as managerId,
+        POWER(ROUND(T.LONGITUDE, 6) - ROUND(${longitude}, 6), 2) + POWER(ROUND(T.LATITUDE, 6) - ROUND(${latitude}, 6),
+        2) AS MINORG
+        FROM
+        T_AUTH_ORG T
+        WHERE
+        T.TYPE IN(5,7,11)
+        AND t.STATUS = 1
+        AND T.CITY_CODE LIKE ${city}||'%'
+        AND T.VALID = 1
+        AND T.LONGITUDE IS NOT NULL
+        AND T.LATITUDE IS NOT NULL
+        AND T.TYPE2 IS NOT NULL
+        <if test="cateType==2">
+            and exists(select 1 from emerp.t_auth_manager s where s.dept_id = t.id and s.state = 1 and s.valid=1 and
+            s.alternate_type in(1,2))
+        </if>
+        <if test="cateType==1">
+            and exists(select 1 from emerp.t_auth_manager s where s.dept_id = t.id and s.state = 1 and s.valid=1 and
+            s.alternate_type in(1,3))
+        </if>
+        and EXISTS (SELECT 1 FROM t_auth_channel_product p INNER JOIN t_auth_channel c ON p.AUTH_CHANNEL_ID = c.id AND
+        c.valid = 1 WHERE p.valid = 1 AND c.org_id = t.id AND p.product_code = ${productCode} AND c.channel_id =
+        ${orderChannel})
+        and not exists(SELECT 1 FROM emerp.t_auth_org s where s.id=t.id start with s.code =10010061 connect by nocycle
+        prior s.id=s.fid )    <!-- 不在已注销机构里面 -->
+        and t.code != 1001004700080004 <!-- 呼叫中心不匹配 -->
+        )ORDER BY MINORG
+    </select>
+    <!-- 随机 -->
+    <select id="distributeInPeking3" parameterType="com.emotte.order.order.model.Order" resultType="java.lang.Long">
+        select id as managerId from (
+        select s.id from emerp.t_auth_manager s where
+        s.state=1 and s.valid=1
+        <if test="cateType==2">
+            and s.alternate_type in(1,2)
+        </if>
+        <if test="cateType==1">
+            and s.alternate_type in(1,3)
+        </if>
+        and s.dept_id = ${deptId}
+        and (s.alternate_count=(
+        SELECT min(t.alternate_count) FROM emerp.t_auth_manager t
+        where
+        t.state=1 and t.valid=1
+        <if test="cateType==2">
+            and t.alternate_type in(1,2)
+        </if>
+        <if test="cateType==1">
+            and t.alternate_type in(1,3)
+        </if>
+        and t.dept_id = ${deptId}
+        )or s.alternate_count is null)
+        order by dbms_random.value
+        )
+        where rownum = 1
+    </select>
+
+    <select id="queryGuanjia" parameterType="java.lang.Long" resultType="java.lang.Long">
+		select m.id from t_auth_manager m where  m.valid=1 and m.state=1 and m.id = #{createBy}
+	</select>
+
+</mapper>

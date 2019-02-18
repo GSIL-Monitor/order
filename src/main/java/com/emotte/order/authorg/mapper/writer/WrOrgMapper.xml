@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<mapper namespace="com.emotte.order.authorg.mapper.writer.WrOrgMapper">
+	<sql id="colunms">
+		ID ,
+		NAME ,
+		FID ,
+		CODE ,
+		TYPE ,
+		STATUS ,
+		FAX ,
+		MANAGER ,
+		CREATE_BY ,
+		CREATE_TIME ,
+		UPDATE_BY ,
+		UPDATE_TIME ,
+		VERSION ,
+		VALID ,
+		POSITION ,
+		TELEPHONE ,
+		CITY_CODE ,
+		LONGITUDE ,
+		LATITUDE ,
+		ADDR ,
+		IS_ALL_CATEGORY ,
+		CATEGORY_CODE ,
+		IS_OLD_DATA ,
+		ORG_ABSTRACT ,
+		CONTRACT_HEADER ,
+		LOG 
+	</sql>
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.emotte.order.authorg.model.Org">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT getseq()	FROM dual
+		</selectKey>
+		insert into t_auth_org (
+			<include refid="colunms" />
+		) values (
+			#{id} ,
+			#{name} ,
+			#{fid} ,
+			#{code} ,
+			#{type} ,
+			#{status} ,
+			#{fax} ,
+			#{manager} ,
+			#{createBy} ,
+			#{createTime} ,
+			#{updateBy} ,
+			#{updateTime} ,
+			#{version} ,
+			#{valid} ,
+			#{position} ,
+			#{telephone} ,
+			#{cityCode} ,
+			#{longitude} ,
+			#{latitude} ,
+			#{addr} ,
+			#{isAllCategory} ,
+			#{categoryCode} ,
+			#{isOldData} ,
+			#{orgAbstract} ,
+			#{contractHeader} ,
+			#{log} 
+		)
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="com.emotte.order.authorg.model.Org">
+		update t_auth_org	
+		<set>  
+			<if test="id != null and id != ''">
+				ID = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				,NAME = #{name}
+			</if>
+			<if test="fid != null and fid != ''">
+				,FID = #{fid}
+			</if>
+			<if test="code != null and code != ''">
+				,CODE = #{code}
+			</if>
+			<if test="type != null and type != ''">
+				,TYPE = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				,STATUS = #{status}
+			</if>
+			<if test="fax != null and fax != ''">
+				,FAX = #{fax}
+			</if>
+			<if test="manager != null and manager != ''">
+				,MANAGER = #{manager}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				,CREATE_BY = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				,CREATE_TIME = #{createTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				,UPDATE_BY = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				,UPDATE_TIME = #{updateTime}
+			</if>
+			<if test="version != null and version != ''">
+				,VERSION = #{version}
+			</if>
+			<if test="valid != null and valid != ''">
+				,VALID = #{valid}
+			</if>
+			<if test="position != null and position != ''">
+				,POSITION = #{position}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				,TELEPHONE = #{telephone}
+			</if>
+			<if test="cityCode != null and cityCode != ''">
+				,CITY_CODE = #{cityCode}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,LONGITUDE = #{longitude}
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,LATITUDE = #{latitude}
+			</if>
+			<if test="addr != null and addr != ''">
+				,ADDR = #{addr}
+			</if>
+			<if test="isAllCategory != null and isAllCategory != ''">
+				,IS_ALL_CATEGORY = #{isAllCategory}
+			</if>
+			<if test="categoryCode != null and categoryCode != ''">
+				,CATEGORY_CODE = #{categoryCode}
+			</if>
+			<if test="isOldData != null and isOldData != ''">
+				,IS_OLD_DATA = #{isOldData}
+			</if>
+			<if test="orgAbstract != null and orgAbstract != ''">
+				,ORG_ABSTRACT = #{orgAbstract}
+			</if>
+			<if test="contractHeader != null and contractHeader != ''">
+				,CONTRACT_HEADER = #{contractHeader}
+			</if>
+			<if test="log != null and log != ''">
+				,LOG = #{log}
+			</if>
+		</set>
+		where 
+			 ID = #{id}
+	</update>
+	
+	<!-- 批量插入 -->
+	<insert id="multiInsert">
+		insert into t_auth_org ( 
+			<include refid="colunms" />
+		) 
+		<foreach collection="list" item="item" open="(" close=")" separator="union all">
+			select
+				 #{id}
+				, #{name}
+				, #{fid}
+				, #{code}
+				, #{type}
+				, #{status}
+				, #{fax}
+				, #{manager}
+				, #{createBy}
+				, #{createTime}
+				, #{updateBy}
+				, #{updateTime}
+				, #{version}
+				, #{valid}
+				, #{position}
+				, #{telephone}
+				, #{cityCode}
+				, #{longitude}
+				, #{latitude}
+				, #{addr}
+				, #{isAllCategory}
+				, #{categoryCode}
+				, #{isOldData}
+				, #{orgAbstract}
+				, #{contractHeader}
+				, #{log}
+			from dual
+		</foreach>
+	</insert>
+	
+	<!-- 删除模板 -->
+	<delete id="multiDelete">
+		delete from t_auth_org where id in 
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			#{id:NUMERIC}
+		</foreach>
+	</delete>
+	
+		<!-- 插入订单轮询负责管家记录 -->
+	<insert id="insertPollRecord" parameterType="com.emotte.order.authorg.model.Org">
+		insert into t_order_poll_record (
+			order_id,
+			create_by, 
+			create_time, 
+			valid, 
+			version, 
+			responsible_id
+		) values (
+			#{orderId} ,
+			1 ,
+			sysdate ,
+			1 ,
+			1 ,
+			#{manager} 
+		)
+	</insert>
+	<update id="updateDistribute" parameterType="java.lang.Long">
+		<!-- update emerp.t_auth_manager s set s.alternate_count=nvl(s.alternate_count,0)+1 where s.id = #{managerId} --> 
+		update emerp.t_auth_manager s
+	  	set s.alternate_count = (
+	   	SELECT min(nvl(t1.alternate_count,0)) FROM emerp.t_auth_manager t1 where t1.valid=1 and t1.state=1 and t1.dept_id =(
+	   	SELECT t2.dept_id FROM emerp.t_auth_manager t2 where t2.id=#{managerId}
+	    )
+	   	and t1.alternate_type in(1,(SELECT t2.alternate_type FROM emerp.t_auth_manager t2 where t2.id=#{managerId}))
+	   	and t1.id!=#{managerId}
+	    ) + 1
+	 	where s.id =#{managerId}
+	</update>
+</mapper>
